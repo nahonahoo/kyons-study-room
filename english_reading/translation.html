@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>訳文（保護者用）</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #1a1a2e;
+      --surface: #16213e;
+      --card: #0f3460;
+      --text: #e0e0e0;
+      --muted: #888;
+      --gold: #f7c948;
+      --radius: 12px;
+      --jp-font: 'Noto Serif JP', serif;
+      --eng-font: 'Times New Roman', Georgia, serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--jp-font);
+      min-height: 100vh;
+      padding: 0 0 60px;
+    }
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      padding: 20px 24px;
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px;
+    }
+    .header-title { font-size: 1.2rem; font-weight: 700; color: var(--gold); }
+    .header-note  { font-size: .8rem; color: var(--muted); }
+    .back-btn {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px;
+      padding: 8px 16px;
+      color: var(--text);
+      font-family: var(--jp-font);
+      font-size: .85rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all .15s;
+    }
+    .back-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+    main {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 32px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .text-block {
+      background: var(--surface);
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .text-header {
+      background: var(--card);
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .text-num { font-size: .78rem; color: var(--muted); margin-bottom: 2px; }
+    .text-title-jp { font-size: 1rem; font-weight: 700; color: var(--gold); }
+    .text-title-en { font-size: .85rem; color: var(--muted); font-family: var(--eng-font); font-style: italic; margin-top: 2px; }
+
+    .translation-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .line-pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0 20px;
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255,255,255,.04);
+    }
+    .line-pair:last-child { border-bottom: none; }
+    @media (max-width: 640px) {
+      .line-pair { grid-template-columns: 1fr; gap: 2px; }
+    }
+    .line-en {
+      font-family: var(--eng-font);
+      font-size: .92rem;
+      color: #c8c8d0;
+      line-height: 1.6;
+    }
+    .line-jp {
+      font-size: .88rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .speaker-label {
+      font-weight: 700;
+      color: var(--gold);
+    }
+    .stage-note { font-style: italic; color: #666; }
+
+    .toc {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .toc-title { font-size: .85rem; color: var(--muted); margin-bottom: 12px; font-weight: 700; }
+    .toc-links { display: flex; flex-wrap: wrap; gap: 8px; }
+    .toc-link {
+      background: var(--card);
+      border-radius: 8px;
+      padding: 8px 16px;
+      color: var(--text);
+      text-decoration: none;
+      font-size: .85rem;
+      transition: all .15s;
+      border: 1px solid transparent;
+    }
+    .toc-link:hover { border-color: var(--gold); color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="header-title">📖 訳文（保護者用）</div>
+    <div class="header-note">お子さまには見せないでください</div>
+  </div>
+  <a href="english_reading.html" class="back-btn">← 学習ページへ</a>
+</header>
+
+<main>
+
+  <!-- 目次 -->
+  <div class="toc">
+    <div class="toc-title">テキスト一覧</div>
+    <div class="toc-links">
+      <a href="#text1" class="toc-link">Text 1: コメディ理論の授業</a>
+      <a href="#text2" class="toc-link">Text 2: 吉本の公演のあと</a>
+      <a href="#text3" class="toc-link">Text 3: 大阪から来た転校生</a>
+      <a href="#text4" class="toc-link">Text 4: 食卓のお笑い評論家</a>
+      <a href="#text5" class="toc-link">Text 5: 私のお笑い日記</a>
+    </div>
+  </div>
+
+  <!-- TEXT 1 -->
+  <div class="text-block" id="text1">
+    <div class="text-header">
+      <div class="text-num">TEXT 1</div>
+      <div class="text-title-jp">コメディ理論の授業</div>
+      <div class="text-title-en">The Comedy Theory Class</div>
+    </div>
+    <div class="translation-body">
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mr. Tanaka:</span> "OK, class. Today's topic is very important. Why is Reiwa Roman funny?"</div>
+        <div class="line-jp"><span class="speaker-label">田中先生：</span>「さあ、みんな。今日のトピックはとても重要です。なぜ令和ロマンは面白いのでしょう？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Yuki:</span> "Because they are smart?"</div>
+        <div class="line-jp"><span class="speaker-label">ゆき：</span>「賢いからですか？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mr. Tanaka:</span> "Yes, but there is more. Kuruma always says something strange with a very calm voice. This is called 'boke.' His partner Kemuri corrects him. This is called 'tsukkomi.' Do you understand?"</div>
+        <div class="line-jp"><span class="speaker-label">田中先生：</span>「そう、でもそれだけじゃない。くるまはいつもとても落ち着いた声で変なことを言います。これを『ボケ』といいます。相方のケムリが訂正します。これを『ツッコミ』といいます。わかりましたか？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Kenji:</span> "I think so. Kuruma says the wrong thing, and Kemuri fixes it?"</div>
+        <div class="line-jp"><span class="speaker-label">けんじ：</span>「たぶん。くるまが間違ったことを言って、ケムリが直す？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mr. Tanaka:</span> "Exactly! But here is the secret. Kuruma does not say something stupid. He says something that sounds almost correct. That is much harder to do. For example, Kuruma once said, 'I have a very logical reason for this.' Then he gave a completely illogical reason. Everyone laughed because his confidence was so high."</div>
+        <div class="line-jp"><span class="speaker-label">田中先生：</span>「その通り！でも秘密があります。くるまはバカなことを言うのではありません。ほとんど正しいように聞こえることを言うのです。それはずっと難しいことです。例えば、くるまはかつて『これについてとても論理的な理由があります』と言いました。そしてまったく非論理的な理由を述べました。彼の自信がとても高かったので、みんな笑いました。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Yuki:</span> "That's amazing. So confidence is important in comedy?"</div>
+        <div class="line-jp"><span class="speaker-label">ゆき：</span>「すごい。じゃあ自信はお笑いで大切なんですね？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mr. Tanaka:</span> "Very important. If Kuruma looked nervous, nobody would laugh. Comedy needs courage. Now, here is your homework. Watch one Reiwa Roman video tonight and write three sentences about it in English."</div>
+        <div class="line-jp"><span class="speaker-label">田中先生：</span>「とても大切です。もしくるまが緊張して見えたら、誰も笑いません。お笑いには勇気が必要です。では宿題です。今夜令和ロマンのビデオを1本見て、英語で3文書いてきてください。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Kenji:</span> "Can I watch ten videos?"</div>
+        <div class="line-jp"><span class="speaker-label">けんじ：</span>「10本見てもいいですか？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mr. Tanaka:</span> "That is not homework. That is just fun."</div>
+        <div class="line-jp"><span class="speaker-label">田中先生：</span>「それは宿題ではありません。ただの楽しみです。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Kenji:</span> "For me, it is the same thing."</div>
+        <div class="line-jp"><span class="speaker-label">けんじ：</span>「僕には同じことです。」</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEXT 2 -->
+  <div class="text-block" id="text2">
+    <div class="text-header">
+      <div class="text-num">TEXT 2</div>
+      <div class="text-title-jp">吉本の公演のあと</div>
+      <div class="text-title-en">After the Yoshimoto Show</div>
+    </div>
+    <div class="translation-body">
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Hana:</span> "That was the best show! Shimofuriboshi was incredible!"</div>
+        <div class="line-jp"><span class="speaker-label">はな：</span>「最高の公演だった！霜降り明星は信じられないくらいよかった！」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Ryo:</span> "Are you serious? Kamaitachi was ten times better. Yamauchi's face alone is funnier than anything Seiya does."</div>
+        <div class="line-jp"><span class="speaker-label">りょう：</span>「本気で言ってるの？かまいたちの方が10倍面白かった。山内の顔だけで、せいやのどんなネタより面白いよ。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Hana:</span> "No way! Seiya completely became the character! He was not Seiya anymore. He was the character!"</div>
+        <div class="line-jp"><span class="speaker-label">はな：</span>「そんなことない！せいやは完全にキャラになりきってた！もうせいやじゃなかった。キャラクターだった！」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Ryo:</span> "That is called 'acting.' Yamauchi uses silence. Silence is more powerful than noise."</div>
+        <div class="line-jp"><span class="speaker-label">りょう：</span>「それは『演技』というんだよ。山内は沈黙を使う。沈黙は騒音より強い。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Hana:</span> "Silence? We paid 3,000 yen to watch someone be quiet?"</div>
+        <div class="line-jp"><span class="speaker-label">はな：</span>「沈黙？誰かが静かにしているのを見るために3000円払ったの？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Ryo:</span> "You don't understand advanced comedy."</div>
+        <div class="line-jp"><span class="speaker-label">りょう：</span>「高度なお笑いがわかってないんだよ。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Hana:</span> "Advanced comedy? I understand comedy perfectly. Seiya made me laugh fifteen times. Yamauchi made me laugh seven times. Fifteen is bigger than seven."</div>
+        <div class="line-jp"><span class="speaker-label">はな：</span>「高度なお笑い？私はお笑いが完璧にわかってる。せいやは私を15回笑わせた。山内は7回。15は7より大きい。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Ryo:</span> "Comedy is not mathematics!"</div>
+        <div class="line-jp"><span class="speaker-label">りょう：</span>「お笑いは数学じゃない！」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Hana:</span> "Then stop using numbers!"</div>
+        <div class="line-jp"><span class="speaker-label">はな：</span>「じゃあ数字を使わないで！」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Ryo:</span> "I only used numbers because YOU used numbers first!"</div>
+        <div class="line-jp"><span class="speaker-label">りょう：</span>「最初に数字を使ったのはあなたでしょ！」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="stage-note">[They did not speak for five minutes.]</span></div>
+        <div class="line-jp"><span class="stage-note">（5分間、二人は話さなかった。）</span></div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Hana:</span> "...The takoyaki after the show was delicious."</div>
+        <div class="line-jp"><span class="speaker-label">はな：</span>「…公演の後のたこ焼き、おいしかったね。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Ryo:</span> "...Yes. It was."</div>
+        <div class="line-jp"><span class="speaker-label">りょう：</span>「…うん。そうだったね。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Hana:</span> "Can we go again next week?"</div>
+        <div class="line-jp"><span class="speaker-label">はな：</span>「来週また行かない？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Ryo:</span> "I already bought the tickets."</div>
+        <div class="line-jp"><span class="speaker-label">りょう：</span>「もうチケット買ったよ。」</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEXT 3 -->
+  <div class="text-block" id="text3">
+    <div class="text-header">
+      <div class="text-num">TEXT 3</div>
+      <div class="text-title-jp">大阪から来た転校生</div>
+      <div class="text-title-en">The New Student from Osaka</div>
+    </div>
+    <div class="translation-body">
+      <div class="line-pair">
+        <div class="line-en">Mei transferred to a new school in Tokyo in April. She is from Osaka. On her first day, she met a boy named Sota.</div>
+        <div class="line-jp">メイは4月、東京の新しい学校に転校してきた。彼女は大阪出身だ。最初の日、ソウタという男の子と会った。</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Sota:</span> "Hi. I'm Sota. Are you from Osaka?"</div>
+        <div class="line-jp"><span class="speaker-label">ソウタ：</span>「やあ。僕はソウタ。大阪から来たの？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mei:</span> "Yeah! How did you know?"</div>
+        <div class="line-jp"><span class="speaker-label">メイ：</span>「うん！どうしてわかったの？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Sota:</span> "You said 'nande ya nen' when you dropped your pencil."</div>
+        <div class="line-jp"><span class="speaker-label">ソウタ：</span>「鉛筆を落としたとき『なんでやねん』って言ってたから。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mei:</span> "Oh! Sorry. I use Kansai dialect without thinking."</div>
+        <div class="line-jp"><span class="speaker-label">メイ：</span>「あ！ごめん。無意識に関西弁が出ちゃう。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Sota:</span> "Don't apologize! It's cool. But why is Kansai dialect funnier than standard Japanese?"</div>
+        <div class="line-jp"><span class="speaker-label">ソウタ：</span>「謝らないで！かっこいいよ。でもなぜ関西弁は標準語より面白いの？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mei:</span> "Hmm. Good question. In Osaka, the rhythm of speaking is different. It goes up and down like music. Standard Japanese is flatter. When a comedian from Osaka speaks, the rhythm itself is already interesting."</div>
+        <div class="line-jp"><span class="speaker-label">メイ：</span>「うーん。いい質問だね。大阪では、話すリズムが違う。音楽みたいに上がったり下がったりする。標準語はもっと平らだよ。大阪の芸人が話すと、リズム自体がもう面白い。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Sota:</span> "Like a song?"</div>
+        <div class="line-jp"><span class="speaker-label">ソウタ：</span>「歌みたいに？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mei:</span> "Exactly! And in Osaka, if something is not funny, people tell you immediately. So Osaka comedians train very hard. They become very strong."</div>
+        <div class="line-jp"><span class="speaker-label">メイ：</span>「そう！そして大阪では、面白くないとすぐに言われる。だから大阪の芸人はすごく鍛えられる。とても強くなる。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Sota:</span> "So Tokyo comedians are weaker?"</div>
+        <div class="line-jp"><span class="speaker-label">ソウタ：</span>「じゃあ東京の芸人は弱いの？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mei:</span> "I didn't say that!"</div>
+        <div class="line-jp"><span class="speaker-label">メイ：</span>「そんなこと言ってない！」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Sota:</span> "Your face said that."</div>
+        <div class="line-jp"><span class="speaker-label">ソウタ：</span>「君の顔がそう言ってたよ。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mei:</span> "My face said nothing!"</div>
+        <div class="line-jp"><span class="speaker-label">メイ：</span>「顔は何も言ってない！」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Sota:</span> "It said 'yes, Tokyo comedians are weaker.'"</div>
+        <div class="line-jp"><span class="speaker-label">ソウタ：</span>「『はい、東京の芸人は弱い』って言ってたよ。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mei:</span> "...OK maybe a little."</div>
+        <div class="line-jp"><span class="speaker-label">メイ：</span>「…まあ少しだけかも。」</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEXT 4 -->
+  <div class="text-block" id="text4">
+    <div class="text-header">
+      <div class="text-num">TEXT 4</div>
+      <div class="text-title-jp">食卓のお笑い評論家</div>
+      <div class="text-title-en">Dinner Table Comedy Experts</div>
+    </div>
+    <div class="translation-body">
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mom:</span> "I watched a funny video today. It was Nasu Nakanishi."</div>
+        <div class="line-jp"><span class="speaker-label">お母さん：</span>「今日面白い動画を見たよ。なすなかにしだった。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Kai:</span> "Oh? Which era? Their early style was completely different from their current style."</div>
+        <div class="line-jp"><span class="speaker-label">かい：</span>「へえ？どの時代の？初期のスタイルは今と全然違うよね。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mom:</span> "Era? It was just a video."</div>
+        <div class="line-jp"><span class="speaker-label">お母さん：</span>「時代？ただの動画だよ。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Kai:</span> "Mom. Nasu Nakanishi has three clear periods. Early period, middle period, and current period. In the early period, Nakanishi's boke was more aggressive. Now it is more relaxed. The timing changed completely around 2019."</div>
+        <div class="line-jp"><span class="speaker-label">かい：</span>「お母さん。なすなかにしには明確に3つの時代がある。初期、中期、現在。初期はなかにしのボケはもっと攻撃的だった。今はもっとゆるい。タイミングは2019年頃に完全に変わった。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mom:</span> "...You are thirteen years old."</div>
+        <div class="line-jp"><span class="speaker-label">お母さん：</span>「…あなた今13歳よ。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Kai:</span> "Comedy history is important."</div>
+        <div class="line-jp"><span class="speaker-label">かい：</span>「お笑いの歴史は大切なんだよ。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mom:</span> "More important than math homework?"</div>
+        <div class="line-jp"><span class="speaker-label">お母さん：</span>「数学の宿題より大切なの？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Kai:</span> "For understanding human psychology, yes."</div>
+        <div class="line-jp"><span class="speaker-label">かい：</span>「人間の心理を理解するためには、そう。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mom:</span> "What?"</div>
+        <div class="line-jp"><span class="speaker-label">お母さん：</span>「何？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Kai:</span> "Comedy is psychology, Mom. When Nasu corrects Nakanishi, he uses the minimum number of words. This creates maximum impact. It is very efficient communication."</div>
+        <div class="line-jp"><span class="speaker-label">かい：</span>「お笑いは心理学なんだよ、お母さん。那須がなかにしを訂正するとき、最小限の言葉を使う。これで最大の効果を生む。とても効率的なコミュニケーションだよ。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mom:</span> "I just wanted to share a funny video."</div>
+        <div class="line-jp"><span class="speaker-label">お母さん：</span>「私はただ面白い動画を共有したかっただけなのに。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Kai:</span> "And you did. But now you also understand why it was funny. You're welcome."</div>
+        <div class="line-jp"><span class="speaker-label">かい：</span>「そうしてくれたね。でも今は、なぜ面白かったかもわかった。どういたしまして。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mom:</span> "..."</div>
+        <div class="line-jp"><span class="speaker-label">お母さん：</span>「…」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Kai:</span> "Do you want me to explain the theory behind Kamaitachi next?"</div>
+        <div class="line-jp"><span class="speaker-label">かい：</span>「次はかまいたちの理論を説明しようか？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Mom:</span> "Please eat your rice."</div>
+        <div class="line-jp"><span class="speaker-label">お母さん：</span>「ご飯食べてください。」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Kai:</span> "I can do both."</div>
+        <div class="line-jp"><span class="speaker-label">かい：</span>「両方できるよ。」</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TEXT 5 -->
+  <div class="text-block" id="text5">
+    <div class="text-header">
+      <div class="text-num">TEXT 5</div>
+      <div class="text-title-jp">私のお笑い日記</div>
+      <div class="text-title-en">My Comedy Diary</div>
+    </div>
+    <div class="translation-body">
+      <div class="line-pair">
+        <div class="line-en"><strong>Monday</strong></div>
+        <div class="line-jp"><strong>月曜日</strong></div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en">I discovered a new comedy duo today. Their name is 9 Bangai Retro. I watched one video and I could not stop. I watched five more videos. Then ten more. My homework is still on my desk.</div>
+        <div class="line-jp">今日新しいコンビを発見した。名前は9番街レトロ。動画を1本見たら止まらなくなった。さらに5本見た。それから10本。宿題はまだ机の上にある。</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en">Kyogoku is the boke. He never looks excited. He always speaks in a calm, cool voice. But his words are completely crazy. I think this is very difficult to do. How can he say such strange things so seriously?</div>
+        <div class="line-jp">京極がボケ担当。絶対に興奮した顔をしない。いつも落ち着いてクールな声で話す。でも言ってることは完全に狂ってる。これってすごく難しいと思う。どうしてそんな変なことをあんなに真剣に言えるんだろう？</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en">Nakamura is the tsukkomi. He is loud and passionate. When Kyogoku says something strange, Nakamura explodes. "That's wrong!" "Why do you think so?!" His energy is incredible.</div>
+        <div class="line-jp">なかむらがツッコミ。大きな声で情熱的。京極が変なことを言うと爆発する。「それ違う！」「なんでそう思うの！？」エネルギーがすごい。</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><strong>Tuesday</strong></div>
+        <div class="line-jp"><strong>火曜日</strong></div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en">I watched more videos today. I have a new theory. Kyogoku's calm boke is more powerful BECAUSE Nakamura is so passionate. They are opposite. Like ice and fire. Like silence and noise. Like my brain before 9 Bangai Retro and after 9 Bangai Retro.</div>
+        <div class="line-jp">今日もたくさん動画を見た。新しい理論ができた。なかむらがあんなに情熱的だからこそ、京極の落ち着いたボケがより強力なんだと思う。2人は正反対。氷と炎みたいに。沈黙と騒音みたいに。9番街レトロを知る前と知った後の私の脳みたいに。</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><strong>Wednesday</strong></div>
+        <div class="line-jp"><strong>水曜日</strong></div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en">I told my friend about 9 Bangai Retro at school today.</div>
+        <div class="line-jp">今日学校で友達に9番街レトロのことを話した。</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Me:</span> "You have to watch them. Kyogoku never smiles but everything he says is funny."</div>
+        <div class="line-jp"><span class="speaker-label">私：</span>「絶対見てみて。京極は全然笑わないのに言ってることが全部面白い」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Friend:</span> "Why is that funny?"</div>
+        <div class="line-jp"><span class="speaker-label">友達：</span>「なんで面白いの？」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Me:</span> "Because the gap is funny! Cool outside, crazy inside!"</div>
+        <div class="line-jp"><span class="speaker-label">私：</span>「ギャップが面白いんだよ！外はクール、中は狂ってる！」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Friend:</span> "I don't understand."</div>
+        <div class="line-jp"><span class="speaker-label">友達：</span>「よくわからない」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><span class="speaker-label">Me:</span> "You will. Trust me."</div>
+        <div class="line-jp"><span class="speaker-label">私：</span>「見ればわかる。信じて」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en">She watched one video that night. She sent me a message at midnight. It said: "I can't stop watching." I replied: "I know."</div>
+        <div class="line-jp">その夜彼女は動画を1本見た。夜中にメッセージが来た。「止まらない」と書いてあった。私は返信した：「わかる」</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><strong>Thursday</strong></div>
+        <div class="line-jp"><strong>木曜日</strong></div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en">I have a new goal. I want to go to their live show at Jimbocho Yoshimoto. I need to save money. I will stop buying snacks. Comedy is more important than snacks.</div>
+        <div class="line-jp">新しい目標ができた。神保町よしもと漫才劇場のライブに行きたい。お金を貯めないといけない。おやつを買うのをやめる。お笑いはおやつより大事。</div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en"><strong>Friday</strong></div>
+        <div class="line-jp"><strong>金曜日</strong></div>
+      </div>
+      <div class="line-pair">
+        <div class="line-en">I bought snacks today. But I also watched all their YouTube videos. That is progress, I think.</div>
+        <div class="line-jp">今日おやつを買った。でもYouTubeの動画を全部見た。これは前進だと思う。</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+</body>
+</html>

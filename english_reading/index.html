@@ -1,0 +1,1777 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>英語で学ぶお笑い理論</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #1a1a2e;
+      --surface: #16213e;
+      --card: #0f3460;
+      --text: #e0e0e0;
+      --muted: #888;
+      --radius: 12px;
+      --gold: #f7c948;
+      --green: #10b981;
+      --red: #ef4444;
+      --blue: #3b82f6;
+      --purple: #7c3aed;
+      --eng-font: 'Times New Roman', Georgia, serif;
+      --jp-font: 'Noto Serif JP', 'Georgia', serif;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--jp-font);
+      min-height: 100vh;
+    }
+
+    /* ── ARTIST SELECT SCREEN ── */
+    #artist-screen {
+      position: fixed; inset: 0; z-index: 100;
+      background: var(--bg);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .as-card {
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 40px 36px;
+      max-width: 560px; width: 92%;
+      text-align: center;
+      box-shadow: 0 0 60px rgba(0,0,0,.6);
+    }
+    .as-title { font-size: 1.4rem; font-weight: 700; margin-bottom: 6px; color: var(--gold); }
+    .as-sub { font-size: .9rem; color: var(--muted); margin-bottom: 28px; }
+    .as-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .as-btn {
+      background: var(--card);
+      border: 2px solid transparent;
+      border-radius: var(--radius);
+      padding: 14px 8px;
+      cursor: pointer;
+      color: var(--text);
+      font-family: var(--jp-font);
+      font-size: .85rem;
+      transition: all .15s;
+    }
+    .as-btn:hover { border-color: var(--gold); background: rgba(247,201,72,.1); }
+    .as-icon { font-size: 1.6rem; margin-bottom: 4px; }
+
+    /* ── HEADER ── */
+    #app { display: none; flex-direction: column; min-height: 100vh; }
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      padding: 14px 20px;
+    }
+    .header-top {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 10px;
+      margin-bottom: 12px;
+    }
+    .header-title { font-size: 1.1rem; font-weight: 700; color: var(--gold); }
+    .artist-badge {
+      display: flex; align-items: center; gap: 8px;
+      background: var(--card);
+      border-radius: 99px;
+      padding: 6px 14px;
+      font-size: .82rem;
+    }
+    .artist-badge button {
+      background: none; border: none; color: var(--muted);
+      font-size: .75rem; cursor: pointer; padding: 0;
+      font-family: var(--jp-font);
+      text-decoration: underline;
+    }
+    .text-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tab-btn {
+      background: var(--card);
+      border: 2px solid transparent;
+      border-radius: 99px;
+      padding: 7px 18px;
+      color: var(--muted);
+      font-family: var(--jp-font);
+      font-size: .85rem;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .tab-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(247,201,72,.1); }
+    .tab-btn:hover:not(.active) { border-color: rgba(255,255,255,.2); color: var(--text); }
+
+    /* ── MAIN LAYOUT ── */
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      flex: 1;
+      min-height: 0;
+    }
+    @media (max-width: 768px) {
+      main { grid-template-columns: 1fr; }
+    }
+
+    /* ── TEXT PANEL ── */
+    #text-panel {
+      padding: 24px 20px;
+      overflow-y: auto;
+      border-right: 1px solid rgba(255,255,255,.06);
+      max-height: calc(100vh - 120px);
+    }
+    @media (max-width: 768px) {
+      #text-panel { max-height: 45vh; border-right: none; border-bottom: 1px solid rgba(255,255,255,.06); }
+    }
+    .text-title {
+      font-family: var(--eng-font);
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: var(--gold);
+      margin-bottom: 18px;
+      font-style: italic;
+    }
+    .text-body {
+      font-family: var(--eng-font);
+      font-size: 1.125rem;
+      line-height: 2.0;
+      letter-spacing: 0.03em;
+      color: #d4d4d4;
+    }
+    .text-body .speaker {
+      color: var(--gold);
+      font-weight: bold;
+    }
+    .text-body .stage-dir {
+      color: var(--muted);
+      font-style: italic;
+    }
+    .text-body p { margin-bottom: 6px; }
+    .text-line { display: block; }
+    .highlight-line {
+      background: rgba(247,201,72,.15);
+      border-left: 3px solid var(--gold);
+      padding-left: 8px;
+      border-radius: 2px;
+    }
+
+    /* ── MEMO SECTION ── */
+    .memo-section {
+      margin-top: 4px;
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding-top: 16px;
+    }
+    .memo-label {
+      font-family: var(--jp-font);
+      font-size: .85rem;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .memo-textarea {
+      width: 100%;
+      background: #0a0a1a;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: #c8c8d8;
+      font-family: var(--jp-font);
+      font-size: .88rem;
+      line-height: 1.7;
+      resize: vertical;
+      outline: none;
+      transition: border-color .15s;
+      min-height: 100px;
+    }
+    .memo-textarea:focus { border-color: rgba(247,201,72,.4); }
+    .memo-textarea::placeholder { color: rgba(255,255,255,.2); }
+    .memo-clear-wrap {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 6px;
+    }
+    .memo-clear-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 6px;
+      padding: 4px 10px;
+      color: var(--muted);
+      font-family: var(--jp-font);
+      font-size: .75rem;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .memo-clear-btn:hover { border-color: var(--red); color: var(--red); }
+
+    /* ── QUESTION PANEL ── */
+    #question-panel {
+      padding: 24px 20px;
+      overflow-y: auto;
+      max-height: calc(100vh - 120px);
+      display: flex; flex-direction: column; gap: 16px;
+    }
+    @media (max-width: 768px) {
+      #question-panel { max-height: none; }
+    }
+
+    /* Progress */
+    .progress-bar-wrap { background: rgba(255,255,255,.08); border-radius: 99px; height: 6px; }
+    .progress-bar-fill { height: 100%; border-radius: 99px; background: var(--gold); transition: width .3s; }
+    .progress-label { font-size: .78rem; color: var(--muted); margin-top: 4px; }
+
+    /* Question card */
+    .q-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .q-type-badge {
+      display: inline-block;
+      font-size: .72rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 99px;
+      margin-bottom: 12px;
+      letter-spacing: .04em;
+    }
+    .badge-vocab    { background: rgba(59,130,246,.25); color: #93c5fd; }
+    .badge-fill     { background: rgba(124,58,237,.25); color: #c4b5fd; }
+    .badge-tf       { background: rgba(16,185,129,.25); color: #6ee7b7; }
+    .badge-translate { background: rgba(236,72,153,.25); color: #f9a8d4; }
+
+    .q-text {
+      font-size: 1rem;
+      line-height: 1.75;
+      letter-spacing: 0.02em;
+      margin-bottom: 14px;
+    }
+    .q-text .jp { font-family: var(--jp-font); }
+    .q-text .en { font-family: var(--eng-font); font-size: 1.05rem; }
+    .q-blank { color: var(--gold); font-weight: bold; }
+
+    .q-input {
+      width: 100%;
+      background: var(--card);
+      border: 2px solid rgba(255,255,255,.1);
+      border-radius: 8px;
+      padding: 12px 14px;
+      color: var(--text);
+      font-family: var(--eng-font);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color .15s;
+    }
+    .q-input:focus { border-color: var(--gold); }
+    .q-input.correct { border-color: var(--green); background: rgba(16,185,129,.1); }
+    .q-input.incorrect { border-color: var(--red); background: rgba(239,68,68,.1); }
+    .q-input:disabled { opacity: .6; }
+
+    .q-btns { display: flex; gap: 8px; margin-top: 12px; }
+    .btn-answer {
+      background: var(--gold);
+      color: #111;
+      border: none;
+      border-radius: 8px;
+      padding: 11px 22px;
+      font-family: var(--jp-font);
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .15s;
+    }
+    .btn-answer:hover { opacity: .85; }
+    .btn-skip {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 8px;
+      padding: 11px 16px;
+      color: var(--muted);
+      font-family: var(--jp-font);
+      font-size: .85rem;
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .btn-skip:hover { border-color: rgba(255,255,255,.3); color: var(--text); }
+
+    /* Feedback */
+    .feedback {
+      margin-top: 12px;
+      border-radius: 10px;
+      padding: 14px 16px;
+      display: none;
+    }
+    .feedback.correct-fb {
+      background: rgba(16,185,129,.12);
+      border: 1px solid rgba(16,185,129,.3);
+    }
+    .feedback.wrong-fb {
+      background: rgba(239,68,68,.1);
+      border: 1px solid rgba(239,68,68,.25);
+    }
+    .fb-result { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+    .fb-correct .fb-result { color: var(--green); }
+    .fb-wrong   .fb-result { color: var(--red); }
+
+    .artist-comment {
+      display: flex; align-items: flex-start; gap: 12px;
+      background: rgba(255,255,255,.04);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 8px;
+    }
+    .ac-icon { font-size: 1.8rem; flex-shrink: 0; }
+    .ac-name { font-size: .75rem; color: var(--muted); margin-bottom: 3px; }
+    .ac-line { font-size: .95rem; line-height: 1.5; }
+
+    /* ── EXPLANATION BOX ── */
+    .explanation-box {
+      margin-top: 12px;
+      background: #1e2a45;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 8px;
+      padding: 14px 16px;
+      animation: fadeInUp .3s ease;
+    }
+    .explanation-header {
+      display: flex; align-items: center; gap: 8px;
+      font-size: .8rem;
+      font-weight: 700;
+      color: #93c5fd;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      letter-spacing: .05em;
+    }
+    .explanation-divider {
+      color: rgba(255,255,255,.2);
+      font-size: .7rem;
+    }
+    .explanation-body {
+      font-family: var(--jp-font);
+      font-size: .875rem;
+      line-height: 1.8;
+      color: #c8d8f0;
+      white-space: pre-line;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .hint-box {
+      background: rgba(255,255,255,.04);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 8px;
+      font-size: .88rem;
+      color: #c0c0c0;
+    }
+    .hint-box .hint-label { color: var(--gold); font-weight: 600; font-size: .8rem; margin-bottom: 4px; }
+
+    .btn-next {
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-family: var(--jp-font);
+      font-size: .9rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: opacity .15s;
+    }
+    .btn-next:hover { opacity: .85; }
+
+    /* Complete screen */
+    #complete-screen {
+      display: none;
+      text-align: center;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      margin: 20px;
+    }
+    .cs-title { font-size: 1.5rem; font-weight: 700; color: var(--gold); margin-bottom: 8px; }
+    .cs-score { font-size: 3rem; font-weight: 700; margin: 16px 0; }
+    .cs-msg { color: var(--muted); margin-bottom: 24px; }
+    .cs-btns { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+    .cs-btn {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 8px;
+      padding: 12px 24px;
+      color: var(--text);
+      font-family: var(--jp-font);
+      cursor: pointer;
+      transition: all .15s;
+    }
+    .cs-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .cs-btn.primary { background: var(--gold); color: #111; border-color: var(--gold); font-weight: 700; }
+    .cs-btn.primary:hover { opacity: .85; }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 2px; }
+
+    /* ── STUDY OVERLAY ── */
+    #study-overlay {
+      position: fixed; inset: 0; z-index: 50;
+      background: var(--bg);
+      overflow-y: auto;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 48px 20px;
+    }
+    #mode-screen {
+      text-align: center;
+      max-width: 480px;
+      width: 100%;
+      margin: auto;
+    }
+    .mode-text-title {
+      font-size: 1.05rem;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .mode-subtitle {
+      font-size: .9rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+    .mode-studied-badge {
+      display: inline-block;
+      background: rgba(16,185,129,.18);
+      color: var(--green);
+      border-radius: 99px;
+      padding: 5px 16px;
+      font-size: .8rem;
+      margin-bottom: 20px;
+    }
+    .mode-btns { display: flex; flex-direction: column; gap: 14px; margin-bottom: 20px; }
+    .mode-btn-primary {
+      background: var(--gold); color: #111;
+      border: none; border-radius: var(--radius);
+      padding: 18px 24px;
+      font-family: var(--jp-font); font-size: 1.05rem; font-weight: 700;
+      cursor: pointer; transition: opacity .15s;
+    }
+    .mode-btn-primary:hover { opacity: .85; }
+    .mode-btn-secondary {
+      background: var(--card); color: var(--text);
+      border: 1px solid rgba(255,255,255,.15); border-radius: var(--radius);
+      padding: 18px 24px;
+      font-family: var(--jp-font); font-size: 1.05rem; font-weight: 700;
+      cursor: pointer; transition: all .15s;
+    }
+    .mode-btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
+    .mode-skip-link {
+      font-size: .8rem; color: var(--muted);
+      cursor: pointer; text-decoration: underline;
+      background: none; border: none; font-family: var(--jp-font);
+    }
+    .mode-skip-link:hover { color: var(--text); }
+    .tab-btn.studied::after { content: ' ✓'; color: var(--green); font-size: .72rem; }
+
+    /* Flashcard */
+    #fc-screen {
+      width: 100%; max-width: 560px; margin: auto;
+      display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+    .fc-progress-wrap { width: 100%; text-align: center; }
+    .fc-progress-label {
+      font-size: .9rem; color: var(--muted);
+      margin-bottom: 8px; letter-spacing: .05em;
+    }
+    .fc-bar-bg { background: rgba(255,255,255,.08); border-radius: 99px; height: 7px; }
+    .fc-bar-fill { height: 100%; border-radius: 99px; background: var(--gold); transition: width .35s; }
+    .flashcard {
+      background: #0f1c3a;
+      border: 2px solid rgba(247,201,72,.25);
+      border-radius: 20px;
+      padding: 40px 32px 32px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(0,0,0,.5);
+    }
+    .fc-speak-top { display: flex; justify-content: center; margin-bottom: 28px; }
+    .fc-speak-btn {
+      background: rgba(247,201,72,.12);
+      border: 2px solid rgba(247,201,72,.4);
+      border-radius: 50%;
+      width: 62px; height: 62px;
+      font-size: 1.6rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all .15s;
+    }
+    .fc-speak-btn:hover { background: rgba(247,201,72,.28); }
+    .fc-word {
+      font-family: var(--eng-font);
+      font-size: 3rem; font-weight: bold; color: #fff;
+      letter-spacing: 0.1em; margin-bottom: 10px; line-height: 1.1;
+    }
+    .fc-kana {
+      font-size: 1.3rem; color: rgba(255,255,255,.42);
+      letter-spacing: 0.15em; margin-bottom: 18px;
+    }
+    .fc-divider { width: 60px; height: 2px; background: rgba(247,201,72,.3); margin: 0 auto 18px; }
+    .fc-jp {
+      font-family: var(--jp-font);
+      font-size: 2rem; color: #e8d88a;
+      letter-spacing: 0.08em; line-height: 1.4;
+    }
+    .fc-prompt { font-size: .82rem; color: rgba(255,255,255,.3); margin-top: 20px; letter-spacing: .06em; }
+    .fc-actions { display: flex; flex-direction: column; align-items: center; gap: 10px; width: 100%; }
+    .fc-next-btn {
+      background: var(--gold); color: #111;
+      border: none; border-radius: var(--radius);
+      padding: 16px 40px;
+      font-family: var(--jp-font); font-size: 1rem; font-weight: 700;
+      cursor: pointer; transition: opacity .15s;
+      width: 100%; max-width: 360px;
+    }
+    .fc-next-btn:hover { opacity: .85; }
+    .fc-again-btn {
+      background: none; border: none;
+      color: var(--muted); font-family: var(--jp-font);
+      font-size: .82rem; cursor: pointer; text-decoration: underline;
+    }
+    .fc-again-btn:hover { color: var(--text); }
+
+    /* Grammar card */
+    #fc-grammar-card {
+      background: #0d1f3a;
+      border: 2px solid rgba(59,130,246,.35);
+      border-radius: 20px;
+      padding: 32px 28px;
+      width: 100%; text-align: left;
+      box-shadow: 0 8px 40px rgba(0,0,0,.5);
+    }
+    .gc-badge {
+      display: inline-block;
+      background: rgba(59,130,246,.2); color: #93c5fd;
+      border-radius: 99px; padding: 4px 14px;
+      font-size: .78rem; font-weight: 700;
+      margin-bottom: 16px; letter-spacing: .05em;
+    }
+    .gc-title {
+      font-size: 1.05rem; font-weight: 700; color: #fff;
+      margin-bottom: 16px; font-family: var(--jp-font);
+    }
+    .gc-example-en {
+      font-family: var(--eng-font); font-size: 1rem;
+      color: var(--gold); margin-bottom: 4px; font-style: italic;
+    }
+    .gc-arrow { color: var(--muted); font-size: .82rem; margin-bottom: 4px; }
+    .gc-translate {
+      font-family: var(--jp-font); font-size: .9rem;
+      color: #c8d8f0; margin-bottom: 14px;
+    }
+    .gc-point {
+      font-family: var(--jp-font); font-size: .85rem;
+      color: var(--green); margin-bottom: 14px; font-weight: 700;
+    }
+    .gc-examples {
+      font-family: var(--jp-font); font-size: .85rem;
+      color: #c0cce0; line-height: 2.0; white-space: pre-line;
+    }
+    .gc-en { font-family: var(--eng-font); color: #93c5fd; }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════ ARTIST SELECT SCREEN ══════════════════════ -->
+<div id="artist-screen">
+  <div class="as-card">
+    <div class="as-title">📖 英語で学ぶお笑い理論</div>
+    <div class="as-sub">好きな芸人を選んでね！正解したらひとことコメントしてくれるよ</div>
+    <div class="as-grid" id="artist-grid"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════ MAIN APP ══════════════════════ -->
+<div id="app">
+  <header>
+    <div class="header-top">
+      <div class="header-title">📖 英語で学ぶお笑い理論</div>
+      <div class="artist-badge">
+        <span id="current-artist-label">芸人を選んでください</span>
+        <button onclick="resetArtist()">変える</button>
+      </div>
+    </div>
+    <div class="text-tabs" id="text-tabs"></div>
+  </header>
+
+  <main>
+    <div id="text-panel">
+      <div class="text-title" id="text-title"></div>
+      <div class="text-body" id="text-body"></div>
+    </div>
+
+    <div id="question-panel">
+      <div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+        <div class="progress-label" id="progress-label">問題 0/0</div>
+      </div>
+
+      <div class="q-card" id="q-card">
+        <div class="q-type-badge" id="q-type-badge"></div>
+        <div class="q-text" id="q-text"></div>
+        <input class="q-input" id="q-input" type="text" placeholder="ここに入力…" autocomplete="off" autocorrect="off" spellcheck="false">
+        <div class="q-btns">
+          <button class="btn-answer" onclick="checkAnswer()">回答する</button>
+          <button class="btn-skip" onclick="skipQuestion()">スキップ</button>
+        </div>
+        <div class="feedback" id="feedback"></div>
+      </div>
+
+      <div id="complete-screen">
+        <div class="cs-title">🎉 全問クリア！</div>
+        <div class="cs-score" id="cs-score"></div>
+        <div class="cs-msg" id="cs-msg"></div>
+        <div class="cs-btns">
+          <button class="cs-btn primary" onclick="retryText()">もう一度</button>
+          <button class="cs-btn" onclick="nextText()">次のテキストへ</button>
+        </div>
+      </div>
+
+      <div class="memo-section">
+        <div class="memo-label">📝 メモ・気づきを書こう</div>
+        <textarea class="memo-textarea" id="memo-textarea" rows="5" placeholder="気づいたことや覚えたい表現をメモしよう…"></textarea>
+        <div class="memo-clear-wrap">
+          <button class="memo-clear-btn" onclick="clearMemo()">メモをクリア</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ══════════════════════ STUDY OVERLAY ══════════════════════ -->
+<div id="study-overlay" style="display:none;">
+
+  <!-- Mode selection -->
+  <div id="mode-screen">
+    <div class="mode-text-title" id="mode-text-label"></div>
+    <div class="mode-subtitle">どこから始める？</div>
+    <div id="mode-studied-badge" class="mode-studied-badge" style="display:none;">✅ この単語はもう予習済みだよ</div>
+    <div class="mode-btns">
+      <button class="mode-btn-primary" onclick="startStudy()">📚 予習する</button>
+      <button class="mode-btn-secondary" onclick="goToReading()">📖 長文を読む</button>
+    </div>
+    <button class="mode-skip-link" onclick="goToReading()">予習をスキップして長文へ</button>
+  </div>
+
+  <!-- Flashcard screen -->
+  <div id="fc-screen" style="display:none;">
+    <div class="fc-progress-wrap">
+      <div class="fc-progress-label" id="fc-progress-label">1 / 8 単語</div>
+      <div class="fc-bar-bg"><div class="fc-bar-fill" id="fc-bar-fill" style="width:0%"></div></div>
+    </div>
+
+    <div class="flashcard" id="fc-word-card">
+      <div class="fc-speak-top">
+        <button class="fc-speak-btn" onclick="speakWord()">🔊</button>
+      </div>
+      <div class="fc-word" id="fc-word"></div>
+      <div class="fc-kana" id="fc-kana"></div>
+      <div class="fc-divider"></div>
+      <div class="fc-jp" id="fc-jp"></div>
+      <div class="fc-prompt">声に出して読もう！</div>
+    </div>
+
+    <div id="fc-grammar-card" style="display:none;">
+      <div class="gc-badge">📐 文法ヒント</div>
+      <div class="gc-title" id="gc-title"></div>
+      <div class="gc-example-en" id="gc-example-en"></div>
+      <div class="gc-arrow">→</div>
+      <div class="gc-translate" id="gc-translate"></div>
+      <div class="gc-point" id="gc-point"></div>
+      <div class="gc-examples" id="gc-examples"></div>
+    </div>
+
+    <div class="fc-actions">
+      <button class="fc-next-btn" id="fc-next-btn" onclick="nextFlashcard()">覚えた！次へ →</button>
+      <button class="fc-again-btn" id="fc-again-btn" onclick="speakWord()">🔊 もう一度聞く</button>
+      <button class="mode-skip-link" onclick="goToReading()" style="margin-top:4px;">スキップして長文へ</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════════
+
+const ARTISTS = [
+  {
+    id: 'reiwa_roman', name: '令和ロマン', icon: '🎭',
+    members: [
+      { name: 'ケムリ', icon: '🧑‍💼', comments: [
+        '正解。覚えとけ',
+        '合ってる。その調子',
+        '正解。次も頼む',
+        'できるじゃないか。続けろ',
+        '正解。まあそうだよな'
+      ]},
+      { name: 'くるま', icon: '🚗', comments: [
+        '待って待って、全部合ってるじゃん！めちゃくちゃすごいじゃん！',
+        'え、これ解けるの？俺より頭いいんじゃないの？',
+        '正解！なんか普通にすごくない？',
+        '待って待って、天才じゃん！受験絶対受かるじゃん！',
+        '合ってる！ケムリ先生より賢いかも'
+      ]}
+    ]
+  },
+  {
+    id: 'cotton', name: 'コットン', icon: '☁️',
+    members: [
+      { name: '西村', icon: '😎', comments: [
+        '正解！よく覚えてたね',
+        '合ってる！さすがだね！',
+        'できた！この調子でいこう！',
+        '正解！広島でも東京でも通用するよ！',
+        'よかった！ちゃんとわかってるじゃないか！'
+      ]},
+      { name: 'きょん', icon: '✨', comments: [
+        'にっくん！合ってたよ！すごくない！？',
+        'やった！正解！天才かも！',
+        '合ってる合ってる！すごいすごい！',
+        '正解！もう英語得意になってるんじゃない！？',
+        'にっくん見てて！私より賢いかも！'
+      ]}
+    ]
+  },
+  {
+    id: 'shimofuri', name: '霜降り明星', icon: '⭐',
+    members: [
+      { name: '粗品', icon: '🧊', comments: [
+        '正解か！',
+        'できるやん！',
+        '天才か！',
+        '合っとるやん！',
+        'やるやん！'
+      ]},
+      { name: 'せいや', icon: '🔥', comments: [
+        '天才やん！！もう受験余裕やで！！',
+        'すごすぎる！！！なんでわかるん！！！',
+        'やったやん！！！最高やん！！！',
+        '受かるわこれ！！絶対受かる！！！',
+        'もう英語得意やん！！！'
+      ]}
+    ]
+  },
+  {
+    id: 'kamaitachi', name: 'かまいたち', icon: '🌀',
+    members: [
+      { name: '山内', icon: '🎩', comments: [
+        '正解やな。まあそうやろとは思ってたけど',
+        'できるやん。思ってたより賢いな',
+        '正解。島根でもわかるやつやな',
+        '合ってる。その知識、大事にしとけよ',
+        '正解やな。教員免許持ちとして認めたる'
+      ]},
+      { name: '濱家', icon: '😄', comments: [
+        'やるやん！さすがやな！',
+        'すごいすごい！正解やん！',
+        'やったやん！天才か！',
+        'できるやん！受験楽勝やん！',
+        '正解！！めちゃくちゃええやん！！'
+      ]}
+    ]
+  },
+  {
+    id: 'kyubangai', name: '9番街レトロ', icon: '🏙️',
+    members: [
+      { name: '京極', icon: '🕶️', comments: [
+        '正解や。まあわかると思ってたけど',
+        '合ってる。落ち着いて考えたらわかるやろ',
+        '正解や。センスあるな',
+        'できるやん。思ってたより賢いな',
+        '正解。次も頼むわ'
+      ]},
+      { name: 'なかむら', icon: '🙌', comments: [
+        '正解！！！天才やん！！！勉強できるやん！！！',
+        'やったやん！！すごすぎるやろ！！！',
+        '合ってる！！！受験受かるわこれ！！！',
+        '天才！！！なかむらより賢いんちゃう！！！',
+        '正解！！！もう英語マスターやん！！！'
+      ]}
+    ]
+  },
+  {
+    id: 'nightingale', name: 'ナイチンゲールダンス', icon: '🕊️',
+    members: [
+      { name: 'ヤス', icon: '🧐', comments: [
+        'なかるてぃんは正解できた方がいいよ',
+        '正解。その調子でいいよ',
+        '合ってる。続けた方がいいよ',
+        'できてる。このまま進んだ方がいいよ',
+        '正解。受験も頑張った方がいいよ'
+      ]},
+      { name: 'なかるてぃん', icon: '🙋', comments: [
+        'では、やったことないですけど、正解しました！',
+        '正解ですよね！？やったことないのに解けました！',
+        'できましたよ！！すごくないですか！？',
+        '正解です！これ得意かもしれないですよ！',
+        'やりました！！！英語できるじゃないですか！！！'
+      ]}
+    ]
+  },
+  {
+    id: 'evers', name: 'エバース', icon: '⚡',
+    members: [
+      { name: '佐々木', icon: '⚾', comments: [
+        '正解じゃん。まあ俺も最初からわかってたけど',
+        '合ってる。野球で言うと完璧なバント',
+        'できるじゃん。センスあるよ',
+        '正解。この調子で続けろよ',
+        '合ってる。思ってたより賢いじゃん'
+      ]},
+      { name: '町田', icon: '😤', comments: [
+        'いや待て。合ってるじゃん。すごいじゃん',
+        '正解だろ。この調子でいけ',
+        'できてるじゃん。普通にすごいから',
+        'いや待て待て。全部合ってるじゃん',
+        '正解。受験絶対いけるから'
+      ]}
+    ]
+  },
+  {
+    id: 'dondecorte', name: 'ドンデコルテ', icon: '🎪',
+    members: [
+      { name: '渡辺', icon: '📢', comments: [
+        '正解です。つまりですね、あなたは理解できているということです',
+        '合っています。考えてみてください、これは大切な知識です',
+        '正解です。このまま続けることをお勧めします',
+        'できています。つまり、英語の才能があるということです',
+        '正解です。受験に向けて、順調だということです'
+      ]},
+      { name: '小橋', icon: '😮', comments: [
+        'あ、合ってる。やるじゃないですか',
+        '正解ですね。すごいじゃないですか',
+        'できてる。なんか普通にいいですね',
+        '合ってる。このままいけますよ',
+        '正解。思ったよりできるじゃないですか'
+      ]}
+    ]
+  },
+  {
+    id: 'nasu_nakanishi', name: 'なすなかにし', icon: '🍆',
+    members: [
+      { name: '那須', icon: '🙂', comments: [
+        '正解！中西さん、こいつできるで！',
+        'やったやん！！天才やん！！',
+        '合ってる！！受験絶対受かるやん！！',
+        '正解！！中西さん見てて！すごくない！？',
+        'できるやん！！！最高やん！！！'
+      ]},
+      { name: 'なかにし', icon: '😊', comments: [
+        '那須くん、正解やって。すごいやん',
+        '合ってるで。さすがやな',
+        'できてるやん。この調子でいこ',
+        '正解やで。受験も頑張りや',
+        '那須くん、こいつ賢いで。正解やって'
+      ]}
+    ]
+  }
+];
+
+const TEXTS = [
+  {
+    id: 1,
+    title: "Text 1: The Comedy Theory Class",
+    lines: [
+      { id: 'L1',  html: '<span class="speaker">Mr. Tanaka:</span> <span class="en">"OK, class. Today\'s topic is very important.</span>' },
+      { id: 'L2',  html: '<span class="en">Why is Reiwa Roman funny?"</span>' },
+      { id: 'L3',  html: '<span class="speaker">Yuki:</span> <span class="en">"Because they are smart?"</span>' },
+      { id: 'L4',  html: '<span class="speaker">Mr. Tanaka:</span> <span class="en">"Yes, but there is more. Kuruma always says</span>' },
+      { id: 'L5',  html: '<span class="en">something strange with a very calm voice. This is called</span>' },
+      { id: 'L6',  html: '<span class="en">\'boke.\' His partner Kemuri corrects him. This is called</span>' },
+      { id: 'L7',  html: '<span class="en">\'tsukkomi.\' Do you understand?"</span>' },
+      { id: 'L8',  html: '<span class="speaker">Kenji:</span> <span class="en">"I think so. Kuruma says the wrong thing,</span>' },
+      { id: 'L9',  html: '<span class="en">and Kemuri fixes it?"</span>' },
+      { id: 'L10', html: '<span class="speaker">Mr. Tanaka:</span> <span class="en">"Exactly! But here is the secret. Kuruma does</span>' },
+      { id: 'L11', html: '<span class="en">not say something stupid. He says something that sounds</span>' },
+      { id: 'L12', html: '<span class="en">almost correct. That is much harder to do. For example,</span>' },
+      { id: 'L13', html: '<span class="en">Kuruma once said, \'I have a very logical reason for this.\'</span>' },
+      { id: 'L14', html: '<span class="en">Then he gave a completely illogical reason. Everyone laughed</span>' },
+      { id: 'L15', html: '<span class="en">because his confidence was so high."</span>' },
+      { id: 'L16', html: '<span class="speaker">Yuki:</span> <span class="en">"That\'s amazing. So confidence is important in comedy?"</span>' },
+      { id: 'L17', html: '<span class="speaker">Mr. Tanaka:</span> <span class="en">"Very important. If Kuruma looked nervous, nobody</span>' },
+      { id: 'L18', html: '<span class="en">would laugh. Comedy needs courage. Now, here is your homework.</span>' },
+      { id: 'L19', html: '<span class="en">Watch one Reiwa Roman video tonight and write three sentences</span>' },
+      { id: 'L20', html: '<span class="en">about it in English."</span>' },
+      { id: 'L21', html: '<span class="speaker">Kenji:</span> <span class="en">"Can I watch ten videos?"</span>' },
+      { id: 'L22', html: '<span class="speaker">Mr. Tanaka:</span> <span class="en">"That is not homework. That is just fun."</span>' },
+      { id: 'L23', html: '<span class="speaker">Kenji:</span> <span class="en">"For me, it is the same thing."</span>' }
+    ],
+    questions: [
+      { type: 'vocab', q: '自信', a: 'confidence', hint1c: 'c',
+        explanation: '「confidence」は「自信」という意味の名詞です。\n「He speaks with confidence.」で「彼は自信を持って話す」となります。\n形容詞形は「confident（自信がある）」です。' },
+      { type: 'vocab', q: '論理的な', a: 'logical', hint1c: 'l',
+        explanation: '「logical」は「論理的な」という意味の形容詞です。\n「a logical reason」で「論理的な理由」となります。\n反対語は「illogical（非論理的な）」です。' },
+      { type: 'vocab', q: '訂正する', a: 'correct', hint1c: 'c',
+        explanation: '「correct」は動詞で「訂正する」、形容詞で「正しい」という意味です。\n「Please correct my mistake.」で「私の間違いを訂正してください」となります。' },
+      { type: 'vocab', q: '重要な', a: 'important', hint1c: 'i',
+        explanation: '「important」は「重要な・大切な」という意味の形容詞です。\n「It is important to study.」で「勉強することは大切です」となります。\n名詞形は「importance（重要性）」です。' },
+      { type: 'vocab', q: '宿題', a: 'homework', hint1c: 'h',
+        explanation: '「homework」は「宿題」という意味の名詞です。\n数えられない名詞なので「a homework」とは言いません。\n「do homework」で「宿題をする」となります。' },
+      { type: 'fill', q: 'Kuruma always says something strange with a very ___ voice.', a: 'calm', lineId: 'L5',
+        explanation: '「calm」は「穏やかな・落ち着いた」という意味の形容詞です。\n「a calm voice」で「落ち着いた声」となります。\n反対語は「nervous（緊張した）」です。' },
+      { type: 'fill', q: 'Comedy needs ___.', a: 'courage', lineId: 'L18',
+        explanation: '「courage」は「勇気」という意味の名詞です。\n「needs courage」で「勇気が必要だ」となります。\n形容詞形は「courageous（勇敢な）」です。' },
+      { type: 'fill', q: 'If Kuruma looked ___, nobody would laugh.', a: 'nervous', lineId: 'L17',
+        explanation: '「nervous」は「緊張した・不安な」という意味の形容詞です。\n「feel nervous」で「緊張を感じる」となります。\n反対語は「calm（落ち着いた）」です。' },
+      { type: 'tf', q: 'Kemuri makes mistakes in the comedy duo.', a: 'false',
+        explanation: '本文の「Kuruma always says something strange」とあります。\n間違えるのはKemuri（ケムリ）ではなくKuruma（くるま）です。\nKemuriは「corrects him（彼を訂正する）」役です。' },
+      { type: 'tf', q: 'Kuruma speaks with a lot of confidence.', a: 'true',
+        explanation: '本文に「his confidence was so high」とあります。\nKurumaは非常に高い自信を持って話すのが特徴です。' },
+      { type: 'tf', q: 'The homework is to watch ten videos.', a: 'false',
+        explanation: '本文に「Watch one Reiwa Roman video tonight」とあります。\n宿題は10本ではなく1本です。\nKenjiが「Can I watch ten videos?」と聞いたのは宿題ではなく個人の希望です。' },
+      { type: 'translate', q: 'お笑いには勇気が必要です。', a: 'Comedy needs courage.',
+        explanation: '「〜には…が必要だ」は「〜 needs …」で表します。\n「need」は「必要とする」という動詞です。\n主語がComedyなので三単現のsをつけて「needs」になります。' },
+      { type: 'translate', q: '自信はお笑いで大切です。', a: 'Confidence is important in comedy.',
+        explanation: '「〜は…です」はbe動詞を使います。\n「Confidence is important」で「自信は大切だ」となります。\n「in comedy」は「お笑いにおいて」という意味の前置詞句です。' }
+    ]
+  },
+  {
+    id: 2,
+    title: "Text 2: After the Yoshimoto Show",
+    lines: [
+      { id: 'L1',  html: '<span class="speaker">Hana:</span> <span class="en">"That was the best show! Shimofuriboshi was incredible!"</span>' },
+      { id: 'L2',  html: '<span class="speaker">Ryo:</span> <span class="en">"Are you serious? Kamaitachi was ten times better.</span>' },
+      { id: 'L3',  html: '<span class="en">Yamauchi\'s face alone is funnier than anything Seiya does."</span>' },
+      { id: 'L4',  html: '<span class="speaker">Hana:</span> <span class="en">"No way! Seiya completely became the character!</span>' },
+      { id: 'L5',  html: '<span class="en">He was not Seiya anymore. He was the character!"</span>' },
+      { id: 'L6',  html: '<span class="speaker">Ryo:</span> <span class="en">"That is called \'acting.\' Yamauchi uses silence.</span>' },
+      { id: 'L7',  html: '<span class="en">Silence is more powerful than noise."</span>' },
+      { id: 'L8',  html: '<span class="speaker">Hana:</span> <span class="en">"Silence? We paid 3,000 yen to watch someone be quiet?"</span>' },
+      { id: 'L9',  html: '<span class="speaker">Ryo:</span> <span class="en">"You don\'t understand advanced comedy."</span>' },
+      { id: 'L10', html: '<span class="speaker">Hana:</span> <span class="en">"Advanced comedy? I understand comedy perfectly.</span>' },
+      { id: 'L11', html: '<span class="en">Seiya made me laugh fifteen times. Yamauchi made me laugh</span>' },
+      { id: 'L12', html: '<span class="en">seven times. Fifteen is bigger than seven."</span>' },
+      { id: 'L13', html: '<span class="speaker">Ryo:</span> <span class="en">"Comedy is not mathematics!"</span>' },
+      { id: 'L14', html: '<span class="speaker">Hana:</span> <span class="en">"Then stop using numbers!"</span>' },
+      { id: 'L15', html: '<span class="speaker">Ryo:</span> <span class="en">"I only used numbers because YOU used numbers first!"</span>' },
+      { id: 'L16', html: '<span class="stage-dir">[They did not speak for five minutes.]</span>' },
+      { id: 'L17', html: '<span class="speaker">Hana:</span> <span class="en">"...The takoyaki after the show was delicious."</span>' },
+      { id: 'L18', html: '<span class="speaker">Ryo:</span> <span class="en">"...Yes. It was."</span>' },
+      { id: 'L19', html: '<span class="speaker">Hana:</span> <span class="en">"Can we go again next week?"</span>' },
+      { id: 'L20', html: '<span class="speaker">Ryo:</span> <span class="en">"I already bought the tickets."</span>' }
+    ],
+    questions: [
+      { type: 'vocab', q: '信じられない', a: 'incredible', hint1c: 'i',
+        explanation: '「incredible」は「信じられないほどすごい」という意味の形容詞です。\n「That was incredible!」で「それは信じられないほどすごかった！」となります。\n似た言葉に「amazing（驚くべき）」「fantastic（素晴らしい）」があります。' },
+      { type: 'vocab', q: '沈黙', a: 'silence', hint1c: 's',
+        explanation: '「silence」は「沈黙・静けさ」という意味の名詞です。\n「in silence」で「黙って・静かに」となります。\n形容詞形は「silent（静かな）」です。' },
+      { type: 'vocab', q: '強力な', a: 'powerful', hint1c: 'p',
+        explanation: '「powerful」は「強力な・力強い」という意味の形容詞です。\n「power（力）」に「-ful（〜に満ちた）」がついた形です。\n反対語は「weak（弱い）」です。' },
+      { type: 'vocab', q: '数学', a: 'mathematics', hint1c: 'm',
+        explanation: '「mathematics」は「数学」という意味の名詞です。\n省略して「math」とも言います。\n「Comedy is not mathematics!」で「お笑いは数学じゃない！」となります。' },
+      { type: 'vocab', q: 'おいしい', a: 'delicious', hint1c: 'd',
+        explanation: '「delicious」は「とてもおいしい」という意味の形容詞です。\n「The takoyaki was delicious.」で「たこ焼きはおいしかった」となります。\n似た言葉に「tasty（おいしい）」「yummy（おいしい・口語）」があります。' },
+      { type: 'fill', q: 'Yamauchi uses ___.', a: 'silence', lineId: 'L6',
+        explanation: '「Yamauchi uses silence.」で「山内は沈黙を使う」となります。\n前に出てきた「silence is more powerful than noise」の流れで\n山内の特徴として沈黙が挙げられています。' },
+      { type: 'fill', q: 'We paid 3,000 yen to watch someone be ___?', a: 'quiet', lineId: 'L8',
+        explanation: '「watch someone be quiet」で「誰かが黙っているのを見る」となります。\n「quiet」は「静かな」という意味の形容詞です。\n「be quiet」で「静かにしている」という状態を表します。' },
+      { type: 'fill', q: 'They did not ___ for five minutes.', a: 'speak', lineId: 'L16',
+        explanation: '「They did not speak for five minutes.」で\n「彼らは5分間話さなかった」となります。\n「did not speak」は過去の否定形です。' },
+      { type: 'tf', q: 'Hana thinks Kamaitachi was the best.', a: 'false',
+        explanation: '本文で「That was the best show! Shimofuriboshi was incredible!」\nと言っているのはHanaです。\nHanaはShimofuriboshiが好きで、KamaitachiはRyoが好きです。' },
+      { type: 'tf', q: 'Ryo already bought tickets for next week.', a: 'true',
+        explanation: '本文の最後に「I already bought the tickets.」とあります。\nRyoはすでに来週のチケットを買っていました。' },
+      { type: 'tf', q: 'They ate takoyaki after the show.', a: 'true',
+        explanation: '本文に「The takoyaki after the show was delicious.」とあります。\nショーのあとにたこ焼きを食べたことが書かれています。' },
+      { type: 'translate', q: '沈黙は騒音より強い。', a: 'Silence is more powerful than noise.',
+        explanation: '「AはBよりも〜だ」は「A is more … than B」で表します。\n「powerful」は2音節以上なので「more」を使って比較します。\n「than」の後に比べる対象「noise（騒音）」を置きます。' },
+      { type: 'translate', q: '来週また行かない？', a: 'Can we go again next week?',
+        explanation: '「〜してもいいですか？」は「Can we 〜?」で表します。\n「go again」で「また行く」となります。\n「next week」は「来週」という意味の副詞句です。' }
+    ]
+  },
+  {
+    id: 3,
+    title: "Text 3: The New Student from Osaka",
+    lines: [
+      { id: 'L1',  html: '<span class="en">Mei transferred to a new school in Tokyo in April.</span>' },
+      { id: 'L2',  html: '<span class="en">She is from Osaka. On her first day, she met a boy named Sota.</span>' },
+      { id: 'L3',  html: '<span class="speaker">Sota:</span> <span class="en">"Hi. I\'m Sota. Are you from Osaka?"</span>' },
+      { id: 'L4',  html: '<span class="speaker">Mei:</span> <span class="en">"Yeah! How did you know?"</span>' },
+      { id: 'L5',  html: '<span class="speaker">Sota:</span> <span class="en">"You said \'nande ya nen\' when you dropped your pencil."</span>' },
+      { id: 'L6',  html: '<span class="speaker">Mei:</span> <span class="en">"Oh! Sorry. I use Kansai dialect without thinking."</span>' },
+      { id: 'L7',  html: '<span class="speaker">Sota:</span> <span class="en">"Don\'t apologize! It\'s cool. But why is Kansai dialect</span>' },
+      { id: 'L8',  html: '<span class="en">funnier than standard Japanese?"</span>' },
+      { id: 'L9',  html: '<span class="speaker">Mei:</span> <span class="en">"Hmm. Good question. In Osaka, the rhythm of speaking</span>' },
+      { id: 'L10', html: '<span class="en">is different. It goes up and down like music. Standard Japanese</span>' },
+      { id: 'L11', html: '<span class="en">is flatter. When a comedian from Osaka speaks, the rhythm</span>' },
+      { id: 'L12', html: '<span class="en">itself is already interesting."</span>' },
+      { id: 'L13', html: '<span class="speaker">Sota:</span> <span class="en">"Like a song?"</span>' },
+      { id: 'L14', html: '<span class="speaker">Mei:</span> <span class="en">"Exactly! And in Osaka, if something is not funny,</span>' },
+      { id: 'L15', html: '<span class="en">people tell you immediately. So Osaka comedians train very hard.</span>' },
+      { id: 'L16', html: '<span class="en">They become very strong."</span>' },
+      { id: 'L17', html: '<span class="speaker">Sota:</span> <span class="en">"So Tokyo comedians are weaker?"</span>' },
+      { id: 'L18', html: '<span class="speaker">Mei:</span> <span class="en">"I didn\'t say that!"</span>' },
+      { id: 'L19', html: '<span class="speaker">Sota:</span> <span class="en">"Your face said that."</span>' },
+      { id: 'L20', html: '<span class="speaker">Mei:</span> <span class="en">"My face said nothing!"</span>' },
+      { id: 'L21', html: '<span class="speaker">Sota:</span> <span class="en">"It said \'yes, Tokyo comedians are weaker.\'"</span>' },
+      { id: 'L22', html: '<span class="speaker">Mei:</span> <span class="en">"...OK maybe a little."</span>' }
+    ],
+    questions: [
+      { type: 'vocab', q: '転校する', a: 'transfer', hint1c: 't',
+        explanation: '「transfer」は「転校する・移動する」という意味の動詞です。\n「transfer to a new school」で「新しい学校に転校する」となります。\n過去形は「transferred」です。' },
+      { type: 'vocab', q: '方言', a: 'dialect', hint1c: 'd',
+        explanation: '「dialect」は「方言・なまり」という意味の名詞です。\n「Kansai dialect」で「関西弁」となります。\n「standard language（標準語）」の反対概念です。' },
+      { type: 'vocab', q: 'リズム', a: 'rhythm', hint1c: 'r',
+        explanation: '「rhythm」は「リズム・調子」という意味の名詞です。\n「the rhythm of speaking」で「話すリズム」となります。\nスペルに注意：rhのhは発音しません。' },
+      { type: 'vocab', q: '無意識に', a: 'without thinking', hint1c: 'w',
+        explanation: '「without thinking」は「考えずに・無意識に」という意味です。\n「without」は「〜なしに」という意味の前置詞です。\n「without〜ing」で「〜せずに」という意味になります。' },
+      { type: 'vocab', q: '鍛える', a: 'train', hint1c: 't',
+        explanation: '「train」は「鍛える・訓練する」という意味の動詞です。\n「train very hard」で「猛練習する」となります。\n名詞では「電車」という意味もあります。' },
+      { type: 'fill', q: 'Mei ___ to a new school in Tokyo in April.', a: 'transferred', lineId: 'L1',
+        explanation: '「Mei transferred to a new school」で\n「メイは新しい学校に転校した」となります。\n過去のことなので過去形「transferred」を使います。' },
+      { type: 'fill', q: 'Standard Japanese is ___.', a: 'flatter', lineId: 'L11',
+        explanation: '「Standard Japanese is flatter.」で\n「標準語はよりフラットだ」となります。\n「flat（平らな）」の比較級が「flatter」です。\n関西弁と比べてリズムの起伏が少ないことを表しています。' },
+      { type: 'fill', q: 'Osaka comedians ___ very hard.', a: 'train', lineId: 'L15',
+        explanation: '「Osaka comedians train very hard.」で\n「大阪の芸人はとても厳しく鍛える」となります。\nここでの「train」は「訓練する・鍛える」という動詞です。' },
+      { type: 'tf', q: 'Mei is from Tokyo.', a: 'false',
+        explanation: '本文の最初に「She is from Osaka.」とあります。\nMeiはTokyoではなくOsaka出身です。' },
+      { type: 'tf', q: 'Kansai dialect goes up and down like music.', a: 'true',
+        explanation: '本文に「It goes up and down like music.」とあります。\n関西弁は音楽のように上がったり下がったりするリズムを持っています。' },
+      { type: 'tf', q: 'Sota thinks Kansai dialect is boring.', a: 'false',
+        explanation: '本文でSotaは「Don\'t apologize! It\'s cool.」と言っています。\nSotaはKansai dialectをcool（かっこいい）と思っています。' },
+      { type: 'translate', q: '大阪では話すリズムが違う。', a: 'The rhythm of speaking is different in Osaka.',
+        explanation: '「〜は…だ」はbe動詞を使います。\n「the rhythm of speaking」で「話すリズム」となります。\n「different」は「違う・異なる」という意味の形容詞です。' },
+      { type: 'translate', q: '謝らないで！', a: "Don't apologize!",
+        explanation: '「〜するな」という否定の命令文は「Don\'t 〜」で表します。\n「apologize」は「謝る」という意味の動詞です。\n命令文は主語（You）を省略して動詞から始めます。' }
+    ]
+  },
+  {
+    id: 4,
+    title: "Text 4: Dinner Table Comedy Experts",
+    lines: [
+      { id: 'L1',  html: '<span class="speaker">Mom:</span> <span class="en">"I watched a funny video today. It was Nasu Nakanishi."</span>' },
+      { id: 'L2',  html: '<span class="speaker">Kai:</span> <span class="en">"Oh? Which era? Their early style was completely</span>' },
+      { id: 'L3',  html: '<span class="en">different from their current style."</span>' },
+      { id: 'L4',  html: '<span class="speaker">Mom:</span> <span class="en">"Era? It was just a video."</span>' },
+      { id: 'L5',  html: '<span class="speaker">Kai:</span> <span class="en">"Mom. Nasu Nakanishi has three clear periods. Early period,</span>' },
+      { id: 'L6',  html: '<span class="en">middle period, and current period. In the early period,</span>' },
+      { id: 'L7',  html: '<span class="en">Nakanishi\'s boke was more aggressive. Now it is more relaxed.</span>' },
+      { id: 'L8',  html: '<span class="en">The timing changed completely around 2019."</span>' },
+      { id: 'L9',  html: '<span class="speaker">Mom:</span> <span class="en">"...You are thirteen years old."</span>' },
+      { id: 'L10', html: '<span class="speaker">Kai:</span> <span class="en">"Comedy history is important."</span>' },
+      { id: 'L11', html: '<span class="speaker">Mom:</span> <span class="en">"More important than math homework?"</span>' },
+      { id: 'L12', html: '<span class="speaker">Kai:</span> <span class="en">"For understanding human psychology, yes."</span>' },
+      { id: 'L13', html: '<span class="speaker">Mom:</span> <span class="en">"What?"</span>' },
+      { id: 'L14', html: '<span class="speaker">Kai:</span> <span class="en">"Comedy is psychology, Mom. When Nasu corrects Nakanishi,</span>' },
+      { id: 'L15', html: '<span class="en">he uses the minimum number of words. This creates maximum impact.</span>' },
+      { id: 'L16', html: '<span class="en">It is very efficient communication."</span>' },
+      { id: 'L17', html: '<span class="speaker">Mom:</span> <span class="en">"I just wanted to share a funny video."</span>' },
+      { id: 'L18', html: '<span class="speaker">Kai:</span> <span class="en">"And you did. But now you also understand why it was funny.</span>' },
+      { id: 'L19', html: '<span class="en">You\'re welcome."</span>' },
+      { id: 'L20', html: '<span class="speaker">Mom:</span> <span class="en">"..."</span>' },
+      { id: 'L21', html: '<span class="speaker">Kai:</span> <span class="en">"Do you want me to explain the theory behind Kamaitachi next?"</span>' },
+      { id: 'L22', html: '<span class="speaker">Mom:</span> <span class="en">"Please eat your rice."</span>' },
+      { id: 'L23', html: '<span class="speaker">Kai:</span> <span class="en">"I can do both."</span>' }
+    ],
+    questions: [
+      { type: 'vocab', q: '心理学', a: 'psychology', hint1c: 'p',
+        explanation: '「psychology」は「心理学」という意味の名詞です。\n「Comedy is psychology.」で「お笑いは心理学だ」となります。\n形容詞形は「psychological（心理的な）」です。' },
+      { type: 'vocab', q: '効率的な', a: 'efficient', hint1c: 'e',
+        explanation: '「efficient」は「効率的な・能率的な」という意味の形容詞です。\n「efficient communication」で「効率的なコミュニケーション」となります。\n名詞形は「efficiency（効率）」です。' },
+      { type: 'vocab', q: '最小限の', a: 'minimum', hint1c: 'm',
+        explanation: '「minimum」は「最小限の・最低の」という意味の形容詞・名詞です。\n「the minimum number of words」で「最小限の言葉数」となります。\n反対語は「maximum（最大限の）」です。' },
+      { type: 'vocab', q: '説明する', a: 'explain', hint1c: 'e',
+        explanation: '「explain」は「説明する」という意味の動詞です。\n「explain the theory」で「理論を説明する」となります。\n名詞形は「explanation（説明）」です。' },
+      { type: 'vocab', q: '明確な', a: 'clear', hint1c: 'c',
+        explanation: '「clear」は「明確な・はっきりした」という意味の形容詞です。\n「three clear periods」で「3つの明確な時期」となります。\n副詞形は「clearly（明確に）」です。' },
+      { type: 'fill', q: 'Comedy is ___, Mom.', a: 'psychology', lineId: 'L14',
+        explanation: '「Comedy is psychology, Mom.」で\n「お笑いは心理学だよ、お母さん」となります。\nKaiはcomedyとpsychologyのつながりを説明しています。' },
+      { type: 'fill', q: "Nakanishi's boke was more ___ in the early period.", a: 'aggressive', lineId: 'L7',
+        explanation: '「Nakanishi\'s boke was more aggressive in the early period.」で\n「初期はなかにしのボケがもっと攻撃的だった」となります。\n「aggressive」は「攻撃的な・積極的な」という意味の形容詞です。' },
+      { type: 'fill', q: 'Please ___ your rice.', a: 'eat', lineId: 'L22',
+        explanation: '「Please eat your rice.」で「ご飯を食べて」となります。\n「Please〜」は丁寧な命令文です。\nお母さんがKaiに食事をするよう促しています。' },
+      { type: 'tf', q: 'Kai thinks comedy history is more important than math.', a: 'true',
+        explanation: '本文に「Comedy history is important.」とあり、\n「More important than math homework?」という質問に対して\n「For understanding human psychology, yes.」と答えています。' },
+      { type: 'tf', q: "Nasu Nakanishi's style never changed.", a: 'false',
+        explanation: '本文に「The timing changed completely around 2019.」とあります。\nなすなかにしのスタイルは2019年ごろに完全に変わりました。' },
+      { type: 'tf', q: 'Kai wants to explain the theory behind Kamaitachi.', a: 'true',
+        explanation: '本文の最後の方で\n「Do you want me to explain the theory behind Kamaitachi next?」\nとKaiが言っています。' },
+      { type: 'translate', q: 'お笑いは心理学です。', a: 'Comedy is psychology.',
+        explanation: '「AはBです」はA is Bで表します。\n主語が「Comedy」なのでbe動詞は「is」を使います。\n「psychology」は数えられない名詞なのでaはつけません。' },
+      { type: 'translate', q: '両方できるよ。', a: 'I can do both.',
+        explanation: '「できる」はcanを使います。\n「both」は「両方」という意味です。\n「I can do both.」で「私は両方できる」となります。' }
+    ]
+  },
+  {
+    id: 5,
+    title: "Text 5: My Comedy Diary",
+    lines: [
+      { id: 'L1',  html: '<span class="en" style="font-weight:bold;">Monday</span>' },
+      { id: 'L2',  html: '<span class="en">I discovered a new comedy duo today. Their name is</span>' },
+      { id: 'L3',  html: '<span class="en">9 Bangai Retro. I watched one video and I could not stop.</span>' },
+      { id: 'L4',  html: '<span class="en">I watched five more videos. Then ten more.</span>' },
+      { id: 'L5',  html: '<span class="en">My homework is still on my desk.</span>' },
+      { id: 'L6',  html: '<span class="en">Kyogoku is the boke. He never looks excited. He always</span>' },
+      { id: 'L7',  html: '<span class="en">speaks in a calm, cool voice. But his words are completely</span>' },
+      { id: 'L8',  html: '<span class="en">crazy. I think this is very difficult to do. How can he</span>' },
+      { id: 'L9',  html: '<span class="en">say such strange things so seriously?</span>' },
+      { id: 'L10', html: '<span class="en">Nakamura is the tsukkomi. He is loud and passionate.</span>' },
+      { id: 'L11', html: '<span class="en">When Kyogoku says something strange, Nakamura explodes.</span>' },
+      { id: 'L12', html: '<span class="en">"That\'s wrong!" "Why do you think so?!"</span>' },
+      { id: 'L13', html: '<span class="en">His energy is incredible.</span>' },
+      { id: 'L14', html: '<span class="en" style="font-weight:bold;">Tuesday</span>' },
+      { id: 'L15', html: '<span class="en">I watched more videos today. I have a new theory.</span>' },
+      { id: 'L16', html: '<span class="en">Kyogoku\'s calm boke is more powerful BECAUSE Nakamura</span>' },
+      { id: 'L17', html: '<span class="en">is so passionate. They are opposite. Like ice and fire.</span>' },
+      { id: 'L18', html: '<span class="en">Like silence and noise. Like my brain before 9 Bangai</span>' },
+      { id: 'L19', html: '<span class="en">Retro and after 9 Bangai Retro.</span>' },
+      { id: 'L20', html: '<span class="en" style="font-weight:bold;">Wednesday</span>' },
+      { id: 'L21', html: '<span class="en">I told my friend about 9 Bangai Retro at school today.</span>' },
+      { id: 'L22', html: '<span class="speaker">Me:</span> <span class="en">"You have to watch them. Kyogoku never smiles but</span>' },
+      { id: 'L23', html: '<span class="en">everything he says is funny."</span>' },
+      { id: 'L24', html: '<span class="speaker">Friend:</span> <span class="en">"Why is that funny?"</span>' },
+      { id: 'L25', html: '<span class="speaker">Me:</span> <span class="en">"Because the gap is funny! Cool outside, crazy inside!"</span>' },
+      { id: 'L26', html: '<span class="speaker">Friend:</span> <span class="en">"I don\'t understand."</span>' },
+      { id: 'L27', html: '<span class="speaker">Me:</span> <span class="en">"You will. Trust me."</span>' },
+      { id: 'L28', html: '<span class="en">She watched one video that night. She sent me a message</span>' },
+      { id: 'L29', html: '<span class="en">at midnight. It said: "I can\'t stop watching."</span>' },
+      { id: 'L30', html: '<span class="en">I replied: "I know."</span>' },
+      { id: 'L31', html: '<span class="en" style="font-weight:bold;">Thursday</span>' },
+      { id: 'L32', html: '<span class="en">I have a new goal. I want to go to their live show at</span>' },
+      { id: 'L33', html: '<span class="en">Jimbocho Yoshimoto. I need to save money. I will stop</span>' },
+      { id: 'L34', html: '<span class="en">buying snacks. Comedy is more important than snacks.</span>' },
+      { id: 'L35', html: '<span class="en" style="font-weight:bold;">Friday</span>' },
+      { id: 'L36', html: '<span class="en">I bought snacks today. But I also watched all their</span>' },
+      { id: 'L37', html: '<span class="en">YouTube videos. That is progress, I think.</span>' }
+    ],
+    questions: [
+      { type: 'vocab', q: '発見する', a: 'discovered', hint1c: 'd',
+        explanation: '「discover」は「発見する」という動詞。過去形はdiscovered。名詞形はdiscovery（発見）。' },
+      { type: 'vocab', q: '落ち着いた', a: 'calm', hint1c: 'c',
+        explanation: '「calm」は「落ち着いた・穏やかな」という形容詞。反対語はexcited・nervous。' },
+      { type: 'vocab', q: '情熱的な', a: 'passionate', hint1c: 'p',
+        explanation: '「passionate」は「情熱的な」という形容詞。名詞形はpassion（情熱）。' },
+      { type: 'vocab', q: '正反対の', a: 'opposite', hint1c: 'o',
+        explanation: '「opposite」は「正反対の」という形容詞。Like ice and fire.が比喩として使われている。' },
+      { type: 'vocab', q: '目標', a: 'goal', hint1c: 'g',
+        explanation: '「goal」は「目標・ゴール」という名詞。サッカーのゴールも同じ単語。' },
+      { type: 'vocab', q: '信じる', a: 'trust', hint1c: 't',
+        explanation: '「trust」は「信じる・信頼する」という動詞。Trust me.で「信じて」という命令文になる。' },
+      { type: 'vocab', q: '進歩・前進', a: 'progress', hint1c: 'p',
+        explanation: '「progress」は「進歩・前進」という名詞。動詞としても使える。' },
+      { type: 'fill', q: 'He always speaks in a calm, ___ voice.', a: 'cool', lineId: 'L7',
+        explanation: 'ここでは「クールな・落ち着いた」という形容詞。calm, cool voiceで「落ち着いてクールな声」。' },
+      { type: 'fill', q: 'When Kyogoku says something strange, Nakamura ___.', a: 'explodes', lineId: 'L11',
+        explanation: '「爆発する」という動詞。ここでは比喩的に「感情が爆発する」という意味。三単現でexplodes。' },
+      { type: 'fill', q: 'They are ___. Like ice and fire.', a: 'opposite', lineId: 'L17',
+        explanation: 'They are opposite.で「彼らは正反対だ」。京極の落ち着いたボケとなかむらの情熱的なツッコミが対照的。' },
+      { type: 'fill', q: 'I will stop buying ___. Comedy is more important than snacks.', a: 'snacks', lineId: 'L34',
+        explanation: '「おやつ・軽食」という名詞。stop buying snacksで「おやつを買うのをやめる」。stop〜ingで「〜するのをやめる」。' },
+      { type: 'fill', q: 'She sent me a message at ___.', a: 'midnight', lineId: 'L29',
+        explanation: '「夜中の12時・真夜中」。at midnightで「夜中に」。at noon（正午に）と対になる表現。' },
+      { type: 'tf', q: 'Kyogoku always looks very excited.', a: 'false',
+        explanation: '本文にHe never looks excited.とある。Kyogokuは絶対に興奮した顔をしない。' },
+      { type: 'tf', q: 'Nakamura is the tsukkomi.', a: 'true',
+        explanation: '本文にNakamura is the tsukkomi.とはっきり書いてある。' },
+      { type: 'tf', q: "The writer's friend never watched 9 Bangai Retro.", a: 'false',
+        explanation: '本文にShe watched one video that night.とある。夜中に「止まらない」とメッセージを送ってきた。' },
+      { type: 'tf', q: 'The writer wants to go to a live show at Jimbocho Yoshimoto.', a: 'true',
+        explanation: '木曜日の日記にI want to go to their live show at Jimbocho Yoshimoto.とある。' },
+      { type: 'tf', q: 'The writer successfully stopped buying snacks on Friday.', a: 'false',
+        explanation: '金曜日の日記にI bought snacks today.とある。目標は達成できなかった。' },
+      { type: 'translate', q: '私は新しい理論を持っている。', a: 'I have a new theory.',
+        explanation: '「〜を持っている」はhaveを使う。I have〜は所有を表す基本表現。' },
+      { type: 'translate', q: '彼女は夜中にメッセージを送ってきた。', a: 'She sent me a message at midnight.',
+        explanation: '「送った」は過去形でsent（sendの過去形）。send 人 物で「人に物を送る」。' },
+      { type: 'translate', q: 'お笑いはおやつより大事だ。', a: 'Comedy is more important than snacks.',
+        explanation: 'AはBより〜だはA is more〜 than B。importantは2音節以上なのでmoreを使う。' },
+      { type: 'translate', q: '信じて。', a: 'Trust me.',
+        explanation: '命令文は動詞の原形から始める。meは「私を」という目的格。' }
+    ]
+  }
+];
+
+// ══════════════════════════════════════════════
+// STUDY DATA
+// ══════════════════════════════════════════════
+
+const STUDY_WORDS = [
+  [ // Text 1
+    { en: 'confident',  kana: 'コンフィデント',   jp: '自信がある' },
+    { en: 'logical',    kana: 'ロジカル',         jp: '論理的な' },
+    { en: 'correct',    kana: 'コレクト',         jp: '正しい・訂正する' },
+    { en: 'important',  kana: 'インポータント',   jp: '重要な' },
+    { en: 'homework',   kana: 'ホームワーク',     jp: '宿題' },
+    { en: 'calm',       kana: 'カーム',           jp: '落ち着いた' },
+    { en: 'courage',    kana: 'カレッジ',         jp: '勇気' },
+    { en: 'nervous',    kana: 'ナーバス',         jp: '緊張した' }
+  ],
+  [ // Text 2
+    { en: 'incredible',   kana: 'インクレディブル',   jp: '信じられないほどすごい' },
+    { en: 'silence',      kana: 'サイレンス',         jp: '沈黙' },
+    { en: 'powerful',     kana: 'パワフル',           jp: '強力な' },
+    { en: 'mathematics',  kana: 'マスマティクス',     jp: '数学' },
+    { en: 'delicious',    kana: 'デリシャス',         jp: 'おいしい' },
+    { en: 'advanced',     kana: 'アドバンスド',       jp: '高度な' },
+    { en: 'perfectly',    kana: 'パーフェクトリー',   jp: '完璧に' }
+  ],
+  [ // Text 3
+    { en: 'transfer',     kana: 'トランスファー',     jp: '転校する' },
+    { en: 'dialect',      kana: 'ダイアレクト',       jp: '方言' },
+    { en: 'rhythm',       kana: 'リズム',             jp: 'リズム' },
+    { en: 'immediately',  kana: 'イミディエイトリー', jp: 'すぐに' },
+    { en: 'apologize',    kana: 'アポロジャイズ',     jp: '謝る' },
+    { en: 'standard',     kana: 'スタンダード',       jp: '標準の' },
+    { en: 'passionate',   kana: 'パッショネート',     jp: '情熱的な' }
+  ],
+  [ // Text 4
+    { en: 'psychology',  kana: 'サイコロジー',   jp: '心理学' },
+    { en: 'efficient',   kana: 'エフィシェント', jp: '効率的な' },
+    { en: 'minimum',     kana: 'ミニマム',       jp: '最小限の' },
+    { en: 'aggressive',  kana: 'アグレッシブ',   jp: '攻撃的な' },
+    { en: 'explain',     kana: 'エクスプレイン', jp: '説明する' },
+    { en: 'theory',      kana: 'セオリー',       jp: '理論' },
+    { en: 'period',      kana: 'ピリオド',       jp: '時期・時代' }
+  ],
+  [ // Text 5
+    { en: 'discover',    kana: 'ディスカバー',       jp: '発見する' },
+    { en: 'calm',        kana: 'カーム',             jp: '落ち着いた' },
+    { en: 'passionate',  kana: 'パッショネート',     jp: '情熱的な' },
+    { en: 'opposite',    kana: 'オポジット',         jp: '正反対の' },
+    { en: 'goal',        kana: 'ゴール',             jp: '目標' },
+    { en: 'trust',       kana: 'トラスト',           jp: '信じる' },
+    { en: 'progress',    kana: 'プログレス',         jp: '前進・進歩' },
+    { en: 'midnight',    kana: 'ミッドナイト',       jp: '真夜中' },
+    { en: 'incredible',  kana: 'インクレディブル',   jp: '信じられないほどすごい' },
+    { en: 'explode',     kana: 'エクスプロード',     jp: '爆発する' }
+  ]
+];
+
+const GRAMMAR_HINTS = [
+  { // Text 1
+    title: 'if（もし〜なら）の使い方',
+    exampleEn: 'If Kuruma looked nervous, nobody would laugh.',
+    translate: '「もしくるまが緊張して見えたら、誰も笑わなかっただろう」',
+    point: 'if＋過去形、would＋動詞の原形',
+    examples: '・<span class="gc-en">If I had money, I would buy it.</span>（もしお金があれば買うのに）\n・<span class="gc-en">If it rained, we would stay home.</span>（もし雨なら家にいるのに）'
+  },
+  { // Text 2
+    title: '比較級（〜より…だ）の使い方',
+    exampleEn: 'Silence is more powerful than noise.',
+    translate: '「沈黙は騒音より強力だ」',
+    point: 'more＋形容詞＋than',
+    examples: '・<span class="gc-en">Math is more difficult than English.</span>（数学は英語より難しい）\n・<span class="gc-en">This book is more interesting than that one.</span>（この本はあれより面白い）'
+  },
+  { // Text 3
+    title: '命令文（〜しなさい・〜するな）の使い方',
+    exampleEn: "Don't apologize! Trust me.",
+    translate: '「謝るな！信じて」',
+    point: "命令文は動詞の原形から始める。否定はDon't＋動詞の原形。",
+    examples: '・<span class="gc-en">Open the window.</span>（窓を開けて）\n・<span class="gc-en">Don\'t be nervous.</span>（緊張しないで）'
+  },
+  { // Text 4
+    title: 'different from〜（〜と違う）の使い方',
+    exampleEn: 'Their early style was completely different from their current style.',
+    translate: '「初期のスタイルは今のスタイルと完全に違った」',
+    point: 'different from〜で「〜と違う」',
+    examples: '・<span class="gc-en">My opinion is different from yours.</span>（私の意見はあなたのと違う）\n・<span class="gc-en">This is different from what I expected.</span>（これは期待していたものと違う）'
+  },
+  { // Text 5
+    title: 'stop〜ing（〜するのをやめる）の使い方',
+    exampleEn: 'I will stop buying snacks.',
+    translate: '「おやつを買うのをやめる」',
+    point: 'stop＋動詞ing形で「〜するのをやめる」',
+    examples: '・<span class="gc-en">I stopped watching TV.</span>（テレビを見るのをやめた）\n・<span class="gc-en">Please stop talking.</span>（話すのをやめてください）'
+  }
+];
+
+// ══════════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════════
+
+let selectedArtist = null;
+let currentTextIdx = 0;
+let questions       = [];
+let currentQIdx     = 0;
+let attempts        = 0;
+let score           = 0;
+let totalAnswered   = 0;
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+
+function init() {
+  // Build artist selection grid
+  const grid = document.getElementById('artist-grid');
+  ARTISTS.forEach(a => {
+    const btn = document.createElement('button');
+    btn.className = 'as-btn';
+    btn.innerHTML = `<div class="as-icon">${a.icon}</div><div>${a.name}</div>`;
+    btn.onclick = () => selectArtist(a.id);
+    grid.appendChild(btn);
+  });
+
+  // Build text tabs
+  const tabs = document.getElementById('text-tabs');
+  TEXTS.forEach((t, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn' + (i === 0 ? ' active' : '');
+    btn.textContent = `Text ${t.id}`;
+    btn.dataset.idx = i;
+    btn.onclick = () => selectText(i);
+    tabs.appendChild(btn);
+  });
+}
+
+function selectArtist(id) {
+  selectedArtist = ARTISTS.find(a => a.id === id);
+  document.getElementById('artist-screen').style.display = 'none';
+  document.getElementById('app').style.display = 'flex';
+  document.getElementById('current-artist-label').textContent =
+    `${selectedArtist.icon} ${selectedArtist.name}`;
+  showModeScreen(0);
+}
+
+function resetArtist() {
+  document.getElementById('artist-screen').style.display = 'flex';
+  document.getElementById('app').style.display = 'none';
+}
+
+// ══════════════════════════════════════════════
+// TEXT & QUESTION LOADING
+// ══════════════════════════════════════════════
+
+function selectText(idx) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+  showModeScreen(idx);
+}
+
+function loadText(idx) {
+  currentTextIdx = idx;
+  const text = TEXTS[idx];
+
+  // Render text
+  document.getElementById('text-title').textContent = text.title;
+  const body = document.getElementById('text-body');
+  body.innerHTML = text.lines.map(l =>
+    `<span class="text-line" id="tl-${l.id}">${l.html}</span><br>`
+  ).join('');
+
+  // Shuffle questions
+  questions = shuffleArray([...text.questions]);
+  currentQIdx  = 0;
+  score        = 0;
+  totalAnswered = 0;
+  attempts     = 0;
+
+  document.getElementById('complete-screen').style.display = 'none';
+  document.getElementById('q-card').style.display = 'block';
+
+  // Memo is preserved across text switches (do NOT clear textarea)
+
+  showQuestion();
+}
+
+function showQuestion() {
+  clearHighlight();
+  if (currentQIdx >= questions.length) {
+    showComplete();
+    return;
+  }
+
+  const q = questions[currentQIdx];
+  attempts = 0;
+
+  // Progress
+  const pct = Math.round((currentQIdx / questions.length) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent =
+    `問題 ${currentQIdx + 1}/${questions.length}`;
+
+  // Type badge
+  const badge = document.getElementById('q-type-badge');
+  const badgeMap = {
+    vocab:     { cls: 'badge-vocab',     label: '📘 単語問題' },
+    fill:      { cls: 'badge-fill',      label: '✏️ 空欄補充' },
+    tf:        { cls: 'badge-tf',        label: '⭕ True / False' },
+    translate: { cls: 'badge-translate', label: '🖊️ 英作文' }
+  };
+  badge.className = 'q-type-badge ' + badgeMap[q.type].cls;
+  badge.textContent = badgeMap[q.type].label;
+
+  // Question text
+  const qText = document.getElementById('q-text');
+  if (q.type === 'vocab') {
+    qText.innerHTML = `<span class="jp">「${q.q}」を英語で書こう！</span>`;
+  } else if (q.type === 'fill') {
+    const formatted = q.q.replace('___', '<span class="q-blank">___</span>');
+    qText.innerHTML = `<span class="en">${formatted}</span><br><span class="jp" style="font-size:.82rem;color:var(--muted)">（___に入る英語は？）</span>`;
+  } else if (q.type === 'tf') {
+    qText.innerHTML = `<span class="en">${q.q}</span><br><span class="jp" style="font-size:.82rem;color:var(--muted)">（true か false で答えよう）</span>`;
+  } else if (q.type === 'translate') {
+    qText.innerHTML = `<span class="jp">「${q.q}」</span><br><span class="jp" style="font-size:.82rem;color:var(--muted)">↑ これを英語に直そう</span>`;
+  }
+
+  // Reset input
+  const inp = document.getElementById('q-input');
+  inp.value = '';
+  inp.className = 'q-input';
+  inp.disabled = false;
+  inp.placeholder = q.type === 'tf' ? 'true か false を入力…' : 'ここに入力…';
+  inp.focus();
+
+  // Hide feedback
+  const fb = document.getElementById('feedback');
+  fb.style.display = 'none';
+  fb.innerHTML = '';
+
+  // Highlight relevant line for fill questions
+  if (q.type === 'fill' && q.lineId) {
+    highlightLine(q.lineId);
+  }
+}
+
+// ══════════════════════════════════════════════
+// ANSWER CHECKING
+// ══════════════════════════════════════════════
+
+function normalize(s) {
+  return s.trim().toLowerCase().replace(/[.!?'"]/g, '').replace(/\s+/g, ' ');
+}
+
+function checkAnswer() {
+  const q   = questions[currentQIdx];
+  const inp = document.getElementById('q-input');
+  const raw = inp.value;
+  if (!raw.trim()) return;
+
+  const correct = normalize(raw) === normalize(q.a);
+  attempts++;
+
+  if (correct) {
+    inp.className = 'q-input correct';
+    inp.disabled  = true;
+    score++;
+    totalAnswered++;
+    showCorrectFeedback();
+  } else {
+    inp.className = 'q-input incorrect';
+    totalAnswered++;
+    showWrongFeedback();
+  }
+}
+
+function skipQuestion() {
+  totalAnswered++;
+  showSkipFeedback();
+}
+
+function showCorrectFeedback() {
+  const q  = questions[currentQIdx];
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback correct-fb';
+  fb.style.display = 'block';
+
+  // Pick random member and random comment
+  const members = selectedArtist.members;
+  const m = members[Math.floor(Math.random() * members.length)];
+  const comment = m.comments[Math.floor(Math.random() * m.comments.length)];
+
+  // Build explanation HTML
+  let explanationHtml = '';
+  if (q.explanation) {
+    explanationHtml = `
+      <div class="explanation-box">
+        <div class="explanation-header">
+          <span>📖</span>
+          <span class="explanation-divider">━━━━━━━━━━━━━━━━━━━━</span>
+          <span>解説</span>
+          <span class="explanation-divider">━━━━━━━━━━━━━━━━━━━━</span>
+        </div>
+        <div class="explanation-body">${q.explanation.replace(/\n/g, '<br>')}</div>
+      </div>`;
+  }
+
+  fb.innerHTML = `
+    <div class="fb-correct">
+      <div class="fb-result">✅ 正解！</div>
+      <div class="artist-comment">
+        <div class="ac-icon">${m.icon}</div>
+        <div>
+          <div class="ac-name">${selectedArtist.name} / ${m.name}</div>
+          <div class="ac-line">${comment}</div>
+        </div>
+      </div>
+      ${explanationHtml}
+      <button class="btn-next" onclick="nextQuestion()">次の問題へ ▶</button>
+    </div>
+  `;
+}
+
+function showWrongFeedback() {
+  const q   = questions[currentQIdx];
+  const fb  = document.getElementById('feedback');
+  fb.className = 'feedback wrong-fb';
+  fb.style.display = 'block';
+
+  let hintHtml = '';
+  if (attempts === 1) {
+    // First wrong: type-specific hint
+    if (q.type === 'vocab' || q.type === 'fill') {
+      hintHtml = `<div class="hint-box"><div class="hint-label">ヒント</div>最初の文字は「<b>${q.hint1c || q.a[0]}</b>」だよ</div>`;
+    } else if (q.type === 'tf') {
+      hintHtml = `<div class="hint-box"><div class="hint-label">ヒント</div>テキストをもう一度読んで、true か false を考えてみて</div>`;
+    } else if (q.type === 'translate') {
+      hintHtml = `<div class="hint-box"><div class="hint-label">ヒント</div>最初の単語は「<b>${q.a.split(' ')[0]}</b>」だよ</div>`;
+    }
+  } else if (attempts >= 2) {
+    // Second+ wrong: reveal answer
+    hintHtml = `<div class="hint-box"><div class="hint-label">正解はこれだよ</div><b>${q.a}</b></div>`;
+  }
+
+  fb.innerHTML = `
+    <div class="fb-wrong">
+      <div class="fb-result">❌ もう一回チャレンジ！</div>
+      ${hintHtml}
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn-answer" onclick="retryAnswer()">再挑戦</button>
+        <button class="btn-skip" onclick="nextQuestion()">次へ</button>
+      </div>
+    </div>
+  `;
+}
+
+function showSkipFeedback() {
+  const q  = questions[currentQIdx];
+  const fb = document.getElementById('feedback');
+  fb.className = 'feedback wrong-fb';
+  fb.style.display = 'block';
+
+  fb.innerHTML = `
+    <div class="fb-wrong">
+      <div class="fb-result">⏭ スキップ</div>
+      <div class="hint-box"><div class="hint-label">正解</div><b>${q.a}</b></div>
+      <button class="btn-next" onclick="nextQuestion()">次の問題へ ▶</button>
+    </div>
+  `;
+}
+
+function retryAnswer() {
+  const q   = questions[currentQIdx];
+  const inp = document.getElementById('q-input');
+  inp.className = 'q-input';
+  inp.disabled  = false;
+  inp.value     = '';
+  inp.focus();
+
+  const fb = document.getElementById('feedback');
+  fb.style.display = 'none';
+  if (q.type === 'fill' && q.lineId) highlightLine(q.lineId);
+}
+
+function nextQuestion() {
+  currentQIdx++;
+  showQuestion();
+}
+
+// ══════════════════════════════════════════════
+// TEXT HIGHLIGHT
+// ══════════════════════════════════════════════
+
+function highlightLine(lineId) {
+  const el = document.getElementById('tl-' + lineId);
+  if (el) {
+    el.classList.add('highlight-line');
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+function clearHighlight() {
+  document.querySelectorAll('.highlight-line').forEach(el => {
+    el.classList.remove('highlight-line');
+  });
+}
+
+// ══════════════════════════════════════════════
+// MEMO
+// ══════════════════════════════════════════════
+
+function clearMemo() {
+  document.getElementById('memo-textarea').value = '';
+}
+
+// ══════════════════════════════════════════════
+// COMPLETE SCREEN
+// ══════════════════════════════════════════════
+
+function showComplete() {
+  document.getElementById('q-card').style.display = 'none';
+  const cs = document.getElementById('complete-screen');
+  cs.style.display = 'block';
+
+  const pct = Math.round((score / questions.length) * 100);
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('progress-label').textContent = '全問完了！';
+
+  let scoreColor = pct >= 80 ? 'var(--green)' : pct >= 50 ? 'var(--gold)' : 'var(--red)';
+  document.getElementById('cs-score').innerHTML =
+    `<span style="color:${scoreColor}">${score}</span><span style="font-size:1.5rem;color:var(--muted)">/${questions.length}</span>`;
+
+  let msg = '';
+  if (pct === 100) msg = '完璧！全問正解！すごすぎる！';
+  else if (pct >= 80) msg = 'すばらしい！よく覚えられてるね！';
+  else if (pct >= 60) msg = 'いい調子！もう一度やってみよう！';
+  else msg = 'テキストをもう一度読んでみよう！';
+  document.getElementById('cs-msg').textContent = msg;
+}
+
+function retryText() {
+  loadText(currentTextIdx);
+}
+
+function nextText() {
+  const next = (currentTextIdx + 1) % TEXTS.length;
+  selectText(next);
+}
+
+// ══════════════════════════════════════════════
+// UTILS
+// ══════════════════════════════════════════════
+
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ══════════════════════════════════════════════
+// STUDY MODE
+// ══════════════════════════════════════════════
+
+let studyWordIdx = 0;
+let studyWords   = [];
+let studiedTexts = {};
+
+function showModeScreen(idx) {
+  currentTextIdx = idx;
+  const text = TEXTS[idx];
+  document.getElementById('mode-text-label').textContent = text.title;
+
+  const badge = document.getElementById('mode-studied-badge');
+  badge.style.display = studiedTexts[idx] ? 'inline-block' : 'none';
+
+  document.getElementById('mode-screen').style.display  = 'block';
+  document.getElementById('fc-screen').style.display    = 'none';
+  document.getElementById('study-overlay').style.display = 'flex';
+}
+
+function goToReading() {
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+  document.getElementById('study-overlay').style.display = 'none';
+  loadText(currentTextIdx);
+}
+
+function startStudy() {
+  studyWords   = STUDY_WORDS[currentTextIdx] || [];
+  studyWordIdx = 0;
+
+  document.getElementById('mode-screen').style.display     = 'none';
+  document.getElementById('fc-word-card').style.display    = 'block';
+  document.getElementById('fc-grammar-card').style.display = 'none';
+  document.getElementById('fc-again-btn').style.display    = 'inline-block';
+  document.getElementById('fc-next-btn').onclick           = nextFlashcard;
+  document.getElementById('fc-screen').style.display       = 'flex';
+
+  showFlashcard();
+}
+
+function showFlashcard() {
+  const total = studyWords.length;
+  if (studyWordIdx >= total) { showGrammarHint(); return; }
+
+  const w   = studyWords[studyWordIdx];
+  const pct = Math.round((studyWordIdx / total) * 100);
+
+  document.getElementById('fc-progress-label').textContent = `${studyWordIdx + 1} / ${total} 単語`;
+  document.getElementById('fc-bar-fill').style.width        = pct + '%';
+  document.getElementById('fc-word').textContent            = w.en;
+  document.getElementById('fc-kana').textContent            = w.kana;
+  document.getElementById('fc-jp').textContent              = w.jp;
+
+  const isLast = studyWordIdx === total - 1;
+  document.getElementById('fc-next-btn').textContent =
+    isLast ? '覚えた！文法ヒントへ →' : '覚えた！次へ →';
+
+  setTimeout(() => speakWord(), 400);
+}
+
+function nextFlashcard() {
+  studyWordIdx++;
+  showFlashcard();
+}
+
+function speakWord() {
+  if (studyWordIdx >= studyWords.length) return;
+  const w = studyWords[studyWordIdx];
+  if (!w || !('speechSynthesis' in window)) return;
+  const u = new SpeechSynthesisUtterance(w.en);
+  u.lang = 'en-US';
+  u.rate = 0.85;
+  speechSynthesis.cancel();
+  speechSynthesis.speak(u);
+}
+
+function showGrammarHint() {
+  const hint = GRAMMAR_HINTS[currentTextIdx];
+  if (!hint) { completeStudy(); return; }
+
+  document.getElementById('fc-progress-label').textContent = '📐 文法ヒント';
+  document.getElementById('fc-bar-fill').style.width        = '100%';
+
+  document.getElementById('gc-title').textContent       = hint.title;
+  document.getElementById('gc-example-en').textContent  = hint.exampleEn;
+  document.getElementById('gc-translate').textContent   = hint.translate;
+  document.getElementById('gc-point').textContent       = 'ポイント：' + hint.point;
+  document.getElementById('gc-examples').innerHTML      = hint.examples;
+
+  document.getElementById('fc-word-card').style.display    = 'none';
+  document.getElementById('fc-grammar-card').style.display = 'block';
+  document.getElementById('fc-again-btn').style.display    = 'none';
+
+  const btn = document.getElementById('fc-next-btn');
+  btn.textContent = '予習完了！長文を読もう！';
+  btn.onclick     = completeStudy;
+}
+
+function completeStudy() {
+  studiedTexts[currentTextIdx] = true;
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    if (i === currentTextIdx) b.classList.add('studied');
+  });
+  goToReading();
+}
+
+// Enter key to submit
+document.addEventListener('DOMContentLoaded', () => {
+  init();
+  document.getElementById('q-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkAnswer();
+  });
+});
+</script>
+</body>
+</html>

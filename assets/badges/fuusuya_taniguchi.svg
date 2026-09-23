@@ -1,0 +1,19 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="50" cy="50" r="50" fill="#8ecae6"/>
+  <circle cx="50" cy="50" r="47" fill="none" stroke="#d4af37" stroke-width="2.5"/>
+  <circle cx="18" cy="18" r="2.2" fill="#d4af37" opacity="0.7"/>
+  <circle cx="82" cy="18" r="2.2" fill="#d4af37" opacity="0.7"/>
+  <circle cx="18" cy="82" r="2.2" fill="#d4af37" opacity="0.7"/>
+  <circle cx="82" cy="82" r="2.2" fill="#d4af37" opacity="0.7"/>
+  <rect x="18" y="17" width="64" height="1" rx="1" fill="#d4af37" opacity="0.4"/>
+  <text x="50" y="41" text-anchor="middle" font-size="26">💨</text>
+  <rect x="14" y="52" width="72" height="1.5" rx="1" fill="#d4af37" opacity="0.7"/>
+  <text x="50" y="66" text-anchor="middle"
+        font-size="18" fill="white"
+        font-family="Georgia,'Times New Roman',serif"
+        font-weight="900" font-style="italic"
+        letter-spacing="2">FUUSUYA</text>
+  <rect x="14" y="70" width="72" height="1" rx="1" fill="#d4af37" opacity="0.5"/>
+  <text x="50" y="80" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.9)" font-family="'Noto Serif JP',sans-serif">谷口理</text>
+  <text x="50" y="91" text-anchor="middle" font-size="5.8" fill="#d4af37" font-family="sans-serif">フースーヤ</text>
+</svg>

@@ -1,0 +1,19 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="50" cy="50" r="50" fill="#ffd166"/>
+  <circle cx="50" cy="50" r="47" fill="none" stroke="#d4af37" stroke-width="2.5"/>
+  <line x1="10" y1="10" x2="90" y2="90" stroke="white" stroke-width="3" opacity="0.07"/>
+  <line x1="20" y1="10" x2="100" y2="90" stroke="white" stroke-width="3" opacity="0.07"/>
+  <line x1="0"  y1="20" x2="80"  y2="100" stroke="white" stroke-width="3" opacity="0.07"/>
+  <line x1="-10" y1="30" x2="70" y2="110" stroke="white" stroke-width="3" opacity="0.07"/>
+  <rect x="18" y="17" width="64" height="1" rx="1" fill="white" opacity="0.3"/>
+  <text x="50" y="41" text-anchor="middle" font-size="26">🔔</text>
+  <rect x="14" y="52" width="72" height="1.5" rx="1" fill="white" opacity="0.7"/>
+  <text x="50" y="66" text-anchor="middle"
+        font-size="15" fill="none" stroke="white" stroke-width="0.8"
+        font-family="Impact,'Arial Narrow',sans-serif"
+        font-weight="900"
+        letter-spacing="1">ZEROKARAN</text>
+  <rect x="14" y="70" width="72" height="1" rx="1" fill="white" opacity="0.5"/>
+  <text x="50" y="80" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.9)" font-family="'Noto Serif JP',sans-serif">ワキユウタ</text>
+  <text x="50" y="91" text-anchor="middle" font-size="5.8" fill="rgba(255,255,255,0.85)" font-family="sans-serif">ゼロカラン</text>
+</svg>

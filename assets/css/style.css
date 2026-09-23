@@ -1,0 +1,376 @@
+:root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #1c2230;
+    --gold: #f5c518;
+    --red: #e94560;
+    --green: #3fb950;
+    --teal: #0ea5e9;
+    --purple: #a371f7;
+    --orange: #f97316;
+    --text: #e6edf3;
+    --muted: #8b949e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Serif JP', serif;
+    min-height: 100vh;
+    padding: 0 0 60px;
+    line-height: 2.0;
+    letter-spacing: 0.04em;
+  }
+
+  /* ====== HEADER ====== */
+  .site-header {
+    background: var(--bg2);
+    border-bottom: 2px solid var(--gold);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .site-header h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+  }
+  .site-header .subtitle {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* ====== LAYOUT ====== */
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  /* ====== SECTION CARD ====== */
+  .card {
+    background: var(--bg2);
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 22px 24px;
+  }
+  .card-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    margin-bottom: 16px;
+    border-bottom: 1px solid #30363d;
+    padding-bottom: 10px;
+  }
+
+  /* ====== KYON LEVEL BLOCK ====== */
+  .kyon-block {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .kyon-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold) 0%, #e67e22 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.6rem;
+    flex-shrink: 0;
+    border: 3px solid var(--gold);
+    box-shadow: 0 0 20px rgba(245,197,24,0.3);
+  }
+  .kyon-info { flex: 1; min-width: 200px; }
+  .kyon-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.4rem;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+  }
+  .kyon-status {
+    font-size: 1.0rem;
+    color: var(--text);
+    margin: 4px 0;
+  }
+  .kyon-quote {
+    font-size: 0.9rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+  .total-xp {
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .total-xp span {
+    color: var(--gold);
+    font-weight: bold;
+  }
+
+  /* ====== XP BAR ====== */
+  .xp-bar-wrap { margin-top: 10px; }
+  .xp-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+  .xp-bar-outer {
+    height: 10px;
+    background: var(--bg3);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .xp-bar-inner {
+    height: 100%;
+    background: linear-gradient(90deg, var(--gold), #e67e22);
+    border-radius: 5px;
+    transition: width 0.5s ease;
+  }
+
+  /* ====== BADGE GRID ====== */
+  .badge-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .badge {
+    background: var(--bg3);
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .badge.earned {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+  .badge.locked {
+    color: var(--muted);
+    opacity: 0.5;
+  }
+
+  /* ====== SUBJECT CARDS ====== */
+  .subject-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+  }
+  .subject-card {
+    background: var(--bg3);
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 18px;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  .subject-card:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+  }
+  .subject-card.locked-subject {
+    cursor: default;
+    opacity: 0.5;
+  }
+  .subject-card.locked-subject:hover {
+    border-color: #30363d;
+    transform: none;
+  }
+  .subject-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .subject-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.08em;
+  }
+  .subject-icon { font-size: 1.4rem; }
+  .subject-xp-bar {
+    height: 6px;
+    background: var(--bg);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 8px 0;
+  }
+  .subject-xp-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+  .subject-stats {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+  .weak-badge {
+    background: rgba(233,69,96,0.2);
+    color: var(--red);
+    border-radius: 4px;
+    padding: 1px 7px;
+    font-size: 0.75rem;
+  }
+  .subject-links {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .subject-link {
+    display: block;
+    background: var(--bg2);
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.82rem;
+    color: var(--text);
+    text-decoration: none;
+    transition: border-color 0.2s;
+  }
+  .subject-link:hover { border-color: var(--gold); color: var(--gold); }
+  .subject-link.is-weak { border-left: 3px solid var(--red); background: rgba(233,69,96,0.05); }
+  .unit-weak-tag {
+    float: right;
+    font-size: 0.68rem;
+    background: rgba(233,69,96,0.22);
+    color: var(--red);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+  }
+
+  /* ====== CHARACTERS ====== */
+  .char-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    justify-content: flex-start;
+  }
+  .char-card {
+    width: 110px;
+    text-align: center;
+    padding: 12px 8px;
+    background: var(--bg3);
+    border: 1px solid #30363d;
+    border-radius: 10px;
+  }
+  .char-card.unlocked { border-color: var(--teal); }
+  .char-card.locked-char { opacity: 0.35; filter: grayscale(1); }
+  .char-avatar {
+    font-size: 2.2rem;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .char-name {
+    font-size: 0.78rem;
+    color: var(--text);
+    font-weight: bold;
+    line-height: 1.5;
+  }
+  .char-unlock {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+
+  /* ====== SHOP BUTTON ====== */
+  .shop-btn {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--purple), #7c3aed);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-family: 'Noto Serif JP', serif;
+    font-size: 1rem;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    margin-top: 10px;
+    transition: opacity 0.2s;
+  }
+  .shop-btn:hover { opacity: 0.85; }
+  .shop-coming {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 8px;
+  }
+
+  /* ====== CALENDAR ====== */
+  .cal-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(28, 1fr);
+    gap: 3px;
+  }
+  .cal-cell {
+    aspect-ratio: 1;
+    border-radius: 3px;
+    background: #21262d;
+    position: relative;
+  }
+  .cal-cell:hover::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #000;
+    color: #fff;
+    font-size: 11px;
+    padding: 3px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .cal-legend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin-top: 8px;
+    justify-content: flex-end;
+  }
+  .cal-legend-cell { width: 13px; height: 13px; border-radius: 2px; }
+  .cal-today-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  /* ====== RESPONSIVE ====== */
+  @media (max-width: 600px) {
+    .kyon-block { flex-direction: column; align-items: center; text-align: center; }
+    .subject-grid { grid-template-columns: 1fr; }
+    .char-grid { justify-content: center; }
+  }

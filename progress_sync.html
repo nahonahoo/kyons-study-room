@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>記録の引き継ぎ｜きょんの勉強部屋</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0d1117; --bg2:#161b22; --bg3:#1c2230;
+  --gold:#f5c518; --red:#e94560; --green:#3fb950;
+  --purple:#a371f7; --text:#e6edf3; --text2:#8b949e; --border:#30363d;
+}
+* { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--bg); color:var(--text); font-family:'Noto Serif JP',serif; min-height:100vh; line-height:2.0; letter-spacing:0.04em; padding:24px 16px 60px; }
+.main { max-width:640px; margin:0 auto; }
+h1 { font-family:'Bebas Neue',sans-serif; font-size:30px; color:var(--gold); letter-spacing:2px; margin-bottom:6px; }
+.lead { font-size:14px; color:var(--text2); line-height:1.9; margin-bottom:24px; }
+.card { background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:22px 20px; margin-bottom:20px; }
+.card-title { font-size:15px; color:var(--purple); font-weight:bold; margin-bottom:10px; }
+.card p { font-size:13px; color:var(--text2); line-height:1.9; margin-bottom:14px; }
+.btn { display:inline-block; width:100%; border:none; padding:14px; border-radius:10px; font-size:16px; font-family:inherit; font-weight:bold; cursor:pointer; letter-spacing:0.5px; text-align:center; }
+.btn-export { background:linear-gradient(135deg,var(--purple),#7c3aed); color:#fff; }
+.btn-import { background:linear-gradient(135deg,var(--green),#2ea043); color:#04150a; }
+.btn:hover { opacity:0.9; }
+input[type=file] { display:block; width:100%; margin-bottom:12px; font-size:13px; color:var(--text2); }
+.status { margin-top:14px; padding:12px 14px; border-radius:8px; font-size:13px; line-height:1.9; display:none; }
+.status.ok   { display:block; background:rgba(63,185,80,0.1); border-left:3px solid var(--green); color:var(--green); }
+.status.err  { display:block; background:rgba(233,69,96,0.08); border-left:3px solid var(--red); color:#f87171; }
+table { width:100%; border-collapse:collapse; font-size:13px; margin-top:6px; }
+th,td { padding:6px 8px; text-align:left; border-bottom:1px solid var(--border); }
+th { color:var(--text2); font-weight:normal; font-size:12px; }
+td.num { text-align:right; color:var(--gold); font-family:'Bebas Neue',sans-serif; font-size:15px; }
+.total-row td { border-top:1px solid var(--purple); border-bottom:none; font-weight:bold; }
+.total-row td.num { color:var(--gold); font-size:18px; }
+.back { display:inline-block; margin-top:24px; color:var(--text2); font-size:13px; text-decoration:none; }
+.back:hover { color:var(--purple); }
+</style>
+</head>
+<body>
+<div class="main">
+  <h1>🔄 記録の引き継ぎ</h1>
+  <p class="lead">XP・バッジ・弱点データは、このブラウザ（この端末・このURL）の中だけに保存されています。別の端末や別のサイトで続きをやりたいときは、ここで記録をファイルに書き出して、向こう側で読み込んでください。</p>
+
+  <div class="card">
+    <div class="card-title">📊 いまの記録（このブラウザ）</div>
+    <table id="statsTable"></table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">① このブラウザの記録を保存する</div>
+    <p>ボタンを押すと <code>kyon_progress_日付.json</code> というファイルがダウンロードされます。LINEやメール、USBなどで別の端末に送ってください。</p>
+    <button class="btn btn-export" id="exportBtn">📤 記録をファイルに保存</button>
+  </div>
+
+  <div class="card">
+    <div class="card-title">② ファイルから記録を読み込む</div>
+    <p>さっき保存したファイルをここで選ぶと、いまの記録に追加で反映されます（既にある記録は上書きされます）。</p>
+    <input type="file" id="importFile" accept="application/json,.json">
+    <button class="btn btn-import" id="importBtn">📥 記録を読み込む</button>
+    <div class="status" id="importStatus"></div>
+  </div>
+
+  <a class="back" href="index.html">← ホームへ戻る</a>
+</div>
+
+<script>
+var PREFIXES = ['nh3_','nh3u_','sci_','math_','soc_','jpn_','shop_'];
+var SUBJECTS = [
+  { key:'nh3_xp',  label:'英語' },
+  { key:'sci_xp',  label:'理科' },
+  { key:'math_xp', label:'数学' },
+  { key:'soc_xp',  label:'社会' },
+  { key:'jpn_xp',  label:'国語' }
+];
+
+function isTrackedKey(key){
+  return PREFIXES.some(function(p){ return key.indexOf(p) === 0; });
+}
+
+function collectData(){
+  var data = {};
+  for (var i = 0; i < localStorage.length; i++) {
+    var key = localStorage.key(i);
+    if (isTrackedKey(key)) data[key] = localStorage.getItem(key);
+  }
+  return data;
+}
+
+function renderStats(){
+  var total = 0;
+  var rows = SUBJECTS.map(function(s){
+    var v = parseInt(localStorage.getItem(s.key) || '0', 10);
+    total += v;
+    return '<tr><td>' + s.label + '</td><td class="num">' + v.toLocaleString() + '</td></tr>';
+  }).join('');
+  var spent = parseInt(localStorage.getItem('shop_spent') || '0', 10);
+  var owned = [];
+  try { owned = JSON.parse(localStorage.getItem('shop_owned') || '[]'); } catch(e){}
+  var keyCount = Object.keys(collectData()).length;
+  var html = '<tr><th>教科</th><th style="text-align:right">XP</th></tr>'
+    + rows
+    + '<tr class="total-row"><td>合計XP</td><td class="num">' + total.toLocaleString() + '</td></tr>'
+    + '<tr><td>使用済みXP（ショップ）</td><td class="num">' + spent.toLocaleString() + '</td></tr>'
+    + '<tr><td>所持バッジ数</td><td class="num">' + owned.length + '</td></tr>'
+    + '<tr><td>保存されている項目数</td><td class="num">' + keyCount + '</td></tr>';
+  document.getElementById('statsTable').innerHTML = html;
+}
+renderStats();
+
+document.getElementById('exportBtn').addEventListener('click', function(){
+  var data = collectData();
+  var payload = { app:'kyons-study-room', exportedAt:new Date().toISOString(), keyCount:Object.keys(data).length, data:data };
+  var blob = new Blob([JSON.stringify(payload, null, 2)], { type:'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  var today = new Date().toISOString().slice(0,10);
+  a.href = url;
+  a.download = 'kyon_progress_' + today + '.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('importBtn').addEventListener('click', function(){
+  var fileInput = document.getElementById('importFile');
+  var statusEl = document.getElementById('importStatus');
+  var file = fileInput.files[0];
+  if (!file) {
+    statusEl.className = 'status err';
+    statusEl.textContent = '❌ ファイルが選ばれていません。';
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var payload;
+    try {
+      payload = JSON.parse(e.target.result);
+    } catch(err) {
+      statusEl.className = 'status err';
+      statusEl.textContent = '❌ 読み込みに失敗しました。ファイルが壊れているか、対応していない形式です。';
+      return;
+    }
+    var data = payload && payload.data ? payload.data : payload;
+    if (!data || typeof data !== 'object') {
+      statusEl.className = 'status err';
+      statusEl.textContent = '❌ このファイルには記録データが見つかりませんでした。';
+      return;
+    }
+    var count = 0;
+    Object.keys(data).forEach(function(key){
+      if (isTrackedKey(key)) { localStorage.setItem(key, data[key]); count++; }
+    });
+    if (count === 0) {
+      statusEl.className = 'status err';
+      statusEl.textContent = '❌ 対応する記録が見つかりませんでした。';
+      return;
+    }
+    statusEl.className = 'status ok';
+    statusEl.textContent = '✅ ' + count + '件の記録を読み込みました！反映しています…';
+    renderStats();
+    setTimeout(function(){ location.reload(); }, 1200);
+  };
+  reader.readAsText(file);
+});
+</script>
+</body>
+</html>

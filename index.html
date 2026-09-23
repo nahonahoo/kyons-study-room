@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>きょんの勉強部屋 📚</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div>
+    <h1>📚 KYON'S STUDY ROOM</h1>
+    <div class="subtitle">きょん（富士田恭兵）の受験対策ダッシュボード</div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- ====== きょんレベル ====== -->
+  <div class="card">
+    <div class="card-title">🎤 きょんの吉本出世ランク</div>
+    <div class="kyon-block">
+      <div class="kyon-avatar" id="kyonAvatar">🥚</div>
+      <div class="kyon-info">
+        <div class="kyon-name" id="kyonStatus">NSC入学（見習い研修生）</div>
+        <div class="kyon-status" id="kyonStatusLine">Lv.1 — 吉本への第一歩</div>
+        <div class="kyon-quote" id="kyonQuote">「勉強？なにそれ食えるの？」</div>
+        <div class="total-xp">総合XP: <span id="totalXpVal">0</span> pt</div>
+        <div class="xp-bar-wrap">
+          <div class="xp-bar-label">
+            <span id="xpBarFrom">0</span>
+            <span id="xpBarTo">次のランクまで</span>
+          </div>
+          <div class="xp-bar-outer">
+            <div class="xp-bar-inner" id="totalXpBar" style="width:0%"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 称号バッジ一覧 -->
+    <div class="badge-grid" id="badgeGrid"></div>
+  </div>
+
+  <!-- ====== 教科別進捗 ====== -->
+  <div class="card">
+    <div class="card-title">📊 教科別 進捗＆弱点</div>
+    <div class="subject-grid" id="subjectGrid">
+      <!-- JS で生成 -->
+    </div>
+  </div>
+
+  <!-- ====== 学習カレンダー ====== -->
+  <div class="card">
+    <div class="card-title">📅 学習カレンダー（過去28日）</div>
+    <div class="cal-label">
+      <span id="calOldDate"></span>
+      <span id="calNewDate">今日</span>
+    </div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-legend">
+      <span>少</span>
+      <div class="cal-legend-cell" style="background:#21262d;border:1px solid #30363d"></div>
+      <div class="cal-legend-cell" style="background:#0e4429"></div>
+      <div class="cal-legend-cell" style="background:#006d32"></div>
+      <div class="cal-legend-cell" style="background:#26a641"></div>
+      <div class="cal-legend-cell" style="background:#39d353"></div>
+      <span>多</span>
+    </div>
+    <div class="cal-today-label" id="calTodayLabel"></div>
+  </div>
+
+  <!-- ====== 仲間キャラ ====== -->
+  <div class="card">
+    <div class="card-title">👥 仲間キャラ一覧</div>
+    <div class="char-grid" id="charGrid">
+      <!-- JS で生成 -->
+    </div>
+  </div>
+
+  <!-- ====== ポイントショップ ====== -->
+  <div class="card" style="text-align:center;">
+    <div class="card-title">🛒 ポイントショップ</div>
+    <p style="font-size:0.9rem;color:var(--muted);margin-bottom:12px;">貯めたXPでご褒美アイテムをゲット！</p>
+    <a href="shop.html" class="shop-btn" style="display:inline-block;text-decoration:none;">
+      💨 ケムリの闇コレクション堂へ
+    </a>
+    <div class="shop-coming">バッジを集めよう！XPを使って芸人バッジをコレクション</div>
+  </div>
+
+  <!-- ====== 記録の引き継ぎ ====== -->
+  <div class="card" style="text-align:center;">
+    <div class="card-title">🔄 記録の引き継ぎ</div>
+    <p style="font-size:0.9rem;color:var(--muted);margin-bottom:12px;">スマホなど別の端末に、いまのXP・バッジ・弱点データを持って行きたいとき</p>
+    <a href="progress_sync.html" class="shop-btn" style="display:inline-block;text-decoration:none;">
+      📤 記録を書き出す／読み込む
+    </a>
+  </div>
+
+</div>
+
+<script src="assets/js/dashboard.js" defer></script>
+</body>
+</html>

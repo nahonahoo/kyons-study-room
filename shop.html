@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ケムリの闇コレクション堂</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1117; --bg2:#161b22; --bg3:#21262d;
+  --border:#30363d; --text:#e6edf3; --text2:#8b949e;
+  --gold:#d4af37; --green:#3fb950; --red:#f85149; --amber:#e3b341;
+  --shadow:rgba(0,0,0,0.6);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:'Noto Serif JP',sans-serif;min-height:100vh;}
+
+/* ナビ */
+.top-nav{
+  position:sticky;top:0;z-index:100;
+  display:flex;align-items:center;gap:12px;
+  background:rgba(13,17,23,0.95);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);
+  padding:10px 16px;
+}
+.nav-home{font-size:1.3rem;text-decoration:none;flex-shrink:0;line-height:1;}
+.nav-title{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.08em;color:var(--gold);}
+
+/* ケムリパネル */
+.keeper-panel{
+  background:linear-gradient(135deg,#161b22 0%,#0d1117 100%);
+  border:1px solid var(--border);
+  border-bottom:2px solid var(--gold);
+  padding:20px 16px;
+  display:flex;align-items:center;gap:16px;
+}
+.keeper-avatar{
+  width:72px;height:72px;flex-shrink:0;
+  background:var(--bg3);border-radius:50%;
+  border:2px solid var(--gold);
+  display:flex;align-items:center;justify-content:center;
+  font-size:2rem;
+}
+.keeper-info{flex:1;}
+.keeper-name{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.06em;color:var(--gold);margin-bottom:4px;}
+.keeper-group{font-size:11px;color:var(--text2);margin-bottom:8px;}
+.keeper-quote{
+  font-size:13px;line-height:1.9;color:var(--text);
+  border-left:3px solid var(--gold);padding-left:10px;
+  font-style:italic;
+}
+
+/* コイン表示 */
+.coin-bar{
+  background:var(--bg2);border-bottom:1px solid var(--border);
+  padding:12px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:8px;
+}
+.coin-display{display:flex;align-items:center;gap:8px;}
+.coin-icon{font-size:1.2rem;}
+.coin-val{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;color:var(--gold);}
+.coin-label{font-size:12px;color:var(--text2);}
+.owned-count{font-size:12px;color:var(--text2);}
+.owned-count span{color:var(--green);font-weight:bold;}
+
+/* フィルターバー */
+.filter-bar{
+  padding:10px 16px;
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.filter-btn{
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--text2);border-radius:20px;padding:4px 12px;
+  font-size:12px;cursor:pointer;font-family:'Noto Serif JP',sans-serif;
+  transition:all 0.15s;
+}
+.filter-btn:hover,.filter-btn.active{
+  background:var(--gold);color:#000;border-color:var(--gold);
+}
+
+/* バッジグリッド */
+.badge-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(90px,1fr));
+  gap:12px;
+  padding:16px;
+  max-width:900px;margin:0 auto;
+}
+.badge-item{
+  display:flex;flex-direction:column;align-items:center;gap:4px;
+  cursor:pointer;
+  transition:transform 0.15s;
+}
+.badge-item:hover{transform:scale(1.08);}
+.badge-img{width:72px;height:72px;border-radius:50%;display:block;}
+.badge-locked{opacity:0.22;filter:grayscale(1);}
+.badge-name-label{
+  font-size:10px;color:var(--text2);text-align:center;
+  line-height:1.4;max-width:80px;
+}
+.badge-name-label.owned-label{color:var(--gold);}
+.badge-group-label{font-size:8.5px;color:var(--text2);opacity:0.8;}
+
+/* モーダル */
+.modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,0.75);z-index:200;
+  align-items:center;justify-content:center;
+  padding:20px;
+}
+.modal-overlay.open{display:flex;}
+.modal-box{
+  background:var(--bg2);border:1px solid var(--border);
+  border-top:3px solid var(--gold);
+  border-radius:12px;padding:24px;
+  max-width:340px;width:100%;
+  box-shadow:0 8px 32px var(--shadow);
+  text-align:center;
+}
+.modal-badge-svg{width:100px;height:100px;margin:0 auto 12px;border-radius:50%;display:block;}
+.modal-name{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:0.06em;color:var(--gold);margin-bottom:2px;}
+.modal-group{font-size:12px;color:var(--text2);margin-bottom:16px;}
+.modal-status{font-size:13px;margin-bottom:16px;padding:8px;border-radius:6px;}
+.modal-status.owned{background:rgba(63,185,80,0.1);color:var(--green);border:1px solid var(--green);}
+.modal-status.locked{background:rgba(248,81,73,0.08);color:var(--text2);border:1px solid var(--border);}
+.modal-cost{font-size:12px;color:var(--text2);margin-bottom:12px;}
+.modal-cost span{color:var(--gold);font-weight:bold;}
+.buy-btn{
+  width:100%;padding:12px;border:none;border-radius:8px;
+  background:var(--gold);color:#000;
+  font-family:'Noto Serif JP',sans-serif;font-size:15px;font-weight:bold;
+  cursor:pointer;transition:opacity 0.15s;margin-bottom:8px;
+}
+.buy-btn:hover{opacity:0.85;}
+.buy-btn:disabled{background:var(--bg3);color:var(--text2);cursor:not-allowed;opacity:1;}
+.close-btn{
+  width:100%;padding:10px;border:1px solid var(--border);border-radius:8px;
+  background:transparent;color:var(--text2);
+  font-family:'Noto Serif JP',sans-serif;font-size:13px;
+  cursor:pointer;
+}
+.close-btn:hover{border-color:var(--text2);}
+
+/* トースト */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:#1d6334;color:#fff;padding:10px 20px;border-radius:8px;
+  font-size:14px;display:none;z-index:300;pointer-events:none;
+  transition:opacity 0.3s;box-shadow:0 4px 16px rgba(0,0,0,0.4);
+}
+
+/* 空状態 */
+.empty-state{
+  text-align:center;padding:60px 20px;color:var(--text2);
+}
+.empty-state .big{font-size:3rem;margin-bottom:12px;}
+
+/* 所持バッジストリップ */
+.owned-strip{
+  position:sticky;top:44px;z-index:99;
+  background:rgba(13,17,23,0.97);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);
+  padding:6px 12px;
+  display:flex;align-items:center;gap:6px;
+  overflow-x:auto;min-height:50px;
+  scrollbar-width:thin;scrollbar-color:var(--border) transparent;
+}
+.owned-strip::-webkit-scrollbar{height:3px;}
+.owned-strip::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.strip-label{font-size:10px;color:var(--text2);flex-shrink:0;white-space:nowrap;margin-right:2px;}
+.strip-badge{
+  width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  transition:transform 0.15s;cursor:default;
+}
+.strip-badge:hover{transform:scale(1.18);}
+.strip-empty{font-size:11px;color:var(--text2);font-style:italic;}
+
+/* レスポンシブ */
+@media(max-width:400px){
+  .badge-grid{grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px;}
+  .badge-svg{width:60px;height:60px;}
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="index.html" class="nav-home" title="ダッシュボードへ">🏠</a>
+  <div class="nav-title">🏪 ケムリの闇コレクション堂</div>
+</nav>
+
+<div class="owned-strip" id="ownedStrip"></div>
+
+<div class="keeper-panel">
+  <div class="keeper-avatar">💨</div>
+  <div class="keeper-info">
+    <div class="keeper-name">松井ケムリ</div>
+    <div class="keeper-group">令和ロマン</div>
+    <div class="keeper-quote" id="keeperQuote">読み込み中…</div>
+  </div>
+</div>
+
+<div class="coin-bar">
+  <div class="coin-display">
+    <span class="coin-icon">🪙</span>
+    <span class="coin-val" id="coinVal">0</span>
+    <span class="coin-label">XPコイン</span>
+  </div>
+  <div class="owned-count">コレクション: <span id="ownedCount">0</span> / <span id="totalCount">0</span></div>
+</div>
+
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">すべて</button>
+  <button class="filter-btn" data-filter="owned">所持済み</button>
+  <button class="filter-btn" data-filter="locked">未所持</button>
+</div>
+
+<div class="badge-grid" id="badgeGrid"></div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box" id="modalBox">
+    <!-- JS で生成 -->
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="assets/js/shop_badges.js"></script>
+<script>
+// ===== localStorage =====
+var OWNED_KEY   = 'shop_owned';   // 所持バッジIDの配列
+var SPENT_KEY   = 'shop_spent';   // 消費した合計コイン数
+
+function getOwned(){ try{ return JSON.parse(localStorage.getItem(OWNED_KEY)||'[]'); }catch(e){return[];} }
+function saveOwned(arr){ localStorage.setItem(OWNED_KEY,JSON.stringify(arr)); }
+function getSpent(){ return parseInt(localStorage.getItem(SPENT_KEY)||'0',10); }
+function saveSpent(v){ localStorage.setItem(SPENT_KEY,String(v)); }
+
+// 全教科のXP合計を取得
+function getTotalXp(){
+  var keys=['nh3_xp','sci_xp','math_xp','soc_xp','jpn_xp'];
+  return keys.reduce(function(s,k){return s+parseInt(localStorage.getItem(k)||'0',10);},0);
+}
+function getAvailableCoins(){ return Math.max(0, getTotalXp() - getSpent()); }
+
+// ===== SVG表示 =====
+// assets/badges/{id}.svg を使用。locked時はCSSでグレースケール適用
+function makeBadgeHTML(badge, locked){
+  var svgSrc = 'assets/badges/' + badge.id + '.svg';
+  return '<img src="'+svgSrc+'" class="badge-img'+(locked?' badge-locked':'')+'" '
+    +'alt="'+badge.name+'" width="72" height="72" loading="lazy">';
+}
+function makeModalBadgeHTML(badge){
+  return '<img src="assets/badges/'+badge.id+'.svg" '
+    +'alt="'+badge.name+'" width="100" height="100">';
+}
+
+// ===== ショップ描画 =====
+var currentFilter = 'all';
+
+function renderShop(){
+  var owned = getOwned();
+  var coins = getAvailableCoins();
+  var cost  = SHOP_CONFIG.cost_per_badge;
+
+  document.getElementById('coinVal').textContent = coins.toLocaleString();
+  document.getElementById('ownedCount').textContent = owned.length;
+  document.getElementById('totalCount').textContent = SHOP_BADGES.length;
+
+  var grid = document.getElementById('badgeGrid');
+  var filtered = SHOP_BADGES.filter(function(b){
+    if(currentFilter === 'owned') return owned.indexOf(b.id) >= 0;
+    if(currentFilter === 'locked') return owned.indexOf(b.id) < 0;
+    return true;
+  });
+
+  if(filtered.length === 0){
+    grid.innerHTML = '<div class="empty-state"><div class="big">'
+      +(currentFilter==='owned' ? '🏜️' : '🎉')+'</div>'
+      +(currentFilter==='owned' ? 'まだバッジを持っていません。XPを貯めて買おう！' : '全部集めた！ケムリも驚いてる……')
+      +'</div>';
+    return;
+  }
+
+  grid.innerHTML = filtered.map(function(badge){
+    var isOwned = owned.indexOf(badge.id) >= 0;
+    var locked  = !isOwned;
+    return '<div class="badge-item" data-id="'+badge.id+'">'
+      +makeBadgeHTML(badge, locked)
+      +'<div class="badge-name-label'+(isOwned?' owned-label':'')+'">'+badge.name
+      +'<br><span class="badge-group-label">（'+badge.group+'）</span></div>'
+      +'</div>';
+  }).join('');
+
+  // クリックイベント
+  grid.querySelectorAll('.badge-item').forEach(function(el){
+    el.addEventListener('click', function(){
+      var id = this.dataset.id;
+      var badge = SHOP_BADGES.find(function(b){return b.id===id;});
+      if(badge) openModal(badge);
+    });
+  });
+}
+
+// ===== モーダル =====
+var BADGE_COST = 200;
+
+function openModal(badge){
+  var owned   = getOwned();
+  var isOwned = owned.indexOf(badge.id) >= 0;
+  var coins   = getAvailableCoins();
+  var canBuy  = !isOwned && coins >= BADGE_COST;
+
+  var box = document.getElementById('modalBox');
+
+  if(isOwned){
+    // 所持済み
+    box.innerHTML = ''
+      +'<div class="modal-badge-svg">'+makeModalBadgeHTML(badge)+'</div>'
+      +'<div class="modal-name">'+badge.name+'</div>'
+      +'<div class="modal-group">'+badge.group+'</div>'
+      +'<div class="modal-status owned" style="font-size:15px;padding:12px;">✅ すでに持っています！</div>'
+      +'<button class="close-btn" id="closeBtn">閉じる</button>';
+  } else if(canBuy){
+    // 購入確認
+    box.innerHTML = ''
+      +'<div class="modal-badge-svg">'+makeModalBadgeHTML(badge)+'</div>'
+      +'<div class="modal-name">'+badge.name+'</div>'
+      +'<div class="modal-group">'+badge.group+'</div>'
+      +'<div style="font-size:14px;margin:12px 0 4px;line-height:2;">このバッジを<br>'
+      +'<span style="color:var(--gold);font-size:1.5rem;font-family:\'Bebas Neue\',sans-serif;letter-spacing:0.05em;">'+BADGE_COST+' XP</span><br>で買いますか？</div>'
+      +'<div style="font-size:11px;color:var(--text2);margin-bottom:16px;">所持コイン: '+coins+' XP → 購入後: '+(coins-BADGE_COST)+' XP</div>'
+      +'<button class="buy-btn" id="buyBtn">🪙 買う！</button>'
+      +'<button class="close-btn" id="closeBtn">やめる</button>';
+  } else {
+    // コイン不足
+    box.innerHTML = ''
+      +'<div class="modal-badge-svg" style="opacity:0.5;filter:grayscale(1);">'+makeModalBadgeHTML(badge)+'</div>'
+      +'<div class="modal-name">'+badge.name+'</div>'
+      +'<div class="modal-group">'+badge.group+'</div>'
+      +'<div class="modal-status locked" style="font-size:13px;padding:12px;">'
+      +'😢 コインが足りません<br>'
+      +'<span style="color:var(--red);">あと '+(BADGE_COST-coins)+' XP 必要</span><br>'
+      +'<span style="font-size:11px;">（所持: '+coins+' XP）</span>'
+      +'</div>'
+      +'<button class="close-btn" id="closeBtn">閉じる</button>';
+  }
+
+  document.getElementById('modalOverlay').classList.add('open');
+
+  var buyBtn  = document.getElementById('buyBtn');
+  var closeBtn = document.getElementById('closeBtn');
+  if(buyBtn) buyBtn.addEventListener('click', function(){ doBuy(badge); });
+  closeBtn.addEventListener('click', closeModal);
+}
+
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+document.getElementById('modalOverlay').addEventListener('click', function(e){
+  if(e.target === this) closeModal();
+});
+
+function doBuy(badge){
+  var owned = getOwned();
+  var coins = getAvailableCoins();
+  if(owned.indexOf(badge.id) >= 0 || coins < BADGE_COST) return;
+
+  owned.push(badge.id);
+  saveOwned(owned);
+  saveSpent(getSpent() + BADGE_COST);
+
+  closeModal();
+  showToast('🎉 '+badge.name+'（'+badge.group+'）を入手！', '#1d6334');
+  renderStrip();
+  renderShop();
+
+  var buyReactions = [
+    '……そっか。買ったんだ。まあいいけど',
+    'ふーん。また来るの？……来てもいいけど',
+    '（特になにも言わない）',
+    'コレクター気質ってやつ？……嫌いじゃないけど',
+  ];
+  setTimeout(function(){
+    document.getElementById('keeperQuote').textContent =
+      buyReactions[Math.floor(Math.random()*buyReactions.length)];
+  }, 500);
+}
+
+// ===== トースト =====
+function showToast(msg, color){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = color || '#1d6334';
+  t.style.display = 'block';
+  t.style.opacity = '1';
+  setTimeout(function(){
+    t.style.opacity = '0';
+    setTimeout(function(){t.style.display='none';}, 400);
+  }, 2200);
+}
+
+// ===== フィルター =====
+document.querySelectorAll('.filter-btn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+    this.classList.add('active');
+    currentFilter = this.dataset.filter;
+    renderShop();
+  });
+});
+
+// ===== ケムリの一言（ランダム） =====
+function setKeeperQuote(){
+  var q = SHOP_CONFIG.quotes;
+  document.getElementById('keeperQuote').textContent = q[Math.floor(Math.random()*q.length)];
+}
+
+// ===== 所持バッジストリップ =====
+function renderStrip(){
+  var owned = getOwned();
+  var strip = document.getElementById('ownedStrip');
+  if(owned.length === 0){
+    strip.innerHTML = '<span class="strip-label">🏷️ コレクション</span>'
+      +'<span class="strip-empty">バッジを買うとここに並ぶよ</span>';
+    return;
+  }
+  var html = '<span class="strip-label">🏷️ '+owned.length+'枚</span>';
+  owned.forEach(function(id){
+    var b = SHOP_BADGES.find(function(x){return x.id===id;});
+    if(b) html += '<img src="assets/badges/'+id+'.svg" class="strip-badge" alt="'+b.name+'" title="'+b.name+'（'+b.group+'）">';
+  });
+  strip.innerHTML = html;
+}
+
+// ===== 初期化 =====
+setKeeperQuote();
+renderStrip();
+renderShop();
+</script>
+</body>
+</html>

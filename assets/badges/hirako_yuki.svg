@@ -1,0 +1,20 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="50" cy="50" r="50" fill="#8a5e00"/>
+  <circle cx="50" cy="50" r="47" fill="none" stroke="#d4af37" stroke-width="2.5"/>
+  <line x1="50" y1="4" x2="50" y2="14" stroke="#d4af37" stroke-width="1" opacity="0.3"/>
+  <line x1="71" y1="10" x2="66" y2="19" stroke="#d4af37" stroke-width="1" opacity="0.3"/>
+  <line x1="86" y1="24" x2="79" y2="30" stroke="#d4af37" stroke-width="1" opacity="0.3"/>
+  <line x1="29" y1="10" x2="34" y2="19" stroke="#d4af37" stroke-width="1" opacity="0.3"/>
+  <line x1="14" y1="24" x2="21" y2="30" stroke="#d4af37" stroke-width="1" opacity="0.3"/>
+  <rect x="18" y="17" width="64" height="1.5" rx="1" fill="#d4af37" opacity="0.6"/>
+  <text x="50" y="41" text-anchor="middle" font-size="26">🍺</text>
+  <rect x="14" y="52" width="72" height="1.5" rx="1" fill="#d4af37" opacity="0.7"/>
+  <text x="50" y="66" text-anchor="middle"
+        font-size="18" fill="white"
+        font-family="Impact,'Arial Narrow',sans-serif"
+        font-weight="900"
+        letter-spacing="2">HIRAKO</text>
+  <rect x="14" y="70" width="72" height="1" rx="1" fill="#d4af37" opacity="0.5"/>
+  <text x="50" y="80" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.9)" font-family="'Noto Serif JP',sans-serif">平子祐希</text>
+  <text x="50" y="91" text-anchor="middle" font-size="5.8" fill="#d4af37" font-family="sans-serif">アルコ&ピース</text>
+</svg>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>社会｜歴史ストーリーを読む</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/social.css">
+<style>
+/* ===== 号外！学級新聞ふうデコレーション（このページ専用） ===== */
+.paper-main{ max-width:760px; margin:0 auto; padding:20px 16px 60px; }
+
+.masthead{ text-align:center; padding:22px 10px 18px; position:relative; }
+.masthead-kicker{ display:inline-block; background:var(--red); color:#fff; font-size:12px; font-weight:bold; padding:4px 14px; border-radius:4px; letter-spacing:2px; transform:rotate(-3deg); margin-bottom:14px; box-shadow:0 3px 8px rgba(0,0,0,0.4); }
+.masthead-title{ font-family:'Bebas Neue',sans-serif; font-size:38px; letter-spacing:3px; color:var(--gold); line-height:1.3; text-shadow:0 2px 0 rgba(0,0,0,0.4); }
+.masthead-sub{ font-size:13px; color:var(--text2); margin-top:8px; }
+.masthead-rule{ height:6px; margin-top:16px; background:
+  linear-gradient(var(--gold),var(--gold)) top/100% 3px no-repeat,
+  linear-gradient(var(--border),var(--border)) bottom/100% 1px no-repeat; }
+
+.graph-card{ background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:20px 18px 16px; margin:22px 0; }
+.graph-card-title{ font-size:13px; color:var(--amber); font-weight:bold; letter-spacing:1px; margin-bottom:4px; }
+.graph-note{ font-size:11px; color:var(--text2); text-align:center; margin-top:4px; }
+
+.tagline-box{ background:var(--bg3); border-left:5px solid var(--gold); border-radius:0 12px 12px 0; padding:18px 20px; margin:18px 0 26px; font-size:17px; line-height:2.0; color:var(--gold); font-weight:bold; box-shadow:2px 3px 0 rgba(245,197,24,0.12); }
+
+.clip-card{ position:relative; background:var(--bg2); border:1px solid var(--border); border-radius:4px; padding:26px 22px 22px; margin:0 0 8px; box-shadow:0 6px 18px rgba(0,0,0,0.35); }
+.clip-tape{ position:absolute; top:-10px; left:26px; width:70px; height:22px; border-radius:2px; opacity:0.85; transform:rotate(-5deg); box-shadow:0 2px 4px rgba(0,0,0,0.3); }
+.clip-num{ font-family:'Bebas Neue',sans-serif; font-size:26px; width:44px; height:44px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; color:#000; flex-shrink:0; box-shadow:0 3px 6px rgba(0,0,0,0.3); }
+.clip-head{ display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+.clip-title{ font-size:19px; font-weight:900; line-height:1.6; }
+.clip-body{ font-size:16px; line-height:2.0; letter-spacing:0.03em; }
+.clip-body li{ list-style:none; margin-bottom:10px; padding-left:22px; position:relative; }
+.clip-body li::before{ content:'📍'; position:absolute; left:0; top:2px; font-size:13px; }
+
+.sticky{ margin-top:20px; padding:22px 16px 14px; border-radius:8px; font-size:15px; line-height:1.9; font-weight:bold; border:2px dashed; position:relative; }
+.sticky-icon{ position:absolute; top:-13px; left:14px; font-size:18px; background:var(--bg2); padding:0 4px; line-height:1; }
+
+.hl{ background:linear-gradient(120deg, rgba(245,197,24,0.55) 0%, rgba(245,197,24,0.55) 100%); background-repeat:no-repeat; background-size:100% 44%; background-position:0 78%; font-weight:900; padding:0 2px; }
+.hl-red{ background:linear-gradient(120deg, rgba(233,69,96,0.4) 0%, rgba(233,69,96,0.4) 100%); background-repeat:no-repeat; background-size:100% 44%; background-position:0 78%; font-weight:900; padding:0 2px; }
+.hl-blue{ background:linear-gradient(120deg, rgba(74,158,255,0.4) 0%, rgba(74,158,255,0.4) 100%); background-repeat:no-repeat; background-size:100% 44%; background-position:0 78%; font-weight:900; padding:0 2px; }
+
+.arrow-down{ text-align:center; font-size:26px; line-height:1; margin:6px 0 26px; }
+
+.end-note{ text-align:center; margin-top:30px; padding:18px; background:var(--bg2); border:1px dashed var(--border); border-radius:12px; font-size:13px; color:var(--text2); line-height:1.9; }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="../index.html" title="ホームへ" style="font-size:1.3rem;text-decoration:none;flex-shrink:0;line-height:1;">🏠</a>
+  <div class="nav-title">🗞️ 歴史ストーリー</div>
+</nav>
+
+<div class="paper-main" id="paperMain"></div>
+
+<script src="../assets/js/soc_history_story.js" defer></script>
+</body>
+</html>

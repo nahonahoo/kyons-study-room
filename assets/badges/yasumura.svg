@@ -1,0 +1,16 @@
+<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="50" cy="50" r="50" fill="#e9c46a"/>
+  <circle cx="50" cy="50" r="47" fill="none" stroke="#d4af37" stroke-width="2.5"/>
+  <circle cx="50" cy="50" r="42" fill="none" stroke="white" stroke-width="0.8" opacity="0.25"/>
+  <rect x="18" y="17" width="64" height="1" rx="1" fill="white" opacity="0.3"/>
+  <text x="50" y="41" text-anchor="middle" font-size="26">☀️</text>
+  <rect x="14" y="52" width="72" height="1.5" rx="1" fill="white" opacity="0.7"/>
+  <text x="50" y="66" text-anchor="middle"
+        font-size="15" fill="white"
+        font-family="'Trebuchet MS',Arial,sans-serif"
+        font-weight="900"
+        letter-spacing="1">YASUMURA</text>
+  <rect x="14" y="70" width="72" height="1" rx="1" fill="white" opacity="0.5"/>
+  <text x="50" y="80" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,0.9)" font-family="'Noto Serif JP',sans-serif">安村</text>
+  <text x="50" y="91" text-anchor="middle" font-size="5.8" fill="rgba(255,255,255,0.85)" font-family="sans-serif">とにかく明るい安村</text>
+</svg>

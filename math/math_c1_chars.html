@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数学｜文字式（中1）</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/math.css">
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="../index.html" title="ホームへ" style="font-size:1.3rem;text-decoration:none;flex-shrink:0;line-height:1;">🏠</a>
+  <div class="nav-title">📐 数学 文字式</div>
+  <div class="section-tabs" id="sectionTabs"></div>
+  <div class="coin-total" id="coinTotal">🪙 0 XP</div>
+</nav>
+
+<div class="xp-bar-wrap">
+  <div class="xp-top-row">
+    <div class="xp-badge" id="xpBadge">NSC入学</div>
+    <div class="xp-rank"  id="xpLevel">Lv.1 🥚</div>
+    <div class="xp-title" id="xpTitle">見習い研修生</div>
+    <div class="xp-next"  id="xpNext">次の昇格まで 15 XP</div>
+  </div>
+  <div class="xp-status-row" id="xpStatus">きょん「文字式？なにそれ食えるの？」</div>
+  <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+</div>
+
+<div class="weak-bar">
+  <span class="weak-bar-label">🔥 弱点TOP</span>
+  <div id="weakItems" style="display:flex;flex-wrap:wrap;gap:6px;flex:1;align-items:center"></div>
+</div>
+
+<div class="main" id="mainContent"></div>
+<div id="toast" class="toast"></div>
+<div id="resultOverlay"></div>
+
+<script src="../assets/js/math_c1_chars.js" defer></script>
+</body>
+</html>

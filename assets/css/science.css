@@ -787,12 +787,12 @@ body {
   background: rgba(245,197,24,0.35);
 }
 
-/* ====== モバイル用ナビ調整（タブを横スクロールに） ====== */
+/* ====== モバイル用ナビ調整（タブ専用の行を下に確保） ====== */
 @media (max-width: 600px) {
-  .top-nav { flex-wrap: nowrap; padding: 8px 12px; gap: 8px; }
-  .nav-title { font-size: 14px; letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 150px; }
-  .section-tabs { flex: 1 1 auto; min-width: 0; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .top-nav { flex-wrap: wrap; padding: 8px 12px; gap: 6px 8px; }
+  .nav-title { font-size: 14px; letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 50%; }
+  .coin-total { flex-shrink: 0; font-size: 0.85rem; padding: 3px 10px; }
+  .section-tabs { order: 5; flex: 1 0 100%; min-width: 0; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; gap: 6px; }
   .section-tabs::-webkit-scrollbar { display: none; }
-  .section-tab { flex-shrink: 0; padding: 5px 10px; font-size: 11px; }
-  .coin-total { flex-shrink: 0; font-size: 0.8rem; padding: 3px 9px; }
+  .section-tab { flex-shrink: 0; padding: 6px 14px; font-size: 12px; }
 }

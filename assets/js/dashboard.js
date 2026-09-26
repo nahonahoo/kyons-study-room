@@ -55,6 +55,7 @@ const SUBJECTS = [
       { label:'中3 多項式・乗法公式・因数分解', href:'math/math_c3_polynomial.html', weakDb:'math', qidPrefix:'math_poly_' },
       { label:'中3 二次方程式（解の公式）', href:'math/math_c3_quadratic.html', weakDb:'math', qidPrefix:'math_quad_' },
       { label:'中2〜3 関数（一次関数・y=ax²）', href:'math/math_c3_function.html', weakDb:'math', qidPrefix:'math_func_' },
+      { label:'🏆 入試 大問1 完全攻略（10問セット）', href:'math/math_exam_q1.html', weakDb:'math', qidPrefix:'math_q1_' },
     ]
   },
   {

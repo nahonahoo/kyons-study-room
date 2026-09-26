@@ -63,6 +63,7 @@ const SUBJECTS = [
       { label:'歴史',               href:'social/soc_history.html',   weakDb:'soc', qidPrefix:'soc_hist_' },
       { label:'🗞️ 歴史ストーリーを読む', href:'social/soc_history_story.html' },
       { label:'地理（世界・日本）', href:'social/soc_geography.html', weakDb:'soc', qidPrefix:'soc_geo_' },
+      { label:'⚖️ 公民（人権・政治・経済）入試頻出', href:'social/soc_civics.html', weakDb:'soc', qidPrefix:'soc_civ_' },
     ]
   },
   {

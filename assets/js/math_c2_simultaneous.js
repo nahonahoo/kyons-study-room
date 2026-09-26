@@ -554,21 +554,12 @@ function renderSection1(){
     },
     {
       qid:'math_sim_s1_q5',
-      jp:'次の連立方程式を代入法で解くと、x はいくつですか？<br>① x = 2y + 1<br>② 3x + y = 20',
-      answer:'x = 5',
-      choices:['x = 5', 'x = 6', 'x = 3', 'x = 7'],
-      exp:'📐 ①の x = 2y+1 を②の x に代入<br>3<span style="color:var(--gold)">(2y+1)</span> + y = 20<br>6y + 3 + y = 20 → 7y = 17... <br>ん？計算しやすい問題にしましょう：<br>3(2y+1)+y=20 → 7y=17 → y=17/7... <br>💡 実は①を②に代入：3(2y+1)+y=20 → 7y=17、少し複雑。<br>②を使って：3x+y=20、x=2y+1 → y=3 → x=7<br>✅ 正しい流れで計算：y=3、<span style="color:var(--gold)">x=2×3+1=7</span>... <br>選択肢と合わない場合は検算で確認しよう！<br>※ 正解は x=5: y=2 の場合、3×5+2=17≠20。再確認：7y=17なので整数にならない。<br>この問題はスキップして次に進もう！'
+      jp:'次の連立方程式を代入法で解くと、y はいくつですか？<br>① x = y + 4<br>② 2x + 3y = 23',
+      answer:'y = 3',
+      choices:['y = 3', 'y = 5', 'y = 2', 'y = 4'],
+      exp:'📐 ①の x = y+4 を②の x に代入<br>2<span style="color:var(--gold)">(y+4)</span> + 3y = 23<br>2y + 8 + 3y = 23 → 5y = 15 → <span style="color:var(--gold)">y = 3</span><br>x = 3 + 4 = 7。答え：x = 7、y = 3<br>💡 検算：2×7+3×3 = 14+9 = 23 ✅'
     },
   ];
-
-  // Q5 を差し替え（整合性のある問題に）
-  qs[5] = {
-    qid:'math_sim_s1_q5',
-    jp:'次の連立方程式を代入法で解くと、y はいくつですか？<br>① x = y + 4<br>② 2x + 3y = 23',
-    answer:'y = 3',
-    choices:['y = 3', 'y = 5', 'y = 2', 'y = 4'],
-    exp:'📐 ①の x = y+4 を②の x に代入<br>2<span style="color:var(--gold)">(y+4)</span> + 3y = 23<br>2y + 8 + 3y = 23 → 5y = 15 → <span style="color:var(--gold)">y = 3</span><br>x = 3 + 4 = 7。答え：x = 7、y = 3<br>💡 検算：2×7+3×3 = 14+9 = 23 ✅'
-  };
 
   // 計算入力問題
   var inputQs = [
@@ -1328,7 +1319,7 @@ function renderSection4(){
       formula:'②－① で 3y を消す',
       answer:'3', xp:6,
       hint:'②-① → x=3 → 3y=12 → y=4',
-      exp:'②-① → x=<span style="color:var(--gold)">3</span>。3×3+3y=18 → 3y=9 → y=3... wait: 2×3+3y=18 → 6+3y=18 → 3y=12 → y=4。答え：x=3, y=4'
+      exp:'同符号（+3y と +3y）→ 引く → ②-① → x=<span style="color:var(--gold)">3</span><br>x=3 を①に代入：2×3+3y=18 → 6+3y=18 → 3y=12 → y=4。答え：x=3, y=4<br>検算：3×3+3×4=9+12=21 ✅'
     },
     {
       qid:'math_sim_s4_q12', type:'choice',
@@ -1395,7 +1386,7 @@ function renderSection4(){
       formula:'①＋② で y を消す',
       answer:'4', xp:6,
       hint:'①+② → 3x=12 → x=4 → y=2',
-      exp:'①+② → 3x=12 → <span style="color:var(--gold)">x=4</span>。y=2×1=2... x-y=2 → 4-y=2 → y=2。答え：x=4, y=2'
+      exp:'異符号（+y と -y）→ 足す → ①+② → 3x=12 → <span style="color:var(--gold)">x=4</span><br>x=4 を②に代入：4-y=2 → y=2。答え：x=4, y=2<br>検算：2×4+2=10 ✅　4-2=2 ✅'
     },
   ];
 

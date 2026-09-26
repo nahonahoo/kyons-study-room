@@ -39,6 +39,7 @@ const SUBJECTS = [
       { label:'中2 電流・磁界',         href:'science/sci_c2_electric.html', weakDb:'sci', qidPrefix:'sci_elec_' },
       { label:'中3 化学変化とイオン',   href:'science/sci_c3_ion.html',      weakDb:'sci', qidPrefix:'sci_ion_' },
       { label:'中3 生物の成長と生殖・遺伝', href:'science/sci_c4_life.html', weakDb:'sci', qidPrefix:'sci_life_' },
+      { label:'🔬 実験器具と実験文の読み方（入試対策）', href:'science/sci_exam_lab.html', weakDb:'sci', qidPrefix:'sci_lab_' },
     ]
   },
   {

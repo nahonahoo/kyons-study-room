@@ -873,7 +873,7 @@ function renderSection3(){
     + '</svg>';
 
   // SVG: 速さタイプ（反対方向・同方向）
-  var svgSpeed = '<svg viewBox="0 0 300 120" style="width:100%;max-width:340px;display:block;margin:0 auto">'
+  var svgSpeed = '<svg viewBox="0 0 300 134" style="width:100%;max-width:340px;display:block;margin:0 auto">'
     + '<text x="6" y="14" fill="#8b949e" font-size="10">【速さの文章題の式の立て方】</text>'
     // Left figure: opposite directions
     + '<text x="6" y="32" fill="#a371f7" font-size="10">反対方向に出発</text>'
@@ -886,13 +886,14 @@ function renderSection3(){
     + '<text x="150" y="50" fill="#8b949e" font-size="10">　y m/分 →</text>'
     + '<text x="6" y="68" fill="#f5c518" font-size="10">t 分後の距離 = (x + y) × t</text>'
     // Right figure: same direction
-    + '<text x="6" y="88" fill="#0ea5e9" font-size="10">同方向に出発</text>'
+    + '<text x="6" y="88" fill="#0ea5e9" font-size="10">同方向に出発（B のほうが速い）</text>'
     + '<circle cx="30" cy="105" r="8" fill="rgba(163,113,247,0.2)" stroke="#a371f7" stroke-width="1.5"/>'
     + '<text x="30" y="109" fill="#a371f7" font-size="9" text-anchor="middle">A</text>'
     + '<circle cx="60" cy="105" r="8" fill="rgba(14,165,233,0.2)" stroke="#0ea5e9" stroke-width="1.5"/>'
     + '<text x="60" y="109" fill="#0ea5e9" font-size="9" text-anchor="middle">B</text>'
     + '<line x1="74" y1="105" x2="120" y2="105" stroke="#30363d" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#arr)"/>'
     + '<text x="130" y="109" fill="#f5c518" font-size="10">→ t 分後の差 = (y - x) × t</text>'
+    + '<text x="6" y="127" fill="#8b949e" font-size="9">※ 差は「速い方 − 遅い方」。B（y）が速いので y − x</text>'
     + '</svg>';
 
   // SVG: 食塩水
@@ -978,14 +979,23 @@ function renderSection3(){
     + '<div class="rule-box" style="margin-bottom:14px">'
     + '<div class="rule-title">例題で確認：反対方向・同方向パターン</div>'
     + '<div class="ex" style="line-height:2.3">'
-    + '問題：きょん（分速 x m）とにっくん（分速 y m）が同じ場所から反対方向に歩き出す。10分後に2人の間は200m離れていた。また同方向に歩くと10分で40mの差がつく。2人の速さは？<br><br>'
+    + '問題：きょん（分速 x m）とにっくん（分速 y m）が同じ場所から反対方向に歩き出す。10分後に2人の間は200m離れていた。また、<strong style="color:var(--gold)">にっくんの方が速く</strong>、同じ方向に歩くと10分でにっくんが40m先に行く。2人の速さは？<br><br>'
     + '<span style="color:var(--purple)">【STEP1】</span> きょんの速さ＝x、にっくんの速さ＝y と置く<br>'
-    + '<span style="color:var(--teal)">【STEP2】</span> 反対方向 → 道のりの合計＝離れた距離 → 10×(x+y)=200 → <strong>x+y=20</strong> …①<br>'
-    + '　同方向 → 速い方から遅い方を引いた差＝道のりの差 → 10×(y-x)=40 → <strong>y-x=4</strong> …②<br>'
+    + '<span style="color:var(--teal)">【STEP2】</span> 反対方向 → 2人の道のりの合計＝離れた距離 → 10x＋10y=200 → <strong>x+y=20</strong> …①<br>'
+    + '　同方向 → 先に行った<strong style="color:var(--gold)">にっくんの道のり</strong> − 後ろの<strong style="color:var(--purple)">きょんの道のり</strong> ＝ 差 → 10y − 10x = 40 → <strong>y-x=4</strong> …②<br>'
     + '<span style="color:var(--green)">【STEP3】</span> ①＋② → 2y=24 → y=12、x=8<br>'
     + '<span style="color:var(--gold)">【STEP4】</span> 答え：きょん 分速8m、にっくん 分速12m'
     + '</div>'
-    + '<div class="note">💡 「反対方向＝足す」「同方向の差＝引く」がカギ！</div>'
+    + '<div class="note">💡 「反対方向＝足す」「同方向の差＝速い方 − 遅い方」がカギ！</div>'
+    + '</div>'
+    + '<div class="rule-box" style="margin-bottom:14px">'
+    + '<div class="rule-title">🤔 同方向のとき、なぜ y − x？（x − y じゃダメ？）</div>'
+    + '<div class="ex">📐 ルール：同じ方向に進むときの差 ＝ <strong style="color:var(--gold)">速い方の道のり − 遅い方の道のり</strong></div>'
+    + '<div class="ex">上の問題には「にっくんの方が速い」と書いてある → 速い方＝にっくん（y）、遅い方＝きょん（x）→ だから <strong style="color:var(--gold)">y − x</strong></div>'
+    + '<div class="ex">もし問題に「きょんの方が速い」と書いてあれば <strong style="color:var(--gold)">x − y</strong> になる。文字の順番ではなく<strong>「どっちが速いか」</strong>で決まる！</div>'
+    + '<div class="ex" style="color:var(--green)">✅ 正例：y=12, x=8 → y − x = 12 − 8 = 4 ✅</div>'
+    + '<div class="ex" style="color:var(--red)">❌ 逆に引くと：x − y = 8 − 12 = −4 → マイナスになる</div>'
+    + '<div class="note">💡 チェック方法：差がマイナスになったら「引く順番が逆だった」というサイン。入れ替えればOKで、間違いではなく「気づくための合図」！<br>💡 反対方向は2人が離れていくので足し算、同方向は追いかけっこなので引き算（速い − 遅い）</div>'
     + '</div>'
 
     + '<div style="font-size:13px;color:var(--text2);margin-bottom:10px;font-weight:bold">③ 食塩水</div>'
@@ -1061,10 +1071,10 @@ function renderSection3(){
     },
     {
       qid:'math_sim_s3_q3',
-      jp:'きょん（分速 x m）とにっくん（分速 y m）が反対方向に走ると 10 分で 200 m 離れる。同方向に走ると 10 分で 40 m 差がつく。連立方程式は？',
+      jp:'きょん（分速 x m）とにっくん（分速 y m）が反対方向に走ると 10 分で 200 m 離れる。にっくんの方が速く、同方向に走ると 10 分でにっくんが 40 m 先に行く。連立方程式は？',
       answer:'{ x+y=20, y-x=4 }',
       choices:['{ x+y=20, y-x=4 }', '{ x+y=200, y-x=40 }', '{ xy=20, y-x=4 }', '{ x+y=20, y+x=4 }'],
-      exp:'📐 反対方向：10(x+y)=200 → x+y=20<br>同方向（にっくん速い）：10(y-x)=40 → y-x=4<br>✅ 正解は <span style="color:var(--gold)">{ x+y=20, y-x=4 }</span>'
+      exp:'📐 反対方向：10(x+y)=200 → x+y=20<br>同方向：速い方（にっくん y）− 遅い方（きょん x）＝ 差 → 10(y-x)=40 → y-x=4<br>✅ 正解は <span style="color:var(--gold)">{ x+y=20, y-x=4 }</span><br>💡 「にっくんの方が速い」と書いてあるから y − x。逆なら x − y になる'
     },
     {
       qid:'math_sim_s3_q4',
@@ -1358,10 +1368,10 @@ function renderSection4(){
     },
     {
       qid:'math_sim_s4_q16', type:'choice',
-      jp:'きょん（x m/分）とにっくん（y m/分）。反対方向に 5 分走ると 250 m 離れる、同方向に 5 分走ると 50 m 差。にっくん y は？',
+      jp:'きょん（x m/分）とにっくん（y m/分）。反対方向に 5 分走ると 250 m 離れる。にっくんの方が速く、同方向に 5 分走るとにっくんが 50 m 先に行く。にっくん y は？',
       answer:'30',
       choices:['30', '20', '40', '25'],
-      exp:'📐 5(x+y)=250 → x+y=50<br>5(y-x)=50 → y-x=10<br>加減法で ①+② → 2y=60 → <span style="color:var(--gold)">y=30</span>（にっくん）, x=20（きょん）'
+      exp:'📐 反対方向：5(x+y)=250 → x+y=50<br>同方向：速い方（にっくん y）− 遅い方（きょん x）→ 5(y-x)=50 → y-x=10<br>加減法で ①+② → 2y=60 → <span style="color:var(--gold)">y=30</span>（にっくん）, x=20（きょん）<br>💡 「にっくんの方が速い」と書いてあるから y − x'
     },
     {
       qid:'math_sim_s4_q17', type:'input',

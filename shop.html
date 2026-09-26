@@ -239,7 +239,7 @@ function saveSpent(v){ localStorage.setItem(SPENT_KEY,String(v)); }
 
 // 全教科のXP合計を取得
 function getTotalXp(){
-  var keys=['nh3_xp','sci_xp','math_xp','soc_xp','jpn_xp'];
+  var keys=['nh3_xp','sci_xp','math_xp','soc_xp','jpn_xp','exam_xp'];
   return keys.reduce(function(s,k){return s+parseInt(localStorage.getItem(k)||'0',10);},0);
 }
 function getAvailableCoins(){ return Math.max(0, getTotalXp() - getSpent()); }

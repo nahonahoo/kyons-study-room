@@ -35,7 +35,7 @@ function updateXP() {
   var toXP   = next ? next.min : MAX_XP;
   var pct    = Math.min(100, Math.round((xp - fromXP) / (toXP - fromXP) * 100));
   document.getElementById('xpFill').style.width  = pct + '%';
-  var _xpKeys=['nh3_xp','sci_xp','math_xp','soc_xp','jpn_xp'];
+  var _xpKeys=['nh3_xp','sci_xp','math_xp','soc_xp','jpn_xp','exam_xp'];
   var _total=Math.max(0,_xpKeys.reduce(function(s,k){return s+parseInt(localStorage.getItem(k)||'0',10);},0)-parseInt(localStorage.getItem('shop_spent')||'0',10));
   var _coinEl=document.getElementById('coinTotal');if(_coinEl){_coinEl.textContent='🪙 '+_total.toLocaleString()+' XP';_coinEl.classList.add('bump');setTimeout(function(){_coinEl.classList.remove('bump');},350);}
   document.getElementById('xpLevel').textContent  = lv.label;

@@ -14,6 +14,12 @@ const LEVELS = [
 // weakDb: localStorage キー（{weakDb}_weakdb）, qidPrefix: 問題IDの先頭文字列
 const SUBJECTS = [
   {
+    key:'exam', name:'入試対策（全教科共通）', icon:'🔍', color:'#f5c518',
+    links:[
+      { label:'🔍 設問の読み方トレーニング', href:'setsumon_training.html', weakDb:'exam', qidPrefix:'exam_setsu_' },
+    ]
+  },
+  {
     key:'nh3', name:'英語', icon:'🇬🇧', color:'#3b82f6',
     links:[
       { label:'Unit0 基礎復習',              href:'english_reading/nh3_unit0.html',             weakDb:'nh3',  qidPrefix:'s' },
@@ -240,7 +246,7 @@ function renderChars() {
 // ====== 学習カレンダー ======
 function getDailyData() {
   const data = {};
-  ['nh3', 'sci', 'math', 'soc', 'jpn'].forEach(key => {
+  ['nh3', 'sci', 'math', 'soc', 'jpn', 'exam'].forEach(key => {
     try {
       const d = JSON.parse(localStorage.getItem(key + '_daily') || '{}');
       Object.entries(d).forEach(([date, count]) => {

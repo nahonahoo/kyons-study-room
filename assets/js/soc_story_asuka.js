@@ -13,16 +13,22 @@ function talk(lines){
   var h = '<div class="talk">';
   lines.forEach(function(l){
     var c = CAST[l[0]];
-    h += '<div class="chat-line"><div class="avatar ' + c.cls + '">' + c.av + '</div><div><div class="chat-name">' + c.name + '</div><div class="chat-bubble">' + l[1] + '</div></div></div>';
+    h += '<div class="chat-line"><div class="avatar ' + c.cls + '">' + c.av + '</div><div style="flex:1"><div class="chat-name">' + c.name + '</div><div class="chat-bubble b-' + l[0] + '">' + l[1] + '</div></div></div>';
   });
   return h + '</div>';
 }
-function goro(t){ return '<div class="goro">🎵 <b>語呂合わせ</b>　' + t + '</div>'; }
-function sticky(icon, text, color){
-  var c = color || 'var(--gold)';
-  var bg = color === 'var(--red)' ? 'rgba(233,69,96,0.1)' : color === 'var(--blue)' ? 'rgba(74,158,255,0.08)' : 'rgba(245,197,24,0.08)';
-  return '<div class="sticky" style="border-color:' + c + ';background:' + bg + ';color:' + c + '"><span class="sticky-icon">' + icon + '</span>' + text + '</div>';
+// 語呂合わせ（付箋。「🎵 語呂合わせ」のラベルはCSSで付ける）
+function goro(t){ return '<div class="goro">' + t + '</div>'; }
+// POP札：📌＝ココ出る!!／🔗＝つづく!!／⚠️＝まちがえ注意!!
+function sticky(icon, text){
+  var kind = icon === '🔗' ? 'next' : icon === '⚠️' ? 'warn' : '';
+  var tag = kind === 'next' ? 'つづく!!' : kind === 'warn' ? 'まちがえ注意!!' : 'ココ出る!!';
+  var body = text.replace(/^(テストに出る！|まちがえ注意！　|→ )/, '');
+  return '<div class="pop-point ' + kind + '"><span class="pop-tag">' + tag + '</span>' + body + '</div>';
 }
+// POPの色（記事ごとの帯色・見出しリボン色）
+var BANDS = ['var(--pop-v)','var(--pop-y)','var(--pop-o)','var(--pop-p)','var(--pop-c)','var(--pop-r)','var(--pop-g)'];
+function secHead(text, color){ return '<div class="sec-head ' + (color || '') + '"><span>' + text + '</span></div>'; }
 
 // ===== 登場人物 =====
 var CHARAS = [
@@ -225,73 +231,71 @@ function renderStoryPage(){
   var html = '';
 
   html += '<div class="masthead">';
-  html += '<div class="masthead-kicker">号外！</div>';
-  html += '<div class="masthead-title">飛鳥時代ストーリー新聞</div>';
-  html += '<div class="masthead-sub">🗞️ 聖徳太子から平城京まで（592〜710年ごろ）<br>テスト前にサクッと読んで「流れ」を掴もう！（クイズじゃないよ）</div>';
+  html += '<div class="burst">号外<br>!!</div>';
+  html += '<div class="masthead-title"><span class="t1">飛鳥時代</span><br><span class="t2">ストーリー</span>新聞</div>';
+  html += '<div class="masthead-sub">🗞️ 聖徳太子から平城京まで（592〜710年ごろ）<br>サクッと読んで「流れ」をつかもう！（クイズじゃないよ）</div>';
   html += '<div class="series">'
     + '<span class="now">① 飛鳥（いまここ）</span>'
     + '<span class="soon">② 奈良（準備中）</span>'
     + '<span class="soon">③ 平安（準備中）</span>'
     + '<a href="soc_history_story.html">📰 戦後日本</a>'
     + '</div>';
-  html += '<div class="masthead-rule"></div>';
   html += '</div>';
 
-  html += '<div class="tagline-box">豪族がバチバチにケンカしていた国が、「天皇を中心に、法律で動く国」に大変身するまでの、約120年の大河ドラマ！<br><span style="font-size:14px;color:var(--text2);font-weight:normal">主役は聖徳太子 → 中大兄皇子 → 天武天皇へとバトンタッチ</span></div>';
+  html += '<div class="catch">豪族がバチバチにケンカしていた国が、「<span class="hl-red">天皇を中心に、法律で動く国</span>」に大変身するまでの、約120年の大河ドラマ！<small>主役は 聖徳太子 → 中大兄皇子 → 天武天皇 へとバトンタッチ</small></div>';
 
   // 登場人物
-  html += '<div class="sec-head">🎭 まずは登場人物（キャラ図鑑）</div>';
+  html += secHead('🎭 まずは登場人物（キャラ図鑑）');
   html += '<div class="chara-grid">';
-  CHARAS.forEach(function(c){
-    html += '<div class="chara"><div class="chara-name">' + c[0] + ' ' + c[1] + ' <small>' + c[2] + '</small></div><div class="chara-desc">' + c[3] + '</div></div>';
+  CHARAS.forEach(function(c, i){
+    html += '<div class="chara k' + (i % 6) + '"><div class="chara-top"><div class="chara-emo">' + c[0] + '</div><div class="chara-name">' + c[1] + '<small>' + c[2] + '</small></div></div><div class="chara-desc">' + c[3] + '</div></div>';
   });
   html += '</div>';
 
   // 年表
-  html += '<div class="sec-head">📅 たての年表（上から古い順）</div>';
+  html += secHead('📅 たての年表（上から古い順）', 'c');
   html += '<div class="tl">';
-  TIMELINE.forEach(function(t){ html += '<div class="tl-item"><span class="tl-year">' + t[0] + '</span>' + t[1] + '</div>'; });
+  TIMELINE.forEach(function(t){ html += '<div class="tl-item"><span class="tl-year">' + t[0] + '</span><span>' + t[1] + '</span></div>'; });
   html += '</div>';
 
   // 記事
-  html += '<div class="sec-head">📰 本日の記事</div>';
+  html += secHead('📰 本日の記事（全7本）', 'o');
   STAGES.forEach(function(s, i){
-    html += '<div class="clip-card">';
-    html += '<div class="clip-tape" style="background:' + s.theme + '"></div>';
-    html += '<div class="clip-head"><div class="clip-num" style="background:' + s.theme + '">' + s.no + '</div><div class="clip-title">' + s.title + '</div></div>';
+    html += '<div class="clip-card" style="--band:' + BANDS[i % BANDS.length] + '">';
+    html += '<div class="clip-head"><div class="clip-num">' + s.no + '</div><div class="clip-title">' + s.title + '</div></div>';
     html += '<ul class="clip-body">';
     s.items.forEach(function(it){ html += '<li>' + it + '</li>'; });
     html += '</ul>';
     if(s.talk) html += talk(s.talk);
     if(s.goro) html += goro(s.goro);
-    html += sticky(s.stickyIcon, s.stickyText, s.stickyColor);
+    html += sticky(s.stickyIcon, s.stickyText);
     html += '</div>';
-    if(i < STAGES.length - 1) html += '<div class="arrow-down">↓</div>';
+    if(i < STAGES.length - 1) html += '<div class="arrow-down">👇</div>';
   });
 
   // まとめ
-  html += '<div class="sec-head">🧭 120年を1行で</div>';
-  html += '<div class="tagline-box" style="font-size:16px">豪族バラバラ → <span class="hl">聖徳太子</span>「実力主義と役人のルール」 → 蘇我氏が暴走 → <span class="hl">大化の改新</span>「土地も人も国のもの」 → <span class="hl">白村江</span>で負けて守りを固める → <span class="hl">壬申の乱</span>で天皇パワーUP → <span class="hl">大宝律令</span>で法律の国が完成！</div>';
+  html += secHead('🧭 120年を1行で', 'g');
+  html += '<div class="oneline">豪族バラバラ → <span class="hl">聖徳太子</span>「実力主義と役人のルール」 → 蘇我氏が暴走 → <span class="hl">大化の改新</span>「土地も人も国のもの」 → <span class="hl">白村江</span>で負けて守りを固める → <span class="hl">壬申の乱</span>で天皇パワーUP → <span class="hl">大宝律令</span>で法律の国が完成！</div>';
 
   // 勘違い
-  html += '<div class="sec-head">🚫 よくある勘違い（ここで直しておこう）</div>';
+  html += secHead('🚫 よくある勘違い（ここで直そう）');
   MYTHS.forEach(function(m){
-    html += '<div class="myth"><span class="ng">✕ ' + m[0] + '</span><br><span class="ok">○ </span>' + m[1] + '</div>';
+    html += '<div class="myth"><span class="stamp ng">✕</span><div><span class="ng-text">' + m[0] + '</span><span class="ok-text">' + m[1] + '</span></div></div>';
   });
 
   // 組み合わせ表
-  html += '<div class="sec-head">🔗 人物とできごとの組み合わせ（入試の組み合わせ問題に）</div>';
-  html += '<div style="overflow-x:auto"><table class="pair-table"><tr><th>人物</th><th>できごと</th></tr>';
-  PAIRS.forEach(function(p){ html += '<tr><td style="white-space:nowrap;font-weight:bold">' + p[0] + '</td><td>' + p[1] + '</td></tr>'; });
+  html += secHead('🔗 人物とできごとの組み合わせ', 'v');
+  html += '<div class="pair-wrap"><table class="pair-table"><tr><th>人物</th><th>できごと</th></tr>';
+  PAIRS.forEach(function(p){ html += '<tr><td style="white-space:nowrap;font-weight:900">' + p[0] + '</td><td>' + p[1] + '</td></tr>'; });
   html += '</table></div>';
 
   // 3秒チェック
-  html += '<div class="sec-head">⏱️ 3秒チェック（考えてからタップ）</div>';
+  html += secHead('⏱️ 3秒チェック（考えてからタップ）', 'c');
   CHECKS.forEach(function(c, i){
-    html += '<div class="flip"><div>Q' + (i + 1) + '. ' + c[0] + '</div><button class="flip-btn" data-flip="' + i + '">答えを見る</button><div class="flip-ans" id="flip_' + i + '">→ ' + c[1] + '</div></div>';
+    html += '<div class="flip"><div><span class="flip-q">Q' + (i + 1) + '</span>' + c[0] + '</div><button class="flip-btn" data-flip="' + i + '">答えを見る</button><div class="flip-ans" id="flip_' + i + '">→ ' + c[1] + '</div></div>';
   });
 
-  html += '<div class="end-note">📰 発行：きょん＆西村新聞社　／　これは「流れ」を掴むための読み物です。<br>クイズで確かめたいときは、ホームの「歴史」ページへ！<br>次号「奈良時代ストーリー新聞」をお楽しみに</div>';
+  html += '<div class="end-note">📰 発行：きょん＆西村新聞社<br>これは「流れ」をつかむための読み物です。<br>クイズで確かめたいときは、ホームの「歴史」ページへ！<br>次号「奈良時代ストーリー新聞」をお楽しみに</div>';
 
   document.getElementById('paperMain').innerHTML = html;
 

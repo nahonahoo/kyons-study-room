@@ -322,7 +322,7 @@ function checkSectionComplete() {
       if (!document.getElementById('sectionCompleteBanner')) {
         var banner = document.createElement('div');
         banner.id = 'sectionCompleteBanner';
-        var nextSec = currentSection < 3 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストで腕試し！';
+        var nextSec = currentSection === 2 ? '「式に表す」へ進もう！' : currentSection === 7 ? '確認テストで腕試し！' : (currentSection < 3 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストで腕試し！');
         banner.innerHTML = '<div style="text-align:center;padding:20px;margin-bottom:12px;background:linear-gradient(135deg,rgba(63,185,80,0.12),rgba(163,113,247,0.08));border:1px solid var(--green);border-radius:14px">'
           + '<div style="font-size:36px;margin-bottom:8px">🎉</div>'
           + '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--green);letter-spacing:2px;margin-bottom:6px">セクション ' + currentSection + ' クリア！</div>'
@@ -342,6 +342,7 @@ var SECTIONS = [
   { id:0, label:'📐 スタート',   title:'文字式',              sub:'x や a って何？文字が入る理由から始めよう！' },
   { id:1, label:'文字式の書き方', title:'文字式の書き方',      sub:'×省略・÷分数・係数1は省く——書き方ルール10問' },
   { id:2, label:'式の計算・代入', title:'式の計算と代入',      sub:'同類項・展開・代入——計算問題10問' },
+  { id:7, label:'式に表す',      title:'数量や関係を式に表す', sub:'割合・速さ・平均・等式・不等式（入試の大問1で頻出）' },
   { id:3, label:'確認テスト',    title:'確認テスト',          sub:'文字式の総まとめ！選択10問＋代入5問' },
   { id:4, label:'🔗3年予習',     title:'3年予習：多項式・因数分解', sub:'文字式→多項式・因数分解への橋渡し' },
   { id:5, label:'📊弱点',        title:'弱点ノート',          sub:'間違えた問題の正答率を確認しよう' },
@@ -352,10 +353,11 @@ function renderTabs() {
   var html = '';
   SECTIONS.forEach(function(s) {
     var cls = 'section-tab';
-    if (s.id >= 5) cls += ' tokku';
+    if (s.id === 5 || s.id === 6) cls += ' tokku';
     if (s.id === currentSection) cls += ' active';
-    if (sectionDone[s.id] && s.id < 5) cls += ' done';
-    var label = s.label + (sectionDone[s.id] && s.id < 5 ? ' ✓' : '');
+    var normal = s.id !== 5 && s.id !== 6;
+    if (sectionDone[s.id] && normal) cls += ' done';
+    var label = s.label + (sectionDone[s.id] && normal ? ' ✓' : '');
     if (s.id === 6) { var wk = getWeakQuestions(); label = '🔥特訓' + (wk.length > 0 ? '('+wk.length+')' : ''); }
     html += '<button class="' + cls + '" data-sid="' + s.id + '">' + label + '</button>';
   });
@@ -368,7 +370,7 @@ function goSection(id) { currentSection = id; renderTabs(); renderSection(id); w
 function renderSection(id) {
   if (id === 5) { renderWeakNote(); return; }
   if (id === 6) { renderTokkuMode(); return; }
-  var s = SECTIONS[id];
+  var s = SECTIONS.filter(function(x) { return x.id === id; })[0];
   var html = '<div class="progress-dots">';
   for (var i = 0; i <= 4; i++) {
     html += '<div class="dot' + (i < id ? ' done' : i === id ? ' current' : '') + '"></div>';
@@ -382,11 +384,13 @@ function renderSection(id) {
   if      (id === 0) html += renderSection0();
   else if (id === 1) html += renderSection1();
   else if (id === 2) html += renderSection2();
+  else if (id === 7) html += renderSection7();
   else if (id === 3) html += renderSection3();
   else if (id === 4) html += renderSection4();
-  if (id >= 1 && id <= 3) {
-    var nextLabel  = id < 3 ? '次のセクションへ →' : '🏆 結果を見る！';
-    var nextAction = id < 3 ? 'goSection(' + (id+1) + ')' : 'showFinalResult()';
+  if ((id >= 1 && id <= 3) || id === 7) {
+    var NEXT = { 1:2, 2:7, 7:3 };
+    var nextLabel  = id !== 3 ? '次のセクションへ →' : '🏆 結果を見る！';
+    var nextAction = id !== 3 ? 'goSection(' + NEXT[id] + ')' : 'showFinalResult()';
     html += '<button class="next-section-btn" id="nextBtn" onclick="' + nextAction + '">' + nextLabel + '</button>';
   }
   document.getElementById('mainContent').innerHTML = html;
@@ -439,7 +443,7 @@ function renderSection1() {
     + '<div class="rule-box">'
     + '<div class="rule-title">③ 同じ文字の積は指数で書く</div>'
     + '<div class="ex">a × a → a²　　a × a × a → a³</div>'
-    + '<div class="note">💡 「2a」は a+a ではなく a×2。「a²」は a×a</div>'
+    + '<div class="note">💡 「2a」は a×2（＝a＋a）、「a²」は a×a。<b>2a と a² はちがう！</b></div>'
     + '</div>'
     + '</div>';
 
@@ -565,6 +569,68 @@ function renderSection2() {
     html += makeInputCard(q.qid, q.jp, q.formula, q.answer, q.xp, q.hint, q.exp);
   });
 
+  return html;
+}
+
+// ===== SECTION 7: 数量や関係を式に表す（2026-09-30 追加。愛知の大問1で毎年のように出る「等式・不等式で表す」） =====
+function renderSection7() {
+  var html = '';
+  html += '<div class="rule-card">'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">「〜以下」とか「〜未満」とか、日本語を記号にするのがいちばん苦手…</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">日本語と記号の対応表を1つ覚えるだけだ。あとは「何と何をくらべているか」を先に決めて、左右に置けばいい</div></div></div>'
+    + '</div>';
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">📐 よく使う数量の表し方</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">代金 ＝ 1個の値段 × 個数（a円を5個 → <b>5a円</b>）</div>'
+    + '<div class="ex">x円の3割 → <b>3/10 x 円</b>（0.3x円）　a円の2割引 → <b>8/10 a 円</b>（0.8a円）　x％ → <b>x/100</b></div>'
+    + '<div class="ex">道のり ＝ 速さ × 時間　／　時間 ＝ 道のり ÷ 速さ（y kmを時速4km → <b>y/4 時間</b>）</div>'
+    + '<div class="ex">平均 ＝ 合計 ÷ 個数（a, b, c の平均 → <b>(a+b+c)/3</b>）</div>'
+    + '<div class="ex">単位をそろえる：x m と y cm → <b>100x + y (cm)</b></div>'
+    + '</div>'
+    + '<div class="rule-card-title" style="margin-top:14px">📐 等式と不等式（ことばと記号の対応表）</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">〜と等しい・〜になる → <b>＝</b>（等式）</div>'
+    + '<div class="ex">A は B <b>以上</b> → A <b>≧</b> B　／　A は B <b>以下</b> → A <b>≦</b> B（B をふくむ）</div>'
+    + '<div class="ex">A は B <b>より大きい</b> → A <b>＞</b> B　／　A は B <b>未満</b>・<b>より小さい</b> → A <b>＜</b> B（B をふくまない）</div>'
+    + '<div class="note">💡 「以」の字がついたら「＝」の線がつく（≧・≦）。「未満」「より」は線なし（＞・＜）。</div>'
+    + '</div>'
+    + '</div>';
+
+  function E(rule, ok, ng, tip) {
+    return '📐 ルール：' + rule + '<br>✅ ' + ok + (ng ? '<br>❌ ' + ng : '') + '<br>💡 ' + tip;
+  }
+  var qs = [
+    { jp:'1個 a 円のりんご5個と、1本 b 円のジュース2本を買ったときの代金は？', answer:'5a+2b（円）', choices:['5a+2b（円）','7ab（円）','5a+b（円）','2a+5b（円）'],
+      exp:E('代金＝1個の値段×個数を、それぞれ足す', 'a×5＋b×2＝5a＋2b', 'かけ算とたし算を混ぜて7abにしない', '「何が何個」をそれぞれ式にしてから足す') },
+    { jp:'x 円の3割は何円？', answer:'3/10 x（円）', choices:['3/10 x（円）','3x（円）','x/3（円）','30x（円）'],
+      exp:E('1割＝1/10、3割＝3/10', 'x×3/10＝3/10 x（0.3x）', 'x/3 は「3等分」なので別もの', '割合は分数か小数に直してかける') },
+    { jp:'a 円の品物を2割引で買ったときの代金は？', answer:'0.8a（円）', choices:['0.8a（円）','0.2a（円）','a−2（円）','a−0.2（円）'],
+      exp:E('2割引＝もとの値段の8割（1−0.2＝0.8）', 'a×0.8＝0.8a（4/5 a）', '0.2aは「引かれた金額」の方', '「引いたあと」は 1−割合 をかける') },
+    { jp:'y km の道のりを時速4kmで歩いたときにかかる時間は？', answer:'y/4（時間）', choices:['y/4（時間）','4y（時間）','4/y（時間）','y−4（時間）'],
+      exp:E('時間＝道のり÷速さ', 'y÷4＝y/4', '4yは「4時間歩いた道のり」', '「はじき」の図：時間＝道のり÷速さ') },
+    { jp:'分速 a m で10分間歩いたときの道のりは？', answer:'10a（m）', choices:['10a（m）','a/10（m）','a+10（m）','10/a（m）'],
+      exp:E('道のり＝速さ×時間', 'a×10＝10a', 'a/10は10でわってしまっている', '単位（分速と分）がそろっているか確認') },
+    { jp:'3回のテストの点数が a 点、b 点、c 点のとき、平均点は？', answer:'(a+b+c)/3（点）', choices:['(a+b+c)/3（点）','a+b+c/3（点）','3(a+b+c)（点）','abc/3（点）'],
+      exp:E('平均＝合計÷回数', '(a+b+c)÷3', 'a+b+c/3 は c だけを3でわっている', '合計をカッコでくくってからわる') },
+    { jp:'x m と y cm を合わせた長さを、cm の単位で表すと？', answer:'100x+y（cm）', choices:['100x+y（cm）','x+y（cm）','x+100y（cm）','x+y/100（cm）'],
+      exp:E('1m＝100cm。単位をそろえてから足す', 'x m＝100x cm → 100x＋y', '単位がちがうまま足さない', 'たす前に単位チェック') },
+    { jp:'「ある数 x の3倍から5をひくと、7になる」を等式で表すと？', answer:'3x−5=7', choices:['3x−5=7','3(x−5)=7','5−3x=7','3x=7−5'],
+      exp:E('ことばの順に式にする。「〜になる」は＝', '3倍 → 3x、5をひく → 3x−5、7になる → ＝7', '3(x−5)は「5をひいてから3倍」', '順番どおりに式をつなぐ') },
+    { jp:'「1個 a 円のパン4個の代金は600円以下である」を不等式で表すと？', answer:'4a≦600', choices:['4a≦600','4a＜600','4a≧600','4a＝600'],
+      exp:E('「以下」は ≦（600をふくむ）', '代金4a が600以下 → 4a≦600', '「未満」なら ＜', '「以」がついたら ＝ の線つき') },
+    { jp:'「x に2を加えた数は10より大きい」を不等式で表すと？', answer:'x+2＞10', choices:['x+2＞10','x+2≧10','x+2＜10','2x＞10'],
+      exp:E('「より大きい」は ＞（10をふくまない）', 'x+2 ＞ 10', '≧は「10以上」', '「より」は線なし') },
+    { jp:'「〜以上」を表す不等号はどれ？', answer:'≧', choices:['≧','＞','≦','＜'],
+      exp:E('以上＝その数をふくんで大きい', 'A は B 以上 → A≧B', '＞は「より大きい」', '以上・以下は線つき') },
+    { jp:'【難】「1本 x 円のペン3本と、1冊 y 円のノート2冊の代金の合計は1000円未満である」を不等式で表すと？', answer:'3x+2y＜1000', choices:['3x+2y＜1000','3x+2y≦1000','3x+2y＞1000','5xy＜1000'],
+      exp:E('「未満」は ＜（1000をふくまない）', '代金の合計 3x＋2y が1000未満 → 3x+2y＜1000', '≦は「以下」', '左に数量、右にくらべる数') },
+    { jp:'【難】「a 個のあめを、1人に3個ずつ b 人に配ると5個余る」を等式で表すと？', answer:'a=3b+5', choices:['a=3b+5','a=3b−5','3a+5=b','a+5=3b'],
+      exp:E('全部の数 ＝ 配った数 ＋ 余った数', 'a＝3b＋5（配った3b個と余り5個）', '足りないときは −、余るときは ＋', '「全部＝配った＋余り」の型') },
+    { jp:'【難】x 人の20％を表す式は？', answer:'x/5（人）', choices:['x/5（人）','20x（人）','x/20（人）','5x（人）'],
+      exp:E('20％＝20/100＝1/5', 'x×1/5＝x/5（0.2x）', 'x/20 は5％', '％は100でわってから約分') }
+  ];
+  qs.forEach(function(q, i) { html += makeChoices('math_chars_s7_q' + i, q.jp, q.answer, q.choices, q.exp); });
   return html;
 }
 

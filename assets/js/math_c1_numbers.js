@@ -302,7 +302,7 @@ function checkSectionComplete() {
       if (!document.getElementById('secCompleteBanner')) {
         var banner = document.createElement('div');
         banner.id = 'secCompleteBanner';
-        var nextMsg = currentSection < 4 ? 'Section ' + (currentSection + 1) + ' へ進もう！' : '確認テストへ挑戦！';
+        var nextMsg = currentSection === 3 ? '「素因数分解」へ進もう！' : currentSection === 7 ? '確認テストへ挑戦！' : (currentSection < 4 ? 'Section ' + (currentSection + 1) + ' へ進もう！' : '確認テストへ挑戦！');
         banner.innerHTML = '<div style="text-align:center;padding:20px;margin-bottom:12px;background:linear-gradient(135deg,rgba(163,113,247,0.12),rgba(14,165,233,0.08));border:1px solid var(--purple);border-radius:14px">'
           + '<div style="font-size:36px;margin-bottom:8px">🎉</div>'
           + '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--purple);letter-spacing:2px;margin-bottom:6px">セクション ' + currentSection + ' クリア！</div>'
@@ -322,6 +322,7 @@ var SECTIONS = [
   { id:1, label:'基本',          title:'正負の数の基本',    sub:'正の数・負の数・絶対値・数直線をマスターしよう' },
   { id:2, label:'加法・減法',    title:'加法と減法',        sub:'正負の数のたし算・ひき算のルール' },
   { id:3, label:'乗法・除法',    title:'乗法と除法',        sub:'正負の数のかけ算・わり算のルール' },
+  { id:7, label:'素因数分解',    title:'素数と素因数分解',  sub:'素数・すだれ算・最大公約数・「2乗にする」問題' },
   { id:4, label:'確認テスト',    title:'確認テスト',        sub:'全セクションの総まとめ！何問正解できる？' },
   { id:5, label:'📊弱点',        title:'弱点ノート',        sub:'間違えた問題の正答率を確認しよう' },
   { id:6, label:'🔥特訓',        title:'弱点特訓モード',    sub:'弱点問題だけを集中練習！' },
@@ -334,12 +335,13 @@ function renderTabs() {
     if (s.id >= 5) cls += ' tokku';
     if (s.id === currentSection) cls += ' active';
     if (sectionDone[s.id] && s.id < 5) cls += ' done';
-    var label = s.label + (sectionDone[s.id] && s.id < 5 ? ' ✓' : '');
+    var label = s.label + (sectionDone[s.id] && s.id !== 5 && s.id !== 6 ? ' ✓' : '');
     if (s.id === 6) {
       var wk = getWeakQuestions();
       label = '🔥特訓' + (wk.length > 0 ? '(' + wk.length + ')' : '');
     }
-    html += '<button class="section-tab' + (s.id >= 5 ? ' tokku' : '') + (s.id === currentSection ? ' active' : '') + (sectionDone[s.id] && s.id < 5 ? ' done' : '') + '" data-sid="' + s.id + '">' + label + '</button>';
+    var normal = s.id !== 5 && s.id !== 6;
+    html += '<button class="section-tab' + (!normal ? ' tokku' : '') + (s.id === currentSection ? ' active' : '') + (sectionDone[s.id] && normal ? ' done' : '') + '" data-sid="' + s.id + '">' + label + '</button>';
   });
   document.getElementById('sectionTabs').innerHTML = html;
   document.querySelectorAll('.section-tab[data-sid]').forEach(function(btn) {
@@ -358,7 +360,7 @@ function renderSection(id) {
   if (id === 5) { renderWeakNote(); return; }
   if (id === 6) { renderTokkuMode(); return; }
 
-  var s = SECTIONS[id];
+  var s = SECTIONS.filter(function(x) { return x.id === id; })[0];
   var html = '';
   // Progress dots
   html += '<div class="progress-dots">';
@@ -377,11 +379,13 @@ function renderSection(id) {
   else if (id === 1) html += renderSection1();
   else if (id === 2) html += renderSection2();
   else if (id === 3) html += renderSection3();
+  else if (id === 7) html += renderSection7();
   else if (id === 4) html += renderSection4();
 
-  if (id >= 1 && id <= 4) {
-    var nextLabel = id < 4 ? '次のセクションへ →' : '🏆 結果を見る！';
-    var nextAction = id < 4 ? 'goSection(' + (id + 1) + ')' : 'showFinalResult()';
+  if ((id >= 1 && id <= 4) || id === 7) {
+    var NEXT = { 1:2, 2:3, 3:7, 7:4 };
+    var nextLabel = id !== 4 ? '次のセクションへ →' : '🏆 結果を見る！';
+    var nextAction = id !== 4 ? 'goSection(' + NEXT[id] + ')' : 'showFinalResult()';
     html += '<button class="next-section-btn" id="nextBtn" style="display:none" onclick="' + nextAction + '">' + nextLabel + '</button>';
   }
 
@@ -778,6 +782,74 @@ function renderSection3() {
       + '<div class="q-number">Q' + (i+1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
       + (q.sub ? '<div class="q-sub">' + q.sub + '</div>' : '')
+      + makeChoices(qid, q.choices, q.a, 4)
+      + makeFeedback(qid, q.exp)
+      + '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+// ===== SECTION 7: 素数と素因数分解（2026-09-30 追加。今の教科書では中1で学習） =====
+function renderSection7() {
+  var html = '';
+  html += '<div class="rule-card">'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">素因数分解って、なんか名前が必殺技っぽい！</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">数を「これ以上わけられない数（素数）」のかけ算に分解する技だ。中3の平方根でも毎回使うから、ここでパターンを身につけておこう</div></div></div>'
+    + '</div>';
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">📐 素数</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex"><b>素数</b>＝1とその数自身しか約数がない自然数。2, 3, 5, 7, 11, 13, 17, 19, 23, 29 …</div>'
+    + '<div class="note">⚠️ <b>1は素数ではない</b>。<b>2は偶数でただ1つの素数</b>。</div>'
+    + '</div>'
+    + '<div class="rule-card-title" style="margin-top:14px">📐 素因数分解（すだれ算でやる）</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">小さい素数（2 → 3 → 5 → 7 …）で、わり切れるだけわっていく。</div>'
+    + '<div class="ex" style="font-family:monospace;line-height:1.7">2 ) 60<br>2 ) 30<br>3 ) 15<br>　　 5</div>'
+    + '<div class="ex">→ 60 ＝ 2 × 2 × 3 × 5 ＝ <b>2² × 3 × 5</b>（同じ数のかけ算は指数でまとめる）</div>'
+    + '<div class="note">💡 使い道：最大公約数（共通する素数を全部かける）・最小公倍数（どちらかにある素数を全部かける）・「□をかけて自然数の2乗にする」問題（指数を全部偶数にそろえる）</div>'
+    + '</div>'
+    + '</div>';
+
+  function E(rule, ok, ng, tip) {
+    return '<span class="exp-rule"><span class="label">📐 ルール</span>' + rule + '</span><span class="exp-ok">✅ ' + ok + '</span>' + (ng ? '<span class="exp-ng">❌ ' + ng + '</span>' : '') + '<span class="exp-tip">💡 ' + tip + '</span>';
+  }
+  var qs = [
+    { q:'次のうち、素数はどれ？', a:'13', choices:['13','9','15','21'],
+      exp:E('素数は1とその数自身しか約数がない数', '13の約数は1と13だけ', '9＝3×3、15＝3×5、21＝3×7 はわり切れる', '「3でわれないか」「7でわれないか」をチェック') },
+    { q:'1は素数か？', a:'素数ではない', choices:['素数ではない','素数である','偶数の素数である','場合による'],
+      exp:E('素数は「約数がちょうど2個（1と自分）」の数', '1の約数は1だけ（1個）なので素数ではない', '1を素数に入れるのはよくあるまちがい', 'いちばん小さい素数は2') },
+    { q:'20以下の素数はいくつある？', a:'8個', choices:['8個','7個','9個','10個'],
+      exp:E('20以下の素数：2, 3, 5, 7, 11, 13, 17, 19', '全部で8個', '1や9、15を数えない', '2以外の偶数は素数にならない') },
+    { q:'60を素因数分解すると？', a:'2² × 3 × 5', choices:['2² × 3 × 5','2 × 3 × 10','4 × 3 × 5','2 × 30'],
+      exp:E('素因数分解は「素数だけ」のかけ算にする', '60 ＝ 2×2×3×5 ＝ 2²×3×5', '10や4は素数ではないので分解が途中', 'すだれ算で2→3→5の順にわる') },
+    { q:'84を素因数分解すると？', a:'2² × 3 × 7', choices:['2² × 3 × 7','2 × 42','2³ × 7','2² × 21'],
+      exp:E('小さい素数から順にわる', '84 → 42 → 21 → 7（2,2,3でわった）→ 2²×3×7', '21は3×7に分けられる', '最後が素数になるまでわる') },
+    { q:'126を素因数分解すると？', a:'2 × 3² × 7', choices:['2 × 3² × 7','2 × 63','2 × 3 × 21','3 × 42'],
+      exp:E('2 → 3 → 3 → 7 の順にわれる', '126 ＝ 2×3×3×7 ＝ 2×3²×7', '63や21は素数ではない', '各けたの和が9の倍数なら9（3×3）でわれる') },
+    { q:'180を素因数分解すると？', a:'2² × 3² × 5', choices:['2² × 3² × 5','2 × 3 × 30','2² × 45','2³ × 3 × 5'],
+      exp:E('180 → 90 → 45 → 15 → 5', '180 ＝ 2×2×3×3×5 ＝ 2²×3²×5', '45は3²×5に分けられる', '指数の数を数えまちがえないように') },
+    { q:'2³ × 3 × 5 はいくつ？', a:'120', choices:['120','30','90','60'],
+      exp:E('指数は同じ数のかけ算', '2³＝8 → 8×3×5＝120', '2³を6（2×3）にしない', '2³＝2×2×2') },
+    { q:'24と36の最大公約数は？', a:'12', choices:['12','6','72','4'],
+      exp:E('両方に共通する素数を全部かける', '24＝2³×3、36＝2²×3² → 共通は2²×3＝12', '72は最小公倍数', '「小さい方の指数」を選ぶ') },
+    { q:'12と18の最小公倍数は？', a:'36', choices:['36','6','216','72'],
+      exp:E('どちらかにある素数を、指数の大きい方で全部かける', '12＝2²×3、18＝2×3² → 2²×3²＝36', '12×18＝216は公倍数だが最小ではない', '「大きい方の指数」を選ぶ') },
+    { q:'【難】18にできるだけ小さい自然数をかけて、ある自然数の2乗にしたい。かける数は？', a:'2', choices:['2','3','18','9'],
+      exp:E('自然数の2乗 ＝ 素因数分解したとき指数が全部偶数', '18＝2×3² → 2の指数を偶数にするため×2 → 36＝6²', '3をかけると2×3³で2乗にならない', '中3の平方根の問題でもそのまま使う') },
+    { q:'【難】72をできるだけ小さい自然数でわって、ある自然数の2乗にしたい。わる数は？', a:'2', choices:['2','8','3','6'],
+      exp:E('わって指数を全部偶数にする', '72＝2³×3² → 2でわると2²×3²＝36＝6²', '8でわると9＝3²にもなるが「できるだけ小さい数」ではない', '指数が奇数の素数を1つ取りのぞく') }
+  ];
+  qs.forEach(function(q, i) { q._qid = 'math_nums_s7_q' + i; });
+  qs = shuffleArray(qs);
+  html += '<div class="practice-section"><div class="practice-title">✏️ 練習問題 — 素数と素因数分解</div>';
+  qs.forEach(function(q, i) {
+    var qid = q._qid;
+    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:q.q, choices:q.choices };
+    html += '<div class="q-card" data-card="' + qid + '">'
+      + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
+      + '<div class="q-text">' + q.q + '</div>'
       + makeChoices(qid, q.choices, q.a, 4)
       + makeFeedback(qid, q.exp)
       + '</div>';

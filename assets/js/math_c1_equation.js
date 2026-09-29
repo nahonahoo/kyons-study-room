@@ -337,7 +337,7 @@ function checkSectionComplete() {
       if (!document.getElementById('sectionCompleteBanner')) {
         var banner = document.createElement('div');
         banner.id = 'sectionCompleteBanner';
-        var nextSec = currentSection < 3 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストで腕試し！';
+        var nextSec = currentSection === 2 ? '「レベルアップ」へ進もう！' : currentSection === 7 ? '確認テストで腕試し！' : (currentSection < 3 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストで腕試し！');
         banner.innerHTML = '<div style="text-align:center;padding:20px;margin-bottom:12px;background:linear-gradient(135deg,rgba(63,185,80,0.12),rgba(163,113,247,0.08));border:1px solid var(--green);border-radius:14px">'
           + '<div style="font-size:36px;margin-bottom:8px">🎉</div>'
           + '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--green);letter-spacing:2px;margin-bottom:6px">セクション ' + currentSection + ' クリア！</div>'
@@ -357,6 +357,7 @@ var SECTIONS = [
   { id:0, label:'📐 スタート',   title:'一次方程式',              sub:'中1数学の核心。移項をマスターすれば二次方程式まで解ける！' },
   { id:1, label:'方程式の基本',  title:'方程式の解き方',          sub:'移項・等式の性質・解の確認——計算問題10問' },
   { id:2, label:'比例式・文章題', title:'比例式と文章題',          sub:'a:b=c:d の解き方と文章題への応用' },
+  { id:7, label:'レベルアップ',  title:'レベルアップ：小数・分数・入試の文章題', sub:'両辺に数をかけて消す・過不足・追いつく・解から係数' },
   { id:3, label:'確認テスト',    title:'確認テスト',              sub:'一次方程式の総まとめ！計算10問＋文章題5問' },
   { id:4, label:'🔗3年予習',     title:'3年予習：二次方程式',     sub:'因数分解と解の公式への橋渡し' },
   { id:5, label:'📊弱点',        title:'弱点ノート',              sub:'間違えた問題の正答率を確認しよう' },
@@ -367,10 +368,11 @@ function renderTabs() {
   var html = '';
   SECTIONS.forEach(function(s) {
     var cls = 'section-tab';
-    if (s.id >= 5) cls += ' tokku';
+    if (s.id === 5 || s.id === 6) cls += ' tokku';
     if (s.id === currentSection) cls += ' active';
-    if (sectionDone[s.id] && s.id < 5) cls += ' done';
-    var label = s.label + (sectionDone[s.id] && s.id < 5 ? ' ✓' : '');
+    var normal = s.id !== 5 && s.id !== 6;
+    if (sectionDone[s.id] && normal) cls += ' done';
+    var label = s.label + (sectionDone[s.id] && normal ? ' ✓' : '');
     if (s.id === 6) { var wk = getWeakQuestions(); label = '🔥特訓' + (wk.length > 0 ? '('+wk.length+')' : ''); }
     html += '<button class="' + cls + '" data-sid="' + s.id + '">' + label + '</button>';
   });
@@ -383,7 +385,7 @@ function goSection(id) { currentSection = id; renderTabs(); renderSection(id); w
 function renderSection(id) {
   if (id === 5) { renderWeakNote(); return; }
   if (id === 6) { renderTokkuMode(); return; }
-  var s = SECTIONS[id];
+  var s = SECTIONS.filter(function(x) { return x.id === id; })[0];
   var html = '<div class="progress-dots">';
   for (var i = 0; i <= 4; i++) {
     html += '<div class="dot' + (i < id ? ' done' : i === id ? ' current' : '') + '"></div>';
@@ -397,11 +399,13 @@ function renderSection(id) {
   if      (id === 0) html += renderSection0();
   else if (id === 1) html += renderSection1();
   else if (id === 2) html += renderSection2();
+  else if (id === 7) html += renderSection7();
   else if (id === 3) html += renderSection3();
   else if (id === 4) html += renderSection4();
-  if (id >= 1 && id <= 3) {
-    var nextLabel  = id < 3 ? '次のセクションへ →' : '🏆 結果を見る！';
-    var nextAction = id < 3 ? 'goSection(' + (id+1) + ')' : 'showFinalResult()';
+  if ((id >= 1 && id <= 3) || id === 7) {
+    var NEXT = { 1:2, 2:7, 7:3 };
+    var nextLabel  = id !== 3 ? '次のセクションへ →' : '🏆 結果を見る！';
+    var nextAction = id !== 3 ? 'goSection(' + NEXT[id] + ')' : 'showFinalResult()';
     html += '<button class="next-section-btn" id="nextBtn" onclick="' + nextAction + '">' + nextLabel + '</button>';
   }
   document.getElementById('mainContent').innerHTML = html;
@@ -615,6 +619,63 @@ function renderSection2() {
     html += makeInputCard(q.qid, q.jp, q.formula, q.answer, q.xp, q.hint, q.exp);
   });
 
+  return html;
+}
+
+// ===== SECTION 7: レベルアップ（小数・分数の方程式、入試の文章題）（2026-09-30 追加） =====
+function renderSection7() {
+  var html = '';
+  html += '<div class="rule-card">'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">小数とか分数が入ると、急にどうしていいかわからなくなる…</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">最初に<b>両辺に同じ数をかけて、小数や分数を消す</b>。そうすればいつもの方程式になる。入試の大問1はこの形がよく出る</div></div></div>'
+    + '</div>';
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">📐 小数・分数を消すルール</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">小数：両辺を <b>10倍</b>（小数第2位まであれば100倍）。0.5x + 1.2 = 0.2x + 3 → <b>5x + 12 = 2x + 30</b></div>'
+    + '<div class="ex">分数：両辺に<b>分母の最小公倍数</b>をかける。(x−1)/2 = (x+2)/3 → ×6 → <b>3(x−1) = 2(x+2)</b></div>'
+    + '<div class="note">⚠️ 分子が式のときは<b>カッコをつけてからかける</b>。−(x−1)/2 に6をかけると <b>−3(x−1) ＝ −3x ＋ 3</b>（−3x−3 にしない！）<br>⚠️ 数だけの項（定数項）にもかけ忘れない。</div>'
+    + '</div>'
+    + '<div class="rule-card-title" style="margin-top:14px">📐 文章題の型</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex"><b>過不足</b>：「全部の数」を2通りの式で表して ＝ でつなぐ（余る → ＋、足りない → −）</div>'
+    + '<div class="ex"><b>追いつく</b>：追いついたとき、2人の進んだ<b>道のりが等しい</b></div>'
+    + '<div class="ex"><b>解から係数</b>：解を方程式に<b>代入</b>して、残った文字の方程式を解く</div>'
+    + '</div>'
+    + '</div>';
+
+  function E(rule, ok, ng, tip) { return '📐 ルール：' + rule + '<br>✅ ' + ok + (ng ? '<br>❌ ' + ng : '') + '<br>💡 ' + tip; }
+  var qs = [
+    { jp:'0.5x + 1.2 = 0.2x + 3 を解け。', answer:'x = 6', choices:['x = 6','x = 0.6','x = 3','x = 60'],
+      exp:E('両辺を10倍して小数を消す', '5x + 12 = 2x + 30 → 3x = 18 → x = 6', '1.2や3にも10をかけ忘れない', '全部の項に同じ数をかける') },
+    { jp:'1.2x − 3 = 0.7x + 2 を解け。', answer:'x = 10', choices:['x = 10','x = 1','x = 5','x = −10'],
+      exp:E('両辺を10倍', '12x − 30 = 7x + 20 → 5x = 50 → x = 10', '−3を−30にし忘れると答えがずれる', '確認：12−3＝9、7＋2＝9 ✓') },
+    { jp:'x/3 − x/4 = 2 を解け。', answer:'x = 24', choices:['x = 24','x = 2','x = 12','x = 7'],
+      exp:E('分母3と4の最小公倍数12をかける', '4x − 3x = 24 → x = 24', '右辺の2にも12をかける（24）', '確認：24/3−24/4＝8−6＝2 ✓') },
+    { jp:'(x − 1)/2 = (x + 2)/3 を解け。', answer:'x = 7', choices:['x = 7','x = 1','x = 5','x = −7'],
+      exp:E('両辺に6をかける。分子はカッコのまま', '3(x−1) = 2(x+2) → 3x − 3 = 2x + 4 → x = 7', '3x−1 のようにカッコを忘れない', '確認：6/2＝3、9/3＝3 ✓') },
+    { jp:'【難】(2x + 1)/3 − (x − 1)/2 = 1 を解け。', answer:'x = 1', choices:['x = 1','x = 7','x = −1','x = 5'],
+      exp:E('6をかける。−(x−1)/2 は −3(x−1)', '2(2x+1) − 3(x−1) = 6 → 4x + 2 − 3x + 3 = 6 → x = 1', '−3(x−1) を −3x−3 にすると x = 7 になる（いちばん多いまちがい）', 'マイナスのついたカッコは中の符号が全部変わる') },
+    { jp:'5x + 3 = 2x − 9 を解け。', answer:'x = −4', choices:['x = −4','x = 4','x = −2','x = 2'],
+      exp:E('xを左辺、数を右辺に移項', '3x = −12 → x = −4', '答えがマイナスでもあわてない', '確認：−20+3＝−17、−8−9＝−17 ✓') },
+    { jp:'4x − 7 = 6x + 2 を解け。', answer:'x = −9/2', choices:['x = −9/2','x = 9/2','x = −2/9','x = 5/2'],
+      exp:E('移項して −2x = 9', 'x = 9 ÷ (−2) = −9/2', '−2/9 は逆数にしてしまったまちがい', '答えが分数になってもOK') },
+    { jp:'3(2x − 1) = 4(x + 2) を解け。', answer:'x = 11/2', choices:['x = 11/2','x = 2/11','x = 5','x = 11'],
+      exp:E('カッコを展開してから移項', '6x − 3 = 4x + 8 → 2x = 11 → x = 11/2', '2x = 11 から x = 11 としない', 'わり切れなければ分数で答える') },
+    { jp:'【難】方程式 3x + a = 5 の解が x = 2 のとき、a の値は？', answer:'a = −1', choices:['a = −1','a = 1','a = 11','a = 3'],
+      exp:E('解 x = 2 を代入すると a の方程式になる', '6 + a = 5 → a = −1', 'x を求める問題ではない', '「解が〜のとき」は代入') },
+    { jp:'子どもにあめを配る。1人に4個ずつ配ると3個余り、5個ずつ配ると4個足りない。子どもの人数は？', answer:'7人', choices:['7人','1人','31人','9人'],
+      exp:E('人数を x として、あめの数を2通りに表す', '4x + 3 = 5x − 4 → x = 7', '31はあめの個数', '余る → ＋、足りない → −') },
+    { jp:'前の問題で、あめは全部で何個？', answer:'31個', choices:['31個','28個','35個','7個'],
+      exp:E('求めた人数を式に代入', '4×7 + 3 = 31（5×7 − 4 = 31 でも同じ）', '人数と個数を取りちがえない', '2つの式で同じになれば確認OK') },
+    { jp:'弟が家を出て分速60mで歩いた。その10分後に兄が分速210mの自転車で同じ道を追いかけた。兄は出発してから何分後に弟に追いつく？', answer:'4分後', choices:['4分後','10分後','14分後','3分後'],
+      exp:E('追いついたとき、2人の進んだ道のりが等しい', '兄の出発から x 分 → 210x = 60(x + 10) → 150x = 600 → x = 4', '弟は10分多く歩いているので x+10', '道のり＝速さ×時間 を2人分') },
+    { jp:'ある品物を定価の2割引で買ったら、代金は960円だった。定価は何円？', answer:'1200円', choices:['1200円','1152円','768円','1000円'],
+      exp:E('2割引＝定価の0.8倍', '0.8x = 960 → x = 1200', '960×1.2＝1152 は逆算のまちがい', '「もとの値段」を x とおく') },
+    { jp:'【難】現在、父は42歳、子は12歳である。父の年齢が子の年齢の3倍になるのは何年後か。', answer:'3年後', choices:['3年後','6年後','2年後','10年後'],
+      exp:E('x 年後は2人とも x 歳ふえる', '42 + x = 3(12 + x) → 42 + x = 36 + 3x → x = 3', '子だけに x をたさない', '確認：45歳と15歳で3倍 ✓') }
+  ];
+  qs.forEach(function(q, i) { html += makeChoices('math_eq_s7_q' + i, q.jp, q.answer, q.choices, q.exp); });
   return html;
 }
 

@@ -198,7 +198,7 @@ function checkSectionComplete(){
       nb.style.display='block';
       if(!document.getElementById('sectionCompleteBanner')){
         var banner=document.createElement('div'); banner.id='sectionCompleteBanner';
-        var nextSec=currentSection<3?'Section '+(currentSection+1)+' へ進もう！':'確認テストで腕試し！';
+        var nextSec=currentSection===3?'「座標・変域」へ進もう！':(currentSection<3?'Section '+(currentSection+1)+' へ進もう！':'確認テストで腕試し！');
         banner.innerHTML='<div style="text-align:center;padding:20px;margin-bottom:12px;background:linear-gradient(135deg,rgba(63,185,80,0.12),rgba(163,113,247,0.08));border:1px solid var(--green);border-radius:14px">'
           +'<div style="font-size:36px;margin-bottom:8px">🎉</div>'
           +'<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--green);letter-spacing:2px;margin-bottom:6px">セクション '+currentSection+' クリア！</div>'
@@ -219,6 +219,7 @@ var SECTIONS=[
   { id:1, label:'比例',         title:'比例の基本',          sub:'対応表・グラフ・比例定数——選択8問＋計算4問' },
   { id:2, label:'反比例',       title:'反比例の基本',        sub:'y = a/x のルールと計算——選択6問＋計算4問' },
   { id:3, label:'文章題',       title:'文章題と応用',        sub:'速度・値段・面積——実生活の比例・反比例' },
+  { id:7, label:'座標・変域',   title:'座標・変域・グラフ上の点', sub:'代入すれば解ける——入試の関数の土台' },
   { id:4, label:'確認テスト',   title:'確認テスト',          sub:'比例・反比例まとめ——全セクション総仕上げ' },
   { id:5, label:'📊弱点',       title:'弱点ノート',          sub:'間違えた問題の正答率を確認' },
   { id:6, label:'🔥特訓',       title:'弱点特訓モード',      sub:'弱点問題を集中練習！' },
@@ -256,6 +257,7 @@ function goSection(id){
   else if(id===2) renderSection2();
   else if(id===3) renderSection3();
   else if(id===4) renderSection4();
+  else if(id===7) renderSection7();
   else if(id===5) renderWeakNote();
   else if(id===6) renderTokku();
   window.scrollTo({top:0,behavior:'smooth'});
@@ -721,8 +723,8 @@ function renderSection3(){
     +'<text x="30" y="10" fill="#8b949e" font-size="10" text-anchor="middle">x個</text>'
     +'<text x="170" y="50" fill="#f5c518" font-size="14">→</text>'
     +'<text x="200" y="45" fill="#f5c518" font-size="13" font-weight="bold">y = 80x</text>'
-    +'<text x="200" y="62" fill="#8b949e" font-size="11">x が増えると</text>'
-    +'<text x="200" y="76" fill="#a371f7" font-size="11">y も増える → 比例！</text>'
+    +'<text x="200" y="62" fill="#8b949e" font-size="11">y ÷ x ＝ 80（一定）</text>'
+    +'<text x="200" y="76" fill="#a371f7" font-size="11">→ 比例！</text>'
     +'</svg>';
 
   var choiceQs = [
@@ -811,8 +813,8 @@ function renderSection3(){
 
     +'<div class="intro-box"><div class="intro-box-title">📐 きょん＆西村の会話</div>'
     +'<div class="chat-line"><div class="avatar av-kyon">き</div><div class="chat-bubble"><div class="chat-name">きょん</div>文章題ってどこから手をつければいいの？「何が x で何が y か」がわからなくなる！</div></div>'
-    +'<div class="chat-line"><div class="avatar av-nishi">西村</div><div class="chat-bubble"><div class="chat-name">西村真二（慶應卒・元アナ）</div>まず「何と何が関係しているか」を整理する。そして「x が増えたとき y はどうなるか」を考える。増えるなら比例、逆に減るなら反比例だ。</div></div>'
-    +'<div class="chat-line"><div class="avatar av-kyon">き</div><div class="chat-bubble"><div class="chat-name">きょん</div>速さが上がると時間が減る……だから反比例！！お菓子の個数が増えると代金が増える……比例！！あ、わかるかも！！</div></div>'
+    +'<div class="chat-line"><div class="avatar av-nishi">西村</div><div class="chat-bubble"><div class="chat-name">西村真二（慶應卒・元アナ）</div>まず「何と何が関係しているか」を整理して、式にしてみる。<b>y÷x が一定なら比例、x×y が一定なら反比例</b>だ。「増える・減る」だけで決めると失敗する。y＝−2x は x が増えると y が減るけど比例、y＝x＋3 は増えるけど比例じゃない。</div></div>'
+    +'<div class="chat-line"><div class="avatar av-kyon">き</div><div class="chat-bubble"><div class="chat-name">きょん</div>道のりが決まってたら、速さ×時間＝道のりで x×y が一定……だから反比例！！お菓子は、代金÷個数＝1個の値段で y÷x が一定……比例！！あ、わかるかも！！</div></div>'
     +'<div class="chat-line"><div class="avatar av-nishi">西村</div><div class="chat-bubble"><div class="chat-name">西村真二</div>正確に理解できてる。もう一つコツを言うと——「総量が一定」のときは必ず反比例になる。</div></div>'
     +'</div>'
 
@@ -823,7 +825,7 @@ function renderSection3(){
     +'<div class="ex">・単価 × 個数 = 代金（個数↑→代金↑）</div>'
     +'<div class="ex">・速さ × 時間 = 距離（時間↑→距離↑）</div>'
     +'<div class="ex">・高さ一定の三角形：底辺↑→面積↑</div>'
-    +'<div class="note">💡 「x が増えると y も増える」→ 比例！</div>'
+    +'<div class="note">💡 「1個あたり・1分あたり（y÷x）が決まっている」→ 比例！　⚠️「増えるから比例」は×（y＝−2x は減るけど比例）</div>'
     +'</div>'
     +'<div class="rule-box" style="margin-top:8px"><div class="rule-title">反比例になる場面（y = a/x）</div>'
     +'<div class="ex">・距離一定で速さ×時間=距離（速さ↑→時間↓）</div>'
@@ -839,9 +841,9 @@ function renderSection3(){
     +'<td style="padding:8px 10px;font-weight:bold">反比例</td>'
     +'</tr>'
     +'<tr style="border-bottom:1px solid var(--border)">'
-    +'<td style="padding:8px 10px;color:var(--text2)">x が増えると y は？</td>'
-    +'<td style="padding:8px 10px;color:var(--purple)">増える</td>'
-    +'<td style="padding:8px 10px;color:var(--teal)">減る</td>'
+    +'<td style="padding:8px 10px;color:var(--text2)">x が2倍になると y は？</td>'
+    +'<td style="padding:8px 10px;color:var(--purple)">2倍</td>'
+    +'<td style="padding:8px 10px;color:var(--teal)">1/2倍</td>'
     +'</tr>'
     +'<tr style="border-bottom:1px solid var(--border)">'
     +'<td style="padding:8px 10px;color:var(--text2)">一定なもの</td>'
@@ -867,8 +869,64 @@ function renderSection3(){
     html += '<div style="font-size:12px;color:var(--text2);margin-bottom:6px">Q'+(choiceQs.length+i+1)+'</div>'
       + makeInputCard(q.qid, q.jp, q.formula, q.answer, q.xp, q.hint, q.exp);
   });
-  html += '<button class="next-section-btn" id="nextBtn" data-goto="4" style="display:none">次のセクションへ：確認テスト →</button>';
+  html += '<button class="next-section-btn" id="nextBtn" data-goto="7" style="display:none">次のセクションへ：座標・変域 →</button>';
 
+  document.getElementById('mainContent').innerHTML = html;
+  bindEvents();
+  document.querySelectorAll('.next-section-btn[data-goto]').forEach(function(b){
+    b.addEventListener('click', function(){ goSection(parseInt(b.dataset.goto)); });
+  });
+  updateDots();
+}
+
+// ===== SECTION 7: 座標・変域・グラフ上の点（2026-09-30 追加。入試の関数の小問でよく出る） =====
+function renderSection7(){
+  function E(rule, ok, ng, tip){ return '📐 ルール：'+rule+'<br>✅ '+ok+(ng?'<br>❌ '+ng:'')+'<br>💡 '+tip; }
+  var qs = [
+    { jp:'点 A(3, −2) の x 座標はいくつ？', answer:'3', choices:['3','−2','1','−6'],
+      exp:E('(x座標, y座標) の順に書く', 'A(3, −2) の x 座標は 3、y 座標は −2', '順番を逆に読まない', '「x が先、y があと」＝アルファベット順') },
+    { jp:'点 (−4, 5) はどこにある？', answer:'原点から左へ4、上へ5', choices:['原点から左へ4、上へ5','原点から右へ4、上へ5','原点から左へ5、上へ4','原点から右へ4、下へ5'],
+      exp:E('x がマイナス → 左、y がプラス → 上', '左へ4、上へ5', 'x と y の数を入れかえない', 'まず横（x）、次にたて（y）') },
+    { jp:'点 (2, 3) と、x 軸について対称な点の座標は？', answer:'(2, −3)', choices:['(2, −3)','(−2, 3)','(−2, −3)','(3, 2)'],
+      exp:E('x 軸について対称 → y 座標の符号だけが変わる', '(2, 3) → (2, −3)', '(−2, 3) は y 軸について対称な点', 'x 軸で折り返すと上下が入れかわる') },
+    { jp:'y = 2x で、x の変域が 1 ≦ x ≦ 3 のとき、y の変域は？', answer:'2 ≦ y ≦ 6', choices:['2 ≦ y ≦ 6','1 ≦ y ≦ 3','2 ≦ y ≦ 3','6 ≦ y ≦ 2'],
+      exp:E('x の両はしを代入して y の両はしを求める', 'x=1 → y=2、x=3 → y=6 → 2≦y≦6', 'x の変域をそのまま書かない', '小さい方を左に書く') },
+    { jp:'y = −2x で、x の変域が 1 ≦ x ≦ 3 のとき、y の変域は？', answer:'−6 ≦ y ≦ −2', choices:['−6 ≦ y ≦ −2','−2 ≦ y ≦ −6','2 ≦ y ≦ 6','−2 ≦ y ≦ 6'],
+      exp:E('両はしを代入 → 小さい方を左に', 'x=1 → −2、x=3 → −6 → −6≦y≦−2', '−2≦y≦−6 は大小が逆', 'a がマイナスのときは大小が入れかわる') },
+    { jp:'y = 6/x で、x の変域が 1 ≦ x ≦ 3 のとき、y の変域は？', answer:'2 ≦ y ≦ 6', choices:['2 ≦ y ≦ 6','6 ≦ y ≦ 2','1 ≦ y ≦ 3','3 ≦ y ≦ 6'],
+      exp:E('両はしを代入', 'x=1 → 6、x=3 → 2 → 2≦y≦6', '6≦y≦2 のように大小を逆に書かない', '反比例（a＞0）は x が増えると y が減る') },
+    { jp:'比例 y = ax のグラフが点 (2, −6) を通るとき、a の値は？', answer:'−3', choices:['−3','3','−12','−1/3'],
+      exp:E('通る点の x, y を式に代入', '−6 = a × 2 → a = −3', '−12 はかけてしまったまちがい', '「通る」＝代入してよい') },
+    { jp:'反比例 y = a/x のグラフが点 (−3, 4) を通るとき、a の値は？', answer:'−12', choices:['−12','12','−4/3','−7'],
+      exp:E('反比例は a = x × y', 'a = (−3) × 4 = −12', '12 は符号を落としたまちがい', 'x×y を計算するだけ') },
+    { jp:'【難】y = 12/x のグラフ上の点で、x 座標と y 座標がともに正の整数である点はいくつある？', answer:'6個', choices:['6個','12個','4個','3個'],
+      exp:E('x は 12 の約数（正）', '(1,12)(2,6)(3,4)(4,3)(6,2)(12,1) の6個', '負の数もふくめると12個', '約数を小さい順に全部書き出す') },
+    { jp:'【難】y = 12/x のグラフ上の点で、x 座標と y 座標がともに整数である点はいくつある？', answer:'12個', choices:['12個','6個','24個','8個'],
+      exp:E('正の約数6個 ＋ 負の約数6個', '(−1,−12)(−2,−6)… の6個も加えて12個', '正の整数だけなら6個', '「整数」には負の数もふくまれる') },
+    { jp:'【難】y = ax と y = 12/x のグラフが、点 (3, b) で交わっている。a の値は？', answer:'4/3', choices:['4/3','4','3/4','36'],
+      exp:E('交点は両方のグラフ上にある', 'y=12/x に x=3 → b=4。y=ax に (3, 4) → 4=3a → a=4/3', 'b の値（4）を a と答えない', '先にわかる方のグラフから b を出す') },
+    { jp:'【難】y = a/x で、x = 2 のとき y = 6 である。x が 2 から 4 まで増加すると、y はどうなる？', answer:'3 減る', choices:['3 減る','3 増える','6 減る','12 減る'],
+      exp:E('まず a = 2×6 = 12 → y = 12/x', 'x=2 → 6、x=4 → 3 なので 3 減る', '「2倍になる」と決めつけない（反比例は 1/2 倍）', '式を作ってから代入') }
+  ];
+  var html = '<div class="section-header"><div class="section-badge">SECTION ＋</div>'
+    +'<div class="section-title">座標・変域・グラフ上の点</div><div class="section-sub">入試の関数の問題の土台。代入すれば全部解ける！</div></div>'
+    +'<div class="intro-box"><div class="intro-box-title">📐 きょん＆西村の会話</div>'
+    +'<div class="chat-line"><div class="avatar av-kyon">き</div><div class="chat-bubble"><div class="chat-name">きょん</div>「グラフが点を通る」って言われても、どうしたらいいかわからない…</div></div>'
+    +'<div class="chat-line"><div class="avatar av-nishi">西村</div><div class="chat-bubble"><div class="chat-name">西村真二</div>「通る」と言われたら、その点の x と y を<b>式に代入</b>していい、という合図だ。変域も、両はしを代入するだけでいい</div></div>'
+    +'</div>'
+    +'<div class="rule-card"><div class="rule-card-title">📐 座標と変域</div>'
+    +'<div class="rule-box">'
+    +'<div class="ex">点の位置は <b>(x座標, y座標)</b>。x がプラスなら右、マイナスなら左。y がプラスなら上、マイナスなら下。原点は O(0, 0)。</div>'
+    +'<div class="ex"><b>変域</b>＝x や y がとる値の範囲。x の変域の<b>両はしを代入</b>して y の変域を出す。<b>小さい方を左</b>に書く。</div>'
+    +'<div class="ex">グラフが点 (p, q) を<b>通る</b> → x=p, y=q を<b>代入</b>できる。比例は a＝y÷x、反比例は a＝x×y。</div>'
+    +'<div class="note">💡 反比例のグラフ上の「座標がどちらも整数の点」＝ a の約数を書き出す（負の数も忘れずに）。</div>'
+    +'</div></div>'
+    +'<div style="font-size:13px;color:var(--text2);margin:20px 0 14px;font-weight:bold">── 練習問題（選択） ──</div>';
+  qs.forEach(function(q,i){
+    html += '<div style="font-size:12px;color:var(--text2);margin-bottom:6px">Q'+(i+1)+'</div>'
+      + makeChoices('math_prop_s7_q'+i, q.jp, q.answer, q.choices, q.exp);
+  });
+  html += '<button class="next-section-btn" id="nextBtn" data-goto="4" style="display:none">次のセクションへ：確認テスト →</button>';
   document.getElementById('mainContent').innerHTML = html;
   bindEvents();
   document.querySelectorAll('.next-section-btn[data-goto]').forEach(function(b){

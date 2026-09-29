@@ -332,7 +332,7 @@ function checkSectionComplete() {
       if (!document.getElementById('secCompleteBanner')) {
         var banner = document.createElement('div');
         banner.id = 'secCompleteBanner';
-        var nextMsg = currentSection < 4 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストへ挑戦！';
+        var nextMsg = currentSection === 3 ? '「移動・作図」へ進もう！' : currentSection === 7 ? '確認テストへ挑戦！' : (currentSection < 4 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストへ挑戦！');
         banner.innerHTML = '<div style="text-align:center;padding:20px;margin-bottom:12px;background:linear-gradient(135deg,rgba(163,113,247,0.12),rgba(14,165,233,0.08));border:1px solid var(--purple);border-radius:14px">'
           + '<div style="font-size:36px;margin-bottom:8px">🎉</div>'
           + '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--purple);letter-spacing:2px;margin-bottom:6px">セクション ' + currentSection + ' クリア！</div>'
@@ -352,6 +352,7 @@ var SECTIONS = [
   { id:1, label:'図形の基本',    title:'図形の基本',              sub:'点・直線・角、三角形・四角形・円の性質' },
   { id:2, label:'角度',          title:'角度の性質と計算',        sub:'内角・外角・対頂角・同位角・錯角のルール' },
   { id:3, label:'面積・体積',    title:'面積と体積の基本',        sub:'公式をマスターして図形の大きさを求めよう' },
+  { id:7, label:'移動・作図',    title:'図形の移動・作図・おうぎ形', sub:'平行・回転・対称移動／垂直二等分線・角の二等分線／おうぎ形' },
   { id:4, label:'確認テスト',    title:'確認テスト',              sub:'全セクション総まとめ！何問正解できる？' },
   { id:5, label:'📊弱点',        title:'弱点ノート',              sub:'間違えた問題の正答率を確認しよう' },
   { id:6, label:'🔥特訓',        title:'弱点特訓モード',          sub:'弱点問題だけを集中練習！' },
@@ -361,10 +362,10 @@ function renderTabs() {
   var html = '';
   SECTIONS.forEach(function(s) {
     var cls = 'section-tab'
-      + (s.id >= 5 ? ' tokku' : '')
+      + (s.id === 5 || s.id === 6 ? ' tokku' : '')
       + (s.id === currentSection ? ' active' : '')
-      + (sectionDone[s.id] && s.id < 5 ? ' done' : '');
-    var label = s.label + (sectionDone[s.id] && s.id < 5 ? ' ✓' : '');
+      + (sectionDone[s.id] && s.id !== 5 && s.id !== 6 ? ' done' : '');
+    var label = s.label + (sectionDone[s.id] && s.id !== 5 && s.id !== 6 ? ' ✓' : '');
     if (s.id === 6) { var wk = getWeakQuestions(); label = '🔥特訓' + (wk.length > 0 ? '('+wk.length+')' : ''); }
     html += '<button class="' + cls + '" data-sid="' + s.id + '">' + label + '</button>';
   });
@@ -385,7 +386,7 @@ function renderSection(id) {
   if (id === 5) { renderWeakNote(); return; }
   if (id === 6) { renderTokkuMode(); return; }
 
-  var s = SECTIONS[id];
+  var s = SECTIONS.filter(function(x) { return x.id === id; })[0];
   var html = '';
   html += '<div class="progress-dots">';
   for (var i = 0; i <= 4; i++) {
@@ -403,10 +404,12 @@ function renderSection(id) {
   else if (id === 2) html += renderSection2();
   else if (id === 3) html += renderSection3();
   else if (id === 4) html += renderSection4();
+  else if (id === 7) html += renderSection7();
 
-  if (id >= 1 && id <= 4) {
-    var nextLabel = id < 4 ? '次のセクションへ →' : '🏆 結果を見る！';
-    html += '<button class="next-section-btn" id="nextBtn" data-goto="' + (id < 4 ? id+1 : 'result') + '" style="display:none">' + nextLabel + '</button>';
+  if ((id >= 1 && id <= 4) || id === 7) {
+    var NEXT = { 1:2, 2:3, 3:7, 7:4 };
+    var nextLabel = id !== 4 ? '次のセクションへ →' : '🏆 結果を見る！';
+    html += '<button class="next-section-btn" id="nextBtn" data-goto="' + (id !== 4 ? NEXT[id] : 'result') + '" style="display:none">' + nextLabel + '</button>';
   }
 
   document.getElementById('mainContent').innerHTML = html;
@@ -602,7 +605,7 @@ function renderSection1() {
     + '<div class="rule-box">'
     + '<div class="rule-title">三角形の辺と角の関係</div>'
     + '<div class="ex">正三角形：3辺が等しい → 3つの角もすべて60°</div>'
-    + '<div class="ex">二等辺三角形：2辺が等しい → 底角（等しい2辺に挟まれた2つの角）が等しい</div>'
+    + '<div class="ex">二等辺三角形：2辺が等しい → 底角（底辺の両はしの2つの角）が等しい。等しい2辺にはさまれた角は頂角</div>'
     + '<div class="note">⚠️ 二等辺三角形の底角は等しい！これも入試頻出</div>'
     + '</div>'
     + '</div>';
@@ -684,10 +687,10 @@ function renderSection1() {
     {
       q: '二等辺三角形の「底角」とはどれのこと？',
       sub: '等しい2辺（腰）がどこにあるか考えよう',
-      a: '等しい2辺の両端にある2つの角',
-      choices: ['等しい2辺の両端にある2つの角', '頂点（2辺が集まる点）にある角', '最も大きな角', 'すべての角'],
+      a: '底辺の両はしにある2つの角',
+      choices: ['底辺の両はしにある2つの角', '等しい2辺にはさまれた角', '最も大きな角', 'すべての角'],
       jp: '二等辺三角形の底角',
-      exp: '<span class="exp-rule"><span class="label">📐 定義</span>底角 = 等しい2辺（腰）の両端にある角。この2つは必ず等しい</span><span class="exp-ok">✅ 二等辺三角形：底角が2つ等しい → 底辺の両端の角</span><span class="exp-ng">❌ 頂角（2辺が集まる特別な角）と底角は別物！</span><span class="exp-tip">💡 二等辺三角形の底角が等しいことは、図形問題の証明でよく使われる！</span>'
+      exp: '<span class="exp-rule"><span class="label">📐 定義</span>底角 = 底辺の両はしにある2つの角。この2つは必ず等しい</span><span class="exp-ok">✅ 等しい2辺ではさまれていない方の辺（底辺）の両はし</span><span class="exp-ng">❌ 等しい2辺にはさまれた角は「頂角」。底角とは別物！</span><span class="exp-tip">💡 二等辺三角形の底角が等しいことは、図形問題の証明でよく使われる！</span>'
     },
     {
       q: '正三角形の1つの角の大きさは何度？',
@@ -727,7 +730,7 @@ function renderSection1() {
       a: '1つの角が90°の三角形',
       choices: ['1つの角が90°の三角形', 'すべての角が90°の三角形', '2辺が等しい三角形', '最も長い辺が直角の三角形'],
       jp: '直角三角形の定義',
-      exp: '<span class="exp-rule"><span class="label">📐 定義</span>直角三角形 = 1つの角が90°（直角）の三角形</span><span class="exp-ok">✅ 90°の角が1つ → 残り2角の和が90°（鋭角）</span><span class="exp-tip">💡 直角三角形は「ピタゴラスの定理」でも使う。直角を挟む2辺を「直角を挟む辺」という</span>'
+      exp: '<span class="exp-rule"><span class="label">📐 定義</span>直角三角形 = 1つの角が90°（直角）の三角形</span><span class="exp-ok">✅ 90°の角が1つ → 残り2角の和が90°（鋭角）</span><span class="exp-tip">💡 直角三角形は中3の「三平方の定理」で大活躍する。直角の向かいにある一番長い辺を「斜辺」という</span>'
     },
     {
       q: 'ひし形の対角線の交わり方は？',
@@ -1193,6 +1196,78 @@ function renderSection3() {
       + '<div class="q-number">Q' + (i+1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
       + (q.sub ? '<div class="q-sub">' + q.sub + '</div>' : '')
+      + makeChoices(qid, q.choices, q.a, 4)
+      + makeFeedback(qid, q.exp)
+      + '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+// ===== SECTION 7: 図形の移動・作図・おうぎ形（2026-09-30 追加。中1平面図形の中心なのに抜けていた内容） =====
+function renderSection7() {
+  var html = '<div class="rule-card">'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">作図って、コンパスで何を描けばいいのか毎回わからない…</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">作図は3種類だけだ。そして「その線の上の点は何から等しい距離か」を言えるようにしておけば、どれを使うか決まる</div></div></div>'
+    + '</div>';
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">📐 図形の移動（3種類）</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex"><b>平行移動</b>：一定の方向に、一定の距離だけずらす</div>'
+    + '<div class="ex"><b>回転移動</b>：ある点（回転の中心）を中心に、一定の角度だけ回す。<b>180°</b>の回転移動を<b>点対称移動</b>という</div>'
+    + '<div class="ex"><b>対称移動</b>：ある直線（対称の軸）を折り目にして裏返す</div>'
+    + '</div>'
+    + '<div class="rule-card-title" style="margin-top:14px">📐 作図（定規とコンパス）で使う3つの線</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex"><b>垂直二等分線</b>：線分の<b>両はしの点から等しい距離</b>にある点の集まり（線分の真ん中を垂直に通る）</div>'
+    + '<div class="ex"><b>角の二等分線</b>：角の<b>2辺から等しい距離</b>にある点の集まり</div>'
+    + '<div class="ex"><b>垂線</b>：ある点を通り、直線に垂直な線</div>'
+    + '<div class="note">💡 円の<b>接線</b>は、接点を通る<b>半径に垂直</b>。「接線を作図」＝半径に垂線を引く。</div>'
+    + '</div>'
+    + '<div class="rule-card-title" style="margin-top:14px">📐 おうぎ形（中心角 a°）</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">弧の長さ ＝ 2πr × a/360　／　面積 ＝ πr² × a/360</div>'
+    + '<div class="ex">中心角を求める：a ＝ 360 × （弧の長さ ÷ 円周）</div>'
+    + '<div class="note">💡 おうぎ形は円の「a/360 の割合」。60°＝1/6、90°＝1/4、120°＝1/3、180°＝1/2。</div>'
+    + '</div>'
+    + '</div>';
+
+  function E(rule, ok, ng, tip) { return '<span class="exp-rule"><span class="label">📐 ルール</span>' + rule + '</span><span class="exp-ok">✅ ' + ok + '</span>' + (ng ? '<span class="exp-ng">❌ ' + ng + '</span>' : '') + '<span class="exp-tip">💡 ' + tip + '</span>'; }
+  var qs = [
+    { q:'図形を、一定の方向に一定の距離だけずらす移動を何という？', a:'平行移動', choices:['平行移動','回転移動','対称移動','点対称移動'],
+      exp:E('ずらす＝平行移動', '向きも形も変わらずにずれる', '回すのは回転移動、裏返すのは対称移動', '「平行」＝同じ向きのまま') },
+    { q:'図形を、ある点を中心に一定の角度だけ回す移動を何という？', a:'回転移動', choices:['回転移動','平行移動','対称移動','拡大'],
+      exp:E('回す＝回転移動', '中心の点と角度で決まる', '裏返すのは対称移動', '中心の点は動かない') },
+    { q:'180°の回転移動を、特に何という？', a:'点対称移動', choices:['点対称移動','対称移動','平行移動','線対称移動'],
+      exp:E('180°回転＝点対称移動', 'ちょうど反対側に回る', '直線で裏返すのは対称移動', '「点」を中心にぐるっと半回転') },
+    { q:'図形を、ある直線を折り目にして裏返す移動を何という？', a:'対称移動', choices:['対称移動','回転移動','平行移動','点対称移動'],
+      exp:E('折り目で裏返す＝対称移動', '折り目の直線を対称の軸という', '点対称移動は180°回転', '鏡に映すイメージ') },
+    { q:'線分ABの両はしA、Bから等しい距離にある点の集まりは何？', a:'線分ABの垂直二等分線', choices:['線分ABの垂直二等分線','∠Aの二等分線','点Aを通る垂線','線分AB'],
+      exp:E('2点から等しい距離＝垂直二等分線', '線分の真ん中を垂直に通る直線', '2辺から等しい距離なのは角の二等分線', '「2点から等しい」→ 垂直二等分線') },
+    { q:'角の2辺から等しい距離にある点の集まりは何？', a:'角の二等分線', choices:['角の二等分線','垂直二等分線','垂線','対称の軸'],
+      exp:E('2辺（2本の直線）から等しい距離＝角の二等分線', '角をちょうど半分に分ける線', '2点から等しい距離なのは垂直二等分線', '「2辺から等しい」→ 角の二等分線') },
+    { q:'円の接線と、接点を通る半径がつくる角は何度？', a:'90°', choices:['90°','45°','60°','180°'],
+      exp:E('接線は接点を通る半径に垂直', '90°', '斜めに交わることはない', '接線の作図＝半径に垂線を引く') },
+    { q:'半径6cm、中心角60°のおうぎ形の弧の長さは？', a:'2π cm', choices:['2π cm','6π cm','12π cm','π cm'],
+      exp:E('弧の長さ＝2πr×a/360', '12π×60/360＝12π×1/6＝2π', '12πは円周全部', '60°は円の1/6') },
+    { q:'半径6cm、中心角120°のおうぎ形の面積は？', a:'12π cm²', choices:['12π cm²','36π cm²','4π cm²','24π cm²'],
+      exp:E('面積＝πr²×a/360', '36π×120/360＝36π×1/3＝12π', '36πは円全体の面積', '120°は円の1/3') },
+    { q:'【難】半径4cmのおうぎ形の弧の長さが2π cmのとき、中心角は何度？', a:'90°', choices:['90°','45°','180°','60°'],
+      exp:E('中心角＝360×（弧の長さ÷円周）', '円周8π → 2π÷8π＝1/4 → 360×1/4＝90°', '2π÷4 のように半径でわらない', 'まず円周を出して割合を見る') },
+    { q:'【難】半径9cm、中心角40°のおうぎ形の面積は？', a:'9π cm²', choices:['9π cm²','81π cm²','2π cm²','18π cm²'],
+      exp:E('面積＝πr²×a/360', '81π×40/360＝81π×1/9＝9π', '81πは円全体', '40/360＝1/9 と約分してからかける') },
+    { q:'【難】半径6cm、弧の長さ4π cmのおうぎ形の面積は？', a:'12π cm²', choices:['12π cm²','24π cm²','6π cm²','36π cm²'],
+      exp:E('まず中心角を求める（または 面積＝1/2×弧の長さ×半径）', '円周12π → 4π÷12π＝1/3 → 面積＝36π×1/3＝12π', '4π×6＝24π は1/2をかけ忘れ', '割合（1/3）を見つければ面積も弧も同じ割合') }
+  ];
+  qs.forEach(function(q, i) { q._qid = 'math_geo_s7_q' + i; });
+  qs = shuffleArray(qs);
+  html += '<div class="practice-section"><div class="practice-title">✏️ 練習問題 — 移動・作図・おうぎ形</div>';
+  qs.forEach(function(q, i) {
+    var qid = q._qid;
+    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:q.q, choices:q.choices };
+    html += '<div class="q-card" data-card="' + qid + '">'
+      + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
+      + '<div class="q-text">' + q.q + '</div>'
       + makeChoices(qid, q.choices, q.a, 4)
       + makeFeedback(qid, q.exp)
       + '</div>';

@@ -324,7 +324,7 @@ function checkSectionComplete() {
       if (!document.getElementById('secCompleteBanner')) {
         var banner = document.createElement('div');
         banner.id = 'secCompleteBanner';
-        var nextMsg = currentSection < 4 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストへ挑戦！';
+        var nextMsg = currentSection === 3 ? '「球・位置関係」へ進もう！' : currentSection === 7 ? '確認テストへ挑戦！' : (currentSection < 4 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストへ挑戦！');
         banner.innerHTML = '<div style="text-align:center;padding:20px;margin-bottom:12px;background:linear-gradient(135deg,rgba(163,113,247,0.12),rgba(14,165,233,0.08));border:1px solid var(--purple);border-radius:14px">'
           + '<div style="font-size:36px;margin-bottom:8px">🎉</div>'
           + '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--purple);letter-spacing:2px;margin-bottom:6px">セクション ' + currentSection + ' クリア！</div>'
@@ -344,6 +344,7 @@ var SECTIONS = [
   { id:1, label:'おうぎ形',      title:'おうぎ形（弧の長さ・面積）', sub:'「円の何割か」で考える——弧の長さと面積のルール' },
   { id:2, label:'柱体',          title:'柱体（円柱・角柱）',        sub:'体積・側面積・表面積。展開図で「なぜ」を理解する' },
   { id:3, label:'錐体',          title:'錐体（円錐・角錐）',        sub:'柱体の1/3。円錐は「扇形の展開図」とつながっている' },
+  { id:7, label:'球・位置関係',  title:'球・回転体・投影図・位置関係', sub:'球の公式・回転体・ねじれの位置・正多面体' },
   { id:4, label:'確認テスト',    title:'確認テスト',                sub:'全セクション総まとめ！何問正解できる？' },
   { id:5, label:'📊弱点',        title:'弱点ノート',                sub:'間違えた問題の正答率を確認しよう' },
   { id:6, label:'🔥特訓',        title:'弱点特訓モード',            sub:'弱点問題だけを集中練習！' },
@@ -353,10 +354,10 @@ function renderTabs() {
   var html = '';
   SECTIONS.forEach(function(s) {
     var cls = 'section-tab'
-      + (s.id >= 5 ? ' tokku' : '')
+      + (s.id === 5 || s.id === 6 ? ' tokku' : '')
       + (s.id === currentSection ? ' active' : '')
-      + (sectionDone[s.id] && s.id < 5 ? ' done' : '');
-    var label = s.label + (sectionDone[s.id] && s.id < 5 ? ' ✓' : '');
+      + (sectionDone[s.id] && s.id !== 5 && s.id !== 6 ? ' done' : '');
+    var label = s.label + (sectionDone[s.id] && s.id !== 5 && s.id !== 6 ? ' ✓' : '');
     if (s.id === 6) { var wk = getWeakQuestions(); label = '🔥特訓' + (wk.length > 0 ? '('+wk.length+')' : ''); }
     html += '<button class="' + cls + '" data-sid="' + s.id + '">' + label + '</button>';
   });
@@ -377,7 +378,7 @@ function renderSection(id) {
   if (id === 5) { renderWeakNote(); return; }
   if (id === 6) { renderTokkuMode(); return; }
 
-  var s = SECTIONS[id];
+  var s = SECTIONS.filter(function(x) { return x.id === id; })[0];
   var html = '';
   html += '<div class="progress-dots">';
   for (var i = 0; i <= 4; i++) {
@@ -395,10 +396,12 @@ function renderSection(id) {
   else if (id === 2) html += renderSection2();
   else if (id === 3) html += renderSection3();
   else if (id === 4) html += renderSection4();
+  else if (id === 7) html += renderSection7();
 
-  if (id >= 1 && id <= 4) {
-    var nextLabel = id < 4 ? '次のセクションへ →' : '🏆 結果を見る！';
-    html += '<button class="next-section-btn" id="nextBtn" data-goto="' + (id < 4 ? id+1 : 'result') + '" style="display:none">' + nextLabel + '</button>';
+  if ((id >= 1 && id <= 4) || id === 7) {
+    var NEXT = { 1:2, 2:3, 3:7, 7:4 };
+    var nextLabel = id !== 4 ? '次のセクションへ →' : '🏆 結果を見る！';
+    html += '<button class="next-section-btn" id="nextBtn" data-goto="' + (id !== 4 ? NEXT[id] : 'result') + '" style="display:none">' + nextLabel + '</button>';
   }
 
   document.getElementById('mainContent').innerHTML = html;
@@ -719,6 +722,76 @@ function renderSection3() {
       + '<div class="q-number">Q' + (i+1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
       + (q.sub ? '<div class="q-sub">' + q.sub + '</div>' : '')
+      + makeChoices(qid, q.choices, q.a, 5)
+      + makeFeedback(qid, q.exp)
+      + '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+// ===== SECTION 7: 球・回転体・投影図・直線や平面の位置関係（2026-09-30 追加。中1空間図形で抜けていた内容） =====
+function renderSection7() {
+  var html = '<div class="rule-card">'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">球の公式、分数と3乗が出てきて一番覚えられない…</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">昔からある語呂がある。体積は「身の上に心配あるので参上」、表面積は「心配ある事情」。声に出して3回言えば覚えられるはずだ</div></div></div>'
+    + '</div>';
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">📐 球（半径 r）</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">体積 V ＝ <b>4/3 πr³</b>　（身の上に（4/3）心配（π）あるので（r³）参上）</div>'
+    + '<div class="ex">表面積 S ＝ <b>4πr²</b>　（心配（4π）ある（r）事情（²））</div>'
+    + '<div class="note">⚠️ 体積は r を<b>3回</b>かける（r³）、表面積は<b>2回</b>（r²）。</div>'
+    + '</div>'
+    + '<div class="rule-card-title" style="margin-top:14px">📐 回転体と投影図</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">回転体：長方形 → <b>円柱</b>／直角三角形 → <b>円錐</b>／半円 → <b>球</b></div>'
+    + '<div class="ex">投影図：<b>立面図</b>（正面から見た図）と<b>平面図</b>（真上から見た図）。立面図が三角形・平面図が円 → <b>円錐</b></div>'
+    + '</div>'
+    + '<div class="rule-card-title" style="margin-top:14px">📐 空間での2直線の位置関係</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">① 交わる　② 平行　③ <b>ねじれの位置</b>（交わらず、平行でもない＝同じ平面上にない）</div>'
+    + '<div class="note">💡 立方体の1本の辺に対して：平行な辺3本、交わる辺4本、ねじれの位置の辺4本。<br>💡 正多面体は5種類だけ：正四面体・正六面体（立方体）・正八面体・正十二面体・正二十面体。</div>'
+    + '</div>'
+    + '</div>';
+
+  function E(rule, ok, ng, tip) { return '<span class="exp-rule"><span class="label">📐 ルール</span>' + rule + '</span><span class="exp-ok">✅ ' + ok + '</span>' + (ng ? '<span class="exp-ng">❌ ' + ng + '</span>' : '') + '<span class="exp-tip">💡 ' + tip + '</span>'; }
+  var qs = [
+    { q:'半径3cmの球の体積は？（πを使った式で）', a:'36π cm³', choices:['36π cm³','12π cm³','108π cm³','27π cm³'],
+      exp:E('V＝4/3 πr³', '4/3×π×27＝36π', '27πは4/3をかけ忘れ', '「身の上に心配あるので参上」') },
+    { q:'半径3cmの球の表面積は？（πを使った式で）', a:'36π cm²', choices:['36π cm²','12π cm²','9π cm²','108π cm²'],
+      exp:E('S＝4πr²', '4×π×9＝36π', '9πは円1つ分の面積', '「心配ある事情」') },
+    { q:'半径6cmの球の体積は？（πを使った式で）', a:'288π cm³', choices:['288π cm³','144π cm³','216π cm³','864π cm³'],
+      exp:E('V＝4/3 πr³', '6³＝216 → 216×4/3＝288 → 288π', '216πは4/3をかけ忘れ', '先に r³ を計算') },
+    { q:'半径5cmの球の表面積は？（πを使った式で）', a:'100π cm²', choices:['100π cm²','25π cm²','500/3 π cm²','20π cm²'],
+      exp:E('S＝4πr²', '4×25×π＝100π', '500/3 π は体積', '表面積は2乗、体積は3乗') },
+    { q:'長方形を、1つの辺を軸として1回転させてできる立体は？', a:'円柱', choices:['円柱','円錐','球','角柱'],
+      exp:E('回転体：長方形 → 円柱', '軸にした辺が円柱の高さになる', '円錐は直角三角形を回したもの', '紙を立ててくるっと回すイメージ') },
+    { q:'直角三角形を、直角をはさむ1辺を軸として1回転させてできる立体は？', a:'円錐', choices:['円錐','円柱','球','三角柱'],
+      exp:E('回転体：直角三角形 → 円錐', '軸の辺が高さ、もう1辺が底面の半径', '円柱は長方形', 'とんがり帽子の形') },
+    { q:'半円を、直径を軸として1回転させてできる立体は？', a:'球', choices:['球','円錐','円柱','半球'],
+      exp:E('回転体：半円 → 球', '半円をぐるっと回すと丸ごとの球', '半球にはならない', '半分を回して全部') },
+    { q:'立面図が三角形、平面図が円である立体は？', a:'円錐', choices:['円錐','円柱','三角錐','球'],
+      exp:E('立面図＝正面から、平面図＝真上から', '正面から三角形・上から円 → 円錐', '三角錐なら平面図も三角形', '真上から見て円なら「円〜」') },
+    { q:'立面図が長方形、平面図が円である立体は？', a:'円柱', choices:['円柱','円錐','四角柱','球'],
+      exp:E('正面から長方形・上から円 → 円柱', '缶を正面と真上から見た形', '四角柱なら平面図は四角形', '平面図で底面の形がわかる') },
+    { q:'空間で、交わらず、平行でもない2直線の位置関係を何という？', a:'ねじれの位置', choices:['ねじれの位置','垂直','平行','一致'],
+      exp:E('交わらない＋平行でない＝ねじれの位置', '同じ平面上にない2直線', '平行なら同じ平面上にある', '立体の中でしか起こらない関係') },
+    { q:'【難】立方体ABCD-EFGHで、辺ABとねじれの位置にある辺は何本？', a:'4本', choices:['4本','3本','2本','6本'],
+      exp:E('平行な辺（3本）と交わる辺（4本）を除いた残り', '12−1−3−4＝4本（CG・DH・EH・FG）', '平行な辺を数えない', '全部の辺から引き算で数える') },
+    { q:'正多面体は全部で何種類ある？', a:'5種類', choices:['5種類','4種類','6種類','無数にある'],
+      exp:E('正多面体は5種類だけ', '正四面体・正六面体・正八面体・正十二面体・正二十面体', '無数にはない', '「4・6・8・12・20」の5つ') },
+    { q:'【難】半径3cmの半球の体積は？（πを使った式で）', a:'18π cm³', choices:['18π cm³','36π cm³','9π cm³','27π cm³'],
+      exp:E('半球＝球の半分', '球36π÷2＝18π', '36πは球全体', '表面積の場合は、切り口の円もたすことに注意') }
+  ];
+  qs.forEach(function(q, i) { q._qid = 'math_solid_s7_q' + i; });
+  html += '<div class="practice-section"><div class="practice-title">✏️ 練習問題 — 球・回転体・位置関係</div>';
+  qs.forEach(function(q, i) {
+    var qid = q._qid;
+    qMeta[qid] = { type:'choice', answer:q.a, xp:5, jp:q.q, choices:q.choices };
+    html += '<div class="q-card" data-card="' + qid + '">'
+      + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
+      + '<div class="q-text">' + q.q + '</div>'
       + makeChoices(qid, q.choices, q.a, 5)
       + makeFeedback(qid, q.exp)
       + '</div>';

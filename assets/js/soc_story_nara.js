@@ -221,5 +221,5 @@ renderStory({
   onelineHead:'約80年を1行で',
   oneline:'<span class="hl">平城京</span>で新生活 → <span class="hl">班田収授法</span>と重い税（租・調・庸） → 農民つらい＆口分田不足 → <span class="hl">墾田永年私財法</span>で土地の私有OK → 社会不安を<span class="hl">聖武天皇</span>が仏教パワー（国分寺・大仏）で乗り切ろうとする → 遣唐使・鑑真で<span class="hl">天平文化</span> → <span class="hl">平安京</span>へ！',
   myths:MYTHS, pairs:PAIRS, checks:CHECKS,
-  nextNote:'<a href="soc_story_asuka.html" style="color:var(--pop-c)">👈 前号「飛鳥時代」</a>　／　次号「平安時代ストーリー新聞」をお楽しみに'
+  nextNote:'<a href="soc_story_asuka.html" style="color:var(--pop-c)">👈 前号「飛鳥時代」</a>　／　<a href="soc_story_heian.html" style="color:var(--pop-c)">次号「平安時代」へ 👉</a>'
 });

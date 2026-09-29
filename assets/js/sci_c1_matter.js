@@ -624,7 +624,7 @@ function renderSection1() {
   qs = shuffleArray(qs);
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: q.jp, choices: q.choices };
+    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: (q.jp || q.q), choices: q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -773,7 +773,7 @@ function renderSection2() {
   qs = shuffleArray(qs);
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: q.jp, choices: q.choices };
+    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: (q.jp || q.q), choices: q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -949,7 +949,7 @@ function renderSection3() {
   qs = shuffleArray(qs);
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: q.jp, choices: q.choices };
+    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: (q.jp || q.q), choices: q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -1084,7 +1084,7 @@ function renderSection4() {
       exp: '<span class="exp-rule"><span class="label">📐 溶解度の定義</span>一定温度で水100gに溶ける溶質の最大質量（g）</span><span class="exp-ok">✅ 水100g基準！（1Lでも溶液でもなく水100g）</span><span class="exp-tip">💡 20℃での溶解度の例：NaCl ≒ 36g、KNO₃ ≒ 32g</span>'
     },
     {
-      q: '硝酸カリウム（KNO₃）の溶解度は60℃で約109g、20℃で約32g。60℃の飽和水溶液を20℃まで冷やすと何g析出するか？',
+      q: '硝酸カリウム（KNO₃）の溶解度は60℃で約109g、20℃で約32g。60℃の水100gに硝酸カリウムを溶けるだけ溶かした（飽和水溶液）。これを20℃まで冷やすと何g析出するか？',
       sub: '析出量 = 高温の溶解度 − 低温の溶解度',
       a: '約77g',
       choices: ['約77g', '約32g', '約109g', '約141g'],
@@ -1092,7 +1092,7 @@ function renderSection4() {
       exp: '<span class="exp-rule"><span class="label">📐 ルール</span>析出量 = 高温の溶解度 − 冷却後の溶解度</span><span class="exp-ok">✅ 109g − 32g = 77g が析出する</span><span class="exp-ng">❌ 溶解度はすべて水100gあたりなので、そのまま引ける</span><span class="exp-tip">💡 これが「再結晶」の仕組み！KNO₃は温度差が大きいので再結晶に向いている</span>'
     },
     {
-      q: '溶解度曲線でほぼ直線（温度変化による変化が小さい）なのはどれ？',
+      q: '溶解度曲線がほぼ水平（温度が変わっても溶解度があまり変わらない）なのはどれ？',
       sub: 'グラフを思い出して考えよう',
       a: 'NaCl（食塩）',
       choices: ['NaCl（食塩）', 'KNO₃（硝酸カリウム）', 'KCl（塩化カリウム）'],
@@ -1129,7 +1129,7 @@ function renderSection4() {
   qs = shuffleArray(qs);
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: q.jp, choices: q.choices };
+    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: (q.jp || q.q), choices: q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -1331,7 +1331,7 @@ function renderSection5() {
         + makeFeedback(qid, q.exp)
         + '</div>';
     } else {
-      qMeta[qid] = { type: 'choice', answer: q.a, xp: 5, jp: q.jp, choices: q.choices };
+      qMeta[qid] = { type: 'choice', answer: q.a, xp: 5, jp: (q.jp || q.q), choices: q.choices };
       html += '<div class="q-card" data-card="' + qid + '">'
         + '<div class="q-number">Q' + (i + 1) + ' / ' + allQs.length + '</div>'
         + '<div class="q-text">' + q.q + '</div>'

@@ -317,7 +317,7 @@ function checkSectionComplete() {
       if (!document.getElementById('sectionCompleteBanner')) {
         var banner = document.createElement('div');
         banner.id = 'sectionCompleteBanner';
-        var nextSec = currentSection < 4 ? 'Section ' + (currentSection + 1) + ' へ進もう！' : '確認テストで腕試し！';
+        var nextSec = currentSection === 4 ? '「イオンの数・実験」へ進もう！' : (currentSection < 4 ? 'Section ' + (currentSection + 1) + ' へ進もう！' : '確認テストで腕試し！');
         banner.innerHTML = '<div style="text-align:center;padding:20px;margin-bottom:12px;background:linear-gradient(135deg,rgba(63,185,80,0.12),rgba(14,165,233,0.08));border:1px solid var(--green);border-radius:14px">'
           + '<div style="font-size:36px;margin-bottom:8px">🎉</div>'
           + '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--green);letter-spacing:2px;margin-bottom:6px">セクション ' + currentSection + ' クリア！</div>'
@@ -339,6 +339,7 @@ var SECTIONS = [
   { id:2, label:'電池',          title:'化学変化と電池',                 sub:'ダニエル電池・イオン化傾向——化学反応で電気を作る仕組み' },
   { id:3, label:'酸・アルカリ',  title:'酸・アルカリとイオン',           sub:'H⁺とOH⁻——酸とアルカリの正体はイオンだった！' },
   { id:4, label:'中和',          title:'中和反応と塩',                   sub:'酸＋アルカリ→塩＋水——打ち消し合いの化学！' },
+  { id:8, label:'🧪イオンの数・実験', title:'イオンの数の変化・金属と電池の実験', sub:'中和のイオンのグラフ・Mg＞Zn＞Cu・ダニエル電池・燃料電池（入試頻出）' },
   { id:5, label:'確認テスト',    title:'確認テスト',                     sub:'全単元の総まとめ！愛知県形式20問' },
   { id:6, label:'📊弱点',        title:'弱点ノート',                     sub:'間違えた問題の正答率を確認しよう' },
   { id:7, label:'🔥特訓',        title:'弱点特訓モード',                 sub:'間違えた問題だけを集中練習！' },
@@ -348,10 +349,11 @@ function renderTabs() {
   var html = '';
   SECTIONS.forEach(function(s) {
     var cls = 'section-tab';
-    if (s.id >= 6) cls += ' tokku';
+    if (s.id === 6 || s.id === 7) cls += ' tokku';
     if (s.id === currentSection) cls += ' active';
-    if (sectionDone[s.id] && s.id < 6) cls += ' done';
-    var label = s.label + (sectionDone[s.id] && s.id < 6 ? ' ✓' : '');
+    var normal = s.id !== 6 && s.id !== 7;
+    if (sectionDone[s.id] && normal) cls += ' done';
+    var label = s.label + (sectionDone[s.id] && normal ? ' ✓' : '');
     if (s.id === 7) {
       var wk = getWeakQuestions();
       label = '🔥特訓' + (wk.length > 0 ? '(' + wk.length + ')' : '');
@@ -373,7 +375,7 @@ function renderSection(id) {
   if (id === 6) { renderWeakNote();  return; }
   if (id === 7) { renderTokkuMode(); return; }
 
-  var s = SECTIONS[id];
+  var s = SECTIONS.filter(function(x) { return x.id === id; })[0];
   var html = '';
   html += '<div class="progress-dots">';
   for (var i = 0; i <= 5; i++) {
@@ -392,11 +394,13 @@ function renderSection(id) {
   else if (id === 2) html += renderSection2();
   else if (id === 3) html += renderSection3();
   else if (id === 4) html += renderSection4();
+  else if (id === 8) html += renderSection8();
   else if (id === 5) html += renderSection5();
 
-  if (id >= 1 && id <= 5) {
-    var nextLabel  = id < 5 ? '次のセクションへ →' : '🏆 結果を見る！';
-    var nextAction = id < 5 ? 'goSection(' + (id + 1) + ')' : 'showFinalResult()';
+  if ((id >= 1 && id <= 5) || id === 8) {
+    var NEXT = { 1:2, 2:3, 3:4, 4:8, 8:5 };
+    var nextLabel  = id !== 5 ? '次のセクションへ →' : '🏆 結果を見る！';
+    var nextAction = id !== 5 ? 'goSection(' + NEXT[id] + ')' : 'showFinalResult()';
     html += '<button class="next-section-btn" id="nextBtn" onclick="' + nextAction + '">' + nextLabel + '</button>';
   }
 
@@ -550,15 +554,15 @@ function renderSection2() {
     + '<div class="rule-card-title">📐 イオン化傾向と電池の仕組み</div>'
     + '<div class="rule-box">'
     + '<div class="rule-title">イオン化傾向（溶けやすい順）</div>'
-    + '<div class="ex">Li &gt; K &gt; Ca &gt; Na &gt; Mg &gt; Al &gt; Zn &gt; Fe &gt; Ni &gt; Sn &gt; Pb &gt; H &gt; Cu &gt; Ag &gt; Au</div>'
-    + '<div class="ex">覚え方：「リカちゃん、彼氏ナトリウム、先生は鉄ニッケル（リカナマグアルジン鉄ニッスンナマ水銅銀金）」</div>'
-    + '<div class="note">💡 イオン化傾向が大きい金属ほど電子を出しやすい（陽極になりやすい）</div>'
+    + '<div class="ex">中学で比べるのはこの3つ：<b>マグネシウム（Mg）＞ 亜鉛（Zn）＞ 銅（Cu）</b></div>'
+    + '<div class="ex">覚え方：「マグ・アエン・ドウ」＝ M・A・D の順（アルファベット順と同じ）</div>'
+    + '<div class="note">💡 イオンになりやすい金属ほど電子を出しやすく、電池の<b>−極</b>になる。（「イオン化傾向」は高校で習う言い方。教科書では「イオンへのなりやすさ」）</div>'
     + '</div>'
     + '<div class="rule-box">'
     + '<div class="rule-title">ダニエル電池の仕組み</div>'
     + '<div class="ex">Zn板（亜鉛・硫酸亜鉛水溶液）と Cu板（銅・硫酸銅水溶液）を組み合わせた電池</div>'
-    + '<div class="ex">負極（−）：Zn → Zn²⁺ + 2e⁻　（亜鉛が溶けて電子を出す）</div>'
-    + '<div class="ex">正極（+）：Cu²⁺ + 2e⁻ → Cu　（銅が析出する）</div>'
+    + '<div class="ex">−極：Zn → Zn²⁺ + ⊖⊖（電子2個）　（亜鉛がとけて電子を出す）</div>'
+    + '<div class="ex">＋極：Cu²⁺ + ⊖⊖（電子2個）→ Cu　（銅が出てくる）</div>'
     + '<div class="note">⚡ イオン化傾向が大きい Zn が−極、小さい Cu が+極になる</div>'
     + '</div>'
     + '</div>';
@@ -570,13 +574,13 @@ function renderSection2() {
     + '<text x="85" y="55" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Arial,sans-serif">ZnSO₄水溶液</text>'
     + '<rect x="38" y="20" width="10" height="80" rx="3" fill="#6b7280"/>'
     + '<text x="43" y="16" text-anchor="middle" font-size="9" fill="#fcd34d" font-family="Arial,sans-serif">Zn（−）</text>'
-    + '<text x="85" y="75" text-anchor="middle" font-size="10" fill="#38bdf8" font-family="Arial,sans-serif">Zn→Zn²⁺+2e⁻</text>'
+    + '<text x="85" y="75" text-anchor="middle" font-size="10" fill="#38bdf8" font-family="Arial,sans-serif">Zn→Zn²⁺+⊖⊖</text>'
     + '<text x="85" y="108" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Arial,sans-serif">亜鉛が溶ける</text>'
     + '<rect x="220" y="30" width="130" height="90" rx="6" fill="rgba(249,115,22,0.08)" stroke="#334155" stroke-width="1.5"/>'
     + '<text x="285" y="55" text-anchor="middle" font-size="9" fill="#94a3b8" font-family="Arial,sans-serif">CuSO₄水溶液</text>'
     + '<rect x="322" y="20" width="10" height="80" rx="3" fill="#b45309"/>'
     + '<text x="327" y="16" text-anchor="middle" font-size="9" fill="#fb923c" font-family="Arial,sans-serif">Cu（+）</text>'
-    + '<text x="285" y="75" text-anchor="middle" font-size="10" fill="#f97316" font-family="Arial,sans-serif">Cu²⁺+2e⁻→Cu</text>'
+    + '<text x="285" y="75" text-anchor="middle" font-size="10" fill="#f97316" font-family="Arial,sans-serif">Cu²⁺+⊖⊖→Cu</text>'
     + '<text x="285" y="108" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Arial,sans-serif">銅が析出</text>'
     + '<rect x="149" y="50" width="72" height="22" rx="4" fill="#1e293b" stroke="#475569" stroke-width="1"/>'
     + '<text x="185" y="65" text-anchor="middle" font-size="8" fill="#94a3b8" font-family="Arial,sans-serif">素焼き板（隔壁）</text>'
@@ -590,13 +594,13 @@ function renderSection2() {
   var qs = [
     { jp:'イオン化傾向とは何か。',
       answer:'金属が水溶液中でイオンになりやすい順番', choices:['金属が水溶液中でイオンになりやすい順番','金属の硬さの順番','金属の融点の高さの順番','電気伝導率の順番'],
-      exp:'イオン化傾向：金属が電子を失い陽イオンになりやすい順序。Li・K・Ca・Na・Mg・Al・Zn・Fe...の順に大きい。' },
+      exp:'イオン化傾向（イオンへのなりやすさ）：金属が電子を失って陽イオンになりやすいかどうか。中学では マグネシウム ＞ 亜鉛 ＞ 銅 の順を実験で確かめる。' },
     { jp:'ダニエル電池の負極（−極）の金属はどれか。',
       answer:'亜鉛（Zn）', choices:['亜鉛（Zn）','銅（Cu）','鉄（Fe）','アルミニウム（Al）'],
       exp:'ダニエル電池：Zn（イオン化傾向大）が−極、Cu（イオン化傾向小）が+極。−極の Zn が Zn²⁺ になって溶け、電子を出す。' },
     { jp:'ダニエル電池の正極（+極）では何が起きるか。',
       answer:'Cu²⁺ が電子を受け取り Cu が析出する', choices:['Cu²⁺ が電子を受け取り Cu が析出する','Zn が溶け出す','H₂ が発生する','O₂ が発生する'],
-      exp:'正極（+）：Cu²⁺ + 2e⁻ → Cu。銅イオンが電子を受け取り、銅板の表面に銅が析出（くっつく）。' },
+      exp:'＋極：Cu²⁺ ＋ 電子2個 → Cu。銅イオンが電子を受け取り、銅板の表面に銅が出てくる（くっつく）。' },
     { jp:'Zn と Cu では、どちらのイオン化傾向が大きいか。',
       answer:'Zn（亜鉛）', choices:['Zn（亜鉛）','Cu（銅）','同じ','その時の温度による'],
       exp:'イオン化傾向：Zn > Cu。亜鉛の方が電子を出しやすく、陽イオンになりやすい。だから Zn が−極（電子を出す側）になる。' },
@@ -720,7 +724,7 @@ function renderSection4() {
     + '</div>';
 
   html += '<div class="rule-card">'
-    + '<div class="rule-card-title">📊 中和滴定グラフ（NaOH を少しずつ加えたとき）</div>'
+    + '<div class="rule-card-title">📊 中和のグラフ（NaOH を少しずつ加えたとき）</div>'
     + '<svg viewBox="0 0 370 120" width="100%" style="display:block;margin:0 auto;max-width:480px">'
     + '<line x1="40" y1="10" x2="40" y2="100" stroke="#475569" stroke-width="2"/>'
     + '<line x1="40" y1="100" x2="340" y2="100" stroke="#475569" stroke-width="2"/>'
@@ -767,6 +771,130 @@ function renderSection4() {
   return html;
 }
 
+// ===== SECTION 8: イオンの数の変化・金属のイオンへのなりやすさ・電池の実験（2026-09-29 追加。入試頻出なのに抜けていた内容） =====
+function ionCountSVG() {
+  // 横軸：加えた水酸化ナトリウム水溶液の量（0〜2、中和点＝1）、縦軸：イオンの数（0〜2）
+  function X(v) { return 50 + v * 140; }
+  function Y(n) { return 190 - n * 75; }
+  var s = '<svg viewBox="0 0 360 240" style="width:100%;max-width:540px;display:block;margin:8px auto" role="img" aria-label="中和とイオンの数の変化">';
+  s += '<line x1="' + X(0) + '" y1="' + Y(0) + '" x2="' + X(2.05) + '" y2="' + Y(0) + '" stroke="#9aa4b2"/><line x1="' + X(0) + '" y1="' + Y(0) + '" x2="' + X(0) + '" y2="' + Y(2.2) + '" stroke="#9aa4b2"/>';
+  s += '<line x1="' + X(1) + '" y1="' + Y(0) + '" x2="' + X(1) + '" y2="' + Y(2.2) + '" stroke="#ffd84d" stroke-dasharray="4 4"/><text x="' + X(1) + '" y="' + (Y(2.2) - 4) + '" text-anchor="middle" fill="#ffd84d" font-size="12" font-weight="bold">中和点</text>';
+  s += '<polyline points="' + X(0) + ',' + Y(1) + ' ' + X(1) + ',' + Y(0) + ' ' + X(2) + ',' + Y(0) + '" fill="none" stroke="#ff5c5c" stroke-width="3.5"/>';
+  s += '<line x1="' + X(0) + '" y1="' + Y(1) + '" x2="' + X(2) + '" y2="' + Y(1) + '" stroke="#3ddc84" stroke-width="3.5" stroke-dasharray="1 0"/>';
+  s += '<line x1="' + X(0) + '" y1="' + (Y(0) - 2) + '" x2="' + X(2) + '" y2="' + Y(2) + '" stroke="#4aa8ff" stroke-width="3.5"/>';
+  s += '<polyline points="' + X(0) + ',' + (Y(0) + 3) + ' ' + X(1) + ',' + (Y(0) + 3) + ' ' + X(2) + ',' + Y(1) + '" fill="none" stroke="#b69cff" stroke-width="3.5"/>';
+  s += '<text x="' + (X(0) + 6) + '" y="' + (Y(1) - 8) + '" fill="#ff5c5c" font-size="13" font-weight="bold">H⁺</text>';
+  s += '<text x="' + (X(2) - 4) + '" y="' + (Y(1) - 8) + '" text-anchor="end" fill="#3ddc84" font-size="13" font-weight="bold">Cl⁻（一定）</text>';
+  s += '<text x="' + (X(2) - 4) + '" y="' + (Y(2) + 16) + '" text-anchor="end" fill="#4aa8ff" font-size="13" font-weight="bold">Na⁺</text>';
+  s += '<text x="' + (X(2) - 4) + '" y="' + (Y(1) + 26) + '" text-anchor="end" fill="#b69cff" font-size="13" font-weight="bold">OH⁻</text>';
+  s += '<text x="' + X(1) + '" y="' + (Y(0) + 20) + '" text-anchor="middle" fill="#e6edf3" font-size="12">加えた水酸化ナトリウム水溶液の量 →</text>';
+  s += '<text x="16" y="' + Y(1.1) + '" fill="#e6edf3" font-size="12" transform="rotate(-90 16 ' + Y(1.1) + ')" text-anchor="middle">イオンの数</text>';
+  return s + '</svg>';
+}
+function renderSection8() {
+  var html = '';
+  html += '<div class="intro-box">'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">中和のグラフで「イオンの数」って出てくるの、毎回どれがどの線かわからなくなる！</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">4つのイオンを1つずつ「増える・減る・そのまま」で考えればいい。ポイントは、H⁺ と OH⁻ は出会うと<b>水になって消える</b>こと。それ以外のイオンは消えない</div></div></div>'
+    + '</div>';
+
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">📐 塩酸に水酸化ナトリウム水溶液を加えていくときのイオンの数</div>'
+    + '<div class="rule-box">'
+    + ionCountSVG()
+    + '<div class="ex"><b style="color:#ff5c5c">H⁺</b>：加えたOH⁻と結びついて水になる → <b>減っていき、中和点で0</b></div>'
+    + '<div class="ex"><b style="color:#3ddc84">Cl⁻</b>：だれとも結びつかない → <b>ずっと変わらない</b></div>'
+    + '<div class="ex"><b style="color:#4aa8ff">Na⁺</b>：加えた分だけ入ってくる → <b>増え続ける</b></div>'
+    + '<div class="ex"><b style="color:#b69cff">OH⁻</b>：中和点まではH⁺と結びついて消える → <b>中和点までは0、そのあと増える</b></div>'
+    + '<div class="note">📐 イオンの総数：中和点までは「H⁺が1個減ってNa⁺が1個増える」ので<b>変わらない</b>。中和点をこえると<b>増える</b>。<br>💡 中和が起こると熱が出て、水溶液の温度が上がる（発熱反応）。</div>'
+    + '</div>'
+    + '</div>';
+
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">⚪ 沈殿ができる中和</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">うすい硫酸 ＋ 水酸化バリウム水溶液 → <b>硫酸バリウム（水にとけにくい塩）</b>が<b>白い沈殿</b>になる ＋ 水</div>'
+    + '<div class="ex">ちょうど中和したとき、水溶液中のイオンがほとんどなくなるので、<b>電流がほとんど流れなくなる</b>。</div>'
+    + '</div>'
+    + '</div>';
+
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">🔩 金属のイオンへのなりやすさ（実験で比べる）</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">硫酸銅水溶液に<b>亜鉛板</b>を入れる → 亜鉛の表面に<b>赤い銅</b>がつく（亜鉛がイオンになってとけ、銅イオンが銅になる）</div>'
+    + '<div class="ex">硫酸亜鉛水溶液に<b>銅板</b>を入れる → <b>変化しない</b></div>'
+    + '<div class="ex">硫酸亜鉛水溶液に<b>マグネシウム板</b>を入れる → マグネシウムの表面に<b>亜鉛</b>がつく</div>'
+    + '<div class="note">📐 ルール：イオンへのなりやすさは <b>マグネシウム ＞ 亜鉛 ＞ 銅</b>。なりやすい金属が、なりにくい金属のイオンの水溶液に入ると、自分がとけて相手の金属が出てくる。<br>💡 覚え方：「マグ・アエン・ドウ」＝ M・A・D の順（アルファベット順と同じ！）。</div>'
+    + '</div>'
+    + '</div>';
+
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">🔋 ダニエル電池と燃料電池</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">ダニエル電池：亜鉛板（硫酸亜鉛水溶液）と銅板（硫酸銅水溶液）を<b>セロハン</b>で仕切る。セロハンは<b>2つの水溶液が簡単には混ざらないようにしながら、イオンは通す</b>。</div>'
+    + '<div class="ex">しばらく使うと：亜鉛板は<b>とけてうすく</b>なり、銅板には<b>銅がつく</b>。硫酸銅水溶液の<b>青色がうすく</b>なる（銅イオンが減るから）。</div>'
+    + '<div class="ex">燃料電池：<b>水素と酸素が反応して水ができる</b>ときの化学変化で電気を取り出す（水の電気分解の逆）。出るのは水だけ。</div>'
+    + '<div class="ex">塩酸の電気分解：<b>陰極から水素</b>、<b>陽極から塩素</b>（塩素は水にとけやすく、刺激臭があり、漂白作用がある）。</div>'
+    + '</div>'
+    + '</div>';
+
+  var qs = [
+    { jp:'塩酸に水酸化ナトリウム水溶液を少しずつ加えていく。水素イオン（H⁺）の数はどう変化するか。',
+      answer:'減っていき、中和点で0になる', choices:['減っていき、中和点で0になる','変わらない','増え続ける','中和点までは0で、そのあと増える'],
+      exp:'📐 ルール：H⁺は加えたOH⁻と結びついて水になる。<br>✅ 減っていき、中和点で0<br>❌ 「中和点までは0、そのあと増える」はOH⁻の変化<br>💡 H⁺はOH⁻に出会うと消える' },
+    { jp:'同じ実験で、塩化物イオン（Cl⁻）の数はどう変化するか。',
+      answer:'変わらない', choices:['変わらない','減っていき、中和点で0になる','増え続ける','中和点までは0で、そのあと増える'],
+      exp:'📐 ルール：Cl⁻はどのイオンとも結びつかず、水溶液中に残る。<br>✅ ずっと変わらない<br>❌ 減らない（NaClは水にとけているので、イオンのまま）<br>💡 グラフでは水平な線' },
+    { jp:'同じ実験で、ナトリウムイオン（Na⁺）の数はどう変化するか。',
+      answer:'増え続ける', choices:['増え続ける','変わらない','減っていき、中和点で0になる','中和点までは0で、そのあと増える'],
+      exp:'📐 ルール：Na⁺は加えた水酸化ナトリウム水溶液から入ってきて、どれとも結びつかない。<br>✅ 加えた分だけ増え続ける<br>❌ 中和点で止まらない<br>💡 原点から右上がりの直線' },
+    { jp:'同じ実験で、水酸化物イオン（OH⁻）の数はどう変化するか。',
+      answer:'中和点までは0で、そのあと増える', choices:['中和点までは0で、そのあと増える','増え続ける','変わらない','減っていき、中和点で0になる'],
+      exp:'📐 ルール：中和点までは、入ってきたOH⁻がすぐH⁺と結びついて水になる。H⁺がなくなると残るようになる。<br>✅ 中和点まで0 → そのあと増える<br>❌ はじめから増えるのはNa⁺<br>💡 H⁺がいなくなってからOH⁻の出番' },
+    { jp:'【難】同じ実験で、水溶液中のイオンの総数はどう変化するか。',
+      answer:'中和点までは変わらず、そのあと増える', choices:['中和点までは変わらず、そのあと増える','ずっと変わらない','中和点までは減り、そのあと増える','ずっと増え続ける'],
+      exp:'📐 ルール：中和点までは「H⁺が1個減るかわりにNa⁺が1個増える」。<br>✅ 中和点まで一定、そのあとNa⁺とOH⁻が増える<br>❌ 中和点まで減る、はまちがい（硫酸と水酸化バリウムなら減る）<br>💡 入れかわるだけなら数は同じ' },
+    { jp:'塩酸と水酸化ナトリウム水溶液を混ぜて中和させると、水溶液の温度はどうなるか。',
+      answer:'上がる', choices:['上がる','下がる','変わらない','0℃になる'],
+      exp:'📐 ルール：中和は熱が出る化学変化（発熱反応）。<br>✅ 温度が上がる<br>❌ 下がるのは吸熱反応<br>💡 中和＝あたたかくなる' },
+    { jp:'うすい硫酸に水酸化バリウム水溶液を加えたときに見られる変化はどれか。',
+      answer:'白い沈殿ができる', choices:['白い沈殿ができる','青い沈殿ができる','気体が発生する','変化は見られない'],
+      exp:'📐 ルール：硫酸＋水酸化バリウム → 硫酸バリウム（水にとけにくい塩）＋水。<br>✅ 硫酸バリウムの白い沈殿<br>❌ 気体は発生しない<br>💡 とけにくい塩は沈殿になる' },
+    { jp:'【難】うすい硫酸に水酸化バリウム水溶液を加えていくと、ちょうど中和したときに電流がほとんど流れなくなった。その理由として正しいものはどれか。',
+      answer:'水溶液中のイオンがほとんどなくなったから', choices:['水溶液中のイオンがほとんどなくなったから','水溶液が中性になると電流は必ず流れなくなるから','水素が発生したから','温度が下がったから'],
+      exp:'📐 ルール：H⁺とOH⁻は水に、Ba²⁺とSO₄²⁻は沈殿（硫酸バリウム）になり、イオンがほぼ残らない。<br>✅ イオンがなくなった<br>❌ 塩酸と水酸化ナトリウムの中和点では、NaClがイオンのまま残るので電流は流れる<br>💡 沈殿になるとイオンではなくなる' },
+    { jp:'硫酸銅水溶液に亜鉛板を入れると、亜鉛板の表面に赤い物質がついた。この物質は何か。',
+      answer:'銅', choices:['銅','亜鉛','硫黄','酸化亜鉛'],
+      exp:'📐 ルール：亜鉛がイオンになってとけ、水溶液中の銅イオンが電子を受け取って銅になる。<br>✅ 赤い物質は銅<br>❌ 亜鉛がつくのではない<br>💡 イオンになりやすい方がとける' },
+    { jp:'前の実験からわかることとして正しいものはどれか。',
+      answer:'亜鉛は銅よりもイオンになりやすい', choices:['亜鉛は銅よりもイオンになりやすい','銅は亜鉛よりもイオンになりやすい','亜鉛と銅はイオンにならない','どちらもイオンへのなりやすさは同じ'],
+      exp:'📐 ルール：なりやすい金属が、なりにくい金属のイオンの水溶液の中でとける。<br>✅ 亜鉛 ＞ 銅<br>❌ 逆にしない<br>💡 とけた方が「なりやすい」' },
+    { jp:'マグネシウム・亜鉛・銅を、イオンになりやすい順に並べたものはどれか。',
+      answer:'マグネシウム ＞ 亜鉛 ＞ 銅', choices:['マグネシウム ＞ 亜鉛 ＞ 銅','銅 ＞ 亜鉛 ＞ マグネシウム','亜鉛 ＞ マグネシウム ＞ 銅','マグネシウム ＞ 銅 ＞ 亜鉛'],
+      exp:'📐 ルール：マグネシウム ＞ 亜鉛 ＞ 銅。<br>✅ M・A・D の順<br>❌ 銅がいちばんなりにくい<br>💡 「マグ・アエン・ドウ」' },
+    { jp:'硫酸亜鉛水溶液に銅板を入れるとどうなるか。',
+      answer:'変化しない', choices:['変化しない','銅板に亜鉛がつく','銅板がとける','気体が発生する'],
+      exp:'📐 ルール：銅は亜鉛よりイオンになりにくいので、亜鉛イオンの水溶液に入れても反応しない。<br>✅ 変化なし<br>❌ 銅板に亜鉛はつかない<br>💡 なりにくい方を入れても何も起こらない' },
+    { jp:'ダニエル電池で、2つの水溶液の間にセロハンを入れるのはなぜか。',
+      answer:'2つの水溶液が簡単に混ざらないようにしながら、イオンは通すため', choices:['2つの水溶液が簡単に混ざらないようにしながら、イオンは通すため','イオンを完全に通さないようにするため','電子をセロハンの中に通すため','水溶液を冷やすため'],
+      exp:'📐 ルール：セロハンには小さな穴があり、イオンは少しずつ通れる。<br>✅ 混ざりにくく、イオンは通す<br>❌ イオンを完全に止めると電流が流れなくなる<br>💡 電子は導線、イオンはセロハンを通る' },
+    { jp:'ダニエル電池をしばらく使ったとき、硫酸銅水溶液の色はどうなるか。',
+      answer:'青色がうすくなる', choices:['青色がうすくなる','青色がこくなる','赤色になる','無色から青色になる'],
+      exp:'📐 ルール：銅板の表面で銅イオンが電子を受け取って銅になるので、水溶液中の銅イオンが減る。<br>✅ 青色がうすくなる<br>❌ こくはならない<br>💡 青色の正体は銅イオン' },
+    { jp:'燃料電池について正しいものはどれか。',
+      answer:'水素と酸素が反応して水ができるときに電気を取り出す', choices:['水素と酸素が反応して水ができるときに電気を取り出す','水を電気分解して電気を取り出す','二酸化炭素を出しながら電気を取り出す','亜鉛と銅をとかして電気を取り出す'],
+      exp:'📐 ルール：燃料電池＝水の電気分解の逆向きの化学変化で電気を取り出す。<br>✅ 出てくるのは水だけ<br>❌ 水の電気分解は電気を「使う」方<br>💡 環境にやさしい電池として使われている' },
+    { jp:'塩酸を電気分解したとき、陰極から発生する気体はどれか。',
+      answer:'水素', choices:['水素','塩素','酸素','二酸化炭素'],
+      exp:'📐 ルール：陽イオンのH⁺は陰極へ行って水素に、陰イオンのCl⁻は陽極へ行って塩素になる。<br>✅ 陰極＝水素、陽極＝塩素<br>❌ 塩素は陽極から<br>💡 ＋のイオンは−極へ、−のイオンは＋極へ' }
+  ];
+  qs.forEach(function(q, i) { q._qid = 'sci_ion_s8_q' + i; });
+  qs.forEach(function(q) {
+    html += makeChoices(q._qid, q.jp, q.answer, q.choices, q.exp);
+  });
+  return html;
+}
+
 // ===== SECTION 5: 確認テスト =====
 function renderSection5() {
   var html = '<div style="background:#1a2236;border:1px solid #334155;border-radius:12px;padding:20px 24px;margin-bottom:24px">'
@@ -787,7 +915,7 @@ function renderSection5() {
     { qid:'sci_ion_s5_in3', jp:'水に溶けて電気を通す物質を何というか。', answer:'電解質',
       exp:'電解質：水溶液中で電離してイオンを生じ、電気を通す物質。NaCl・HCl・NaOH・H₂SO₄ など。' },
     { qid:'sci_ion_s5_in4', jp:'金属がイオンになりやすい順番を何というか。', answer:'イオン化傾向',
-      exp:'イオン化傾向：金属が水溶液中で陽イオンになりやすい順序。Li > K > Ca > Na > Mg > Al > Zn > Fe > ... > Cu > Ag > Au。' },
+      exp:'イオン化傾向（イオンへのなりやすさ）：金属が水溶液中で陽イオンになりやすいかどうか。中学では マグネシウム ＞ 亜鉛 ＞ 銅。' },
     { qid:'sci_ion_s5_in5', jp:'酸性の正体となるイオンは何か（記号で答えよ）。', answer:'H⁺',
       exp:'H⁺（水素イオン）が酸性の正体。H⁺ が多いほど pH が低く強い酸性になる。HCl → H⁺ + Cl⁻ の H⁺ が酸性を示す。' },
     { qid:'sci_ion_s5_in6', jp:'アルカリ性の正体となるイオンは何か（記号で答えよ）。', answer:'OH⁻',
@@ -816,7 +944,7 @@ function renderSection5() {
     { jp:'ダニエル電池で電子が流れる方向はどれか。',
       answer:'Zn（−極）から Cu（+極）へ外部回路を通って流れる', choices:['Zn（−極）から Cu（+極）へ外部回路を通って流れる','Cu（+極）から Zn（−極）へ外部回路を通って流れる','水溶液の中を流れる','流れない'],
       exp:'電子は−極（Zn）から+極（Cu）へ外部回路を流れる。電流の向きは電子と逆（+極から−極へ）。' },
-    { jp:'塩酸（HCl）と水酸化ナトリウム（NaOH）を同量混ぜたとき、水溶液の性質はどれか。',
+    { jp:'塩酸にふくまれるH⁺の数と、水酸化ナトリウム水溶液にふくまれるOH⁻の数がちょうど同じになるように混ぜたとき、水溶液の性質はどれか。',
       answer:'中性', choices:['中性','酸性','アルカリ性','強酸性'],
       exp:'HCl + NaOH → NaCl + H₂O。H⁺ と OH⁻ が等量で中和し、中性（pH=7）になる。NaCl（食塩）水溶液。' },
     { jp:'中和反応で生じる「塩（えん）」の定義として正しいのはどれか。',
@@ -836,7 +964,7 @@ function renderSection5() {
     { jp:'硫酸（H₂SO₄）の電離式はどれか。',
       answer:'H₂SO₄ → 2H⁺ + SO₄²⁻', choices:['H₂SO₄ → 2H⁺ + SO₄²⁻','H₂SO₄ → H⁺ + SO₄⁻','H₂SO₄ → 2H⁺ + 2SO₄⁻','H₂SO₄ → H₂⁺ + SO₄²⁻'],
       exp:'H₂SO₄ → 2H⁺ + SO₄²⁻。H が2個あるので H⁺ が2個出る。電荷：+2 + (−2) = 0 でバランスOK。強酸の典型例。' },
-    { jp:'中和滴定で酸性の水溶液にアルカリを加えていくとき、pH はどう変化するか。',
+    { jp:'酸性の水溶液にアルカリ性の水溶液を少しずつ加えていくとき、pH はどう変化するか。',
       answer:'小さい値から大きい値へ変化する（上昇する）', choices:['小さい値から大きい値へ変化する（上昇する）','大きい値から小さい値へ変化する','変化しない','急に下がる'],
       exp:'酸性（pH小）の水溶液にアルカリを加えると中和が進み pH が上昇。中和点でちょうど pH=7（中性）になり、過剰に加えるとアルカリ性（pH大）になる。' },
     { jp:'塩化銅水溶液（CuCl₂）の電気分解で陽極から発生する物質はどれか。',
@@ -846,8 +974,8 @@ function renderSection5() {
       answer:'塩化ナトリウム（NaCl）', choices:['塩化ナトリウム（NaCl）','水酸化ナトリウム（NaOH）','塩化水素（HCl）','炭酸ナトリウム（Na₂CO₃）'],
       exp:'NaCl = 塩化ナトリウム（食塩）。Na⁺（NaOH由来）と Cl⁻（HCl由来）が結合した塩（えん）。' },
     { jp:'次のうち中性の物質はどれか（pH=7）。',
-      answer:'純水', choices:['純水','食塩水','塩酸','NaOH水溶液'],
-      exp:'純水は H⁺ と OH⁻ が等量（pH=7、中性）。食塩水は弱アルカリ性（pH=7.1程度）。塩酸は酸性、NaOH水溶液はアルカリ性。' },
+      answer:'砂糖水', choices:['砂糖水','炭酸水','塩酸','NaOH水溶液'],
+      exp:'砂糖水は中性（pH=7）。炭酸水と塩酸は酸性、水酸化ナトリウム水溶液はアルカリ性。ちなみに食塩水も中性。' },
   ];
 
   choiceQs.forEach(function(q, i) {

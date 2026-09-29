@@ -325,7 +325,7 @@ function checkSectionComplete() {
       if (!document.getElementById('sectionCompleteBanner')) {
         var banner = document.createElement('div');
         banner.id = 'sectionCompleteBanner';
-        var nextSec = currentSection < 4 ? 'Section ' + (currentSection + 1) + ' へ進もう！' : '確認テストで腕試し！';
+        var nextSec = currentSection === 3 ? '「質量・熱」へ進もう！' : (currentSection < 4 ? 'Section ' + (currentSection + 1) + ' へ進もう！' : '確認テストで腕試し！');
         banner.innerHTML = '<div style="text-align:center;padding:20px;margin-bottom:12px;background:linear-gradient(135deg,rgba(63,185,80,0.12),rgba(14,165,233,0.08));border:1px solid var(--green);border-radius:14px">'
           + '<div style="font-size:36px;margin-bottom:8px">🎉</div>'
           + '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--green);letter-spacing:2px;margin-bottom:6px">セクション ' + currentSection + ' クリア！</div>'
@@ -345,7 +345,8 @@ var SECTIONS = [
   { id:0, label:'⚗️ スタート',  title:'化学変化・原子分子',        sub:'中2理科の化学分野。中3「化学変化とイオン」の土台を作ろう！' },
   { id:1, label:'原子・分子',   title:'原子・分子・化学式',         sub:'H・O・C・N……元素記号と化学式のルールをマスターしよう' },
   { id:2, label:'化合・分解',   title:'化合・分解・化学反応式',     sub:'化学変化の2パターンと化学反応式の書き方を攻略！' },
-  { id:3, label:'酸化・還元',   title:'酸化・還元・燃焼',           sub:'酸素との化合・切り離し——中3化学の根幹！' },
+  { id:3, label:'酸化・還元',   title:'酸化・還元・燃焼',           sub:'酸素と結びつく・酸素を失う——中3化学の根幹！' },
+  { id:8, label:'⚖️質量・熱',   title:'化学変化と質量・熱',         sub:'4：1と3：2の計算・質量保存・発熱と吸熱（入試頻出）' },
   { id:4, label:'確認テスト',   title:'確認テスト',                 sub:'全単元の総まとめ！愛知県形式20問' },
   { id:5, label:'🔗3年予習',    title:'3年予習：化学変化とイオン',  sub:'酸・アルカリ・中和——中2化学の続き' },
   { id:6, label:'📊弱点',       title:'弱点ノート',                 sub:'間違えた問題の正答率を確認しよう' },
@@ -356,10 +357,11 @@ function renderTabs() {
   var html = '';
   SECTIONS.forEach(function(s) {
     var cls = 'section-tab';
-    if (s.id >= 6) cls += ' tokku';
+    if (s.id === 6 || s.id === 7) cls += ' tokku';
     if (s.id === currentSection) cls += ' active';
-    if (sectionDone[s.id] && s.id < 6) cls += ' done';
-    var label = s.label + (sectionDone[s.id] && s.id < 6 ? ' ✓' : '');
+    var normal = s.id !== 6 && s.id !== 7;
+    if (sectionDone[s.id] && normal) cls += ' done';
+    var label = s.label + (sectionDone[s.id] && normal ? ' ✓' : '');
     if (s.id === 7) {
       var wk = getWeakQuestions();
       label = '🔥特訓' + (wk.length > 0 ? '(' + wk.length + ')' : '');
@@ -381,7 +383,7 @@ function renderSection(id) {
   if (id === 6) { renderWeakNote();  return; }
   if (id === 7) { renderTokkuMode(); return; }
 
-  var s = SECTIONS[id];
+  var s = SECTIONS.filter(function(x) { return x.id === id; })[0];
   var html = '';
   html += '<div class="progress-dots">';
   for (var i = 0; i <= 5; i++) {
@@ -399,12 +401,14 @@ function renderSection(id) {
   else if (id === 1) html += renderSection1();
   else if (id === 2) html += renderSection2();
   else if (id === 3) html += renderSection3();
+  else if (id === 8) html += renderSection8();
   else if (id === 4) html += renderSection4();
   else if (id === 5) html += renderSection5();
 
-  if (id >= 1 && id <= 4) {
-    var nextLabel  = id < 4 ? '次のセクションへ →' : '🏆 結果を見る！';
-    var nextAction = id < 4 ? 'goSection(' + (id + 1) + ')' : 'showFinalResult()';
+  if ((id >= 1 && id <= 4) || id === 8) {
+    var NEXT = { 1:2, 2:3, 3:8, 8:4 };
+    var nextLabel  = id !== 4 ? '次のセクションへ →' : '🏆 結果を見る！';
+    var nextAction = id !== 4 ? 'goSection(' + NEXT[id] + ')' : 'showFinalResult()';
     html += '<button class="next-section-btn" id="nextBtn" onclick="' + nextAction + '">' + nextLabel + '</button>';
   }
 
@@ -613,6 +617,7 @@ function renderSection2() {
     + '<div class="ex">2種類以上の物質 → 1種類の新しい物質（化合物）</div>'
     + '<div class="ex">例：鉄 + 硫黄 → 硫化鉄　Fe + S → FeS</div>'
     + '<div class="ex">例：銅 + 酸素 → 酸化銅　2Cu + O₂ → 2CuO</div>'
+    + '<div class="note">📘 教科書では「化合」を「物質どうしが結びつく変化」と書いていることがある。意味は同じ。</div>'
     + '</div>'
     + '<div class="rule-box">'
     + '<div class="rule-title">分解（ぶんかい）</div>'
@@ -726,6 +731,125 @@ function renderSection2() {
   return html;
 }
 
+// ===== SECTION 8: 化学変化と質量・熱（2026-09-29 追加。質量の比の計算は愛知の入試で頻出） =====
+function chemMassGraphSVG() {
+  // 横軸：金属の質量 0〜2.0g、縦軸：できた酸化物の質量 0〜3.5g
+  function X(g) { return 50 + g * 140; }
+  function Y(g) { return 210 - g * 55; }
+  var s = '<svg viewBox="0 0 360 250" style="width:100%;max-width:520px;display:block;margin:8px auto" role="img" aria-label="金属の質量と酸化物の質量のグラフ">';
+  for (var i = 0; i <= 4; i++) { var gx = i * 0.5; s += '<line x1="' + X(gx) + '" y1="' + Y(0) + '" x2="' + X(gx) + '" y2="' + Y(3.5) + '" stroke="rgba(255,255,255,0.08)"/><text x="' + X(gx) + '" y="' + (Y(0) + 16) + '" text-anchor="middle" fill="#9aa4b2" font-size="11">' + gx.toFixed(1) + '</text>'; }
+  for (var j = 0; j <= 7; j++) { var gy = j * 0.5; s += '<line x1="' + X(0) + '" y1="' + Y(gy) + '" x2="' + X(2.0) + '" y2="' + Y(gy) + '" stroke="rgba(255,255,255,0.08)"/><text x="' + (X(0) - 6) + '" y="' + (Y(gy) + 4) + '" text-anchor="end" fill="#9aa4b2" font-size="11">' + gy.toFixed(1) + '</text>'; }
+  s += '<line x1="' + X(0) + '" y1="' + Y(0) + '" x2="' + X(2.0) + '" y2="' + Y(2.5) + '" stroke="#f97316" stroke-width="3"/>';
+  s += '<line x1="' + X(0) + '" y1="' + Y(0) + '" x2="' + X(2.0) + '" y2="' + Y(2.0 * 5 / 3) + '" stroke="#e5e7eb" stroke-width="3"/>';
+  s += '<circle cx="' + X(1.2) + '" cy="' + Y(1.5) + '" r="4" fill="#f97316"/><text x="' + (X(1.2) + 8) + '" y="' + (Y(1.5) + 16) + '" fill="#f97316" font-size="12" font-weight="bold">銅1.2g → 酸化銅1.5g</text>';
+  s += '<circle cx="' + X(0.9) + '" cy="' + Y(1.5) + '" r="4" fill="#e5e7eb"/><text x="' + (X(0.9) - 6) + '" y="' + (Y(1.5) - 8) + '" text-anchor="end" fill="#e5e7eb" font-size="12" font-weight="bold">Mg0.9g → 1.5g</text>';
+  s += '<text x="' + X(2.0) + '" y="' + (Y(3.33) - 6) + '" text-anchor="end" fill="#e5e7eb" font-size="12" font-weight="bold">マグネシウム</text>';
+  s += '<text x="' + X(2.0) + '" y="' + (Y(2.5) + 18) + '" text-anchor="end" fill="#f97316" font-size="12" font-weight="bold">銅</text>';
+  s += '<text x="' + X(1.0) + '" y="' + (Y(0) + 34) + '" text-anchor="middle" fill="#e6edf3" font-size="12">金属の質量〔g〕</text>';
+  s += '<text x="14" y="' + Y(1.75) + '" fill="#e6edf3" font-size="12" transform="rotate(-90 14 ' + Y(1.75) + ')" text-anchor="middle">酸化物の質量〔g〕</text>';
+  return s + '</svg>';
+}
+function renderSection8() {
+  var html = '';
+  html += '<div class="intro-box">'
+    + '<div class="intro-box-title">⚖️ きょん＆西村の会話</div>'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">銅を焼いたら重くなるって、質量保存の法則とちがくない！？</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">いい疑問だ。重くなった分は、空気中の<b>酸素</b>が結びついた分。酸素もふくめて全部はかれば、質量は変わっていない。そして結びつく量には<b>決まった比</b>がある。ここが計算問題になる</div></div></div>'
+    + '</div>';
+
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">📐 質量保存の法則（化学変化の前後で全体の質量は変わらない）</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">うすい硫酸 ＋ 塩化バリウム水溶液 → 白い沈殿（硫酸バリウム）ができる。反応の前後で<b>全体の質量は同じ</b>。</div>'
+    + '<div class="ex">炭酸水素ナトリウム ＋ うすい塩酸 → 二酸化炭素が発生。<b>密閉した容器</b>なら質量は変わらない。<b>ふたを開ける</b>と、気体が出ていった分だけ<b>軽くなる</b>。</div>'
+    + '<div class="note">💡 「軽くなった」「重くなった」ときは、気体が出ていったか・入ってきた（酸素が結びついた）かを考える。</div>'
+    + '</div>'
+    + '</div>';
+
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">📐 金属と酸素が結びつく質量の比（丸暗記OK）</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex"><b style="color:#f97316">銅 ： 酸素 ＝ 4 ： 1</b>　→　銅 ： 酸化銅 ＝ 4 ： 5</div>'
+    + '<div class="ex"><b style="color:#e5e7eb">マグネシウム ： 酸素 ＝ 3 ： 2</b>　→　マグネシウム ： 酸化マグネシウム ＝ 3 ： 5</div>'
+    + chemMassGraphSVG()
+    + '<div class="ex">加熱をくり返すと質量は増えていき、やがて<b>一定</b>になる → 金属が<b>すべて酸素と結びついた</b>から。</div>'
+    + '<div class="note">📐 計算の型：①増えた質量＝結びついた酸素の質量 → ②比を使って「反応した金属」を出す → ③「まだ反応していない金属」＝最初の金属 − 反応した金属。<br>💡 覚え方：「銅はよい（4・1）子、マグはサニー（3・2）」。</div>'
+    + '</div>'
+    + '</div>';
+
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">🔥 化学変化と熱（発熱反応・吸熱反応）</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex"><b>発熱反応</b>＝熱を出して、まわりの温度が上がる。例：化学かいろ（鉄粉が酸素と結びつく）・有機物の燃焼・鉄と硫黄の反応</div>'
+    + '<div class="ex"><b>吸熱反応</b>＝熱を吸収して、まわりの温度が下がる。例：炭酸水素ナトリウムとクエン酸を水の中で混ぜる</div>'
+    + '</div>'
+    + '</div>';
+
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">🧪 酸化銅と炭素の実験：操作の理由（入試頻出）</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">① 加熱をやめる前に、<b>ガラス管を石灰水から出す</b> → 石灰水が<b>逆流</b>して試験管が割れるのを防ぐため</div>'
+    + '<div class="ex">② 加熱をやめたら、<b>ピンチコックでゴム管を閉じる</b> → できた銅が<b>空気中の酸素と再び結びつく</b>のを防ぐため</div>'
+    + '</div>'
+    + '</div>';
+
+  var qs = [
+    { jp:'密閉した容器の中で、炭酸水素ナトリウムとうすい塩酸を反応させた。反応の前後で全体の質量はどうなるか。',
+      answer:'変わらない', choices:['変わらない','増える','減る','半分になる'],
+      exp:'📐 ルール：化学変化の前後で、全体の質量は変わらない（質量保存の法則）。<br>✅ 密閉しているので、発生した二酸化炭素も容器の中にある<br>❌ 「気体が出たから減る」は、ふたを開けたときの話<br>💡 密閉なら変わらない、開けたら減る' },
+    { jp:'前の問題のあと、容器のふたをゆるめてから質量をはかった。質量はどうなるか。また、その理由はどれか。',
+      answer:'減る（発生した二酸化炭素が容器の外へ出ていくから）', choices:['減る（発生した二酸化炭素が容器の外へ出ていくから）','増える（空気が入ってくるから）','変わらない（質量保存の法則）','減る（塩酸が蒸発するから）'],
+      exp:'📐 ルール：ふたを開けると、発生した気体が出ていった分だけ軽くなる。<br>✅ 減った質量＝出ていった二酸化炭素の質量<br>❌ 質量保存の法則がくずれたわけではない（出ていった気体もふくめれば同じ）<br>💡 「減った分＝気体」は計算問題でもよく使う' },
+    { jp:'うすい硫酸に塩化バリウム水溶液を加えると、白い沈殿ができた。反応の前後で全体の質量はどうなるか。',
+      answer:'変わらない', choices:['変わらない','沈殿の分だけ増える','沈殿の分だけ減る','2倍になる'],
+      exp:'📐 ルール：沈殿ができても、原子の種類と数は変わらないので全体の質量は同じ。<br>✅ 白い沈殿は硫酸バリウム<br>❌ 沈殿ができても質量は増えない<br>💡 気体が出入りしない反応は、開けていても質量は変わらない' },
+    { jp:'銅の粉末を加熱しては質量をはかる操作をくり返した。質量の変化として正しいものはどれか。',
+      answer:'はじめは増えるが、やがて一定になる', choices:['はじめは増えるが、やがて一定になる','どこまでも増え続ける','はじめは減るが、やがて一定になる','まったく変わらない'],
+      exp:'📐 ルール：銅がすべて酸素と結びつくと、それ以上は増えない。<br>✅ 増えていき → 一定<br>❌ 増え続けることはない<br>💡 一定になった＝全部反応した合図' },
+    { jp:'銅と、銅に結びつく酸素の質量の比（銅：酸素）はどれか。',
+      answer:'4：1', choices:['4：1','3：2','1：4','1：1'],
+      exp:'📐 ルール：銅：酸素＝4：1（銅：酸化銅＝4：5）。<br>✅ 銅0.8gなら酸素0.2g、酸化銅1.0g<br>❌ 3：2はマグネシウムの比<br>💡 「銅はよい（よ＝4・い＝1）子」' },
+    { jp:'マグネシウムと、マグネシウムに結びつく酸素の質量の比（マグネシウム：酸素）はどれか。',
+      answer:'3：2', choices:['3：2','4：1','2：3','1：1'],
+      exp:'📐 ルール：マグネシウム：酸素＝3：2（マグネシウム：酸化マグネシウム＝3：5）。<br>✅ マグネシウム0.6gなら酸素0.4g、酸化マグネシウム1.0g<br>❌ 4：1は銅の比<br>💡 「マグはサニー（さ＝3・に＝2）」' },
+    { jp:'銅1.2gを完全に酸化させると、酸化銅は何gできるか。',
+      answer:'1.5g', choices:['1.5g','1.2g','0.3g','1.8g'],
+      exp:'📐 ルール：銅：酸化銅＝4：5。<br>✅ 1.2 × 5/4 ＝ 1.5g（結びついた酸素は0.3g）<br>❌ 0.3gは酸素だけの質量<br>💡 「4：5」の比で一発' },
+    { jp:'マグネシウム0.6gを完全に酸化させると、酸化マグネシウムは何gできるか。',
+      answer:'1.0g', choices:['1.0g','0.4g','0.9g','1.5g'],
+      exp:'📐 ルール：マグネシウム：酸化マグネシウム＝3：5。<br>✅ 0.6 × 5/3 ＝ 1.0g（結びついた酸素は0.4g）<br>❌ 0.4gは酸素だけの質量<br>💡 3：5 の比' },
+    { jp:'マグネシウムを完全に酸化させたところ、酸化マグネシウムが2.0gできた。マグネシウムと結びついた酸素は何gか。',
+      answer:'0.8g', choices:['0.8g','1.2g','0.4g','2.0g'],
+      exp:'📐 ルール：マグネシウム：酸素：酸化マグネシウム＝3：2：5。<br>✅ 酸素は 2.0 × 2/5 ＝ 0.8g（マグネシウムは1.2g）<br>❌ 1.2gはマグネシウムの質量<br>💡 全体（5）のうち酸素は2' },
+    { jp:'【難】銅0.8gを加熱したところ、質量が0.9gになった。まだ酸素と結びついていない銅は何gか。',
+      answer:'0.4g', choices:['0.4g','0.1g','0.8g','0.5g'],
+      exp:'📐 ルール：①増えた質量＝酸素 ②比で反応した銅 ③最初の銅から引く。<br>✅ 酸素 0.9−0.8＝0.1g → 反応した銅 0.1×4＝0.4g → 残り 0.8−0.4＝0.4g<br>❌ 0.1gは結びついた酸素の質量<br>💡 計算の型「増えた分 → 比 → 引き算」' },
+    { jp:'【難】マグネシウム1.5gを加熱したところ、質量が2.1gになった。まだ酸素と結びついていないマグネシウムは何gか。',
+      answer:'0.6g', choices:['0.6g','0.9g','0.4g','1.5g'],
+      exp:'📐 ルール：増えた分＝酸素 → 3：2で反応したマグネシウム → 引き算。<br>✅ 酸素 2.1−1.5＝0.6g → 反応したMg 0.6×3/2＝0.9g → 残り 1.5−0.9＝0.6g<br>❌ 0.9gは反応したマグネシウム<br>💡 マグネシウムは「酸素×3/2」' },
+    { jp:'【難】同じ質量（1.0g）の酸素と結びつく、銅とマグネシウムの質量の比（銅：マグネシウム）はどれか。',
+      answer:'8：3', choices:['8：3','4：3','3：8','2：1'],
+      exp:'📐 ルール：酸素1.0gと結びつくのは、銅4.0g（4：1）、マグネシウム1.5g（3：2）。<br>✅ 4.0：1.5 ＝ 8：3<br>❌ 4：3 は比をそのまま並べただけ<br>💡 酸素の量をそろえてから比べる' },
+    { jp:'化学かいろが温かくなるのは、どのような化学変化によるものか。',
+      answer:'鉄粉が酸素と結びつく発熱反応', choices:['鉄粉が酸素と結びつく発熱反応','鉄粉が分解する吸熱反応','水が蒸発する状態変化','食塩が水にとける変化'],
+      exp:'📐 ルール：熱を出してまわりの温度が上がる化学変化＝発熱反応。<br>✅ 化学かいろ＝鉄の酸化（ゆるやかな酸化）<br>❌ 吸熱反応はまわりの温度が下がる<br>💡 燃焼も発熱反応' },
+    { jp:'炭酸水素ナトリウムとクエン酸を水の中で混ぜると、温度はどうなるか。',
+      answer:'下がる（吸熱反応）', choices:['下がる（吸熱反応）','上がる（発熱反応）','変わらない','はじめ上がってから下がる'],
+      exp:'📐 ルール：まわりから熱を吸収して温度が下がる化学変化＝吸熱反応。<br>✅ 炭酸水素ナトリウム＋クエン酸 → 温度が下がる<br>❌ 化学かいろ（鉄の酸化）は発熱反応<br>💡 冷却パックに使われる' },
+    { jp:'酸化銅と炭素の混合物を加熱する実験で、加熱をやめる前にガラス管を石灰水から出すのはなぜか。',
+      answer:'石灰水が逆流して試験管が割れるのを防ぐため', choices:['石灰水が逆流して試験管が割れるのを防ぐため','二酸化炭素を空気中に逃がすため','銅が酸化されるのを防ぐため','石灰水を白くにごらせるため'],
+      exp:'📐 ルール：火を消すと試験管内の気体が冷えて縮み、石灰水が吸いこまれて熱い試験管に流れこむ。<br>✅ 先にガラス管を出す<br>❌ 「銅の酸化を防ぐ」はピンチコックを閉じる理由<br>💡 「火を消す前にガラス管を出す」は加熱実験の共通ルール' },
+    { jp:'同じ実験で、加熱をやめたあとピンチコックでゴム管を閉じるのはなぜか。',
+      answer:'できた銅が空気中の酸素と再び結びつかないようにするため', choices:['できた銅が空気中の酸素と再び結びつかないようにするため','石灰水の逆流を防ぐため','二酸化炭素を試験管に残すため','炭素が燃えるのを防ぐため'],
+      exp:'📐 ルール：熱い銅に空気がふれると、また酸化されて酸化銅にもどってしまう。<br>✅ 空気（酸素）が入らないように閉じる<br>❌ 逆流を防ぐのはガラス管を先に出す操作<br>💡 2つの操作と理由をセットで覚える' }
+  ];
+  qs.forEach(function(q, i) { q._qid = 'sci_chem_s8_q' + i; });
+  qs.forEach(function(q) {
+    html += makeChoices(q._qid, q.jp, q.answer, q.choices, q.exp);
+  });
+  return html;
+}
+
 // ===== SECTION 3: 酸化・還元・燃焼 =====
 function renderSection3() {
   var html = '';
@@ -824,7 +948,7 @@ function renderSection3() {
       exp:'2Mg + O₂ → 2MgO（酸化マグネシウム）。白い粉末状の物質ができる。燃やす前より質量が増える（酸素が結合するため）。' },
     { jp:'酸化と還元の関係として正しいのはどれか。',
       answer:'酸化と還元は必ず同時に起こる',
-      choices:['酸化と還元は必ず同時に起こる','酸化と還元は別々に起こる','酸化の後に還元が起こる','還元は酸化の10倍速く起こる'],
+      choices:['酸化と還元は必ず同時に起こる','酸化と還元は別々に起こる','酸化の後に還元が起こる','還元が起きると酸化は起こらない'],
       exp:'酸化と還元は必ず同時進行。ある物質が酸素を得る（酸化）とき、必ず別の物質が酸素を失う（還元）。一方だけは起こらない。' },
   ];
 

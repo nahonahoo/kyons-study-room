@@ -519,7 +519,7 @@ function renderSection1() {
       a:'N（ニュートン）',
       choices:['N（ニュートン）','Pa（パスカル）','J（ジュール）','W（ワット）'],
       jp:'力の単位（ニュートン）',
-      exp:'<span class="exp-rule"><span class="label">📐 単位</span>力の単位 = N（ニュートン）</span><span class="exp-ok">✅ 1N ≈ 100gの物体にかかる重力の大きさ</span><span class="exp-tip">💡 ニュートンはリンゴが落ちるのを見て万有引力を発見した科学者の名前！</span>'
+      exp:'<span class="exp-rule"><span class="label">📐 単位</span>力の単位 = N（ニュートン）</span><span class="exp-ok">✅ 1N ≈ 100gの物体にかかる重力の大きさ</span><span class="exp-tip">💡 ニュートンは万有引力を発見したイギリスの科学者の名前（リンゴが落ちるのを見て思いついたという話が有名）！</span>'
     },
     {
       q:'力の三要素として正しい組み合わせはどれ？',
@@ -575,7 +575,7 @@ function renderSection1() {
   qs = shuffleArray(qs);
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:q.jp, choices:q.choices };
+    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:(q.jp || q.q), choices:q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i+1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -627,7 +627,7 @@ function renderSection2() {
     + '<div class="rule-box">'
     + '<div class="rule-title">全反射（条件2つ）</div>'
     + '<div class="ex">①光が密な媒質 → 疎な媒質（水→空気）に進む</div>'
-    + '<div class="ex">②入射角が臨界角以上になったとき</div>'
+    + '<div class="ex">②入射角がある大きさより大きくなったとき</div>'
     + '<div class="ex">→ 光が境界面を通過せず全て反射する！</div>'
     + '<div class="note">💡 光ファイバーは全反射を利用。光が外に漏れず遠くまで届く</div>'
     + '</div>'
@@ -707,11 +707,11 @@ function renderSection2() {
     },
     {
       q:'光が水から空気へ進むとき、入射角を大きくしていくと最終的にどうなる？',
-      sub:'臨界角以上になると起こる現象',
+      sub:'水中から空気中へ、入射角を大きくしていくと起こる現象',
       a:'全反射が起こる',
       choices:['全反射が起こる','屈折角が0°になる','光が消える','屈折角が90°で止まる'],
       jp:'全反射の条件と現象',
-      exp:'<span class="exp-rule"><span class="label">📐 全反射</span>水→空気で入射角が臨界角以上になると光が全て反射され、空気側へ出ない</span><span class="exp-ok">✅ 全反射が起こる2条件：①密→疎な媒質（水→空気）②入射角≥臨界角</span><span class="exp-tip">💡 光ファイバーはこの全反射を利用。光が外に漏れず遠くまで伝わる！</span>'
+      exp:'<span class="exp-rule"><span class="label">📐 全反射</span>水→空気で入射角がある大きさより大きくなると光が全て反射され、空気側へ出ない</span><span class="exp-ok">✅ 全反射が起こる2条件：①密→疎な媒質（水→空気）②入射角が大きい</span><span class="exp-tip">💡 光ファイバーはこの全反射を利用。光が外に漏れず遠くまで伝わる！</span>'
     },
     {
       q:'凸レンズで物体が焦点距離の2倍（2F）より遠い位置にあるとき、できる像はどれ？',
@@ -719,7 +719,7 @@ function renderSection2() {
       a:'縮小した倒立実像',
       choices:['縮小した倒立実像','拡大した正立虚像','等倍の倒立実像','像はできない'],
       jp:'凸レンズ：2F外→縮小倒立実像',
-      exp:'<span class="exp-rule"><span class="label">📐 実像（倒立）</span>物体が2Fより遠い → 縮小・倒立・実像（FとFの間の位置にできる）</span><span class="exp-ok">✅ 実像はスクリーンに映せる・上下左右が逆</span><span class="exp-tip">💡 カメラは凸レンズで縮小倒立実像を作る仕組み。写真が上下逆にならないのはセンサーで補正するから</span>'
+      exp:'<span class="exp-rule"><span class="label">📐 実像（倒立）</span>物体が2Fより遠い → 縮小・倒立・実像（レンズの反対側の、焦点と2Fの間にできる）</span><span class="exp-ok">✅ 実像はスクリーンに映せる・上下左右が逆</span><span class="exp-tip">💡 カメラは凸レンズで縮小倒立実像を作る仕組み。写真が上下逆にならないのはセンサーで補正するから</span>'
     },
     {
       q:'凸レンズで物体が焦点（F）の内側にあるとき、できる像はどれ？',
@@ -767,7 +767,7 @@ function renderSection2() {
   qs = shuffleArray(qs);
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:q.jp, choices:q.choices };
+    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:(q.jp || q.q), choices:q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i+1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -879,7 +879,7 @@ function renderSection3() {
     + '<div class="rule-box">'
     + '<div class="rule-title">音速のルール（媒質別）</div>'
     + '<div class="ex">固体（鉄など） ≈ 5000 m/s　　液体（水） ≈ 1500 m/s　　気体（空気） ≈ 340 m/s</div>'
-    + '<div class="ex"><strong style="color:var(--gold)">固体 ＞ 液体 ＞ 気体</strong>（密なほど速く伝わる）</div>'
+    + '<div class="ex"><strong style="color:var(--gold)">固体 ＞ 液体 ＞ 気体</strong>（一般にこの順に速い）</div>'
     + '<div class="note">💡 覚え方：「固い（固体）ほど音が早く届く」</div>'
     + '</div>'
     + '</div>';
@@ -889,14 +889,14 @@ function renderSection3() {
     + '<div class="rule-card-title">📐 振動数（Hz）と振幅——音の高さ・大きさ</div>'
     + '<div style="overflow-x:auto;margin:12px 0">' + svgWave + '</div>'
     + '<div class="rule-box">'
-    + '<div class="rule-title">振動数（ふりどうすう）= 音の高さ</div>'
+    + '<div class="rule-title">振動数（しんどうすう）= 音の高さ</div>'
     + '<div class="ex">1秒間に振動する回数。単位は <strong style="color:var(--gold)">Hz（ヘルツ）</strong></div>'
     + '<div class="ex">振動数 多い → <strong style="color:var(--purple)">高い音</strong>　　振動数 少ない → <strong style="color:var(--teal)">低い音</strong></div>'
     + '<div class="note">💡 人間の聴覚範囲：約20 Hz〜20000 Hz。20000 Hz以上 = 超音波（聞こえない）</div>'
     + '</div>'
     + '<div class="rule-box">'
     + '<div class="rule-title">振幅（しんぷく）= 音の大きさ</div>'
-    + '<div class="ex">振動の幅（波の山の高さ）。単位はない（相対的な大きさ）</div>'
+    + '<div class="ex">振動の幅（波の山の高さ）</div>'
     + '<div class="ex">振幅 大きい → <strong style="color:var(--green)">大きい音</strong>　　振幅 小さい → <strong style="color:var(--gold)">小さい音</strong></div>'
     + '<div class="note">💡 ギターを強く弾く（振幅大）→ 大きい音。軽く弾く（振幅小）→ 小さい音</div>'
     + '</div>'
@@ -983,7 +983,7 @@ function renderSection3() {
       a:'固体（鉄など）',
       choices:['固体（鉄など）','液体（水）','気体（空気）','真空'],
       jp:'音速：固体 > 液体 > 気体',
-      exp:'<span class="exp-rule"><span class="label">📐 音速の順</span>固体（≈5000 m/s）＞ 液体（≈1500 m/s）＞ 気体（≈340 m/s）</span><span class="exp-ok">✅ 密な媒質ほど振動が速く伝わる</span><span class="exp-tip">💡 線路に耳を当てると遠くの電車の音が早く聞こえるのは固体（鉄）の音速が速いから</span>'
+      exp:'<span class="exp-rule"><span class="label">📐 音速の順</span>固体（≈5000 m/s）＞ 液体（≈1500 m/s）＞ 気体（≈340 m/s）</span><span class="exp-ok">✅ 一般に、空気中より水中・固体の中の方が速く伝わる</span><span class="exp-tip">💡 線路に耳を当てると遠くの電車の音が早く聞こえるのは固体（鉄）の音速が速いから</span>'
     },
     {
       q:'ギターの弦を短くすると音はどうなるか？',
@@ -1023,7 +1023,7 @@ function renderSection3() {
   qs = shuffleArray(qs);
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:q.jp, choices:q.choices };
+    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:(q.jp || q.q), choices:q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i+1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -1134,7 +1134,7 @@ function renderSection4() {
       choices: [
         '浮力の大きさは物体が押しのけた液体の重さに等しい',
         '浮力は物体の質量が大きいほど大きい',
-        '浮力は深さに関係なく一定',
+        '浮力は下向きにはたらく',
         '浮力は空気中でも液体中でも同じ'
       ],
       exp: 'アルキメデスの原理：浮力 = 押しのけた流体の重さ（密度×体積×g）。同じ体積でも密度の高い液体ほど大きな浮力が生じる。' },
@@ -1153,7 +1153,7 @@ function renderSection4() {
 
   choiceQs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type:'choice', answer:q.answer, xp:4, jp:q.jp, choices:q.choices };
+    qMeta[qid] = { type:'choice', answer:q.answer, xp:4, jp:(q.jp || q.q), choices:q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i + 1) + ' / ' + choiceQs.length + '</div>'
       + '<div class="q-text">' + q.jp + '</div>'

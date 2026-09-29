@@ -529,7 +529,7 @@ function renderSection1() {
   html += '<div class="practice-section"><div class="practice-title">✏️ 練習問題 — 正負の数の基本</div>';
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:q.jp, choices:q.choices };
+    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:(q.jp || q.q), choices:q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i+1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -653,7 +653,7 @@ function renderSection2() {
   html += '<div class="practice-section"><div class="practice-title">✏️ 練習問題 — 加法・減法</div>';
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:q.jp, choices:q.choices };
+    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:(q.jp || q.q), choices:q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i+1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -773,7 +773,7 @@ function renderSection3() {
   html += '<div class="practice-section"><div class="practice-title">✏️ 練習問題 — 乗法・除法</div>';
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:q.jp, choices:q.choices };
+    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:(q.jp || q.q), choices:q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i+1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -974,7 +974,7 @@ function renderSection4() {
         + makeFeedback(qid, q.exp)
         + '</div>';
     } else {
-      qMeta[qid] = { type:'choice', answer:q.a, xp:5, jp:q.jp, choices:q.choices };
+      qMeta[qid] = { type:'choice', answer:q.a, xp:5, jp:(q.jp || q.q), choices:q.choices };
       html += '<div class="q-card" data-card="' + qid + '">'
         + '<div class="q-number">Q' + (i+1) + ' / ' + allQs.length + '</div>'
         + '<div class="q-text">' + q.q + '</div>'

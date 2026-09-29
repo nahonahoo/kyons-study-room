@@ -295,7 +295,7 @@ function checkSectionComplete() {
       if (!document.getElementById('sectionCompleteBanner')) {
         var banner = document.createElement('div');
         banner.id = 'sectionCompleteBanner';
-        var nextSec = currentSection < 5 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストで腕試し！';
+        var nextSec = currentSection === 4 ? '「静電気・電子」へ進もう！' : currentSection === 9 ? '確認テストで腕試し！' : (currentSection < 5 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストで腕試し！');
         banner.innerHTML = '<div style="text-align:center;padding:20px;margin-bottom:12px;background:linear-gradient(135deg,rgba(63,185,80,0.12),rgba(14,165,233,0.08));border:1px solid var(--green);border-radius:14px">'
           + '<div style="font-size:36px;margin-bottom:8px">🎉</div>'
           + '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--green);letter-spacing:2px;margin-bottom:6px">セクション ' + currentSection + ' クリア！</div>'
@@ -317,6 +317,7 @@ var SECTIONS = [
   { id:2, label:'直列回路',    title:'直列回路',                         sub:'電流は一定・電圧は分担——1本道の法則をマスター' },
   { id:3, label:'並列回路',    title:'並列回路',                         sub:'電圧は共通・電流は分担——分岐する回路をマスター' },
   { id:4, label:'電力・磁界',   title:'電力・電熱・磁界',                  sub:'電力の計算と磁界・電磁誘導の仕組み' },
+  { id:9, label:'⚡静電気・電子', title:'静電気・電子・放射線・直流と交流・発熱', sub:'電流の正体（電子）と、電熱線で水をあたためる実験' },
   { id:5, label:'確認テスト',   title:'確認テスト',                       sub:'全単元の総まとめ！愛知県形式20問' },
   { id:6, label:'🔗3年予習',    title:'3年予習：運動とエネルギー',          sub:'仕事・仕事率・エネルギーの保存への橋渡し' },
   { id:7, label:'📊弱点',       title:'弱点ノート',                       sub:'間違えた問題の正答率を確認しよう' },
@@ -327,10 +328,11 @@ function renderTabs() {
   var html = '';
   SECTIONS.forEach(function(s) {
     var cls = 'section-tab';
-    if (s.id >= 7) cls += ' tokku';
+    if (s.id === 7 || s.id === 8) cls += ' tokku';
     if (s.id === currentSection) cls += ' active';
-    if (sectionDone[s.id] && s.id < 7) cls += ' done';
-    var label = s.label + (sectionDone[s.id] && s.id < 7 ? ' ✓' : '');
+    var normal = s.id !== 7 && s.id !== 8;
+    if (sectionDone[s.id] && normal) cls += ' done';
+    var label = s.label + (sectionDone[s.id] && normal ? ' ✓' : '');
     if (s.id === 8) { var wk = getWeakQuestions(); label = '🔥特訓' + (wk.length > 0 ? '('+wk.length+')' : ''); }
     html += '<button class="' + cls + '" data-sid="' + s.id + '">' + label + '</button>';
   });
@@ -359,11 +361,13 @@ function renderSection(id) {
   else if (id === 2) html += renderSection2();
   else if (id === 3) html += renderSection3();
   else if (id === 4) html += renderSection4();
+  else if (id === 9) html += renderSection9();
   else if (id === 5) html += renderSection5();
   else if (id === 6) html += renderSection6();
-  if (id >= 1 && id <= 5) {
-    var nextLabel  = id < 5 ? '次のセクションへ →' : '🏆 結果を見る！';
-    var nextAction = id < 5 ? 'goSection(' + (id+1) + ')' : 'showFinalResult()';
+  if ((id >= 1 && id <= 5) || id === 9) {
+    var NEXT = { 1:2, 2:3, 3:4, 4:9, 9:5 };
+    var nextLabel  = id !== 5 ? '次のセクションへ →' : '🏆 結果を見る！';
+    var nextAction = id !== 5 ? 'goSection(' + NEXT[id] + ')' : 'showFinalResult()';
     html += '<button class="next-section-btn" id="nextBtn" onclick="' + nextAction + '">' + nextLabel + '</button>';
   }
   document.getElementById('mainContent').innerHTML = html;
@@ -528,9 +532,9 @@ function renderSection1() {
       answer:'抵抗が大きいほど電流は小さい',
       choices:['抵抗が大きいほど電流は小さい','抵抗が大きいほど電流も大きい','抵抗と電流は関係ない','抵抗が大きいと電圧が下がる'],
       exp:'V=IR より I=V/R。電圧Vが一定のとき、R（抵抗）が大きいほど I（電流）は小さくなる（反比例の関係）。' },
-    { jp:'V-Iグラフで傾きが表すものはどれか。',
-      answer:'抵抗（Ω）', choices:['抵抗（Ω）','電流（A）','電圧（V）','電力（W）'],
-      exp:'V-Iグラフ（縦軸V、横軸I）の傾きは V÷I = R（抵抗）。傾きが急なほど抵抗が大きい。' },
+    { jp:'横軸に電圧、縦軸に電流をとったグラフ（教科書や入試でよく使う形）で、電熱線Aの直線の方が電熱線Bより傾きが大きかった。抵抗が大きいのはどちらか。',
+      answer:'電熱線B', choices:['電熱線B','電熱線A','どちらも同じ','グラフからはわからない'],
+      exp:'横軸が電圧・縦軸が電流のとき、傾きが大きい＝同じ電圧で電流がたくさん流れる＝抵抗が小さい。だから抵抗が大きいのは傾きが小さいB。軸が逆（横軸が電流）のグラフでは傾きが大きいほど抵抗が大きいので、まず軸を確認すること。' },
     { jp:'電圧を2倍にすると電流はどうなるか（抵抗一定）。',
       answer:'2倍になる', choices:['2倍になる','変わらない','半分になる','4倍になる'],
       exp:'I = V÷R。Rが一定なら I は V に比例するので、電圧が2倍 → 電流も2倍。V-Iグラフが原点を通る直線になる理由。' },
@@ -799,7 +803,7 @@ function renderSection2() {
       exp:'直列回路は1本道。電流は分かれないのでどこでも同じ。電源から出た電流がそのまま1本道を流れる。' },
     { jp:'直列回路で各抵抗にかかる電圧の合計はどうなるか。',
       answer:'電源電圧に等しい', choices:['電源電圧に等しい','電源電圧より大きい','電源電圧より小さい','抵抗の数で割った値'],
-      exp:'直列回路：V = V₁+V₂。各部分の電圧の合計は必ず電源電圧に等しい。これが電圧保存則。' },
+      exp:'直列回路：V = V₁+V₂。各部分の電圧の合計は必ず電源電圧に等しい。' },
     { jp:'直列回路でより大きい抵抗にかかる電圧はどうなるか。',
       answer:'大きくなる（比例関係）', choices:['大きくなる（比例関係）','小さくなる','変わらない','抵抗と関係ない'],
       exp:'V = I×R より、電流Iが同じなら、抵抗Rが大きい部品ほど電圧Vが大きくなる（比例）。' },
@@ -1252,15 +1256,10 @@ function renderSection4() {
         '抵抗を大きくする'
       ],
       exp:'誘導電流を大きくする3方法：①磁石を速く動かす ②強い磁石を使う ③コイルの巻数を多くする。磁界変化が大きいほど大きな誘導電流が生じる。' },
-    { jp:'フレミングの右手の法則が表すのは何か。',
-      answer:'電磁誘導での誘導電流の向き（発電機の原理）',
-      choices:[
-        '電磁誘導での誘導電流の向き（発電機の原理）',
-        'モーターの回転方向',
-        '電流が磁界から受ける力の向き',
-        'コイルのN極の向き'
-      ],
-      exp:'右手の法則：磁界の中で導線を動かしたとき流れる誘導電流の向きを表す。発電機の原理。左手（電動機）と右手（発電機）で使い分ける。' },
+    { jp:'コイルに棒磁石のN極を近づけると、検流計の針が右にふれた。棒磁石のS極を近づけると、針はどうなるか。',
+      answer:'左にふれる',
+      choices:['左にふれる','右にふれる','ふれない','右と左に交互にふれ続ける'],
+      exp:'誘導電流の向きは、磁石の極を逆にしたり、動かす向き（近づける・遠ざける）を逆にしたりすると逆になる。N極→S極に変えたので、針は逆の左にふれる。磁石を止めると電流は流れない。' },
     { jp:'200Wの電熱線を10分間使ったときの発熱量は何Jか。',
       answer:'120000 J', choices:['120000 J','2000 J','200 J','12000 J'],
       exp:'10分 = 600秒。Q = W×t = 200×600 = 120000J。時間の秒換算を忘れずに！' },
@@ -1269,6 +1268,105 @@ function renderSection4() {
   qs.forEach(function(q, i) { q._qid = 'sci_elec_s4_q' + i; });
   qs = shuffleArray(qs);
   qs.forEach(function(q) { html += makeChoices(q._qid, q.jp, q.answer, q.choices, q.exp); });
+  return html;
+}
+
+// ===== SECTION 9: 静電気・電子・放射線・直流と交流・電流による発熱（2026-09-29 追加。東京書籍の範囲で抜けていた内容） =====
+function renderSection9() {
+  var html = '';
+  html += '<div class="intro-box">'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">下じきで髪の毛がくっつくやつ、あれも電気なの？</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">そう、静電気だ。こすり合わせると<b>−の電気をもつ小さな粒（電子）</b>が一方からもう一方へ移る。この「電子」の正体がわかると、電流の向きの話までつながる</div></div></div>'
+    + '</div>';
+
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">📐 静電気と電子</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">ちがう物質どうしをこすり合わせると、<b>電子（−の電気）</b>が一方からもう一方へ移り、物体が電気を帯びる（静電気）。</div>'
+    + '<div class="ex"><b>同じ種類</b>の電気（＋と＋、−と−）は<b>しりぞけ合い</b>、<b>ちがう種類</b>（＋と−）は<b>引き合う</b>。</div>'
+    + '<div class="ex">たまっていた電気が流れ出す現象＝<b>放電</b>（例：雷）。気圧を低くした空間を電流が流れる現象＝<b>真空放電</b>（例：蛍光灯）。</div>'
+    + '<div class="ex"><b>陰極線（電子線）</b>：真空放電管の<b>−極</b>から出る電子の流れ。まっすぐ進み、電極板の間を通すと<b>＋極側に曲がる</b>（電子が−の電気をもつから）。</div>'
+    + '<div class="note">📐 ルール：<b>電流の向き</b>は ＋極 → −極。<b>電子が移動する向き</b>は −極 → ＋極。<b>向きは逆！</b><br>💡 電子はマイナス。だからプラスに引かれる。</div>'
+    + '</div>'
+    + '</div>';
+
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">☢️ 放射線</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">X線・α線・β線・γ線など。目に見えず、<b>物質を通りぬける性質（透過性）</b>がある。</div>'
+    + '<div class="ex">利用例：レントゲン検査（X線）、がんの治療、農作物の品種改良など。浴びすぎると体に害があるので、<b>正しく利用し、むやみに浴びない</b>ことが大切。</div>'
+    + '</div>'
+    + '</div>';
+
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">🔌 直流と交流</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex"><b>直流</b>：電流の向きが一定（乾電池）。<b>交流</b>：電流の向きと大きさが周期的に変わる（家庭のコンセント）。</div>'
+    + '<div class="ex">1秒間にくり返す変化の回数＝<b>周波数</b>（単位 Hz）。東日本は50Hz、愛知県をふくむ西日本は60Hz。</div>'
+    + '</div>'
+    + '</div>';
+
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">🔥 電熱線で水をあたためる実験</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">熱量〔J〕＝ 電力〔W〕× 時間〔s〕</div>'
+    + '<div class="ex">水の量が同じなら、水の<b>上昇温度</b>は<b>電力に比例</b>し、<b>時間に比例</b>する。</div>'
+    + '<div class="ex">電力量〔J〕＝ 電力〔W〕× 時間〔s〕。1Wh（ワット時）＝ 3600J、1kWh ＝ 1000Wh。</div>'
+    + '<div class="note">💡 同じ電圧なら、抵抗が小さい電熱線ほど電流が大きく、電力も大きい → 水が早くあたたまる。</div>'
+    + '</div>'
+    + '</div>';
+
+  var qs = [
+    { jp:'ちがう物質どうしをこすり合わせたとき、一方からもう一方へ移るものはどれか。',
+      answer:'電子（−の電気をもつ粒）', choices:['電子（−の電気をもつ粒）','＋の電気をもつ粒','空気','熱'],
+      exp:'📐 ルール：こすり合わせると電子（−）が移動する。<br>✅ 電子を受け取った方が−、失った方が＋に帯電<br>❌ ＋の電気が移動するのではない<br>💡 動くのはいつも電子' },
+    { jp:'同じ種類の電気を帯びた物体どうしを近づけるとどうなるか。',
+      answer:'しりぞけ合う', choices:['しりぞけ合う','引き合う','何も起こらない','くっついて離れない'],
+      exp:'📐 ルール：同じ種類はしりぞけ合い、ちがう種類は引き合う。<br>✅ −と−、＋と＋ → しりぞけ合う<br>❌ 引き合うのは＋と−<br>💡 磁石のN・Sと同じ考え方' },
+    { jp:'たまっていた電気が流れ出したり、空間を電流が流れたりする現象を何というか。',
+      answer:'放電', choices:['放電','帯電','発電','充電'],
+      exp:'📐 ルール：電気が流れ出す現象＝放電。<br>✅ 雷は自然の放電<br>❌ 帯電は電気を帯びること<br>💡 「放」＝はなつ' },
+    { jp:'気圧を低くした空間に電流が流れる現象を何というか。',
+      answer:'真空放電', choices:['真空放電','電磁誘導','静電気','発熱'],
+      exp:'📐 ルール：気圧を低くした管の中を電流が流れる＝真空放電。<br>✅ 蛍光灯やネオンサインに利用<br>❌ 電磁誘導は磁界の変化で電流が生じる現象<br>💡 真空に近い空間での放電' },
+    { jp:'真空放電管の−極から出る電子の流れを何というか。',
+      answer:'陰極線（電子線）', choices:['陰極線（電子線）','放射線','光線','磁力線'],
+      exp:'📐 ルール：−極（陰極）から出る電子の流れ＝陰極線（電子線）。<br>✅ まっすぐ進み、物体があると影ができる<br>❌ 放射線とは別のもの<br>💡 「陰極」から出るので陰極線' },
+    { jp:'陰極線を上下に電極板をつけた間に通し、上の電極板を＋極にすると、陰極線はどうなるか。',
+      answer:'上（＋極側）に曲がる', choices:['上（＋極側）に曲がる','下（−極側）に曲がる','まっすぐ進む','消える'],
+      exp:'📐 ルール：陰極線は−の電気をもつ電子の流れなので、＋極に引かれる。<br>✅ ＋極側に曲がる<br>❌ −極側に曲がることはない<br>💡 マイナスはプラスに引かれる' },
+    { jp:'導線の中を電流が流れるとき、電流の向きと電子が移動する向きの関係として正しいものはどれか。',
+      answer:'逆向き（電流は＋→−、電子は−→＋）', choices:['逆向き（電流は＋→−、電子は−→＋）','同じ向き（どちらも＋→−）','同じ向き（どちらも−→＋）','関係はない'],
+      exp:'📐 ルール：電流の向きは＋極→−極と決められている。電子は−極→＋極へ動く。<br>✅ 向きは逆<br>❌ 「同じ向き」は入試でねらわれるまちがい<br>💡 電子は−なので＋極に引かれて進む' },
+    { jp:'放射線の性質として正しいものはどれか。',
+      answer:'目に見えず、物質を通りぬける性質がある', choices:['目に見えず、物質を通りぬける性質がある','目に見え、物質を通りぬけない','どれだけ浴びても体に害はない','自然界にはまったく存在しない'],
+      exp:'📐 ルール：放射線は目に見えず、透過性がある。<br>✅ X線でレントゲン写真がとれるのはこの性質のため<br>❌ 浴びすぎると体に害がある。自然界にもある<br>💡 正しく利用し、むやみに浴びない' },
+    { jp:'放射線の利用例として正しいものはどれか。',
+      answer:'レントゲン検査', choices:['レントゲン検査','方位磁針','乾電池','電磁石'],
+      exp:'📐 ルール：X線の透過性を使って体の中を写すのがレントゲン検査。<br>✅ ほかに、がんの治療・農作物の品種改良など<br>❌ 方位磁針や電磁石は磁界の利用<br>💡 「通りぬける」性質を使う' },
+    { jp:'家庭のコンセントから流れる電流のように、向きと大きさが周期的に変わる電流を何というか。',
+      answer:'交流', choices:['交流','直流','誘導電流','静電気'],
+      exp:'📐 ルール：向きが周期的に変わる＝交流、向きが一定＝直流。<br>✅ コンセント＝交流、乾電池＝直流<br>❌ 乾電池の電流は直流<br>💡 「交」わる＝向きが入れかわる' },
+    { jp:'1秒間にくり返す交流の変化の回数を何というか。',
+      answer:'周波数', choices:['周波数','電力','電圧','抵抗'],
+      exp:'📐 ルール：1秒間のくり返しの回数＝周波数（単位Hz）。<br>✅ 東日本50Hz、愛知県をふくむ西日本60Hz<br>❌ 電力の単位はW<br>💡 音の「振動数」と同じ考え方' },
+    { jp:'同じ量の水を電熱線で同じ時間あたためた。電熱線の電力を2倍にすると、水の上昇温度はどうなるか。',
+      answer:'2倍になる', choices:['2倍になる','半分になる','変わらない','4倍になる'],
+      exp:'📐 ルール：水の量と時間が同じなら、上昇温度は電力に比例する。<br>✅ 電力2倍 → 上昇温度2倍<br>❌ 4倍にはならない<br>💡 熱量＝電力×時間' },
+    { jp:'6Wの電熱線に5分間電流を流したときに発生する熱量は何Jか。',
+      answer:'1800J', choices:['1800J','30J','300J','1.2J'],
+      exp:'📐 ルール：熱量〔J〕＝電力〔W〕×時間〔s〕。<br>✅ 5分＝300秒 → 6×300＝1800J<br>❌ 6×5＝30J は「分」のまま計算したまちがい<br>💡 時間は必ず秒に直す' },
+    { jp:'【難】1200Wのドライヤーを10分間使ったときの電力量は何kWhか。',
+      answer:'0.2kWh', choices:['0.2kWh','12kWh','2kWh','0.02kWh'],
+      exp:'📐 ルール：電力量〔Wh〕＝電力〔W〕×時間〔h〕。<br>✅ 10分＝1/6時間 → 1200×1/6＝200Wh＝0.2kWh（Jなら1200×600＝720000J）<br>❌ 1200×10＝12000 は「分」のまま計算したまちがい<br>💡 Whのときは時間を「時間」に、Jのときは「秒」に' },
+    { jp:'【難】6Vの電源に、抵抗2Ωの電熱線Aと抵抗4Ωの電熱線Bをそれぞれ1本ずつつないで、同じ量の水を同じ時間あたためた。水の上昇温度の比（A：B）はどれか。',
+      answer:'2：1', choices:['2：1','1：2','1：1','4：1'],
+      exp:'📐 ルール：電力＝電圧×電流。電圧が同じなら、抵抗が小さいほど電流が大きく、電力も大きい。<br>✅ A：6÷2＝3A → 18W、B：6÷4＝1.5A → 9W。18：9＝2：1<br>❌ 抵抗の比（1：2）をそのまま答えない<br>💡 電力を出してから比べる' }
+  ];
+  qs.forEach(function(q, i) { q._qid = 'sci_elec_s9_q' + i; });
+  qs.forEach(function(q) {
+    html += makeChoices(q._qid, q.jp, q.answer, q.choices, q.exp);
+  });
   return html;
 }
 
@@ -1358,7 +1456,7 @@ function renderSection5() {
     { qid:'sci_elec_s5_in7', jp:'電力の公式（単位W）を式で表せ。', answer:'W = V × I',
       exp:'電力(W) = 電圧(V) × 電流(A)。1Wは1秒間に1Jのエネルギーを消費する電力。' },
     { qid:'sci_elec_s5_in8', jp:'コイルの中で磁石を動かすと電流が発生する現象を何というか。', answer:'電磁誘導',
-      exp:'電磁誘導：磁界の変化でコイルに誘導電流が生じる。発電機・マイク・IHの原理。フレミング右手の法則。' },
+      exp:'電磁誘導：磁界の変化でコイルに誘導電流が生じる。発電機・マイク・IHの原理。' },
     { qid:'sci_elec_s5_in9', jp:'電流が磁界から受ける力の向きを求める法則を何というか。', answer:'フレミングの左手の法則',
       exp:'フレミングの左手の法則：中指=電流、人差し指=磁界、親指=力（電磁力）。モーターの原理。' },
   ];

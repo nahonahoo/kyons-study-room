@@ -620,7 +620,7 @@ function renderSection1() {
   qs = shuffleArray(qs);
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: q.jp, choices: q.choices };
+    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: (q.jp || q.q), choices: q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -769,7 +769,7 @@ function renderSection2() {
   qs = shuffleArray(qs);
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: q.jp, choices: q.choices };
+    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: (q.jp || q.q), choices: q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -945,7 +945,7 @@ function renderSection3() {
   qs = shuffleArray(qs);
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: q.jp, choices: q.choices };
+    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: (q.jp || q.q), choices: q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -1125,7 +1125,7 @@ function renderSection4() {
   qs = shuffleArray(qs);
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: q.jp, choices: q.choices };
+    qMeta[qid] = { type: 'choice', answer: q.a, xp: 4, jp: (q.jp || q.q), choices: q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -1327,7 +1327,7 @@ function renderSection5() {
         + makeFeedback(qid, q.exp)
         + '</div>';
     } else {
-      qMeta[qid] = { type: 'choice', answer: q.a, xp: 5, jp: q.jp, choices: q.choices };
+      qMeta[qid] = { type: 'choice', answer: q.a, xp: 5, jp: (q.jp || q.q), choices: q.choices };
       html += '<div class="q-card" data-card="' + qid + '">'
         + '<div class="q-number">Q' + (i + 1) + ' / ' + allQs.length + '</div>'
         + '<div class="q-text">' + q.q + '</div>'
@@ -2175,7 +2175,7 @@ function renderSection1() {
   qs = shuffleArray(qs);
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:q.jp, choices:q.choices };
+    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:(q.jp || q.q), choices:q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i+1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -2367,7 +2367,7 @@ function renderSection2() {
   qs = shuffleArray(qs);
   qs.forEach(function(q, i) {
     var qid = q._qid;
-    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:q.jp, choices:q.choices };
+    qMeta[qid] = { type:'choice', answer:q.a, xp:4, jp:(q.jp || q.q), choices:q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i+1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'

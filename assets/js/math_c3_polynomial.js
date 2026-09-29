@@ -324,7 +324,7 @@ function checkSectionComplete() {
       if (!document.getElementById('secCompleteBanner')) {
         var banner = document.createElement('div');
         banner.id = 'secCompleteBanner';
-        var nextMsg = currentSection < 4 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストへ挑戦！';
+        var nextMsg = currentSection === 3 ? '「レベルアップ」へ進もう！' : currentSection === 7 ? '確認テストへ挑戦！' : (currentSection < 4 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストへ挑戦！');
         banner.innerHTML = '<div style="text-align:center;padding:20px;margin-bottom:12px;background:linear-gradient(135deg,rgba(163,113,247,0.12),rgba(14,165,233,0.08));border:1px solid var(--purple);border-radius:14px">'
           + '<div style="font-size:36px;margin-bottom:8px">🎉</div>'
           + '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--purple);letter-spacing:2px;margin-bottom:6px">セクション ' + currentSection + ' クリア！</div>'
@@ -344,6 +344,7 @@ var SECTIONS = [
   { id:1, label:'多項式の乗法',  title:'多項式の乗法',              sub:'分配法則の拡張・単項式×多項式・多項式×多項式の展開' },
   { id:2, label:'乗法公式',      title:'乗法公式',                  sub:'3つの公式を覚えれば展開が一瞬でできる' },
   { id:3, label:'因数分解',      title:'因数分解',                  sub:'展開の逆——乗法公式を逆向きに使う' },
+  { id:7, label:'レベルアップ', title:'レベルアップ：入試の因数分解・式の値', sub:'共通因数＋公式・置きかえ・式の値・計算の工夫' },
   { id:4, label:'確認テスト',    title:'確認テスト',                sub:'全セクション総まとめ！何問正解できる？' },
   { id:5, label:'📊弱点',        title:'弱点ノート',                sub:'間違えた問題の正答率を確認しよう' },
   { id:6, label:'🔥特訓',        title:'弱点特訓モード',            sub:'弱点問題だけを集中練習！' },
@@ -353,10 +354,10 @@ function renderTabs() {
   var html = '';
   SECTIONS.forEach(function(s) {
     var cls = 'section-tab'
-      + (s.id >= 5 ? ' tokku' : '')
+      + (s.id === 5 || s.id === 6 ? ' tokku' : '')
       + (s.id === currentSection ? ' active' : '')
-      + (sectionDone[s.id] && s.id < 5 ? ' done' : '');
-    var label = s.label + (sectionDone[s.id] && s.id < 5 ? ' ✓' : '');
+      + (sectionDone[s.id] && s.id !== 5 && s.id !== 6 ? ' done' : '');
+    var label = s.label + (sectionDone[s.id] && s.id !== 5 && s.id !== 6 ? ' ✓' : '');
     if (s.id === 6) { var wk = getWeakQuestions(); label = '🔥特訓' + (wk.length > 0 ? '('+wk.length+')' : ''); }
     html += '<button class="' + cls + '" data-sid="' + s.id + '">' + label + '</button>';
   });
@@ -377,7 +378,7 @@ function renderSection(id) {
   if (id === 5) { renderWeakNote(); return; }
   if (id === 6) { renderTokkuMode(); return; }
 
-  var s = SECTIONS[id];
+  var s = SECTIONS.filter(function(x) { return x.id === id; })[0];
   var html = '';
   html += '<div class="progress-dots">';
   for (var i = 0; i <= 4; i++) {
@@ -395,10 +396,12 @@ function renderSection(id) {
   else if (id === 2) html += renderSection2();
   else if (id === 3) html += renderSection3();
   else if (id === 4) html += renderSection4();
+  else if (id === 7) html += renderSection7();
 
-  if (id >= 1 && id <= 4) {
-    var nextLabel = id < 4 ? '次のセクションへ →' : '🏆 結果を見る！';
-    html += '<button class="next-section-btn" id="nextBtn" data-goto="' + (id < 4 ? id+1 : 'result') + '" style="display:none">' + nextLabel + '</button>';
+  if ((id >= 1 && id <= 4) || id === 7) {
+    var NEXT = { 1:2, 2:3, 3:7, 7:4 };
+    var nextLabel = id !== 4 ? '次のセクションへ →' : '🏆 結果を見る！';
+    html += '<button class="next-section-btn" id="nextBtn" data-goto="' + (id !== 4 ? NEXT[id] : 'result') + '" style="display:none">' + nextLabel + '</button>';
   }
 
   document.getElementById('mainContent').innerHTML = html;
@@ -679,6 +682,68 @@ function renderSection3() {
       + '<div class="q-number">Q' + (i+1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
       + (q.sub ? '<div class="q-sub">' + q.sub + '</div>' : '')
+      + makeChoices(qid, q.choices, q.a, 5)
+      + makeFeedback(qid, q.exp)
+      + '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+// ===== SECTION 7: レベルアップ（入試の大問1でよく出る形）（2026-09-30 追加） =====
+function renderSection7() {
+  var html = '<div class="rule-card">'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">公式はわかったけど、入試の問題は形がちょっとひねってあって、どれを使うかわからない…</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">見る順番を決めておけばいい。<b>①共通因数 → ②公式 → ③同じカタマリは1文字に置きかえ</b>。それから「式の値」は、代入する前に因数分解すると計算が一気に楽になる</div></div></div>'
+    + '</div>';
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">📐 入試の因数分解・計算の型</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">① <b>共通因数を先に</b>：2x² − 8 ＝ 2(x² − 4) ＝ <b>2(x + 2)(x − 2)</b>（最後までくくる）</div>'
+    + '<div class="ex">② <b>置きかえ</b>：(x+1)² − 5(x+1) + 6 → x+1 ＝ A とおくと A² − 5A + 6 ＝ (A−2)(A−3) → A をもどす</div>'
+    + '<div class="ex">③ <b>式の値は因数分解してから代入</b>：x＝23 のとき x² − 6x + 9 ＝ (x−3)² ＝ 20² ＝ 400</div>'
+    + '<div class="ex">④ <b>計算の工夫</b>：99² ＝ (100 − 1)²、51 × 49 ＝ (50 + 1)(50 − 1)</div>'
+    + '<div class="note">⚠️ 「−( )²」の展開はカッコごと引く：−(x − 1)² ＝ −(x² − 2x + 1) ＝ −x² ＋ 2x − 1</div>'
+    + '</div>'
+    + '</div>';
+
+  function E(rule, ok, ng, tip) { return '<span class="exp-rule"><span class="label">📐 ルール</span>' + rule + '</span><span class="exp-ok">✅ ' + ok + '</span>' + (ng ? '<span class="exp-ng">❌ ' + ng + '</span>' : '') + '<span class="exp-tip">💡 ' + tip + '</span>'; }
+  var qs = [
+    { q:'2x² − 8 を因数分解すると？', a:'2(x+2)(x−2)', choices:['2(x+2)(x−2)','2(x²−4)','(2x+4)(x−2)','2(x−2)²'],
+      exp:E('まず共通因数2 → 次に x²−4 を公式で', '2(x²−4) ＝ 2(x+2)(x−2)', '2(x²−4) で止めると「途中」あつかい', '最後まで分解できるか確認') },
+    { q:'3x² − 6x − 24 を因数分解すると？', a:'3(x−4)(x+2)', choices:['3(x−4)(x+2)','3(x+4)(x−2)','(3x−12)(x+2)','3(x²−2x−8)'],
+      exp:E('共通因数3 → 足して−2・かけて−8', '3(x²−2x−8) ＝ 3(x−4)(x+2)', '−4と2の符号を逆にしない', '共通因数をくくると数が小さくなって探しやすい') },
+    { q:'ax² − 9a を因数分解すると？', a:'a(x+3)(x−3)', choices:['a(x+3)(x−3)','a(x−3)²','(ax+3)(x−3)','a(x²−9)'],
+      exp:E('文字の共通因数 a でくくる', 'a(x²−9) ＝ a(x+3)(x−3)', 'a(x²−9) は途中', '文字も共通因数になる') },
+    { q:'x² − 6xy + 9y² を因数分解すると？', a:'(x−3y)²', choices:['(x−3y)²','(x+3y)²','(x−3y)(x+3y)','(x−9y)(x+y)'],
+      exp:E('9y² ＝ (3y)²、6xy ＝ 2×x×3y', '(x−3y)²', '真ん中がマイナスなので (x+3y)² ではない', 'y がついていても形は同じ') },
+    { q:'4x² − 25 を因数分解すると？', a:'(2x+5)(2x−5)', choices:['(2x+5)(2x−5)','(4x+5)(x−5)','(2x−5)²','4(x+5)(x−5)'],
+      exp:E('4x² ＝ (2x)²、25 ＝ 5² → 差の平方', '(2x+5)(2x−5)', '4(x+5)(x−5) を展開すると 4x²−100 になる', '「〇²−□²」の〇が2xでもOK') },
+    { q:'(x+1)² − 5(x+1) + 6 を因数分解すると？', a:'(x−1)(x−2)', choices:['(x−1)(x−2)','(x+1)(x+2)','(x−2)(x−3)','(x+3)(x+4)'],
+      exp:E('x+1 ＝ A とおく', 'A²−5A+6 ＝ (A−2)(A−3) → (x+1−2)(x+1−3) ＝ (x−1)(x−2)', '(A−2)(A−3) を (x−2)(x−3) と書かない（A をもどす）', '同じカタマリは1文字に置きかえる') },
+    { q:'(a+b)² − 4 を因数分解すると？', a:'(a+b+2)(a+b−2)', choices:['(a+b+2)(a+b−2)','(a+b−2)²','(a+b+4)(a+b−1)','a²+b²−4'],
+      exp:E('a+b ＝ A とおくと A² − 4', '(A+2)(A−2) ＝ (a+b+2)(a+b−2)', '展開してしまうと遠回り', 'カタマリのまま差の平方') },
+    { q:'(x+3)(x−3) − (x−1)² を計算すると？', a:'2x − 10', choices:['2x − 10','−2x − 8','2x − 8','−10'],
+      exp:E('−(x−1)² はカッコごと引く', 'x² − 9 − (x² − 2x + 1) ＝ x² − 9 − x² + 2x − 1 ＝ 2x − 10', '−1 を +1 のままにすると 2x−8 になる', '引くカッコの中は全部符号が変わる') },
+    { q:'x ＝ 23 のとき、x² − 6x + 9 の値は？', a:'400', choices:['400','391','529','20'],
+      exp:E('代入の前に因数分解', '(x−3)² ＝ 20² ＝ 400', 'そのまま代入すると 529−138+9 で計算ミスしやすい', '「式の値」はまず因数分解') },
+    { q:'x ＝ 7.5、y ＝ 2.5 のとき、x² − y² の値は？', a:'50', choices:['50','25','56.25','10'],
+      exp:E('x² − y² ＝ (x+y)(x−y)', '(7.5+2.5)(7.5−2.5) ＝ 10 × 5 ＝ 50', '小数をそのまま2乗すると大変', '和と差がきれいな数になる') },
+    { q:'99² を工夫して計算すると？', a:'9801', choices:['9801','9981','9899','10201'],
+      exp:E('99 ＝ 100 − 1 と考えて (a−b)² の公式', '10000 − 200 + 1 ＝ 9801', '10201 は 101²', '100に近い数は100を使う') },
+    { q:'51 × 49 を工夫して計算すると？', a:'2499', choices:['2499','2501','2449','2599'],
+      exp:E('(50+1)(50−1) ＝ 50² − 1²', '2500 − 1 ＝ 2499', '2501 は 2500 + 1 にしたまちがい', '真ん中の数（50）をさがす') },
+    { q:'【難】(n+1)² − n² を計算すると？', a:'2n + 1', choices:['2n + 1','1','2n','n + 1'],
+      exp:E('展開して引く', 'n² + 2n + 1 − n² ＝ 2n + 1', '(n+1)² を n² + 1 にしない', '「となり合う2つの整数の2乗の差は、2数の和」の証明に使う') }
+  ];
+  qs.forEach(function(q, i) { q._qid = 'math_poly_s7_q' + i; });
+  html += '<div class="practice-section"><div class="practice-title">✏️ 練習問題 — レベルアップ</div>';
+  qs.forEach(function(q, i) {
+    var qid = q._qid;
+    qMeta[qid] = { type:'choice', answer:q.a, xp:5, jp:q.q, choices:q.choices };
+    html += '<div class="q-card" data-card="' + qid + '">'
+      + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
+      + '<div class="q-text">' + q.q + '</div>'
       + makeChoices(qid, q.choices, q.a, 5)
       + makeFeedback(qid, q.exp)
       + '</div>';

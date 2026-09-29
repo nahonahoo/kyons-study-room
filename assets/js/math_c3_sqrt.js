@@ -324,7 +324,7 @@ function checkSectionComplete() {
       if (!document.getElementById('secCompleteBanner')) {
         var banner = document.createElement('div');
         banner.id = 'secCompleteBanner';
-        var nextMsg = currentSection < 4 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストへ挑戦！';
+        var nextMsg = currentSection === 3 ? '「レベルアップ」へ進もう！' : currentSection === 7 ? '確認テストへ挑戦！' : (currentSection < 4 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストへ挑戦！');
         banner.innerHTML = '<div style="text-align:center;padding:20px;margin-bottom:12px;background:linear-gradient(135deg,rgba(163,113,247,0.12),rgba(14,165,233,0.08));border:1px solid var(--purple);border-radius:14px">'
           + '<div style="font-size:36px;margin-bottom:8px">🎉</div>'
           + '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--purple);letter-spacing:2px;margin-bottom:6px">セクション ' + currentSection + ' クリア！</div>'
@@ -344,6 +344,7 @@ var SECTIONS = [
   { id:1, label:'基本',          title:'平方根の基本',              sub:'意味・大小比較・整数で挟む考え方' },
   { id:2, label:'変形・計算',    title:'根号の変形と計算',          sub:'掛け算・割り算・簡単にする・有理化' },
   { id:3, label:'加減・展開',    title:'根号の加法・減法・展開',    sub:'同類項としてまとめる・乗法公式の利用' },
+  { id:7, label:'レベルアップ', title:'レベルアップ：入試の平方根', sub:'有理化・√24nが自然数・整数部分と小数部分・近似値・無理数' },
   { id:4, label:'確認テスト',    title:'確認テスト',                sub:'全セクション総まとめ！何問正解できる？' },
   { id:5, label:'📊弱点',        title:'弱点ノート',                sub:'間違えた問題の正答率を確認しよう' },
   { id:6, label:'🔥特訓',        title:'弱点特訓モード',            sub:'弱点問題だけを集中練習！' },
@@ -353,10 +354,10 @@ function renderTabs() {
   var html = '';
   SECTIONS.forEach(function(s) {
     var cls = 'section-tab'
-      + (s.id >= 5 ? ' tokku' : '')
+      + (s.id === 5 || s.id === 6 ? ' tokku' : '')
       + (s.id === currentSection ? ' active' : '')
-      + (sectionDone[s.id] && s.id < 5 ? ' done' : '');
-    var label = s.label + (sectionDone[s.id] && s.id < 5 ? ' ✓' : '');
+      + (sectionDone[s.id] && s.id !== 5 && s.id !== 6 ? ' done' : '');
+    var label = s.label + (sectionDone[s.id] && s.id !== 5 && s.id !== 6 ? ' ✓' : '');
     if (s.id === 6) { var wk = getWeakQuestions(); label = '🔥特訓' + (wk.length > 0 ? '('+wk.length+')' : ''); }
     html += '<button class="' + cls + '" data-sid="' + s.id + '">' + label + '</button>';
   });
@@ -377,7 +378,7 @@ function renderSection(id) {
   if (id === 5) { renderWeakNote(); return; }
   if (id === 6) { renderTokkuMode(); return; }
 
-  var s = SECTIONS[id];
+  var s = SECTIONS.filter(function(x) { return x.id === id; })[0];
   var html = '';
   html += '<div class="progress-dots">';
   for (var i = 0; i <= 4; i++) {
@@ -395,10 +396,12 @@ function renderSection(id) {
   else if (id === 2) html += renderSection2();
   else if (id === 3) html += renderSection3();
   else if (id === 4) html += renderSection4();
+  else if (id === 7) html += renderSection7();
 
-  if (id >= 1 && id <= 4) {
-    var nextLabel = id < 4 ? '次のセクションへ →' : '🏆 結果を見る！';
-    html += '<button class="next-section-btn" id="nextBtn" data-goto="' + (id < 4 ? id+1 : 'result') + '" style="display:none">' + nextLabel + '</button>';
+  if ((id >= 1 && id <= 4) || id === 7) {
+    var NEXT = { 1:2, 2:3, 3:7, 7:4 };
+    var nextLabel = id !== 4 ? '次のセクションへ →' : '🏆 結果を見る！';
+    html += '<button class="next-section-btn" id="nextBtn" data-goto="' + (id !== 4 ? NEXT[id] : 'result') + '" style="display:none">' + nextLabel + '</button>';
   }
 
   document.getElementById('mainContent').innerHTML = html;
@@ -696,6 +699,69 @@ function renderSection3() {
       + '<div class="q-number">Q' + (i+1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
       + (q.sub ? '<div class="q-sub">' + q.sub + '</div>' : '')
+      + makeChoices(qid, q.choices, q.a, 5)
+      + makeFeedback(qid, q.exp)
+      + '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+// ===== SECTION 7: レベルアップ（入試の大問1でよく出る平方根の問題）（2026-09-30 追加） =====
+function renderSection7() {
+  var html = '<div class="rule-card">'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">「√24n が自然数になる n」とか、問題文の意味からわからない…</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">√の中が「何かの2乗」になれば√が外れて自然数になる。だから<b>素因数分解して、指数を全部偶数にそろえる</b>。中1でやった素因数分解の出番だ</div></div></div>'
+    + '</div>';
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">📐 入試によく出る平方根の型</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">① <b>有理化してからまとめる</b>：6/√3 ＝ 6√3/3 ＝ 2√3 → √12 ＋ 6/√3 ＝ 2√3 ＋ 2√3 ＝ 4√3</div>'
+    + '<div class="ex">② <b>√(24n) が自然数</b>：24 ＝ 2³ × 3 → 指数を偶数にするには 2 × 3 ＝ 6 をかける → n ＝ 6（√144 ＝ 12）</div>'
+    + '<div class="ex">③ <b>整数部分・小数部分</b>：2 ＜ √7 ＜ 3 → 整数部分 2、小数部分 √7 − 2</div>'
+    + '<div class="ex">④ <b>近似値</b>：√2 ≒ 1.414 のとき √200 ＝ 10√2 ≒ 14.14</div>'
+    + '<div class="ex">⑤ <b>無理数</b>：分数で表せない数（√2、√5、π など）。√9 ＝ 3 は有理数</div>'
+    + '<div class="note">💡 式の値は「因数分解してから代入」：x ＝ √3 ＋ 1 のとき x² − 2x ＋ 1 ＝ (x − 1)² ＝ (√3)² ＝ 3</div>'
+    + '</div>'
+    + '</div>';
+
+  function E(rule, ok, ng, tip) { return '<span class="exp-rule"><span class="label">📐 ルール</span>' + rule + '</span><span class="exp-ok">✅ ' + ok + '</span>' + (ng ? '<span class="exp-ng">❌ ' + ng + '</span>' : '') + '<span class="exp-tip">💡 ' + tip + '</span>'; }
+  var qs = [
+    { q:'6/√3 を有理化すると？', a:'2√3', choices:['2√3','6√3','√3/3','2'],
+      exp:E('分母・分子に√3をかけて約分', '6√3/3 ＝ 2√3', '6√3 は分母の3で割り忘れ', '有理化したら必ず約分できないか見る') },
+    { q:'√12 ＋ 6/√3 を計算すると？', a:'4√3', choices:['4√3','2√3','√3 ＋ 6','8√3'],
+      exp:E('√12 を簡単に、6/√3 を有理化してからまとめる', '2√3 ＋ 2√3 ＝ 4√3', '有理化しないと足せない', '入試で一番よく出る形') },
+    { q:'√2 × √6 を計算すると？', a:'2√3', choices:['2√3','√8','12','3√2'],
+      exp:E('√a × √b ＝ √(ab) → 簡単にする', '√12 ＝ 2√3', '√12 のままは途中', 'かけたあと必ず簡単にできるか確認') },
+    { q:'√18 − √8 ＋ √2 を計算すると？', a:'2√2', choices:['2√2','√12','0','4√2'],
+      exp:E('全部を □√2 の形にそろえる', '3√2 − 2√2 ＋ √2 ＝ 2√2', '√18−√8＝√10 のように中身を引かない', 'まず全部簡単にしてから計算') },
+    { q:'(√3 − 1)² を計算すると？', a:'4 − 2√3', choices:['4 − 2√3','2','4','2 − 2√3'],
+      exp:E('(a − b)² ＝ a² − 2ab ＋ b²', '3 − 2√3 ＋ 1 ＝ 4 − 2√3', '真ん中の −2√3 を忘れると 4 になる', '√3 × 1 ＝ √3、2倍で 2√3') },
+    { q:'√(24n) が自然数となるような、最も小さい自然数 n は？', a:'6', choices:['6','2','3','24'],
+      exp:E('素因数分解して、指数を全部偶数にする', '24 ＝ 2³×3 → ×2×3 で 2⁴×3² ＝ 144 ＝ 12²', 'n＝2 だと 48 で2乗にならない', '中1の「2乗にする」問題と同じ') },
+    { q:'【難】√(54/n) が自然数となるような、最も小さい自然数 n は？', a:'6', choices:['6','2','3','54'],
+      exp:E('54 ＝ 2 × 3³。わって指数を偶数にする', '54 ÷ 6 ＝ 9 ＝ 3² → √9 ＝ 3', 'n＝54 でも自然数（1）になるが、最小ではない', 'わる問題は「指数が奇数の素数」を取りのぞく') },
+    { q:'√7 の整数部分は？', a:'2', choices:['2','3','7','1'],
+      exp:E('√7 をはさむ2乗の数を探す', '4 ＜ 7 ＜ 9 → 2 ＜ √7 ＜ 3 → 整数部分は 2', '√7 ≒ 2.6 なので 3 ではない', '2乗の数（1, 4, 9, 16…）ではさむ') },
+    { q:'√7 の小数部分は？', a:'√7 − 2', choices:['√7 − 2','√7 − 3','0.7','√7'],
+      exp:E('小数部分 ＝ もとの数 − 整数部分', '√7 − 2', '0.7 のように決めつけない', '整数部分を先に出す') },
+    { q:'√2 ≒ 1.414 とするとき、√200 の値は？', a:'14.14', choices:['14.14','141.4','1.414','28.28'],
+      exp:E('√200 ＝ √(100×2) ＝ 10√2', '10 × 1.414 ＝ 14.14', '141.4 は 100√2', '中から100（＝10²）を出す') },
+    { q:'次のうち、無理数はどれ？', a:'√5', choices:['√5','√9','0.3','2/3'],
+      exp:E('分数で表せない数が無理数', '√5 は 2.236… と終わらずくり返さない', '√9 ＝ 3 は有理数', '√が外れるかどうかを確認') },
+    { q:'x ＝ √3 ＋ 1 のとき、x² − 2x ＋ 1 の値は？', a:'3', choices:['3','4 ＋ 2√3','2√3','1'],
+      exp:E('因数分解してから代入', '(x − 1)² ＝ (√3)² ＝ 3', 'そのまま代入すると計算が長くなる', '「式の値」はまず因数分解') },
+    { q:'【難】5 ＜ √n ＜ 6 を満たす自然数 n はいくつある？', a:'10個', choices:['10個','11個','9個','1個'],
+      exp:E('各辺を2乗する', '25 ＜ n ＜ 36 → 26〜35 の10個', '25 と 36 はふくまない', '「＜」は両はしをふくまない') }
+  ];
+  qs.forEach(function(q, i) { q._qid = 'math_sqrt_s7_q' + i; });
+  html += '<div class="practice-section"><div class="practice-title">✏️ 練習問題 — レベルアップ</div>';
+  qs.forEach(function(q, i) {
+    var qid = q._qid;
+    qMeta[qid] = { type:'choice', answer:q.a, xp:5, jp:q.q, choices:q.choices };
+    html += '<div class="q-card" data-card="' + qid + '">'
+      + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
+      + '<div class="q-text">' + q.q + '</div>'
       + makeChoices(qid, q.choices, q.a, 5)
       + makeFeedback(qid, q.exp)
       + '</div>';

@@ -737,10 +737,10 @@ function renderSection2(){
     },
     {
       qid:'math_sim_s2_q2',
-      jp:'{ 2x + 3y = 13　② x + 3y = 7 で「引く」(①－②)と？',
-      answer:'x = 6',
-      choices:['x = 6', 'x = 20', '3x = 20', 'y = 2'],
-      exp:'📐 ①－② → (2x+3y)-(x+3y) = 13-7 → <span style="color:var(--gold)">x = 6</span><br>✅ 3y と 3y が同符号なので引けば消える！（同符号→引く）'
+      jp:'{ 2x + 3y = 13　② x + 3y = 8 で「引く」(①－②)と？',
+      answer:'x = 5',
+      choices:['x = 5', 'x = 21', '3x = 21', '6y = 5'],
+      exp:'📐 ①－② → (2x+3y)-(x+3y) = 13-8 → <span style="color:var(--gold)">x = 5</span><br>✅ 3y と 3y が同符号なので引けば消える！（同符号→引く）<br>続き：x=5 を②に代入 → 5+3y=8 → y=1。答え：x=5, y=1'
     },
     {
       qid:'math_sim_s2_q3',
@@ -1366,7 +1366,7 @@ function renderSection4(){
     },
     {
       qid:'math_sim_s4_q17', type:'input',
-      jp:'上の問題（きょん x, にっくん y）でき、きょんの速さ x は？',
+      jp:'上の問題（きょん x, にっくん y）で、きょんの速さ x は？',
       formula:'y = 30 を x+y=50 に代入',
       answer:'20', xp:5,
       hint:'x + 30 = 50 → x = 20',

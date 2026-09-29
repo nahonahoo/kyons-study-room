@@ -156,17 +156,17 @@ var Q_JP_MAP = {
   'math_func_s3_q7':'比例 y=3x と一次関数 y=3x+2 のグラフの関係は？',
   'math_func_s3_q8':'次のうち、原点を通らないグラフはどれ？',
   'math_func_s3_q9':'グラフより、この一次関数の式は？',
-  // Section 4：二次関数 y=ax²
+  // Section 4：関数 y=ax²
   'math_func_s4_q0':'y=2x²で、x=3のときのyの値は？',
   'math_func_s4_q1':'y=-x²で、x=-2のときのyの値は？',
   'math_func_s4_q2':'y=x²のグラフの形は？',
-  'math_func_s4_q3':'y=-3x²のグラフは、上に凸？下に凸？',
+  'math_func_s4_q3':'y=-3x²のグラフは、下に開いた形？上に開いた形？',
   'math_func_s4_q4':'y=x²で、x=2のときとx=-2のときのyの値を比べると？',
   'math_func_s4_q5':'表（y=2x²）で、x=-1のときのyの値（?）は？',
   'math_func_s4_q6':'点(2,8)を通るy=ax²のaの値は？',
   'math_func_s4_q7':'y=ax²のグラフがy軸について線対称なのはなぜ？',
   'math_func_s4_q8':'下のグラフのaは正・負どちら？',
-  'math_func_s4_q9':'一次関数のグラフは直線、二次関数y=ax²のグラフは？',
+  'math_func_s4_q9':'一次関数のグラフは直線、関数y=ax²のグラフは？',
   // Section 5（確認テスト）
   'math_func_s5_q0':'点(5,1)は、原点から右にいくつ、上にいくつ進んだ点？',
   'math_func_s5_q1':'xを1つ決めるとyがただ1つに決まる関係を何という？',
@@ -184,10 +184,10 @@ var Q_JP_MAP = {
   'math_func_s5_q13':'y=3x²で、x=2のときのyの値は？',
   'math_func_s5_q14':'y=-2x²で、x=3のときのyの値は？',
   'math_func_s5_q15':'y=x²のグラフはy軸について何？',
-  'math_func_s5_q16':'y=-x²のグラフは上に凸？下に凸？',
+  'math_func_s5_q16':'y=-x²のグラフは下に開いた形？上に開いた形？',
   'math_func_s5_q17':'点(3,18)を通るy=ax²のaの値は？',
   'math_func_s5_q18':'y=x²で、x=4とx=-4のときのyの値の関係は？',
-  'math_func_s5_q19':'二次関数y=ax²のグラフの名前は？',
+  'math_func_s5_q19':'関数y=ax²のグラフの名前は？',
 };
 
 function getJpForQid(qid) {
@@ -334,7 +334,7 @@ function checkSectionComplete() {
       if (!document.getElementById('secCompleteBanner')) {
         var banner = document.createElement('div');
         banner.id = 'secCompleteBanner';
-        var nextMsg = currentSection < 5 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '結果を見よう！';
+        var nextMsg = currentSection === 4 ? '「変化の割合・変域」へ進もう！' : currentSection === 8 ? '確認テストへ挑戦！' : (currentSection < 5 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '結果を見よう！');
         banner.innerHTML = '<div style="text-align:center;padding:20px;margin-bottom:12px;background:linear-gradient(135deg,rgba(163,113,247,0.12),rgba(14,165,233,0.08));border:1px solid var(--purple);border-radius:14px">'
           + '<div style="font-size:36px;margin-bottom:8px">🎉</div>'
           + '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--purple);letter-spacing:2px;margin-bottom:6px">セクション ' + currentSection + ' クリア！</div>'
@@ -350,11 +350,12 @@ function checkSectionComplete() {
 
 // ===== SECTIONS DEF =====
 var SECTIONS = [
-  { id:0, label:'📐 スタート',   title:'関数の世界へようこそ',       sub:'座標の読み方から、比例→一次関数→二次関数y=ax²まで、順番に土台を作る' },
+  { id:0, label:'📐 スタート',   title:'関数の世界へようこそ',       sub:'座標の読み方から、比例→一次関数→関数y=ax²まで、順番に土台を作る' },
   { id:1, label:'関数の基礎',    title:'関数の基礎（座標の読み方）', sub:'「関数」ってそもそも何？座標平面の読み方から始めよう' },
   { id:2, label:'比例の復習',    title:'比例の復習 y=ax',            sub:'中1でやった比例は、関数の中でいちばんシンプルな仲間' },
   { id:3, label:'一次関数',      title:'一次関数 y=ax+b',            sub:'傾きと切片。グラフの書き方を1から積み上げる' },
-  { id:4, label:'二次関数',      title:'二次関数 y=ax²',             sub:'xの2乗に比例する関数。グラフは曲線（放物線）になる' },
+  { id:4, label:'y=ax²',      title:'関数 y=ax²',             sub:'xの2乗に比例する関数。グラフは曲線（放物線）になる' },
+  { id:8, label:'変化の割合・変域', title:'変化の割合・変域・直線の式', sub:'入試の大問1・2でよく出る——0をふくむ変域のひっかけに注意' },
   { id:5, label:'確認テスト',    title:'確認テスト',                 sub:'全セクション総まとめ！何問正解できる？' },
   { id:6, label:'📊弱点',        title:'弱点ノート',                 sub:'間違えた問題の正答率を確認しよう' },
   { id:7, label:'🔥特訓',        title:'弱点特訓モード',             sub:'弱点問題だけを集中練習！' },
@@ -364,10 +365,10 @@ function renderTabs() {
   var html = '';
   SECTIONS.forEach(function(s) {
     var cls = 'section-tab'
-      + (s.id >= 6 ? ' tokku' : '')
+      + (s.id === 6 || s.id === 7 ? ' tokku' : '')
       + (s.id === currentSection ? ' active' : '')
-      + (sectionDone[s.id] && s.id < 6 ? ' done' : '');
-    var label = s.label + (sectionDone[s.id] && s.id < 6 ? ' ✓' : '');
+      + (sectionDone[s.id] && s.id !== 6 && s.id !== 7 ? ' done' : '');
+    var label = s.label + (sectionDone[s.id] && s.id !== 6 && s.id !== 7 ? ' ✓' : '');
     if (s.id === 7) { var wk = getWeakQuestions(); label = '🔥特訓' + (wk.length > 0 ? '('+wk.length+')' : ''); }
     html += '<button class="' + cls + '" data-sid="' + s.id + '">' + label + '</button>';
   });
@@ -388,7 +389,7 @@ function renderSection(id) {
   if (id === 6) { renderWeakNote(); return; }
   if (id === 7) { renderTokkuMode(); return; }
 
-  var s = SECTIONS[id];
+  var s = SECTIONS.filter(function(x) { return x.id === id; })[0];
   var html = '';
   html += '<div class="progress-dots">';
   for (var i = 0; i <= 5; i++) {
@@ -407,10 +408,12 @@ function renderSection(id) {
   else if (id === 3) html += renderSection3();
   else if (id === 4) html += renderSection4();
   else if (id === 5) html += renderSection5();
+  else if (id === 8) html += renderSection8();
 
-  if (id >= 1 && id <= 5) {
-    var nextLabel = id < 5 ? '次のセクションへ →' : '🏆 結果を見る！';
-    html += '<button class="next-section-btn" id="nextBtn" data-goto="' + (id < 5 ? id+1 : 'result') + '" style="display:none">' + nextLabel + '</button>';
+  if ((id >= 1 && id <= 5) || id === 8) {
+    var NEXT = { 1:2, 2:3, 3:4, 4:8, 8:5 };
+    var nextLabel = id !== 5 ? '次のセクションへ →' : '🏆 結果を見る！';
+    html += '<button class="next-section-btn" id="nextBtn" data-goto="' + (id !== 5 ? NEXT[id] : 'result') + '" style="display:none">' + nextLabel + '</button>';
   }
 
   document.getElementById('mainContent').innerHTML = html;
@@ -489,7 +492,7 @@ function linearGraph(a, b, color, reveal) {
     + '</svg>';
 }
 
-// 二次関数 y=ax² のグラフ（放物線）
+// 関数 y=ax² のグラフ（放物線）
 function parabolaGraph(a, color, reveal) {
   var cx=130, cy=120, sc=22, vw=260, vh=240;
   var arr=[];
@@ -566,8 +569,8 @@ function renderSection0() {
   var html = '';
   html += '<div class="intro-box">'
     + '<div class="intro-box-title">📐 きょん＆西村の会話</div>'
-    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">にっくん、関数ってやつが全然わかんない…比例も一次関数も二次関数もごちゃごちゃになってる…</div></div></div>'
-    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村真二（慶應義塾卒・元アナ）</div><div class="chat-bubble">大丈夫。実は関数は全部「xを1つ決めると、yがただ1つに決まる」という同じ考え方の仲間なんだ。今日は基礎の基礎、座標の読み方から始めて、比例→一次関数→二次関数の順に、一つずつ積み上げていこう。</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">にっくん、関数ってやつが全然わかんない…比例も一次関数も関数y=ax²もごちゃごちゃになってる…</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村真二（慶應義塾卒・元アナ）</div><div class="chat-bubble">大丈夫。実は関数は全部「xを1つ決めると、yがただ1つに決まる」という同じ考え方の仲間なんだ。今日は基礎の基礎、座標の読み方から始めて、比例→一次関数→関数y=ax²の順に、一つずつ積み上げていこう。</div></div></div>'
     + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">座標の読み方から!? そんな前からやるの?</div></div></div>'
     + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">うん。土台がないまま応用をやっても崩れてしまう。今日でその土台を完全に作ろう。焦らなくていい。</div></div></div>'
     + '</div>';
@@ -577,10 +580,10 @@ function renderSection0() {
     + '<div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">'
     + '<div style="flex:1;min-width:130px;text-align:center"><div style="font-size:12px;color:var(--purple);margin-bottom:4px;font-weight:bold">比例 y=x</div>' + propGraph(1,'#a371f7',false) + '</div>'
     + '<div style="flex:1;min-width:130px;text-align:center"><div style="font-size:12px;color:#0ea5e9;margin-bottom:4px;font-weight:bold">一次関数 y=x+2</div>' + linearGraph(1,2,'#0ea5e9',false) + '</div>'
-    + '<div style="flex:1;min-width:130px;text-align:center"><div style="font-size:12px;color:var(--gold);margin-bottom:4px;font-weight:bold">二次関数 y=x²</div>' + parabolaGraph(1,'#f5c518',false) + '</div>'
+    + '<div style="flex:1;min-width:130px;text-align:center"><div style="font-size:12px;color:var(--gold);margin-bottom:4px;font-weight:bold">関数y=ax² y=x²</div>' + parabolaGraph(1,'#f5c518',false) + '</div>'
     + '</div>'
     + '<div class="rule-box" style="margin-top:14px">'
-    + '<div class="note">💡 比例は原点を通る直線、一次関数は原点を通らないこともある直線、二次関数y=ax²は曲線（放物線）。形はちがうけど、どれも「xを決めるとyが決まる」仲間！</div>'
+    + '<div class="note">💡 比例は原点を通る直線、一次関数は原点を通らないこともある直線、関数y=ax²は曲線（放物線）。形はちがうけど、どれも「xを決めるとyが決まる」仲間！</div>'
     + '</div>'
     + '</div>';
 
@@ -590,7 +593,7 @@ function renderSection0() {
     + 'Section 1：関数の基礎（座標の読み方）<br>'
     + 'Section 2：比例の復習 y=ax<br>'
     + 'Section 3：一次関数 y=ax+b（傾きと切片）<br>'
-    + 'Section 4：二次関数 y=ax²（放物線）'
+    + 'Section 4：関数 y=ax²（放物線）'
     + '</div></div>'
     + '<button class="start-btn" data-goto="1">📐 Section 1 から始める →</button>';
   return html;
@@ -635,7 +638,7 @@ function renderSection1() {
     { q:'表でx=2のときyはいくつ？', sub: xyTable([1,2,3],[2,4,6]), a:'4', choices:['4','2','6','8'],
       exp:'<span class="exp-rule"><span class="label">📐 ルール</span>表はxとyの対応を表す。同じ列を縦に読む</span><span class="exp-tip">💡 x=2の列を見るとy=4！</span>' },
     { q:'xの値を1つ決めたとき、yの値がただ1つに決まるとき、yはxの何と呼ぶ？', sub:'今日学んだ言葉の確認', a:'xの関数', choices:['xの関数','xの比例','xの変数','xの定数'],
-      exp:'<span class="exp-rule"><span class="label">📐 ルール</span>「xを決めるとyがただ1つに決まる」関係を関数と呼ぶ</span><span class="exp-tip">💡 比例・一次関数・二次関数は、すべて関数の仲間！</span>' },
+      exp:'<span class="exp-rule"><span class="label">📐 ルール</span>「xを決めるとyがただ1つに決まる」関係を関数と呼ぶ</span><span class="exp-tip">💡 比例・一次関数・関数y=ax²は、すべて関数の仲間！</span>' },
     { q:'1本80円のペンをx本買うときの代金y円を式にすると？', sub:'代金＝1本の値段×本数', a:'y=80x', choices:['y=80x','y=80+x','y=x/80','y=80-x'],
       exp:'<span class="exp-rule"><span class="label">📐 ルール</span>代金＝単価×個数 なので y=80×x=80x</span><span class="exp-tip">💡 xを決めればyがただ1つに決まる、これも関数！</span>' },
     { q:'上のペンの式でx=3のときのyの値は？', sub:'y=80xにx=3を代入', a:'240', choices:['240','83','27','83.3'],
@@ -802,21 +805,21 @@ function renderSection3() {
   return html;
 }
 
-// ===== SECTION 4: 二次関数 y=ax² =====
+// ===== SECTION 4: 関数 y=ax² =====
 function renderSection4() {
   var html = '';
   html += '<div class="intro-box">'
     + '<div class="intro-box-title">📐 きょん＆西村の会話</div>'
-    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">やっと二次関数だ…でも比例や一次関数と全然違う気がする！</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">やっと関数y=ax²だ…でも比例や一次関数と全然違う気がする！</div></div></div>'
     + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">式の形は似ている。y=ax²、つまり「xの2乗に比例する」関数だ。ただしグラフは直線じゃなく、曲線（放物線）になる。</div></div></div>'
     + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">なんで曲線になるの？</div></div></div>'
     + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">xを2乗すると、xが少し増えるだけでyが急に大きくなるからだ。表を作って確かめてみよう。</div></div></div>'
     + '</div>';
 
   html += '<div class="rule-card">'
-    + '<div class="rule-card-title">📐 二次関数の式と対応表</div>'
+    + '<div class="rule-card-title">📐 関数y=ax²の式と対応表</div>'
     + '<div class="rule-box">'
-    + '<div class="rule-title">二次関数の式</div>'
+    + '<div class="rule-title">関数y=ax²の式</div>'
     + '<div class="ex">y＝ax²　（xの2乗に比例）</div>'
     + '</div>'
     + '<div style="text-align:center">' + xyTable([-3,-2,-1,0,1,2,3],[9,4,1,0,1,4,9]) + '</div>'
@@ -828,14 +831,14 @@ function renderSection4() {
   html += '<div class="rule-card">'
     + '<div class="rule-card-title">📐 グラフの形（放物線）</div>'
     + '<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">'
-    + '<div style="flex:1;min-width:130px;text-align:center"><div style="font-size:12px;color:var(--purple);margin-bottom:4px;font-weight:bold">a=1（下に凸）</div>' + parabolaGraph(1,'#a371f7',true) + '</div>'
-    + '<div style="flex:1;min-width:130px;text-align:center"><div style="font-size:12px;color:var(--red);margin-bottom:4px;font-weight:bold">a=-1（上に凸）</div>' + parabolaGraph(-1,'#e94560',true) + '</div>'
+    + '<div style="flex:1;min-width:130px;text-align:center"><div style="font-size:12px;color:var(--purple);margin-bottom:4px;font-weight:bold">a=1（上に開いた形）</div>' + parabolaGraph(1,'#a371f7',true) + '</div>'
+    + '<div style="flex:1;min-width:130px;text-align:center"><div style="font-size:12px;color:var(--red);margin-bottom:4px;font-weight:bold">a=-1（下に開いた形）</div>' + parabolaGraph(-1,'#e94560',true) + '</div>'
     + '</div>'
     + '<div class="rule-box" style="margin-top:14px">'
-    + '<div class="rule-title">二次関数y=ax²の性質</div>'
+    + '<div class="rule-title">関数y=ax²の性質</div>'
     + '<div class="ex">① グラフは放物線（曲線）で、必ず原点(0,0)を通る</div>'
     + '<div class="ex">② y軸について線対称（xと-xを代入すると同じ値になるため）</div>'
-    + '<div class="ex">③ a＞0のとき下に凸（お椀型）、a＜0のとき上に凸</div>'
+    + '<div class="ex">③ a＞0のとき上に開いた形（お椀型）、a＜0のとき下に開いた形</div>'
     + '<div class="note">⚠️ 一次関数までとちがい、直線ではなく曲線になることを忘れずに！</div>'
     + '</div>'
     + '</div>';
@@ -845,10 +848,10 @@ function renderSection4() {
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>y=2×3²=2×9=18</span><span class="exp-tip">💡 先に3²=9を計算してから2をかける！</span>' },
     { q:'y=-x²で、x=-2のときのyの値は？', sub:'(-2)²は必ずプラスになることに注意', a:'-4', choices:['-4','4','-2','2'],
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>(-2)²=4。y=-1×4=-4</span><span class="exp-tip">💡 2乗の計算が先、マイナスをかけるのはそのあと！</span>' },
-    { q:'y=x²のグラフの形は？', sub:'グラフの基本形', a:'放物線（下に凸）', choices:['放物線（下に凸）','直線','放物線（上に凸）','円'],
-      exp:'<span class="exp-rule"><span class="label">📐 ルール</span>a>0の二次関数y=ax²は下に凸の放物線</span><span class="exp-tip">💡 y=x²はa=1でプラスだから下に凸！</span>' },
-    { q:'y=-3x²のグラフは、上に凸？下に凸？', sub:'aの符号を確認', a:'上に凸', choices:['上に凸','下に凸','直線','わからない'],
-      exp:'<span class="exp-rule"><span class="label">📐 ルール</span>a<0のときは上に凸</span><span class="exp-tip">💡 -3x²はaがマイナスだから上に凸！</span>' },
+    { q:'y=x²のグラフの形は？', sub:'グラフの基本形', a:'放物線（上に開いた形）', choices:['放物線（上に開いた形）','直線','放物線（下に開いた形）','円'],
+      exp:'<span class="exp-rule"><span class="label">📐 ルール</span>a>0の関数y=ax²は上に開いた形の放物線</span><span class="exp-tip">💡 y=x²はa=1でプラスだから上に開いた形！</span>' },
+    { q:'y=-3x²のグラフは、下に開いた形？上に開いた形？', sub:'aの符号を確認', a:'下に開いた形', choices:['下に開いた形','上に開いた形','直線','わからない'],
+      exp:'<span class="exp-rule"><span class="label">📐 ルール</span>a<0のときは下に開いた形</span><span class="exp-tip">💡 -3x²はaがマイナスだから下に開いた形！</span>' },
     { q:'y=x²で、x=2のときとx=-2のときのyの値を比べると？', sub:'y軸対称の性質', a:'同じ値になる', choices:['同じ値になる','x=2の方が大きい','x=-2の方が大きい','符号が逆になる'],
       exp:'<span class="exp-rule"><span class="label">📐 ルール</span>xと-xを代入すると(-x)²=x²で同じ値になる</span><span class="exp-tip">💡 2²=4、(-2)²=4で同じ！だからy軸に対して線対称！</span>' },
     { q:'表（y=2x²）で、x=-1のときのyの値（?）は？', svg:'', sub: xyTable([-2,-1,0,1,2],[8,'?',0,2,8]), a:'2', choices:['2','-2','4','1'],
@@ -856,14 +859,14 @@ function renderSection4() {
     { q:'点(2,8)を通るy=ax²のaの値は？', sub:'8=a×2² からaを求める', a:'2', choices:['2','4','8','16'],
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>8=a×4 なので a=8÷4=2</span><span class="exp-tip">💡 座標をy=ax²に代入してaを逆算する！</span>' },
     { q:'y=ax²のグラフがy軸について線対称なのはなぜ？', sub:'対称になる理由', a:'xと-xを代入すると同じ(-x)²=x²になるから', choices:['xと-xを代入すると同じ(-x)²=x²になるから','aの値が正だから','xが2乗されないから','グラフが直線だから'],
-      exp:'<span class="exp-rule"><span class="label">📐 理由</span>(-x)²=x²なので、xとーxで必ずyの値が同じになる</span><span class="exp-tip">💡 これが二次関数だけが持つ「対称性」の理由！</span>' },
-    { q:'下のグラフのaは正・負どちら？', svg:parabolaGraph(-1,'#0ea5e9',false), sub:'上に凸か下に凸かで判断', a:'負（マイナス）', choices:['負（マイナス）','正（プラス）','0','わからない'],
-      exp:'<span class="exp-rule"><span class="label">📐 ルール</span>上に凸のグラフはa<0</span><span class="exp-tip">💡 このグラフは上に凸だからaは負！</span>' },
-    { q:'一次関数のグラフは直線、二次関数y=ax²のグラフは？', sub:'グラフの形の違い', a:'曲線（放物線）', choices:['曲線（放物線）','直線','点だけ','関係ない図形'],
-      exp:'<span class="exp-rule"><span class="label">📐 ルール</span>二次関数のグラフは直線ではなく曲線（放物線）</span><span class="exp-tip">💡 xの2乗が入っているから、まっすぐな線にはならない！</span>' },
+      exp:'<span class="exp-rule"><span class="label">📐 理由</span>(-x)²=x²なので、xとーxで必ずyの値が同じになる</span><span class="exp-tip">💡 これが y=ax² のグラフの「対称性」の理由！</span>' },
+    { q:'下のグラフのaは正・負どちら？', svg:parabolaGraph(-1,'#0ea5e9',false), sub:'下に開いた形か上に開いた形かで判断', a:'負（マイナス）', choices:['負（マイナス）','正（プラス）','0','わからない'],
+      exp:'<span class="exp-rule"><span class="label">📐 ルール</span>下に開いた形のグラフはa<0</span><span class="exp-tip">💡 このグラフは下に開いた形だからaは負！</span>' },
+    { q:'一次関数のグラフは直線、関数y=ax²のグラフは？', sub:'グラフの形の違い', a:'曲線（放物線）', choices:['曲線（放物線）','直線','点だけ','関係ない図形'],
+      exp:'<span class="exp-rule"><span class="label">📐 ルール</span>関数y=ax²のグラフは直線ではなく曲線（放物線）</span><span class="exp-tip">💡 xの2乗が入っているから、まっすぐな線にはならない！</span>' },
   ];
   qs.forEach(function(q, i) { q._qid = 'math_func_s4_q' + i; });
-  html += '<div class="practice-section"><div class="practice-title">✏️ 練習問題 — 二次関数 y=ax²</div>';
+  html += '<div class="practice-section"><div class="practice-title">✏️ 練習問題 — 関数 y=ax²</div>';
   qs.forEach(function(q, i) {
     var qid = q._qid;
     qMeta[qid] = { type:'choice', answer:q.a, xp:5, jp:q.q, choices:q.choices };
@@ -880,12 +883,86 @@ function renderSection4() {
   return html;
 }
 
+// ===== SECTION 8: 変化の割合・変域・直線の式・交点（2026-09-30 追加。入試の大問1・大問2でよく出る） =====
+function renderSection8() {
+  var html = '<div class="rule-card">'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">「変化の割合」と「変域」、名前は聞いたことあるけど何をすればいいの？</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">どちらも「両はしを代入」が基本だ。ただし y＝ax² の変域は、x の範囲に<b>0がふくまれるとき</b>だけ注意がいる。そこが入試のひっかけポイントだ</div></div></div>'
+    + '</div>';
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">📐 直線の式の求め方</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">2点を通る：傾き ＝ (yの増加量) ÷ (xの増加量) → 1点を代入して切片 b を求める</div>'
+    + '<div class="ex">例：(1, 3) と (3, 7) → 傾き 4÷2 ＝ 2 → 3 ＝ 2×1 ＋ b → b ＝ 1 → <b>y ＝ 2x ＋ 1</b></div>'
+    + '</div>'
+    + '<div class="rule-card-title" style="margin-top:14px">📐 変化の割合</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">変化の割合 ＝ (yの増加量) ÷ (xの増加量)</div>'
+    + '<div class="ex">一次関数 → いつも一定（＝傾き）。<b>y ＝ ax² → 一定ではない</b>（x の区間で変わる）</div>'
+    + '<div class="ex">y ＝ x² で x が 1 から 3 まで：(9 − 1) ÷ (3 − 1) ＝ <b>4</b></div>'
+    + '<div class="note">💡 近道：y ＝ ax² で x が p から q まで増加するときの変化の割合 ＝ <b>a(p ＋ q)</b>（2×(1＋3)＝8 など）</div>'
+    + '</div>'
+    + '<div class="rule-card-title" style="margin-top:14px">📐 y ＝ ax² の変域（ひっかけ注意）</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">x の変域に <b>0 がふくまれる</b>とき、y の最小（a＞0）または最大（a＜0）は <b>0</b></div>'
+    + '<div class="ex">y ＝ x²、−2 ≦ x ≦ 3 → y ＝ 0（x＝0）〜 9（x＝3）→ <b>0 ≦ y ≦ 9</b>（4 ≦ y ≦ 9 は×）</div>'
+    + '<div class="note">💡 グラフを簡単に描いて、いちばん低い点・高い点を目で確認する。</div>'
+    + '</div>'
+    + '</div>';
+
+  function E(rule, ok, ng, tip) { return '<span class="exp-rule"><span class="label">📐 ルール</span>' + rule + '</span><span class="exp-ok">✅ ' + ok + '</span>' + (ng ? '<span class="exp-ng">❌ ' + ng + '</span>' : '') + '<span class="exp-tip">💡 ' + tip + '</span>'; }
+  var qs = [
+    { q:'2点 (1, 3)、(3, 7) を通る直線の式は？', a:'y＝2x＋1', choices:['y＝2x＋1','y＝2x＋3','y＝4x−1','y＝x＋2'],
+      exp:E('傾きを出してから、1点を代入して b', '傾き (7−3)÷(3−1)＝2 → 3＝2＋b → b＝1', '傾きを 4÷2 ではなく 4 にしない', '最後にもう1点を代入して確認') },
+    { q:'傾きが2で、点 (1, 5) を通る直線の式は？', a:'y＝2x＋3', choices:['y＝2x＋3','y＝2x＋5','y＝5x＋2','y＝2x−3'],
+      exp:E('y＝2x＋b に点を代入', '5＝2×1＋b → b＝3', '通る点の y 座標をそのまま切片にしない', '切片は x＝0 のときの y') },
+    { q:'y＝2x＋1 で、x の変域が 1≦x≦3 のとき、y の変域は？', a:'3≦y≦7', choices:['3≦y≦7','1≦y≦3','2≦y≦6','3≦y≦6'],
+      exp:E('一次関数は両はしを代入', 'x＝1 → 3、x＝3 → 7', 'x の変域をそのまま書かない', '直線なので両はしが最小・最大') },
+    { q:'y＝x² で、x が 1 から 3 まで増加するときの変化の割合は？', a:'4', choices:['4','8','2','9'],
+      exp:E('(yの増加量)÷(xの増加量)', '(9−1)÷(3−1)＝8÷2＝4', '8 は y の増加量だけ', '近道：1×(1＋3)＝4') },
+    { q:'y＝2x² で、x が 1 から 3 まで増加するときの変化の割合は？', a:'8', choices:['8','16','4','2'],
+      exp:E('(yの増加量)÷(xの増加量)', '(18−2)÷(3−1)＝16÷2＝8', '16 は y の増加量', '近道：a(p＋q)＝2×(1＋3)＝8') },
+    { q:'y＝ax² の変化の割合について正しいものは？', a:'x の区間によって変わる', choices:['x の区間によって変わる','いつも a と等しい','いつも一定','いつも0'],
+      exp:E('一定なのは一次関数だけ', 'y＝ax² はどの区間をとるかで変わる', '「いつも a（傾き）と同じ」は一次関数の話', '曲線なので傾きが場所で変わる') },
+    { q:'y＝x² で、x の変域が −2≦x≦3 のとき、y の変域は？', a:'0≦y≦9', choices:['0≦y≦9','4≦y≦9','−4≦y≦9','0≦y≦4'],
+      exp:E('x の変域に0がふくまれる → y の最小は0', 'x＝0 で 0、x＝3 で 9', '両はしだけ代入すると 4≦y≦9 になる（ひっかけ）', 'グラフの谷（原点）をふくむか確認') },
+    { q:'y＝−2x² で、x の変域が −1≦x≦2 のとき、y の変域は？', a:'−8≦y≦0', choices:['−8≦y≦0','−8≦y≦−2','−2≦y≦8','0≦y≦8'],
+      exp:E('a＜0 で0をふくむ → y の最大は0', 'x＝0 で 0、x＝2 で −8', '−8≦y≦−2 は0をふくむことを忘れたまちがい', '下に開いた形は原点がいちばん高い') },
+    { q:'y＝x² で、x の変域が 1≦x≦3 のとき、y の変域は？', a:'1≦y≦9', choices:['1≦y≦9','0≦y≦9','1≦y≦3','2≦y≦6'],
+      exp:E('0をふくまないので両はしを代入', 'x＝1 → 1、x＝3 → 9', '0をふくまないのに 0≦y にしない', 'まず「0をふくむか」を見る') },
+    { q:'【難】y＝ax² で、x が 1 から 3 まで増加するときの変化の割合が 8 である。a の値は？', a:'2', choices:['2','8','4','1'],
+      exp:E('変化の割合 ＝ a(p＋q)', 'a×(1＋3)＝8 → a＝2', 'ていねいに：(9a−a)÷2＝4a＝8 でも同じ', '近道の式が使えると速い') },
+    { q:'【難】放物線 y＝x² と直線 y＝x＋2 の交点の x 座標をすべて求めると？', a:'x＝2, −1', choices:['x＝2, −1','x＝−2, 1','x＝2','x＝1, 4'],
+      exp:E('交点 → 2つの式を＝でつなぐ', 'x²＝x＋2 → x²−x−2＝0 → (x−2)(x＋1)＝0', '二次方程式になるので解は2つ', '二次方程式の単元とつながる') },
+    { q:'【難】放物線 y＝x² 上の2点 A(−1, 1)、B(2, 4) を通る直線の式は？', a:'y＝x＋2', choices:['y＝x＋2','y＝3x＋4','y＝x＋1','y＝−x＋2'],
+      exp:E('2点を通る直線 → 傾きを出して代入', '傾き (4−1)÷(2−(−1))＝1 → 4＝2＋b → b＝2', 'x の増加量は 2−(−1)＝3', 'マイナスの座標は引き算に注意') },
+    { q:'【難】前の問題の直線と y 軸との交点を C とする。原点 O、A、B を結んだ △AOB の面積は？', a:'3', choices:['3','6','2','4'],
+      exp:E('y 軸で2つの三角形に分ける：△AOC ＋ △BOC', 'C(0, 2)。底辺 OC＝2、高さは 1 と 2 → 2×1÷2 ＋ 2×2÷2 ＝ 1 ＋ 2 ＝ 3', '底辺を AB にしない', '入試の大問でよく出る分け方') },
+    { q:'ボールを落とすと、x 秒間に落ちる距離 y m は y＝5x² で表される。落ち始めて1秒後から3秒後までの平均の速さは？', a:'毎秒20m', choices:['毎秒20m','毎秒40m','毎秒45m','毎秒10m'],
+      exp:E('平均の速さ ＝ 変化の割合', '(45−5)÷(3−1)＝20', '40 は進んだ距離', '変化の割合の文章題') }
+  ];
+  qs.forEach(function(q, i) { q._qid = 'math_func_s8_q' + i; });
+  html += '<div class="practice-section"><div class="practice-title">✏️ 練習問題 — 変化の割合・変域・直線の式</div>';
+  qs.forEach(function(q, i) {
+    var qid = q._qid;
+    qMeta[qid] = { type:'choice', answer:q.a, xp:5, jp:q.q, choices:q.choices };
+    html += '<div class="q-card" data-card="' + qid + '">'
+      + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
+      + '<div class="q-text">' + q.q + '</div>'
+      + makeChoices(qid, q.choices, q.a, 5)
+      + makeFeedback(qid, q.exp)
+      + '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
 // ===== SECTION 5: 確認テスト =====
 function renderSection5() {
   var html = '';
   html += '<div class="intro-box">'
     + '<div class="intro-box-title">📐 きょん＆西村の会話</div>'
-    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村真二（慶應義塾卒・元アナ）</div><div class="chat-bubble">Section 1〜4の総まとめだ。関数の基礎・比例・一次関数・二次関数——全部出るよ。自分のペースで解いてみよう。</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村真二（慶應義塾卒・元アナ）</div><div class="chat-bubble">Section 1〜4の総まとめだ。関数の基礎・比例・一次関数・関数y=ax²——全部出るよ。自分のペースで解いてみよう。</div></div></div>'
     + '</div>';
 
   var qs = [
@@ -905,10 +982,10 @@ function renderSection5() {
     { q:'y=3x²で、x=2のときのyの値は？', a:'12', choices:['12','6','9','36'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>y=3×2²=3×4=12</span>' },
     { q:'y=-2x²で、x=3のときのyの値は？', a:'-18', choices:['-18','18','-6','-36'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>y=-2×3²=-2×9=-18</span>' },
     { q:'y=x²のグラフはy軸について何？', a:'線対称', choices:['線対称','点対称','平行','垂直'], exp:'<span class="exp-rule"><span class="label">📐 ルール</span>(-x)²=x²なのでy軸対称</span>' },
-    { q:'y=-x²のグラフは上に凸？下に凸？', a:'上に凸', choices:['上に凸','下に凸','直線','円'], exp:'<span class="exp-rule"><span class="label">📐 ルール</span>aがマイナスなので上に凸</span>' },
+    { q:'y=-x²のグラフは下に開いた形？上に開いた形？', a:'下に開いた形', choices:['下に開いた形','上に開いた形','直線','円'], exp:'<span class="exp-rule"><span class="label">📐 ルール</span>aがマイナスなので下に開いた形</span>' },
     { q:'点(3,18)を通るy=ax²のaの値は？', a:'2', choices:['2','3','6','9'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>18=a×9 なのでa=2</span>' },
     { q:'y=x²で、x=4とx=-4のときのyの値の関係は？', a:'同じ値になる', choices:['同じ値になる','符号が逆になる','xの分だけ違う','関係ない'], exp:'<span class="exp-rule"><span class="label">📐 ルール</span>4²=16、(-4)²=16で同じ</span>' },
-    { q:'二次関数y=ax²のグラフの名前は？', a:'放物線', choices:['放物線','双曲線','直線','円'], exp:'<span class="exp-rule"><span class="label">📐 ルール</span>二次関数のグラフは放物線と呼ぶ</span>' },
+    { q:'関数y=ax²のグラフの名前は？', a:'放物線', choices:['放物線','双曲線','直線','円'], exp:'<span class="exp-rule"><span class="label">📐 ルール</span>関数y=ax²のグラフは放物線と呼ぶ</span>' },
   ];
   qs.forEach(function(q, i) { q._qid = 'math_func_s5_q' + i; });
   qs = shuffleArray(qs);

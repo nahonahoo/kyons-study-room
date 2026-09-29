@@ -324,7 +324,7 @@ function checkSectionComplete() {
       if (!document.getElementById('secCompleteBanner')) {
         var banner = document.createElement('div');
         banner.id = 'secCompleteBanner';
-        var nextMsg = currentSection < 4 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストへ挑戦！';
+        var nextMsg = currentSection === 3 ? '「因数分解で解く」へ進もう！' : currentSection === 7 ? '確認テストへ挑戦！' : (currentSection < 4 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストへ挑戦！');
         banner.innerHTML = '<div style="text-align:center;padding:20px;margin-bottom:12px;background:linear-gradient(135deg,rgba(163,113,247,0.12),rgba(14,165,233,0.08));border:1px solid var(--purple);border-radius:14px">'
           + '<div style="font-size:36px;margin-bottom:8px">🎉</div>'
           + '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--purple);letter-spacing:2px;margin-bottom:6px">セクション ' + currentSection + ' クリア！</div>'
@@ -344,6 +344,7 @@ var SECTIONS = [
   { id:1, label:'標準形とa,b,c', title:'標準形とa,b,cの見つけ方',    sub:'ax²+bx+c=0 に整えて、正確に係数を読み取る' },
   { id:2, label:'解の公式',      title:'解の公式の使い方',           sub:'4ステップで、どんな二次方程式も解ける' },
   { id:3, label:'いろいろな型',  title:'いろいろなパターン',         sub:'√が残る場合・重解・約分の注意点' },
+  { id:7, label:'因数分解で解く', title:'因数分解・平方根で解く／文章題', sub:'教科書で最初に習う解き方と、入試の文章題' },
   { id:4, label:'確認テスト',    title:'確認テスト',                 sub:'全セクション総まとめ！何問正解できる？' },
   { id:5, label:'📊弱点',        title:'弱点ノート',                 sub:'間違えた問題の正答率を確認しよう' },
   { id:6, label:'🔥特訓',        title:'弱点特訓モード',             sub:'弱点問題だけを集中練習！' },
@@ -353,10 +354,10 @@ function renderTabs() {
   var html = '';
   SECTIONS.forEach(function(s) {
     var cls = 'section-tab'
-      + (s.id >= 5 ? ' tokku' : '')
+      + (s.id === 5 || s.id === 6 ? ' tokku' : '')
       + (s.id === currentSection ? ' active' : '')
-      + (sectionDone[s.id] && s.id < 5 ? ' done' : '');
-    var label = s.label + (sectionDone[s.id] && s.id < 5 ? ' ✓' : '');
+      + (sectionDone[s.id] && s.id !== 5 && s.id !== 6 ? ' done' : '');
+    var label = s.label + (sectionDone[s.id] && s.id !== 5 && s.id !== 6 ? ' ✓' : '');
     if (s.id === 6) { var wk = getWeakQuestions(); label = '🔥特訓' + (wk.length > 0 ? '('+wk.length+')' : ''); }
     html += '<button class="' + cls + '" data-sid="' + s.id + '">' + label + '</button>';
   });
@@ -377,7 +378,7 @@ function renderSection(id) {
   if (id === 5) { renderWeakNote(); return; }
   if (id === 6) { renderTokkuMode(); return; }
 
-  var s = SECTIONS[id];
+  var s = SECTIONS.filter(function(x) { return x.id === id; })[0];
   var html = '';
   html += '<div class="progress-dots">';
   for (var i = 0; i <= 4; i++) {
@@ -395,10 +396,12 @@ function renderSection(id) {
   else if (id === 2) html += renderSection2();
   else if (id === 3) html += renderSection3();
   else if (id === 4) html += renderSection4();
+  else if (id === 7) html += renderSection7();
 
-  if (id >= 1 && id <= 4) {
-    var nextLabel = id < 4 ? '次のセクションへ →' : '🏆 結果を見る！';
-    html += '<button class="next-section-btn" id="nextBtn" data-goto="' + (id < 4 ? id+1 : 'result') + '" style="display:none">' + nextLabel + '</button>';
+  if ((id >= 1 && id <= 4) || id === 7) {
+    var NEXT = { 1:2, 2:3, 3:7, 7:4 };
+    var nextLabel = id !== 4 ? '次のセクションへ →' : '🏆 結果を見る！';
+    html += '<button class="next-section-btn" id="nextBtn" data-goto="' + (id !== 4 ? NEXT[id] : 'result') + '" style="display:none">' + nextLabel + '</button>';
   }
 
   document.getElementById('mainContent').innerHTML = html;
@@ -433,7 +436,7 @@ var SVG = {
     + '<text x="170" y="36" fill="#a371f7" font-size="13" text-anchor="middle">① a, b, c を確認する</text>'
     + '<path d="M 170,52 L 170,68" stroke="#8b949e" stroke-width="2" marker-end="url(#qArrow)"/>'
     + '<rect x="20" y="70" width="300" height="42" rx="8" fill="rgba(14,165,233,0.12)" stroke="#0ea5e9" stroke-width="2"/>'
-    + '<text x="170" y="96" fill="#0ea5e9" font-size="13" text-anchor="middle">② 判別式 b²-4ac を計算</text>'
+    + '<text x="170" y="96" fill="#0ea5e9" font-size="13" text-anchor="middle">② √の中（b²−4ac） b²-4ac を計算</text>'
     + '<path d="M 170,112 L 170,128" stroke="#8b949e" stroke-width="2" marker-end="url(#qArrow)"/>'
     + '<rect x="20" y="130" width="300" height="42" rx="8" fill="rgba(245,197,24,0.12)" stroke="#f5c518" stroke-width="2"/>'
     + '<text x="170" y="156" fill="#f5c518" font-size="13" text-anchor="middle">③ √の中を簡単にする</text>'
@@ -547,7 +550,7 @@ function renderSection2() {
   html += '<div class="intro-box">'
     + '<div class="intro-box-title">📐 きょん＆西村の会話</div>'
     + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">いよいよ解の公式！でも式が長くて覚えられる気がしない…</div></div></div>'
-    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">丸ごと覚えるしかない公式だが、使い方は4ステップに分ければ簡単だ。a,b,cを確認して、判別式を計算して、√を簡単にして、最後に約分する。この順番さえ守れば迷わない。</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">丸ごと覚えるしかない公式だが、使い方は4ステップに分ければ簡単だ。a,b,cを確認して、√の中（b²−4ac）を計算して、√を簡単にして、最後に約分する。この順番さえ守れば迷わない。</div></div></div>'
     + '</div>';
 
   html += '<div class="rule-card">'
@@ -564,17 +567,17 @@ function renderSection2() {
     + '</div>';
 
   var qs = [
-    { q:'x²+5x+6=0を解の公式で解くと？', sub:'a=1,b=5,c=6。判別式=25-24=1', a:'x=-2, -3', choices:['x=-2, -3','x=2, 3','x=-2, 3','x=-1, -6'],
-      exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=25-24=1。x=(-5±1)/2 → x=-2, -3</span><span class="exp-tip">💡 判別式が1になる＝ちょうどいい数になる典型パターン！</span>' },
-    { q:'x²-3x-10=0を解の公式で解くと？', sub:'a=1,b=-3,c=-10。判別式=9+40=49', a:'x=5, -2', choices:['x=5, -2','x=-5, 2','x=5, 2','x=-5, -2'],
+    { q:'x²+5x+6=0を解の公式で解くと？', sub:'a=1,b=5,c=6。b²−4ac=25-24=1', a:'x=-2, -3', choices:['x=-2, -3','x=2, 3','x=-2, 3','x=-1, -6'],
+      exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=25-24=1。x=(-5±1)/2 → x=-2, -3</span><span class="exp-tip">💡 √の中（b²−4ac）が1になる＝ちょうどいい数になる典型パターン！</span>' },
+    { q:'x²-3x-10=0を解の公式で解くと？', sub:'a=1,b=-3,c=-10。b²−4ac=9+40=49', a:'x=5, -2', choices:['x=5, -2','x=-5, 2','x=5, 2','x=-5, -2'],
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=9+40=49。x=(3±7)/2 → x=5, -2</span><span class="exp-tip">💡 -b=-(-3)=3になることに注意！</span>' },
-    { q:'x²-6x+9=0を解の公式で解くと？', sub:'判別式=36-36=0（重解）', a:'x=3（重解）', choices:['x=3（重解）','x=-3（重解）','x=9（重解）','x=3, -3'],
-      exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=36-36=0。x=6/2=3（±0なので解は1つだけ）</span><span class="exp-tip">💡 判別式が0のときは「重解」と呼ばれ、答えは1つだけ！</span>' },
-    { q:'2x²+5x+2=0を解の公式で解くと？', sub:'a=2,b=5,c=2。判別式=25-16=9', a:'x=-1/2, -2', choices:['x=-1/2, -2','x=1/2, 2','x=-1/2, 2','x=1/2, -2'],
+    { q:'x²-6x+9=0を解の公式で解くと？', sub:'b²−4ac=36-36=0（重解）', a:'x=3（重解）', choices:['x=3（重解）','x=-3（重解）','x=9（重解）','x=3, -3'],
+      exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=36-36=0。x=6/2=3（±0なので解は1つだけ）</span><span class="exp-tip">💡 √の中（b²−4ac）が0のときは、解は1つだけ（重解ともいう）！</span>' },
+    { q:'2x²+5x+2=0を解の公式で解くと？', sub:'a=2,b=5,c=2。b²−4ac=25-16=9', a:'x=-1/2, -2', choices:['x=-1/2, -2','x=1/2, 2','x=-1/2, 2','x=1/2, -2'],
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=25-16=9。x=(-5±3)/4 → x=-1/2, -2</span><span class="exp-tip">💡 aが1でないときは分母(2a)も変わる。ここでは2a=4！</span>' },
-    { q:'2x²-7x+3=0を解の公式で解くと？', sub:'a=2,b=-7,c=3。判別式=49-24=25', a:'x=3, 1/2', choices:['x=3, 1/2','x=-3, -1/2','x=3, -1/2','x=6, 1'],
+    { q:'2x²-7x+3=0を解の公式で解くと？', sub:'a=2,b=-7,c=3。b²−4ac=49-24=25', a:'x=3, 1/2', choices:['x=3, 1/2','x=-3, -1/2','x=3, -1/2','x=6, 1'],
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=49-24=25。x=(7±5)/4 → x=3, 1/2</span><span class="exp-tip">💡 分数の解になることも普通にある！</span>' },
-    { q:'3x²-2x-1=0を解の公式で解くと？', sub:'a=3,b=-2,c=-1。判別式=4+12=16', a:'x=1, -1/3', choices:['x=1, -1/3','x=-1, 1/3','x=1, 1/3','x=3, -1'],
+    { q:'3x²-2x-1=0を解の公式で解くと？', sub:'a=3,b=-2,c=-1。b²−4ac=4+12=16', a:'x=1, -1/3', choices:['x=1, -1/3','x=-1, 1/3','x=1, 1/3','x=3, -1'],
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=4+12=16。x=(2±4)/6 → x=1, -1/3</span><span class="exp-tip">💡 分母6を忘れずに、約分できるところは約分する！</span>' },
     { q:'x²-5=0を解の公式で解くと？', sub:'a=1,b=0,c=-5。b=0を忘れずに代入', a:'x=±√5', choices:['x=±√5','x=±5','x=±√10','x=5'],
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=0+20=20。x=(0±√20)/2=(0±2√5)/2=±√5</span><span class="exp-tip">💡 b=0でも公式はそのまま使える。√20=2√5への簡略化も忘れずに（平方根の単元の復習）！</span>' },
@@ -604,7 +607,7 @@ function renderSection3() {
 
   html += '<div class="intro-box">'
     + '<div class="intro-box-title">📐 きょん＆西村の会話</div>'
-    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">判別式がきれいな数にならないとき、√がそのまま残っちゃうんだけど…</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">√の中（b²−4ac）がきれいな数にならないとき、√がそのまま残っちゃうんだけど…</div></div></div>'
     + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">それが普通だ。むしろテストではそのパターンの方がよく出る。√の中を平方根の単元でやった素因数分解で簡単にして、最後に分数全体を約分する——ここが一番のヤマ場だ。</div></div></div>'
     + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">約分するとき、注意することある？</div></div></div>'
     + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">大ありだ。分子の「-6±2√5」を2で割るときは、-6と2√5の両方を2で割らないといけない。片方だけ割って満足するのが一番多いミスだ。</div></div></div>'
@@ -615,7 +618,7 @@ function renderSection3() {
     + SVG.reduceCare
     + '<div class="rule-box" style="margin-top:14px">'
     + '<div class="rule-title">注意点まとめ</div>'
-    + '<div class="ex">① 判別式が0より大きい平方数でない → √が残る（普通のこと！）</div>'
+    + '<div class="ex">① √の中（b²−4ac）が0より大きい平方数でない → √が残る（普通のこと！）</div>'
     + '<div class="ex">② √の中は平方根の単元のやり方で簡単にする（√20=2√5など）</div>'
     + '<div class="ex">③ 分子の「-b」と「√の項」の両方を、分母(2a)の共通因数で割る</div>'
     + '<div class="note">⚠️ (-6±2√5)/2 は -3±√5 になる。「-6÷2」と「2√5÷2」の両方を実行して初めて正しい約分！</div>'
@@ -623,21 +626,21 @@ function renderSection3() {
     + '</div>';
 
   var qs = [
-    { q:'x²+2x-1=0を解の公式で解くと？', sub:'判別式=4+4=8=4×2 → √8=2√2', a:'x=-1±√2', choices:['x=-1±√2','x=1±√2','x=-1±2√2','x=-2±√2'],
+    { q:'x²+2x-1=0を解の公式で解くと？', sub:'b²−4ac=4+4=8=4×2 → √8=2√2', a:'x=-1±√2', choices:['x=-1±√2','x=1±√2','x=-1±2√2','x=-2±√2'],
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=4+4=8。x=(-2±2√2)/2 → 両方を2で割って x=-1±√2</span><span class="exp-tip">💡 √8=2√2に簡単化してから、分子全体を2で割る！</span>' },
-    { q:'x²-4x+2=0を解の公式で解くと？', sub:'判別式=16-8=8=4×2 → √8=2√2', a:'x=2±√2', choices:['x=2±√2','x=-2±√2','x=2±2√2','x=4±√2'],
+    { q:'x²-4x+2=0を解の公式で解くと？', sub:'b²−4ac=16-8=8=4×2 → √8=2√2', a:'x=2±√2', choices:['x=2±√2','x=-2±√2','x=2±2√2','x=4±√2'],
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=16-8=8。x=(4±2√2)/2 → x=2±√2</span><span class="exp-tip">💡 4÷2=2、2√2÷2=√2。両方割るのを忘れずに！</span>' },
-    { q:'x²-2x-2=0を解の公式で解くと？', sub:'判別式=4+8=12=4×3 → √12=2√3', a:'x=1±√3', choices:['x=1±√3','x=-1±√3','x=1±3√3','x=2±√3'],
+    { q:'x²-2x-2=0を解の公式で解くと？', sub:'b²−4ac=4+8=12=4×3 → √12=2√3', a:'x=1±√3', choices:['x=1±√3','x=-1±√3','x=1±3√3','x=2±√3'],
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=4+8=12。x=(2±2√3)/2 → x=1±√3</span><span class="exp-tip">💡 √12=2√3への簡略化がポイント！</span>' },
-    { q:'x²+4x+1=0を解の公式で解くと？', sub:'判別式=16-4=12=4×3 → √12=2√3', a:'x=-2±√3', choices:['x=-2±√3','x=2±√3','x=-2±2√3','x=-4±√3'],
+    { q:'x²+4x+1=0を解の公式で解くと？', sub:'b²−4ac=16-4=12=4×3 → √12=2√3', a:'x=-2±√3', choices:['x=-2±√3','x=2±√3','x=-2±2√3','x=-4±√3'],
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=16-4=12。x=(-4±2√3)/2 → x=-2±√3</span><span class="exp-tip">💡 -4÷2=-2、2√3÷2=√3！</span>' },
-    { q:'x²-2x-4=0を解の公式で解くと？', sub:'判別式=4+16=20=4×5 → √20=2√5', a:'x=1±√5', choices:['x=1±√5','x=-1±√5','x=1±2√5','x=2±√5'],
+    { q:'x²-2x-4=0を解の公式で解くと？', sub:'b²−4ac=4+16=20=4×5 → √20=2√5', a:'x=1±√5', choices:['x=1±√5','x=-1±√5','x=1±2√5','x=2±√5'],
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=4+16=20。x=(2±2√5)/2 → x=1±√5</span><span class="exp-tip">💡 √20=2√5！</span>' },
-    { q:'x²+6x+4=0を解の公式で解くと？', sub:'判別式=36-16=20=4×5 → √20=2√5', a:'x=-3±√5', choices:['x=-3±√5','x=3±√5','x=-3±2√5','x=-6±√5'],
+    { q:'x²+6x+4=0を解の公式で解くと？', sub:'b²−4ac=36-16=20=4×5 → √20=2√5', a:'x=-3±√5', choices:['x=-3±√5','x=3±√5','x=-3±2√5','x=-6±√5'],
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=36-16=20。x=(-6±2√5)/2 → x=-3±√5</span><span class="exp-tip">💡 -6と2√5、両方を2で割る！</span>' },
-    { q:'2x²+4x-1=0を解の公式で解くと？', sub:'a=2。判別式=16+8=24=4×6 → √24=2√6', a:'x=(-2±√6)/2', choices:['x=(-2±√6)/2','x=-2±√6','x=(-2±√6)/4','x=(-4±√6)/2'],
+    { q:'2x²+4x-1=0を解の公式で解くと？', sub:'a=2。b²−4ac=16+8=24=4×6 → √24=2√6', a:'x=(-2±√6)/2', choices:['x=(-2±√6)/2','x=-2±√6','x=(-2±√6)/4','x=(-4±√6)/2'],
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=16+8=24。x=(-4±2√6)/4 → 分子分母を2で割って x=(-2±√6)/2</span><span class="exp-tip">💡 分母が2aで4になる場合も、分子の共通因数と一緒に約分できるか確認！</span>' },
-    { q:'x²-4x-1=0を解の公式で解くと？', sub:'判別式=16+4=20=4×5 → √20=2√5', a:'x=2±√5', choices:['x=2±√5','x=-2±√5','x=2±2√5','x=4±√5'],
+    { q:'x²-4x-1=0を解の公式で解くと？', sub:'b²−4ac=16+4=20=4×5 → √20=2√5', a:'x=2±√5', choices:['x=2±√5','x=-2±√5','x=2±2√5','x=4±√5'],
       exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=16+4=20。x=(4±2√5)/2 → x=2±√5</span><span class="exp-tip">💡 4÷2=2、2√5÷2=√5！</span>' },
   ];
   qs.forEach(function(q, i) { q._qid = 'math_quad_s3_q' + i; });
@@ -649,6 +652,74 @@ function renderSection3() {
       + '<div class="q-number">Q' + (i+1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
       + (q.sub ? '<div class="q-sub">' + q.sub + '</div>' : '')
+      + makeChoices(qid, q.choices, q.a, 5)
+      + makeFeedback(qid, q.exp)
+      + '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+// ===== SECTION 7: 因数分解・平方根で解く／文章題（2026-09-30 追加。教科書で最初に習う解き方が抜けていた） =====
+function renderSection7() {
+  var html = '<div class="rule-card">'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">二次方程式は全部、解の公式で解けばいいんでしょ？</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">解けるけど遠回りになることが多い。<b>① 因数分解できないか → ② (　)² ＝ 数 の形なら平方根 → ③ どちらもダメなら解の公式</b>。この順番で見ると、入試の計算はほとんど一瞬で終わる</div></div></div>'
+    + '</div>';
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">📐 二次方程式の解き方（この順に考える）</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">① <b>因数分解</b>：AB ＝ 0 なら A ＝ 0 または B ＝ 0。x² ＋ 5x ＋ 6 ＝ 0 → (x＋2)(x＋3) ＝ 0 → x ＝ −2, −3</div>'
+    + '<div class="ex">② <b>平方根</b>：(x − 3)² ＝ 5 → x − 3 ＝ ±√5 → x ＝ 3 ± √5</div>'
+    + '<div class="ex">③ <b>解の公式</b>：①②で解けないとき</div>'
+    + '<div class="note">⚠️ x² ＝ 3x を x でわって x ＝ 3 だけにしない！ x² − 3x ＝ 0 → x(x − 3) ＝ 0 → <b>x ＝ 0, 3</b>（x ＝ 0 が消えてしまう）<br>⚠️ (x＋1)(x−2) ＝ 4 は「＝0」ではないので、そのまま x＋1＝4 としない。展開して「＝0」にしてから。</div>'
+    + '</div>'
+    + '<div class="rule-card-title" style="margin-top:14px">📐 文章題・解から係数を求める</div>'
+    + '<div class="rule-box">'
+    + '<div class="ex">解の1つが x ＝ 3 → 方程式に<b>代入</b>して a を求める → もとの式を解いて<b>もう1つの解</b>を出す</div>'
+    + '<div class="ex">文章題：求めたものが<b>問題に合うか</b>確認（長さや個数がマイナスなら不適）</div>'
+    + '</div>'
+    + '</div>';
+
+  function E(rule, ok, ng, tip) { return '<span class="exp-rule"><span class="label">📐 ルール</span>' + rule + '</span><span class="exp-ok">✅ ' + ok + '</span>' + (ng ? '<span class="exp-ng">❌ ' + ng + '</span>' : '') + '<span class="exp-tip">💡 ' + tip + '</span>'; }
+  var qs = [
+    { q:'x² ＋ 5x ＋ 6 ＝ 0 を因数分解で解くと？', a:'x ＝ −2, −3', choices:['x ＝ −2, −3','x ＝ 2, 3','x ＝ −1, −6','x ＝ 2, −3'],
+      exp:E('足して5・かけて6 → 2と3', '(x＋2)(x＋3) ＝ 0 → x ＝ −2, −3', '(x＋2) の解は x ＝ +2 ではなく −2', 'カッコの中が0になる x を答える') },
+    { q:'x² − 7x ＋ 12 ＝ 0 を解くと？', a:'x ＝ 3, 4', choices:['x ＝ 3, 4','x ＝ −3, −4','x ＝ 2, 6','x ＝ −3, 4'],
+      exp:E('足して−7・かけて12 → −3と−4', '(x−3)(x−4) ＝ 0 → x ＝ 3, 4', '符号を逆にしない', '確認：9−21+12＝0 ✓') },
+    { q:'x² ＋ 2x − 15 ＝ 0 を解くと？', a:'x ＝ −5, 3', choices:['x ＝ −5, 3','x ＝ 5, −3','x ＝ −5, −3','x ＝ 15, −1'],
+      exp:E('足して2・かけて−15 → 5と−3', '(x＋5)(x−3) ＝ 0 → x ＝ −5, 3', 'x＝5, −3 は符号が逆', '解はカッコの中の数の符号を逆にしたもの') },
+    { q:'x² − 6x ＋ 9 ＝ 0 を解くと？', a:'x ＝ 3', choices:['x ＝ 3','x ＝ −3','x ＝ ±3','x ＝ 9'],
+      exp:E('(x−3)² ＝ 0', 'x ＝ 3（解は1つ）', '±3 にはならない', '(　)² ＝ 0 の形は解が1つ') },
+    { q:'x² − 16 ＝ 0 を解くと？', a:'x ＝ ±4', choices:['x ＝ ±4','x ＝ 4','x ＝ ±8','x ＝ 16'],
+      exp:E('x² ＝ 16 → x ＝ ±√16', 'x ＝ ±4', 'マイナスの解を忘れない', '(x＋4)(x−4)＝0 でも同じ') },
+    { q:'x² ＝ 3x を解くと？', a:'x ＝ 0, 3', choices:['x ＝ 0, 3','x ＝ 3','x ＝ ±√3','x ＝ 0'],
+      exp:E('移項して x² − 3x ＝ 0 → x(x − 3) ＝ 0', 'x ＝ 0, 3', '両辺を x でわると x＝0 が消える（いちばん多いまちがい）', '文字でわらない。移項して因数分解') },
+    { q:'(x − 3)² ＝ 5 を解くと？', a:'x ＝ 3 ± √5', choices:['x ＝ 3 ± √5','x ＝ −3 ± √5','x ＝ 8','x ＝ 3 ± 5'],
+      exp:E('( )の中を1つのカタマリと見て平方根', 'x − 3 ＝ ±√5 → x ＝ 3 ± √5', '−3 を移項すると ＋3', '展開しない方が速い') },
+    { q:'2x² ＝ 18 を解くと？', a:'x ＝ ±3', choices:['x ＝ ±3','x ＝ ±9','x ＝ 3','x ＝ ±√18'],
+      exp:E('x² ＝ 9 にしてから平方根', 'x ＝ ±3', '±√18 は2でわり忘れ', 'x² ＝ 数 の形にそろえる') },
+    { q:'【難】(x ＋ 1)(x − 2) ＝ 4 を解くと？', a:'x ＝ 3, −2', choices:['x ＝ 3, −2','x ＝ 3, 6','x ＝ −1, 2','x ＝ −3, 2'],
+      exp:E('右辺が0ではないので、展開して移項', 'x² − x − 2 − 4 ＝ 0 → x² − x − 6 ＝ 0 → (x−3)(x＋2) ＝ 0 → x ＝ 3, −2', 'x＋1＝4、x−2＝4 とするのはまちがい', '「AB＝0」のときだけ A＝0 または B＝0') },
+    { q:'【難】x² ＋ ax − 12 ＝ 0 の解の1つが x ＝ 3 のとき、a の値は？', a:'a ＝ 1', choices:['a ＝ 1','a ＝ −1','a ＝ 4','a ＝ 7'],
+      exp:E('解を代入すると a の方程式になる', '9 ＋ 3a − 12 ＝ 0 → 3a ＝ 3 → a ＝ 1', '−12 を移項し忘れない', '「解が〜のとき」は代入') },
+    { q:'【難】前の問題で、もう1つの解は？', a:'x ＝ −4', choices:['x ＝ −4','x ＝ 4','x ＝ −3','x ＝ 12'],
+      exp:E('a ＝ 1 をもどして解く', 'x² ＋ x − 12 ＝ 0 → (x＋4)(x−3) ＝ 0 → x ＝ −4', 'x＝3 はすでにわかっている方', 'もとの式にもどして因数分解') },
+    { q:'連続する2つの正の整数があり、その積は56である。小さい方の数は？', a:'7', choices:['7','8','−8','14'],
+      exp:E('小さい方を n とすると n(n＋1) ＝ 56', 'n² ＋ n − 56 ＝ 0 → (n＋8)(n−7) ＝ 0 → n ＝ 7（正の整数なので −8 は不適）', '−8 は「正の整数」に合わない', '最後に問題の条件に合うか確認') },
+    { q:'【難】縦が横より3cm長い長方形の面積が40cm²である。横の長さは？', a:'5cm', choices:['5cm','8cm','−8cm','10cm'],
+      exp:E('横を x とすると縦は x＋3、面積 x(x＋3) ＝ 40', 'x² ＋ 3x − 40 ＝ 0 → (x＋8)(x−5) ＝ 0 → x ＝ 5（長さなので −8 は不適）', '8cm は縦の長さ', '長さはマイナスにならない') },
+    { q:'【難】ある数を2乗した数と、もとの数を4倍して12をたした数が等しい。ある数をすべて求めると？', a:'6 と −2', choices:['6 と −2','6 だけ','−6 と 2','4 と 3'],
+      exp:E('ある数を x として x² ＝ 4x ＋ 12', 'x² − 4x − 12 ＝ 0 → (x−6)(x＋2) ＝ 0 → x ＝ 6, −2', '「正の数」と書いていなければ −2 も答え', '条件をよく読んで不適を判断') }
+  ];
+  qs.forEach(function(q, i) { q._qid = 'math_quad_s7_q' + i; });
+  html += '<div class="practice-section"><div class="practice-title">✏️ 練習問題 — 因数分解・平方根で解く・文章題</div>';
+  qs.forEach(function(q, i) {
+    var qid = q._qid;
+    qMeta[qid] = { type:'choice', answer:q.a, xp:5, jp:q.q, choices:q.choices };
+    html += '<div class="q-card" data-card="' + qid + '">'
+      + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
+      + '<div class="q-text">' + q.q + '</div>'
       + makeChoices(qid, q.choices, q.a, 5)
       + makeFeedback(qid, q.exp)
       + '</div>';
@@ -671,21 +742,21 @@ function renderSection4() {
     { q:'3x²-x=0 の a,b,cは？', sub:'定数項がない場合はc=0', a:'a=3, b=-1, c=0', choices:['a=3, b=-1, c=0','a=3, b=0, c=-1','a=3, b=1, c=0','a=0, b=3, c=-1'], exp:'<span class="exp-rule"><span class="label">📐 ルール</span>定数項がない→c=0。「-x」は「-1x」だからb=-1</span><span class="exp-tip">💡 xの係数が省略された1にも注意！</span>' },
     { q:'x²-2x=8 を ax²+bx+c=0 の形に整えると？', sub:'右辺を移項する', a:'x²-2x-8=0', choices:['x²-2x-8=0','x²-2x+8=0','x²+2x-8=0','x²-8x=0'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>右辺の8を左辺に移項 → x²-2x-8=0</span><span class="exp-tip">💡 移項で符号が変わる！</span>' },
     { q:'-x²+3x+2=0 を a>0になるように整えると？', sub:'両辺に-1を掛ける', a:'x²-3x-2=0', choices:['x²-3x-2=0','x²+3x+2=0','x²-3x+2=0','x²+3x-2=0'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>全項に-1を掛けて符号反転 → x²-3x-2=0</span><span class="exp-tip">💡 aがマイナスならa>0にする慣習！</span>' },
-    { q:'x²+7x+10=0を解の公式で解くと？', sub:'判別式=49-40=9', a:'x=-2, -5', choices:['x=-2, -5','x=2, 5','x=-2, 5','x=-1, -10'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=49-40=9。x=(-7±3)/2 → x=-2, -5</span><span class="exp-tip">💡 判別式が9のきれいなパターン！</span>' },
-    { q:'x²-5x+4=0を解の公式で解くと？', sub:'判別式=25-16=9', a:'x=1, 4', choices:['x=1, 4','x=-1, -4','x=1, -4','x=2, 2'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=25-16=9。x=(5±3)/2 → x=4, 1</span><span class="exp-tip">💡 -b=5であることに注意！</span>' },
-    { q:'x²-4x+4=0を解の公式で解くと？', sub:'判別式=16-16=0（重解）', a:'x=2（重解）', choices:['x=2（重解）','x=-2（重解）','x=4（重解）','x=2, -2'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=0。x=4/2=2（重解）</span><span class="exp-tip">💡 判別式0は解が1つだけ！</span>' },
-    { q:'2x²+7x+3=0を解の公式で解くと？', sub:'a=2。判別式=49-24=25', a:'x=-1/2, -3', choices:['x=-1/2, -3','x=1/2, 3','x=-1/2, 3','x=1/2, -3'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=49-24=25。x=(-7±5)/4 → x=-1/2, -3</span><span class="exp-tip">💡 分母4を忘れずに！</span>' },
-    { q:'3x²+5x+2=0を解の公式で解くと？', sub:'a=3。判別式=25-24=1', a:'x=-2/3, -1', choices:['x=-2/3, -1','x=2/3, 1','x=-2/3, 1','x=2/3, -1'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=25-24=1。x=(-5±1)/6 → x=-2/3, -1</span><span class="exp-tip">💡 分母6できちんと約分する！</span>' },
-    { q:'x²-9=0を解の公式で解くと？', sub:'b=0。判別式=0+36=36', a:'x=±3', choices:['x=±3','x=±9','x=3','x=±6'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=36。x=(0±6)/2=±3</span><span class="exp-tip">💡 √36=6ときれいな数に！</span>' },
-    { q:'2x²-5x=0を解の公式で解くと？', sub:'c=0。判別式=25-0=25', a:'x=0, 5/2', choices:['x=0, 5/2','x=0, -5/2','x=5/2','x=2, 5'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=25。x=(5±5)/4 → x=0, 5/2</span><span class="exp-tip">💡 c=0のときは解の1つが必ず0！</span>' },
-    { q:'x²+2x-2=0を解の公式で解くと？', sub:'判別式=4+8=12=4×3', a:'x=-1±√3', choices:['x=-1±√3','x=1±√3','x=-1±2√3','x=-2±√3'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=12。x=(-2±2√3)/2 → x=-1±√3</span><span class="exp-tip">💡 √12=2√3、分子全体を2で割る！</span>' },
-    { q:'x²-6x+7=0を解の公式で解くと？', sub:'判別式=36-28=8=4×2', a:'x=3±√2', choices:['x=3±√2','x=-3±√2','x=3±2√2','x=6±√2'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=8。x=(6±2√2)/2 → x=3±√2</span><span class="exp-tip">💡 √8=2√2！</span>' },
-    { q:'x²+4x-1=0を解の公式で解くと？', sub:'判別式=16+4=20=4×5', a:'x=-2±√5', choices:['x=-2±√5','x=2±√5','x=-2±2√5','x=-4±√5'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=20。x=(-4±2√5)/2 → x=-2±√5</span><span class="exp-tip">💡 √20=2√5！</span>' },
-    { q:'x²-2x-1=0を解の公式で解くと？', sub:'判別式=4+4=8=4×2', a:'x=1±√2', choices:['x=1±√2','x=-1±√2','x=1±2√2','x=2±√2'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=8。x=(2±2√2)/2 → x=1±√2</span><span class="exp-tip">💡 分子全体を2で割るのを忘れずに！</span>' },
-    { q:'x²+2x-4=0を解の公式で解くと？', sub:'判別式=4+16=20=4×5', a:'x=-1±√5', choices:['x=-1±√5','x=1±√5','x=-1±2√5','x=-2±√5'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=20。x=(-2±2√5)/2 → x=-1±√5</span><span class="exp-tip">💡 √20=2√5！</span>' },
-    { q:'x²-8x+13=0を解の公式で解くと？', sub:'判別式=64-52=12=4×3', a:'x=4±√3', choices:['x=4±√3','x=-4±√3','x=4±2√3','x=8±√3'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=12。x=(8±2√3)/2 → x=4±√3</span><span class="exp-tip">💡 √12=2√3！</span>' },
-    { q:'2x²+2x-1=0を解の公式で解くと？', sub:'a=2。判別式=4+8=12=4×3', a:'x=(-1±√3)/2', choices:['x=(-1±√3)/2','x=-1±√3','x=(-1±√3)/4','x=(-2±√3)/2'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=12。x=(-2±2√3)/4 → 分子分母を2で割り x=(-1±√3)/2</span><span class="exp-tip">💡 分母4も約分の対象になる場合がある！</span>' },
-    { q:'x²+6x+2=0を解の公式で解くと？', sub:'判別式=36-8=28=4×7', a:'x=-3±√7', choices:['x=-3±√7','x=3±√7','x=-3±2√7','x=-6±√7'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=28。x=(-6±2√7)/2 → x=-3±√7</span><span class="exp-tip">💡 √28=2√7！</span>' },
+    { q:'x²+7x+10=0を解の公式で解くと？', sub:'b²−4ac=49-40=9', a:'x=-2, -5', choices:['x=-2, -5','x=2, 5','x=-2, 5','x=-1, -10'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=49-40=9。x=(-7±3)/2 → x=-2, -5</span><span class="exp-tip">💡 √の中（b²−4ac）が9のきれいなパターン！</span>' },
+    { q:'x²-5x+4=0を解の公式で解くと？', sub:'b²−4ac=25-16=9', a:'x=1, 4', choices:['x=1, 4','x=-1, -4','x=1, -4','x=2, 2'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=25-16=9。x=(5±3)/2 → x=4, 1</span><span class="exp-tip">💡 -b=5であることに注意！</span>' },
+    { q:'x²-4x+4=0を解の公式で解くと？', sub:'b²−4ac=16-16=0（重解）', a:'x=2（重解）', choices:['x=2（重解）','x=-2（重解）','x=4（重解）','x=2, -2'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=0。x=4/2=2（重解）</span><span class="exp-tip">💡 √の中（b²−4ac）が0なら解は1つだけ！</span>' },
+    { q:'2x²+7x+3=0を解の公式で解くと？', sub:'a=2。b²−4ac=49-24=25', a:'x=-1/2, -3', choices:['x=-1/2, -3','x=1/2, 3','x=-1/2, 3','x=1/2, -3'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=49-24=25。x=(-7±5)/4 → x=-1/2, -3</span><span class="exp-tip">💡 分母4を忘れずに！</span>' },
+    { q:'3x²+5x+2=0を解の公式で解くと？', sub:'a=3。b²−4ac=25-24=1', a:'x=-2/3, -1', choices:['x=-2/3, -1','x=2/3, 1','x=-2/3, 1','x=2/3, -1'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=25-24=1。x=(-5±1)/6 → x=-2/3, -1</span><span class="exp-tip">💡 分母6できちんと約分する！</span>' },
+    { q:'x²-9=0を解の公式で解くと？', sub:'b=0。b²−4ac=0+36=36', a:'x=±3', choices:['x=±3','x=±9','x=3','x=±6'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=36。x=(0±6)/2=±3</span><span class="exp-tip">💡 √36=6ときれいな数に！</span>' },
+    { q:'2x²-5x=0を解の公式で解くと？', sub:'c=0。b²−4ac=25-0=25', a:'x=0, 5/2', choices:['x=0, 5/2','x=0, -5/2','x=5/2','x=2, 5'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=25。x=(5±5)/4 → x=0, 5/2</span><span class="exp-tip">💡 c=0のときは解の1つが必ず0！</span>' },
+    { q:'x²+2x-2=0を解の公式で解くと？', sub:'b²−4ac=4+8=12=4×3', a:'x=-1±√3', choices:['x=-1±√3','x=1±√3','x=-1±2√3','x=-2±√3'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=12。x=(-2±2√3)/2 → x=-1±√3</span><span class="exp-tip">💡 √12=2√3、分子全体を2で割る！</span>' },
+    { q:'x²-6x+7=0を解の公式で解くと？', sub:'b²−4ac=36-28=8=4×2', a:'x=3±√2', choices:['x=3±√2','x=-3±√2','x=3±2√2','x=6±√2'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=8。x=(6±2√2)/2 → x=3±√2</span><span class="exp-tip">💡 √8=2√2！</span>' },
+    { q:'x²+4x-1=0を解の公式で解くと？', sub:'b²−4ac=16+4=20=4×5', a:'x=-2±√5', choices:['x=-2±√5','x=2±√5','x=-2±2√5','x=-4±√5'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=20。x=(-4±2√5)/2 → x=-2±√5</span><span class="exp-tip">💡 √20=2√5！</span>' },
+    { q:'x²-2x-1=0を解の公式で解くと？', sub:'b²−4ac=4+4=8=4×2', a:'x=1±√2', choices:['x=1±√2','x=-1±√2','x=1±2√2','x=2±√2'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=8。x=(2±2√2)/2 → x=1±√2</span><span class="exp-tip">💡 分子全体を2で割るのを忘れずに！</span>' },
+    { q:'x²+2x-4=0を解の公式で解くと？', sub:'b²−4ac=4+16=20=4×5', a:'x=-1±√5', choices:['x=-1±√5','x=1±√5','x=-1±2√5','x=-2±√5'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=20。x=(-2±2√5)/2 → x=-1±√5</span><span class="exp-tip">💡 √20=2√5！</span>' },
+    { q:'x²-8x+13=0を解の公式で解くと？', sub:'b²−4ac=64-52=12=4×3', a:'x=4±√3', choices:['x=4±√3','x=-4±√3','x=4±2√3','x=8±√3'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=12。x=(8±2√3)/2 → x=4±√3</span><span class="exp-tip">💡 √12=2√3！</span>' },
+    { q:'2x²+2x-1=0を解の公式で解くと？', sub:'a=2。b²−4ac=4+8=12=4×3', a:'x=(-1±√3)/2', choices:['x=(-1±√3)/2','x=-1±√3','x=(-1±√3)/4','x=(-2±√3)/2'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=12。x=(-2±2√3)/4 → 分子分母を2で割り x=(-1±√3)/2</span><span class="exp-tip">💡 分母4も約分の対象になる場合がある！</span>' },
+    { q:'x²+6x+2=0を解の公式で解くと？', sub:'b²−4ac=36-8=28=4×7', a:'x=-3±√7', choices:['x=-3±√7','x=3±√7','x=-3±2√7','x=-6±√7'], exp:'<span class="exp-rule"><span class="label">📐 手順</span>b²-4ac=28。x=(-6±2√7)/2 → x=-3±√7</span><span class="exp-tip">💡 √28=2√7！</span>' },
   ];
   qs.forEach(function(q, i) { q._qid = 'math_quad_s4_q' + i; });
   qs = shuffleArray(qs);

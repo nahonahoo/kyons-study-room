@@ -60,13 +60,13 @@
 .sticky{ margin-top:20px; padding:22px 16px 14px; border-radius:8px; font-size:15px; line-height:1.9; font-weight:bold; border:2px dashed; position:relative; }
 .sticky-icon{ position:absolute; top:-13px; left:14px; font-size:18px; background:var(--bg2); padding:0 4px; line-height:1; }
 
-/* 強調：文字は蛍光色＋うっすらマーカー（文字を邪魔しない薄さ） */
-.hl, .hl-red, .hl-blue{ font-weight:900; padding:0 2px; background-repeat:no-repeat; background-size:100% 40%; background-position:0 85%; }
-.hl{ color:#f4ff3a; text-shadow:0 0 8px rgba(244,255,58,0.3); background-image:linear-gradient(rgba(245,197,24,0.18), rgba(245,197,24,0.18)); }
-.hl-red{ color:#ff5fa8; text-shadow:0 0 8px rgba(255,95,168,0.3); background-image:linear-gradient(rgba(255,95,168,0.16), rgba(255,95,168,0.16)); }
-.hl-blue{ color:#3ee8ff; text-shadow:0 0 8px rgba(62,232,255,0.3); background-image:linear-gradient(rgba(62,232,255,0.14), rgba(62,232,255,0.14)); }
+/* 強調：文字は蛍光色＋はっきりした蛍光ペンのマーカー（帯は文字の下側に寄せて、文字にかぶせない） */
+.hl, .hl-red, .hl-blue{ font-weight:900; padding:0 2px; background-repeat:no-repeat; background-size:100% 32%; background-position:0 100%; }
+.hl{ color:#f4ff3a; text-shadow:0 0 6px rgba(244,255,58,0.3); background-image:linear-gradient(rgba(255,214,0,0.6), rgba(255,214,0,0.6)); }
+.hl-red{ color:#ff6fb3; text-shadow:0 0 6px rgba(255,95,168,0.3); background-image:linear-gradient(rgba(255,40,150,0.55), rgba(255,40,150,0.55)); }
+.hl-blue{ color:#5cefff; text-shadow:0 0 6px rgba(62,232,255,0.3); background-image:linear-gradient(rgba(0,190,255,0.55), rgba(0,190,255,0.55)); }
 /* 金色の文字の中では黄色が埋もれるので、シアンに */
-.tagline-box .hl{ color:#3ee8ff; text-shadow:0 0 8px rgba(62,232,255,0.3); background-image:linear-gradient(rgba(62,232,255,0.14), rgba(62,232,255,0.14)); }
+.tagline-box .hl{ color:#5cefff; background-image:linear-gradient(rgba(0,190,255,0.55), rgba(0,190,255,0.55)); }
 .big{ font-size:19px; }
 
 .arrow-down{ text-align:center; font-size:26px; line-height:1; margin:6px 0 26px; color:var(--amber); }

@@ -39,7 +39,7 @@ const SUBJECTS = [
       { label:'中2 化学変化・原子分子', href:'science/sci_c2_chem.html',     weakDb:'sci', qidPrefix:'sci_chem_' },
       { label:'中2 電流・磁界',         href:'science/sci_c2_electric.html', weakDb:'sci', qidPrefix:'sci_elec_' },
       { label:'中3 化学変化とイオン',   href:'science/sci_c3_ion.html',      weakDb:'sci', qidPrefix:'sci_ion_' },
-      { label:'中3 生物の成長と生殖・遺伝', href:'science/sci_c4_life.html', weakDb:'sci', qidPrefix:'sci_life_' },
+      { label:'中3 生物の成長と生殖・遺伝・進化（始祖鳥）', href:'science/sci_c4_life.html', weakDb:'sci', qidPrefix:'sci_life_' },
       { label:'🔬 実験器具と実験文の読み方（入試対策）', href:'science/sci_exam_lab.html', weakDb:'sci', qidPrefix:'sci_lab_' },
       { label:'🌏 大地の変化・地球と宇宙（3年連続出題）', href:'science/sci_earth.html', weakDb:'sci', qidPrefix:'sci_earth_' },
     ]

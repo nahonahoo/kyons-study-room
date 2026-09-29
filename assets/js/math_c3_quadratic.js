@@ -762,8 +762,11 @@ function qdGraph(c) {
     var fx = st.from[0], fy = st.from[1];
     s += '<line x1="' + X(fx) + '" y1="' + Y(fy) + '" x2="' + X(fx + st.dx) + '" y2="' + Y(fy) + '" stroke="#ffd84d" stroke-width="3" stroke-dasharray="5 3"/>';
     s += '<line x1="' + X(fx + st.dx) + '" y1="' + Y(fy) + '" x2="' + X(fx + st.dx) + '" y2="' + Y(fy + st.dy) + '" stroke="#3ddc84" stroke-width="3" stroke-dasharray="5 3"/>';
-    s += '<text x="' + ((X(fx) + X(fx + st.dx)) / 2) + '" y="' + (Y(fy) + (st.dy >= 0 ? 16 : -6)) + '" text-anchor="middle" fill="#ffd84d" font-size="12" font-weight="bold">' + st.tr + '</text>';
+    s += '<text x="' + ((X(fx) + X(fx + st.dx)) / 2) + '" y="' + (Y(fy) + (st.above ? -6 : (st.dy >= 0 ? 16 : -6))) + '" text-anchor="middle" fill="#ffd84d" font-size="12" font-weight="bold">' + st.tr + '</text>';
     s += '<text x="' + (X(fx + st.dx) + 5) + '" y="' + ((Y(fy) + Y(fy + st.dy)) / 2 + 4) + '" fill="#3ddc84" font-size="12" font-weight="bold">' + st.tu + '</text>';
+  });
+  (c.texts || []).forEach(function(t) {
+    s += '<text x="' + X(t.x) + '" y="' + (Y(t.y) + (t.dy || 0)) + '" text-anchor="' + (t.anchor || 'middle') + '" fill="' + (t.color || '#9aa4b2') + '" font-size="12">' + t.t + '</text>';
   });
   (c.pts || []).forEach(function(p) {
     s += '<circle cx="' + X(p.x) + '" cy="' + Y(p.y) + '" r="5" fill="' + p.color + '" stroke="#000"/>';
@@ -835,15 +838,18 @@ function renderSection8() {
 
   // ---------- PART 3：追いつく問題 ----------
   html += '<div class="qd-part">PART 3　追いついた時刻と場所（プリント(5)）</div>';
-  var g5 = { xmin:0, xmax:60, ymin:0, ymax:3, sx:5.5, sy:70, gx:5, gy:0.5, xl:'（分）', yl:'（km）',
-    xt:[[0,'0'],[15,'15'],[20,'20'],[30,'30'],[40,'40'],[45,'45'],[60,'60']], yt:[[1,'1'],[2,'2'],[3,'3']], maxw:460 };
+  // プリントと同じ目盛り：横1マス＝10分（0〜70分）、たて1マス＝0.5km（0〜3.5km）
+  var g5 = { xmin:0, xmax:70, ymin:0, ymax:3.5, sx:5.2, sy:66, gx:10, gy:0.5, xl:'（分）', yl:'（km）',
+    xt:[[0,'0'],[20,'20'],[40,'40'],[60,'60']], yt:[[1,'1'],[2,'2'],[3,'3']], maxw:460,
+    texts:[{x:0,y:0,t:'（8時）',dy:30,color:'#9aa4b2'},{x:60,y:0,t:'（9時）',dy:30,color:'#9aa4b2'},{x:1,y:3.13,t:'図書館',dy:0,color:'#9aa4b2',anchor:'start'}] };
   g5.lines = [{a:1/15,b:0,x1:0,x2:45,color:'#ff7a45',label:'兄',ly:-4},{a:3/20,b:-3,x1:20,x2:40,color:'#4aa8ff',label:'妹',ly:-8}];
-  g5.pts = [{x:15,y:1,color:'#ff7a45',label:'(15, 1)',dx:6,dy:14},{x:45,y:3,color:'#ff7a45'},{x:20,y:0,color:'#4aa8ff',label:'(20, 0)',dx:4,dy:-8},{x:40,y:3,color:'#4aa8ff',label:'(40, 3)',dx:-58,dy:-6},{x:36,y:2.4,color:'#ffd84d',label:'追いついた！',dx:8,dy:16}];
+  g5.stairs = [{from:[0,0],dx:30,dy:2,tr:'右に30分',tu:'上に2km',above:true}];
+  g5.pts = [{x:30,y:2,color:'#ff7a45',label:'(30, 2)',dx:-52,dy:-6},{x:20,y:0,color:'#4aa8ff',label:'(20, 0)',dx:10,dy:-24},{x:40,y:3,color:'#4aa8ff',label:'(40, 3)',dx:-58,dy:-6},{x:36,y:2.4,color:'#ffd84d',label:'追いついた',dx:8,dy:18}];
   html += '<div class="rule-card"><div class="rule-card-title">📐 横が「時間（分）」、たてが「道のり（km）」のグラフ</div>'
     + qdGraph(g5)
-    + '<div class="ex">ここでも同じ。<b>y軸とぶつかるところ</b>と<b>右にいくつで上にいくつ</b>を読む。1マスの大きさ（横5分・たて0.5km）に注意。</div>'
-    + qdStep('STEP 1　兄の式（タップ）', '兄は <b>0（原点）</b>から出発 → 切片は 0<br>角をぴったり通る点 (15, 1) → <b>右に15分で上に1km</b> → 傾き ＝ 1 ÷ 15 ＝ <b>1/15</b><div class="qd-big">兄：y ＝ 1/15 x</div>（x ＝ 45 で y ＝ 3 → 45分で図書館 ✓）', false)
-    + qdStep('STEP 2　妹の式（タップ）', '妹は y軸とぶつからない（20分に出発）ので、切片は<b>計算で出す</b>。<br>点 (20, 0) と (40, 3) → <b>右に20で上に3</b> → 傾き ＝ <b>3/20</b><br>y ＝ 3/20 x ＋ b に (20, 0) を入れる：0 ＝ 3/20 × 20 ＋ b ＝ 3 ＋ b → <b>b ＝ −3</b><div class="qd-big">妹：y ＝ 3/20 x − 3</div>💡 y軸で読めないときは「点を代入して b を出す」', false)
+    + '<div class="ex">ここでも同じ。<b>y軸とぶつかるところ</b>と<b>右にいくつで上にいくつ</b>を読む。<b>1マスの大きさに注意</b>：横は<b>1マス10分</b>（目盛りの数字は20分ごとにしか書いていない）、たては<b>1マス0.5km</b>。</div>'
+    + qdStep('STEP 1　兄の式（タップ）', '兄は <b>0（原点）</b>から出発 → 切片は 0<br>兄の線がマス目の角をぴったり通るのは <b>(30, 2)</b>（30分のたて線と2kmの横線が交わるところ）。<br>原点から <b>右に30分で上に2km</b> → 傾き ＝ 2 ÷ 30 ＝ <b>1/15</b>（約分）<br>⚠️ 兄の線の先（図書館に着くところ）は45分で、マス目の角ではないので、ここでは読まない<div class="qd-big">兄：y ＝ 1/15 x</div>（x ＝ 45 で y ＝ 3 → 45分で図書館 ✓）', false)
+    + qdStep('STEP 2　妹の式（タップ）', '妹は y軸とぶつからない（20分に出発）ので、切片は<b>計算で出す</b>。<br>妹の線は <b>(20, 0)</b>（出発）と <b>(40, 3)</b>（図書館に着く）がマス目の角。<br>(20, 0) から (40, 3) は <b>右に20分で上に3km</b> → 傾き ＝ 3 ÷ 20 ＝ <b>3/20</b><br>y ＝ 3/20 x ＋ b に (20, 0) を入れる：0 ＝ 3/20 × 20 ＋ b ＝ 3 ＋ b → <b>b ＝ −3</b><div class="qd-big">妹：y ＝ 3/20 x − 3</div>💡 y軸で読めないときは「点を代入して b を出す」', false)
     + qdStep('STEP 3　追いつく ＝ 2本の線の交点（タップ）', '1/15 x ＝ 3/20 x − 3<br>分母15と20の最小公倍数 <b>60</b> をかける：4x ＝ 9x − 180<br>→ −5x ＝ −180 → <b>x ＝ 36</b><br>y ＝ 1/15 × 36 ＝ 36/15 ＝ <b>12/5（＝2.4）</b>', false)
     + qdStep('STEP 4　問題の聞き方に合わせて答える（タップ）', 'x は「8時から何分たったか」→ 36分 → <b>8時36分</b><br>y は「家からの道のり（km）」→ <b>12/5 km（2.4km）</b>', false)
     + '<div class="qd-ans">答え　8時36分、家から 12/5 km（2.4km）の地点</div>'

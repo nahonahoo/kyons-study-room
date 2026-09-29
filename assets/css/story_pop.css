@@ -1,0 +1,145 @@
+/* ===== 歴史ストーリー新聞シリーズ：POP広告デザイン（暗い背景版・全号共通） ===== */
+:root{
+  --pop-y:#ffe14d; --pop-p:#ff5ca8; --pop-c:#29c5f6; --pop-g:#3ddc84; --pop-o:#ff8a1f; --pop-v:#a77bff; --pop-r:#ff4b4b;
+  --dark:#0d1117; --card:#171c26; --card2:#1d2330; --tx:#e6edf3; --tx2:#9aa4b2;
+}
+body{
+  background-color:var(--dark);
+  background-image:radial-gradient(rgba(255,255,255,0.05) 2.5px, transparent 2.5px);
+  background-size:26px 26px;
+  color:var(--tx);
+  font-family:'M PLUS Rounded 1c','Noto Serif JP',sans-serif;
+}
+.top-nav{ background:var(--pop-p); border-bottom:4px solid #000; }
+.nav-title{ font-family:'Mochiy Pop One',sans-serif; color:#fff; text-shadow:2px 2px 0 #000; letter-spacing:1px; }
+.paper-main{ max-width:780px; margin:0 auto; padding:20px 14px 70px; }
+
+/* ---- 見出し（マストヘッド） ---- */
+.masthead{ text-align:center; padding:18px 6px 10px; position:relative; }
+.burst{ display:inline-flex; align-items:center; justify-content:center; width:112px; height:112px; background:var(--pop-r); color:#fff;
+  clip-path:polygon(50% 0%,61% 12%,76% 5%,79% 21%,95% 22%,89% 37%,100% 50%,89% 63%,95% 78%,79% 79%,76% 95%,61% 88%,50% 100%,39% 88%,24% 95%,21% 79%,5% 78%,11% 63%,0% 50%,11% 37%,5% 22%,21% 21%,24% 5%,39% 12%);
+  font-family:'Mochiy Pop One',sans-serif; font-size:22px; line-height:1.15; transform:rotate(-10deg); text-align:center; }
+.masthead .burst{ position:absolute; top:-6px; left:0; z-index:2; }
+.masthead-title{ font-family:'Mochiy Pop One',sans-serif; font-size:40px; line-height:1.35; color:#fff; letter-spacing:2px; margin-top:26px;
+  text-shadow:3px 3px 0 #000,-2px -2px 0 #000,2px -2px 0 #000,-2px 2px 0 #000,6px 6px 0 var(--pop-p); }
+.masthead-title .t1{ color:var(--pop-y); }
+.masthead-title .t2{ color:var(--pop-c); }
+.masthead-sub{ display:inline-block; margin-top:14px; background:var(--card2); color:var(--tx); border:3px solid var(--pop-y); border-radius:30px; padding:6px 18px; font-size:15px; font-weight:800; line-height:1.8; box-shadow:4px 4px 0 var(--pop-p); }
+.series{ display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin:18px 0 4px; font-size:13px; font-weight:800; }
+.series a, .series span{ padding:5px 12px; border-radius:20px; border:2.5px solid #000; color:#111; text-decoration:none; background:#fff; box-shadow:2px 2px 0 rgba(255,255,255,0.35); }
+.series .now{ background:var(--pop-y); }
+.series a{ background:var(--pop-c); }
+.series .soon{ background:transparent; color:var(--tx2); border-color:#3a4252; box-shadow:none; }
+
+/* ---- 明るい色の箱の中（黒い文字）：キャッチ／語呂／1行まとめ ---- */
+.lite{ color:#1a1a1a; }
+
+/* ---- 吹き出しキャッチ ---- */
+.catch{ position:relative; background:var(--pop-y); border:4px solid #000; border-radius:24px; padding:18px 20px; margin:26px 0 32px; font-size:19px; font-weight:900; line-height:1.9; box-shadow:6px 6px 0 var(--pop-p); }
+.catch::after{ content:''; position:absolute; bottom:-24px; left:60px; border-width:22px 16px 0 16px; border-style:solid; border-color:var(--pop-y) transparent transparent transparent; }
+.catch small{ display:block; font-size:14px; font-weight:700; margin-top:6px; }
+
+/* ---- セクション見出し（リボン） ---- */
+.sec-head{ margin:42px 0 18px; text-align:left; }
+.sec-head span{ display:inline-block; font-family:'Mochiy Pop One',sans-serif; font-size:20px; color:#fff; background:var(--pop-p); border:3px solid #000; border-radius:10px; padding:6px 18px; box-shadow:4px 4px 0 #fff; transform:rotate(-2deg); text-shadow:2px 2px 0 #000; }
+.sec-head.c span{ background:var(--pop-c); }
+.sec-head.g span{ background:var(--pop-g); }
+.sec-head.o span{ background:var(--pop-o); }
+.sec-head.v span{ background:var(--pop-v); }
+
+/* ---- キャラ図鑑 ---- */
+.chara-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+.chara{ --k:var(--pop-y); background:var(--card); border:3px solid var(--k); border-radius:16px; padding:14px; box-shadow:5px 5px 0 color-mix(in srgb, var(--k) 40%, transparent); }
+.chara.k0{ --k:var(--pop-y); } .chara.k1{ --k:var(--pop-p); } .chara.k2{ --k:var(--pop-c); } .chara.k3{ --k:var(--pop-g); } .chara.k4{ --k:var(--pop-o); } .chara.k5{ --k:var(--pop-v); }
+.chara-top{ display:flex; align-items:center; gap:10px; }
+.chara-emo{ width:48px; height:48px; border-radius:50%; background:var(--k); border:3px solid #000; display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; }
+.chara-name{ font-family:'Mochiy Pop One',sans-serif; font-size:18px; line-height:1.4; color:var(--k); }
+.chara-name small{ display:block; font-family:'M PLUS Rounded 1c',sans-serif; font-size:12px; font-weight:700; color:var(--tx2); }
+.chara-desc{ font-size:15px; font-weight:700; line-height:1.95; margin-top:8px; }
+
+/* ---- 年表 ---- */
+.tl{ background:var(--card); border:3px solid var(--pop-c); border-radius:16px; padding:16px 14px 6px; box-shadow:5px 5px 0 color-mix(in srgb, var(--pop-c) 40%, transparent); }
+.tl-item{ display:flex; align-items:flex-start; gap:12px; margin-bottom:12px; font-size:16px; font-weight:700; line-height:1.8; }
+.tl-year{ flex-shrink:0; min-width:64px; text-align:center; font-family:'Bebas Neue',sans-serif; font-size:22px; letter-spacing:1px; color:#111; border:2.5px solid #000; border-radius:20px; padding:0 8px; background:var(--pop-y); }
+.tl-item:nth-child(3n+2) .tl-year{ background:var(--pop-c); }
+.tl-item:nth-child(3n) .tl-year{ background:var(--pop-p); }
+
+/* ---- 記事カード ---- */
+.clip-card{ position:relative; background:var(--card); border:4px solid var(--band, var(--pop-y)); border-radius:18px; padding:20px 18px 20px; margin:26px 0 10px; box-shadow:7px 7px 0 color-mix(in srgb, var(--band, var(--pop-y)) 45%, transparent); }
+.clip-head{ display:flex; align-items:center; gap:14px; margin:0 0 14px; }
+.clip-num{ flex-shrink:0; width:64px; height:64px; display:flex; align-items:center; justify-content:center; background:var(--band, var(--pop-y)); font-family:'Mochiy Pop One',sans-serif; font-size:26px; color:#111;
+  clip-path:polygon(50% 0%,61% 12%,76% 5%,79% 21%,95% 22%,89% 37%,100% 50%,89% 63%,95% 78%,79% 79%,76% 95%,61% 88%,50% 100%,39% 88%,24% 95%,21% 79%,5% 78%,11% 63%,0% 50%,11% 37%,5% 22%,21% 21%,24% 5%,39% 12%); }
+.clip-title{ font-family:'Mochiy Pop One',sans-serif; font-size:20px; line-height:1.55; color:#fff; }
+.clip-body{ font-size:17px; font-weight:700; line-height:2.05; padding:0; margin:0; }
+.clip-body li{ list-style:none; margin-bottom:12px; padding-left:30px; position:relative; }
+.clip-body li::before{ content:'★'; position:absolute; left:2px; top:0; font-size:18px; color:var(--band, var(--pop-o)); }
+
+/* ---- 強調（暗い背景：蛍光色の文字＋はっきりした蛍光ペン帯を文字の下側だけ） ---- */
+.hl, .hl-red, .hl-blue{ font-weight:900; padding:0 2px; background-repeat:no-repeat; background-size:100% 32%; background-position:0 100%; }
+.hl{ color:#f4ff3a; text-shadow:0 0 6px rgba(244,255,58,0.3); background-image:linear-gradient(rgba(255,214,0,0.6), rgba(255,214,0,0.6)); }
+.hl-red{ color:#ff6fb3; text-shadow:0 0 6px rgba(255,95,168,0.3); background-image:linear-gradient(rgba(255,40,150,0.55), rgba(255,40,150,0.55)); }
+.hl-blue{ color:#5cefff; text-shadow:0 0 6px rgba(62,232,255,0.3); background-image:linear-gradient(rgba(0,190,255,0.55), rgba(0,190,255,0.55)); }
+/* 明るい箱の中は黒字／赤字／青字＋帯 */
+.lite .hl{ color:#1a1a1a; text-shadow:none; background-size:100% 38%; background-image:linear-gradient(#fff, #fff); }
+.lite .hl-red{ color:#e8002d; text-shadow:none; background-size:100% 38%; background-image:linear-gradient(#fff, #fff); }
+.lite .hl-blue{ color:#0057d9; text-shadow:none; background-size:100% 38%; background-image:linear-gradient(#fff, #fff); }
+.big{ font-size:21px; }
+
+/* ---- 会話（キャラ別の色吹き出し） ---- */
+.talk{ margin:18px 0 6px; padding:14px 10px 4px; border:3px dashed rgba(255,255,255,0.18); border-radius:16px; background:rgba(255,255,255,0.025); }
+.talk .chat-line{ margin-bottom:12px; }
+.talk .avatar{ width:44px; height:44px; font-size:20px; border:3px solid #000; color:#111; background:var(--c); }
+.talk .chat-name{ font-size:12px; font-weight:800; color:var(--c); }
+.talk .chat-bubble{ font-size:16px; font-weight:700; line-height:1.95; color:var(--tx); background:color-mix(in srgb, var(--c) 13%, var(--card)); border:2.5px solid var(--c); border-radius:16px; box-shadow:3px 3px 0 color-mix(in srgb, var(--c) 40%, transparent); }
+.c-kyon{ --c:#ff7aa8; } .c-nishi{ --c:#6cb6ff; } .c-shun{ --c:#b69cff; } .c-kuruma{ --c:#4fe08f; } .c-iwakura{ --c:#ffab5c; }
+.talk .c-nishi .avatar{ font-size:14px; }
+
+/* ---- 語呂合わせ（付箋） ---- */
+.goro{ position:relative; margin:24px 4px 6px; padding:18px 16px 12px; background:#fff59d; border:3px solid #000; border-radius:6px; font-size:16px; font-weight:800; line-height:2; box-shadow:4px 4px 0 var(--pop-v); }
+.goro::before{ content:'🎵 語呂合わせ'; position:absolute; top:-15px; left:14px; font-family:'Mochiy Pop One',sans-serif; font-size:13px; background:var(--pop-v); color:#fff; border:2.5px solid #000; border-radius:8px; padding:1px 10px; transform:rotate(-3deg); }
+.goro b{ color:#e8002d; font-size:18px; }
+
+/* ---- ココ出る!!／つづく!!／まちがえ注意!! の札 ---- */
+.pop-point{ --pc:var(--pop-r); position:relative; margin:28px 0 4px; padding:22px 16px 14px; border:3px solid var(--pc); border-radius:14px; font-size:16px; font-weight:900; line-height:1.95; background:color-mix(in srgb, var(--pc) 14%, var(--card)); box-shadow:5px 5px 0 color-mix(in srgb, var(--pc) 40%, transparent); }
+.pop-point.next{ --pc:var(--pop-c); }
+.pop-point.warn{ --pc:var(--pop-o); }
+.pop-tag{ position:absolute; top:-18px; left:12px; font-family:'Mochiy Pop One',sans-serif; font-size:16px; color:#fff; background:var(--pc); border:3px solid #000; border-radius:10px; padding:2px 14px; transform:rotate(-4deg); text-shadow:1px 1px 0 #000; }
+
+.arrow-down{ text-align:center; font-size:34px; line-height:1; margin:12px 0 6px; animation:bob 1.2s ease-in-out infinite; }
+@keyframes bob{ 50%{ transform:translateY(6px); } }
+
+/* ---- 1行まとめ ---- */
+.oneline{ background:var(--pop-c); border:4px solid #000; border-radius:18px; padding:18px; font-size:17px; font-weight:900; line-height:2.1; box-shadow:6px 6px 0 var(--pop-y); }
+
+/* ---- 勘違い ---- */
+.myth{ display:flex; gap:12px; align-items:flex-start; background:var(--card); border:3px solid var(--pop-r); border-radius:14px; padding:12px 14px; margin-bottom:12px; font-size:16px; font-weight:700; line-height:1.9; box-shadow:4px 4px 0 color-mix(in srgb, var(--pop-r) 40%, transparent); }
+.stamp{ flex-shrink:0; width:38px; height:38px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Mochiy Pop One',sans-serif; font-size:18px; color:#fff; border:3px solid #000; background:var(--pop-r); }
+.myth .ng-text{ color:var(--tx2); text-decoration:line-through; text-decoration-color:var(--pop-r); text-decoration-thickness:3px; }
+.myth .ok-text{ display:block; margin-top:4px; }
+.myth .ok-text::before{ content:'⭕ '; }
+.myth b{ color:#f4ff3a; }
+
+/* ---- 組み合わせ表 ---- */
+.pair-wrap{ overflow-x:auto; border:3px solid var(--pop-y); border-radius:14px; box-shadow:5px 5px 0 color-mix(in srgb, var(--pop-y) 40%, transparent); background:var(--card); }
+.pair-table{ width:100%; border-collapse:collapse; font-size:15px; font-weight:700; line-height:1.8; }
+.pair-table th, .pair-table td{ border-bottom:1.5px solid #2c3444; padding:8px 10px; vertical-align:top; text-align:left; }
+.pair-table th{ background:var(--pop-y); color:#111; font-family:'Mochiy Pop One',sans-serif; font-weight:400; border-bottom:3px solid #000; }
+.pair-table td:first-child{ color:#f4ff3a; }
+.pair-table tr:nth-child(even) td{ background:var(--card2); }
+
+/* ---- 3秒チェック ---- */
+.flip{ background:var(--card); border:3px solid var(--pop-v); border-radius:14px; padding:12px 14px; margin-bottom:12px; font-size:16px; font-weight:700; line-height:1.9; box-shadow:4px 4px 0 color-mix(in srgb, var(--pop-v) 40%, transparent); }
+.flip-q{ display:inline-block; font-family:'Mochiy Pop One',sans-serif; background:var(--pop-v); color:#fff; border-radius:8px; padding:0 8px; margin-right:6px; font-size:14px; }
+.flip-btn{ margin-top:8px; background:var(--pop-y); border:3px solid #000; color:#111; padding:6px 18px; border-radius:22px; font-size:15px; font-family:'Mochiy Pop One',sans-serif; cursor:pointer; box-shadow:3px 3px 0 #fff; }
+.flip-btn:active{ transform:translate(2px,2px); box-shadow:1px 1px 0 #fff; }
+.flip-ans{ display:none; margin-top:8px; font-size:17px; font-weight:900; color:#ff6fb3; }
+
+.end-note{ text-align:center; margin-top:36px; padding:18px; background:var(--card); border:3px dashed #3a4252; border-radius:16px; font-size:14px; font-weight:700; line-height:1.9; color:var(--tx2); }
+
+@media (max-width:600px){
+  .masthead-title{ font-size:30px; }
+  .masthead .burst{ width:84px; height:84px; font-size:17px; top:-10px; }
+  .clip-title{ font-size:18px; }
+  .clip-num{ width:54px; height:54px; font-size:22px; }
+  .sec-head span{ font-size:16px; padding:6px 14px; }
+}

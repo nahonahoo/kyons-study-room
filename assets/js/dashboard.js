@@ -68,6 +68,7 @@ const SUBJECTS = [
     links:[
       { label:'歴史',               href:'social/soc_history.html',   weakDb:'soc', qidPrefix:'soc_hist_' },
       { label:'🗞️ 歴史ストーリー① 飛鳥時代（聖徳太子〜平城京）', href:'social/soc_story_asuka.html' },
+      { label:'🗞️ 歴史ストーリー② 奈良時代（平城京〜平安京）', href:'social/soc_story_nara.html' },
       { label:'🗞️ 歴史ストーリー 戦後日本', href:'social/soc_history_story.html' },
       { label:'地理（世界・日本）', href:'social/soc_geography.html', weakDb:'soc', qidPrefix:'soc_geo_' },
       { label:'⚖️ 公民（人権・政治・経済）入試頻出', href:'social/soc_civics.html', weakDb:'soc', qidPrefix:'soc_civ_' },

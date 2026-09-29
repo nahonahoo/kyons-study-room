@@ -1,34 +1,6 @@
-// ===== 歴史ストーリー新聞：飛鳥時代（聖徳太子〜平城京） =====
-// クイズ・XP・弱点DBとは非連携の読み物ページ（3秒チェックもXPなし）
+// ===== 歴史ストーリー新聞①：飛鳥時代（聖徳太子〜平城京） =====
 
-// 会話の吹き出し
-var CAST = {
-  kyon:   { name:'きょん',          av:'😄', cls:'av-kyon' },
-  nishi:  { name:'西村',            av:'慶', cls:'av-nishi' },
-  shun:   { name:'なかむらしゅん',  av:'🎭', cls:'av-shun' },
-  kuruma: { name:'くるま',          av:'🚗', cls:'av-kuruma' },
-  iwakura:{ name:'イワクラ',        av:'🎸', cls:'av-iwakura' }
-};
-function talk(lines){
-  var h = '<div class="talk">';
-  lines.forEach(function(l){
-    var c = CAST[l[0]];
-    h += '<div class="chat-line"><div class="avatar ' + c.cls + '">' + c.av + '</div><div style="flex:1"><div class="chat-name">' + c.name + '</div><div class="chat-bubble b-' + l[0] + '">' + l[1] + '</div></div></div>';
-  });
-  return h + '</div>';
-}
-// 語呂合わせ（付箋。「🎵 語呂合わせ」のラベルはCSSで付ける）
-function goro(t){ return '<div class="goro">' + t + '</div>'; }
-// POP札：📌＝ココ出る!!／🔗＝つづく!!／⚠️＝まちがえ注意!!
-function sticky(icon, text){
-  var kind = icon === '🔗' ? 'next' : icon === '⚠️' ? 'warn' : '';
-  var tag = kind === 'next' ? 'つづく!!' : kind === 'warn' ? 'まちがえ注意!!' : 'ココ出る!!';
-  var body = text.replace(/^(テストに出る！|まちがえ注意！　|→ )/, '');
-  return '<div class="pop-point ' + kind + '"><span class="pop-tag">' + tag + '</span>' + body + '</div>';
-}
-// POPの色（記事ごとの帯色・見出しリボン色）
-var BANDS = ['var(--pop-v)','var(--pop-y)','var(--pop-o)','var(--pop-p)','var(--pop-c)','var(--pop-r)','var(--pop-g)'];
-function secHead(text, color){ return '<div class="sec-head ' + (color || '') + '"><span>' + text + '</span></div>'; }
+// 描画は assets/js/story_pop.js（シリーズ共通）
 
 // ===== 登場人物 =====
 var CHARAS = [
@@ -62,8 +34,7 @@ var TIMELINE = [
 
 // ===== 本文（7つの記事） =====
 var STAGES = [
-  { no:'0', theme:'var(--text2)',
-    title:'前夜：豪族がバチバチの国に「仏教」がやってきた（〜592年）',
+  { no:'0', title:'前夜：豪族がバチバチの国に「仏教」がやってきた（〜592年）',
     items:[
       'このころの日本は、<span class="hl">大王（おおきみ）</span>を中心にした<span class="hl">ヤマト王権</span>。でも実際は、力の強い<span class="hl">豪族</span>たちがそれぞれ土地と人を持っていて、けっこうバラバラ',
       '朝鮮半島や中国から来た<span class="hl">渡来人</span>が、漢字・仏教・焼き物（須恵器）・機織りなどの最新技術を持ちこむ',
@@ -78,8 +49,7 @@ var STAGES = [
     ],
     stickyIcon:'🔗', stickyText:'→ 勝った蘇我馬子が、次の主役・聖徳太子と手を組む！' },
 
-  { no:'1', theme:'var(--gold)',
-    title:'聖徳太子の大改革！「実力主義」と「役人のルール」（593〜622年）',
+  { no:'1', title:'聖徳太子の大改革！「実力主義」と「役人のルール」（593〜622年）',
     items:[
       '<span class="hl-blue big">593年</span>、<span class="hl">推古天皇</span>（日本初の女性天皇）を助けるため、おいの<span class="hl">聖徳太子</span>が政治に参加。<span class="hl">蘇我馬子</span>と協力して、<span class="hl-red">天皇を中心とした国づくり</span>をめざす',
       '<span class="hl-blue big">603年</span> <span class="hl big">冠位十二階</span>：それまでは「家がらで出世」だったのを、<span class="hl-red">家がらにとらわれず、才能や手がらのある人</span>を役人に取り立てる制度に。位は冠（かんむり）の色で見分けた',
@@ -98,8 +68,7 @@ var STAGES = [
     goro:'<b>593</b> 国民（こくみ）のために太子が政治　／　<b>603</b> 群れ見る（むれみ）冠 十二階　／　<b>604</b> 群れよ（むれよ）、和の心で十七条　／　<b>607</b> 無礼な（むれいな）手紙で小野妹子',
     stickyIcon:'📌', stickyText:'テストに出る！「冠位十二階＝家がらより才能」「十七条の憲法＝役人の心がまえ」「遣隋使＝小野妹子・隋の制度を学ぶ」。3つとも聖徳太子とセットで覚える' },
 
-  { no:'2', theme:'var(--amber)',
-    title:'日本初の仏教ブーム「飛鳥文化」',
+  { no:'2', title:'日本初の仏教ブーム「飛鳥文化」',
     items:[
       '聖徳太子と蘇我氏が仏教を大切にしたので、お寺や仏像がどんどんつくられた。これが日本で最初の仏教中心の文化＝<span class="hl big">飛鳥文化</span>',
       '<span class="hl big">法隆寺</span>（奈良県）：聖徳太子が建てたお寺。<span class="hl-red">現存する世界最古の木造建築</span>で、<span class="hl">世界遺産</span>',
@@ -114,8 +83,7 @@ var STAGES = [
     ],
     stickyIcon:'📌', stickyText:'テストに出る！「飛鳥文化 ＝ 法隆寺・釈迦三尊像・玉虫厨子」。飛鳥文化は「日本で最初の仏教文化」' },
 
-  { no:'3', theme:'var(--red)',
-    title:'蘇我氏の暴走 → クーデター！「大化の改新」（622〜646年ごろ）',
+  { no:'3', title:'蘇我氏の暴走 → クーデター！「大化の改新」（622〜646年ごろ）',
     items:[
       '<span class="hl-blue">622年</span>に聖徳太子が亡くなると、<span class="hl">蘇我蝦夷（えみし）・入鹿（いるか）</span>の親子がやりたい放題。天皇をしのぐほどの力をふるい、太子の子（山背大兄王）までほろぼしてしまう',
       '「このままじゃ国が蘇我氏のものになる！」と立ち上がったのが、<span class="hl">中大兄皇子</span>と<span class="hl">中臣鎌足</span>',
@@ -132,10 +100,9 @@ var STAGES = [
       ['nishi','たとえとしては近い。ただ本当に全国に行き渡るのは、このあと701年の大宝律令のころだ']
     ],
     goro:'<b>645</b> 蒸し米（むしごめ）たいて大化の改新',
-    stickyIcon:'📌', stickyText:'テストに出る！「大化の改新 ＝ 645年・中大兄皇子と中臣鎌足・蘇我氏をたおす・公地公民」', stickyColor:'var(--red)' },
+    stickyIcon:'📌', stickyText:'テストに出る！「大化の改新 ＝ 645年・中大兄皇子と中臣鎌足・蘇我氏をたおす・公地公民」' },
 
-  { no:'4', theme:'var(--blue)',
-    title:'海外遠征で大敗！「白村江の戦い」と国の守り（663年〜）',
+  { no:'4', title:'海外遠征で大敗！「白村江の戦い」と国の守り（663年〜）',
     items:[
       '朝鮮半島で、仲の良かった<span class="hl">百済</span>が<span class="hl">唐</span>（隋のあとの中国の王朝）と<span class="hl">新羅</span>にほろぼされる',
       '日本は百済を助けるために大軍を送るが、<span class="hl-blue big">663年</span> <span class="hl-red big">白村江の戦い</span>で唐・新羅の連合軍に<span class="hl-red">大敗</span>',
@@ -149,10 +116,9 @@ var STAGES = [
       ['shun','ここは「負けた→守りを固めた→国内をまとめ直した」の流れ。戸籍づくりは、全国の人を把握して税をとるための準備']
     ],
     goro:'<b>663</b> ろく・ろく・見（6・6・3）ずに攻めて白村江で大敗',
-    stickyIcon:'🔗', stickyText:'→ 天智天皇が亡くなると、今度はあとつぎをめぐって国内で大ゲンカに！', stickyColor:'var(--blue)' },
+    stickyIcon:'🔗', stickyText:'→ 天智天皇が亡くなると、今度はあとつぎをめぐって国内で大ゲンカに！' },
 
-  { no:'5', theme:'var(--red)',
-    title:'おじ VS おい！「壬申の乱」と天皇パワーの強化（672年〜）',
+  { no:'5', title:'おじ VS おい！「壬申の乱」と天皇パワーの強化（672年〜）',
     items:[
       '天智天皇の死後、あとつぎをめぐって<span class="hl">弟の大海人皇子</span> VS <span class="hl">息子の大友皇子</span>（大海人皇子から見ると、おい）が対立',
       '<span class="hl-blue big">672年</span> <span class="hl-red big">壬申の乱</span>：古代最大の内乱。<span class="hl-red">大海人皇子が勝利</span>し、<span class="hl big">天武天皇</span>として即位',
@@ -167,10 +133,9 @@ var STAGES = [
       ['shun','「天智天皇（兄）」と「天武天皇（弟）」、名前が似てるから注意。<br>天智＝大化の改新の中大兄皇子。天武＝壬申の乱の大海人皇子']
     ],
     goro:'<b>672</b> ろく・な・に（6・7・2）もなく、おじが勝つ壬申の乱',
-    stickyIcon:'⚠️', stickyText:'まちがえ注意！　天智天皇＝兄＝中大兄皇子＝大化の改新・白村江　／　天武天皇＝弟＝大海人皇子＝壬申の乱', stickyColor:'var(--red)' },
+    stickyIcon:'⚠️', stickyText:'まちがえ注意！　天智天皇＝兄＝中大兄皇子＝大化の改新・白村江　／　天武天皇＝弟＝大海人皇子＝壬申の乱' },
 
-  { no:'6', theme:'var(--green)',
-    title:'ついに完成！法律で動く国「大宝律令」→ 平城京へ（701〜710年）',
+  { no:'6', title:'ついに完成！法律で動く国「大宝律令」→ 平城京へ（701〜710年）',
     items:[
       '<span class="hl-blue big">701年</span>、唐の法律にならって<span class="hl big">大宝律令</span>が完成。<span class="hl">律</span>＝刑罰のきまり、<span class="hl">令</span>＝政治のしくみのきまり',
       'これで、天皇を中心に法律（律令）にもとづいて政治をする<span class="hl-red big">律令国家</span>のしくみが整った',
@@ -185,7 +150,7 @@ var STAGES = [
       ['kuruma','きょんさん！次は奈良時代っすよね！大仏っすよね！楽しみっす！！']
     ],
     goro:'<b>701</b> な・お・い（7・0・1）っそう国をまとめる大宝律令　／　<b>710</b> なんと（710）きれいな平城京',
-    stickyIcon:'📌', stickyText:'テストに出る！「大宝律令 ＝ 701年・唐にならう・律（刑罰）と令（政治のしくみ）・律令国家」', stickyColor:'var(--green)' }
+    stickyIcon:'📌', stickyText:'テストに出る！「大宝律令 ＝ 701年・唐にならう・律（刑罰）と令（政治のしくみ）・律令国家」' }
 ];
 
 // ===== よくある勘違い =====
@@ -227,86 +192,15 @@ var CHECKS = [
   ['【並べかえ】冠位十二階・大化の改新・遣隋使・壬申の乱を古い順に','冠位十二階（603）→ 遣隋使（607）→ 大化の改新（645）→ 壬申の乱（672）']
 ];
 
-function renderStoryPage(){
-  var html = '';
-
-  html += '<div class="masthead">';
-  html += '<div class="burst">号外<br>!!</div>';
-  html += '<div class="masthead-title"><span class="t1">飛鳥時代</span><br><span class="t2">ストーリー</span>新聞</div>';
-  html += '<div class="masthead-sub">🗞️ 聖徳太子から平城京まで（592〜710年ごろ）<br>サクッと読んで「流れ」をつかもう！（クイズじゃないよ）</div>';
-  html += '<div class="series">'
-    + '<span class="now">① 飛鳥（いまここ）</span>'
-    + '<span class="soon">② 奈良（準備中）</span>'
-    + '<span class="soon">③ 平安（準備中）</span>'
-    + '<a href="soc_history_story.html">📰 戦後日本</a>'
-    + '</div>';
-  html += '</div>';
-
-  html += '<div class="catch">豪族がバチバチにケンカしていた国が、「<span class="hl-red">天皇を中心に、法律で動く国</span>」に大変身するまでの、約120年の大河ドラマ！<small>主役は 聖徳太子 → 中大兄皇子 → 天武天皇 へとバトンタッチ</small></div>';
-
-  // 登場人物
-  html += secHead('🎭 まずは登場人物（キャラ図鑑）');
-  html += '<div class="chara-grid">';
-  CHARAS.forEach(function(c, i){
-    html += '<div class="chara k' + (i % 6) + '"><div class="chara-top"><div class="chara-emo">' + c[0] + '</div><div class="chara-name">' + c[1] + '<small>' + c[2] + '</small></div></div><div class="chara-desc">' + c[3] + '</div></div>';
-  });
-  html += '</div>';
-
-  // 年表
-  html += secHead('📅 たての年表（上から古い順）', 'c');
-  html += '<div class="tl">';
-  TIMELINE.forEach(function(t){ html += '<div class="tl-item"><span class="tl-year">' + t[0] + '</span><span>' + t[1] + '</span></div>'; });
-  html += '</div>';
-
-  // 記事
-  html += secHead('📰 本日の記事（全7本）', 'o');
-  STAGES.forEach(function(s, i){
-    html += '<div class="clip-card" style="--band:' + BANDS[i % BANDS.length] + '">';
-    html += '<div class="clip-head"><div class="clip-num">' + s.no + '</div><div class="clip-title">' + s.title + '</div></div>';
-    html += '<ul class="clip-body">';
-    s.items.forEach(function(it){ html += '<li>' + it + '</li>'; });
-    html += '</ul>';
-    if(s.talk) html += talk(s.talk);
-    if(s.goro) html += goro(s.goro);
-    html += sticky(s.stickyIcon, s.stickyText);
-    html += '</div>';
-    if(i < STAGES.length - 1) html += '<div class="arrow-down">👇</div>';
-  });
-
-  // まとめ
-  html += secHead('🧭 120年を1行で', 'g');
-  html += '<div class="oneline">豪族バラバラ → <span class="hl">聖徳太子</span>「実力主義と役人のルール」 → 蘇我氏が暴走 → <span class="hl">大化の改新</span>「土地も人も国のもの」 → <span class="hl">白村江</span>で負けて守りを固める → <span class="hl">壬申の乱</span>で天皇パワーUP → <span class="hl">大宝律令</span>で法律の国が完成！</div>';
-
-  // 勘違い
-  html += secHead('🚫 よくある勘違い（ここで直そう）');
-  MYTHS.forEach(function(m){
-    html += '<div class="myth"><span class="stamp ng">✕</span><div><span class="ng-text">' + m[0] + '</span><span class="ok-text">' + m[1] + '</span></div></div>';
-  });
-
-  // 組み合わせ表
-  html += secHead('🔗 人物とできごとの組み合わせ', 'v');
-  html += '<div class="pair-wrap"><table class="pair-table"><tr><th>人物</th><th>できごと</th></tr>';
-  PAIRS.forEach(function(p){ html += '<tr><td style="white-space:nowrap;font-weight:900">' + p[0] + '</td><td>' + p[1] + '</td></tr>'; });
-  html += '</table></div>';
-
-  // 3秒チェック
-  html += secHead('⏱️ 3秒チェック（考えてからタップ）', 'c');
-  CHECKS.forEach(function(c, i){
-    html += '<div class="flip"><div><span class="flip-q">Q' + (i + 1) + '</span>' + c[0] + '</div><button class="flip-btn" data-flip="' + i + '">答えを見る</button><div class="flip-ans" id="flip_' + i + '">→ ' + c[1] + '</div></div>';
-  });
-
-  html += '<div class="end-note">📰 発行：きょん＆西村新聞社<br>これは「流れ」をつかむための読み物です。<br>クイズで確かめたいときは、ホームの「歴史」ページへ！<br>次号「奈良時代ストーリー新聞」をお楽しみに</div>';
-
-  document.getElementById('paperMain').innerHTML = html;
-
-  document.querySelectorAll('.flip-btn[data-flip]').forEach(function(b){
-    b.addEventListener('click', function(){
-      var a = document.getElementById('flip_' + b.getAttribute('data-flip'));
-      var open = a.style.display === 'block';
-      a.style.display = open ? 'none' : 'block';
-      b.textContent = open ? '答えを見る' : 'かくす';
-    });
-  });
-}
-
-renderStoryPage();
+renderStory({
+  key:'asuka',
+  era:'飛鳥時代',
+  span:'聖徳太子から平城京まで（592〜710年ごろ）',
+  catchText:'豪族がバチバチにケンカしていた国が、「<span class="hl-red">天皇を中心に、法律で動く国</span>」に大変身するまでの、約120年の大河ドラマ！',
+  catchSmall:'主役は 聖徳太子 → 中大兄皇子 → 天武天皇 へとバトンタッチ',
+  charas:CHARAS, timeline:TIMELINE, stages:STAGES,
+  onelineHead:'120年を1行で',
+  oneline:'豪族バラバラ → <span class="hl">聖徳太子</span>「実力主義と役人のルール」 → 蘇我氏が暴走 → <span class="hl">大化の改新</span>「土地も人も国のもの」 → <span class="hl">白村江</span>で負けて守りを固める → <span class="hl">壬申の乱</span>で天皇パワーUP → <span class="hl">大宝律令</span>で法律の国が完成！',
+  myths:MYTHS, pairs:PAIRS, checks:CHECKS,
+  nextNote:'<a href="soc_story_nara.html" style="color:var(--pop-c)">👉 次号「奈良時代ストーリー新聞」へ</a>'
+});

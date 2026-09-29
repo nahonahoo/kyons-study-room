@@ -516,7 +516,7 @@ function renderSection2() {
   html += '<div class="intro-box">'
     + '<div class="intro-box-title">📖 きょん＆西村の会話</div>'
     + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">品詞って10種類もあるんでしょ！？全部覚えるの無理じゃない！？</div></div></div>'
-    + '<div class="chat-line"><div class="avatar charB">祭</div><div><div class="chat-name">なかむらしゅん（9番街レトロ）</div><div class="chat-bubble">きょん、正攻法いきましょう。品詞は丸暗記じゃなくて「質問に順番に答える」だけで自動的に決まるんです。①単独で文節を作れるか、②活用するか、③言い切りの音は何か——この3つの質問に答えたら、10種類のうちどれか一つに絞れます。</div></div></div>'
+    + '<div class="chat-line"><div class="avatar charB">祭</div><div><div class="chat-name">なかむらしゅん（9番街レトロ）</div><div class="chat-bubble">きょんさん、ここは正攻法でいきましょう！品詞は丸暗記じゃなくて「質問に順番に答える」だけで自動的に決まるんです。①単独で文節を作れるか、②活用するか、③言い切りの音は何か——この3つの質問に答えたら、10種類のうちどれか一つに絞れます。あみだくじより確実です！</div></div></div>'
     + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">おお、しゅんありがとう！質問形式なら俺のパターン記憶とも相性いいかも！</div></div></div>'
     + '</div>';
 

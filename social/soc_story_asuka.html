@@ -60,9 +60,12 @@
 .sticky{ margin-top:20px; padding:22px 16px 14px; border-radius:8px; font-size:15px; line-height:1.9; font-weight:bold; border:2px dashed; position:relative; }
 .sticky-icon{ position:absolute; top:-13px; left:14px; font-size:18px; background:var(--bg2); padding:0 4px; line-height:1; }
 
-.hl{ background:linear-gradient(120deg, rgba(245,197,24,0.55) 0%, rgba(245,197,24,0.55) 100%); background-repeat:no-repeat; background-size:100% 44%; background-position:0 78%; font-weight:900; padding:0 2px; }
-.hl-red{ background:linear-gradient(120deg, rgba(233,69,96,0.4) 0%, rgba(233,69,96,0.4) 100%); background-repeat:no-repeat; background-size:100% 44%; background-position:0 78%; font-weight:900; padding:0 2px; }
-.hl-blue{ background:linear-gradient(120deg, rgba(74,158,255,0.4) 0%, rgba(74,158,255,0.4) 100%); background-repeat:no-repeat; background-size:100% 44%; background-position:0 78%; font-weight:900; padding:0 2px; }
+/* 強調：マーカー帯ではなく、文字そのものを蛍光色に */
+.hl{ color:#f4ff3a; font-weight:900; text-shadow:0 0 8px rgba(244,255,58,0.35); }
+.hl-red{ color:#ff5fa8; font-weight:900; text-shadow:0 0 8px rgba(255,95,168,0.35); }
+.hl-blue{ color:#3ee8ff; font-weight:900; text-shadow:0 0 8px rgba(62,232,255,0.35); }
+/* 金色の文字の中では黄色が埋もれるので、シアンに */
+.tagline-box .hl{ color:#3ee8ff; text-shadow:0 0 8px rgba(62,232,255,0.35); }
 .big{ font-size:19px; }
 
 .arrow-down{ text-align:center; font-size:26px; line-height:1; margin:6px 0 26px; color:var(--amber); }

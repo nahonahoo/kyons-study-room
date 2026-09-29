@@ -324,7 +324,7 @@ function checkSectionComplete() {
       if (!document.getElementById('secCompleteBanner')) {
         var banner = document.createElement('div');
         banner.id = 'secCompleteBanner';
-        var nextMsg = currentSection === 3 ? '「因数分解で解く」へ進もう！' : currentSection === 7 ? '確認テストへ挑戦！' : (currentSection < 4 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストへ挑戦！');
+        var nextMsg = currentSection === 8 ? '「因数分解で解く」で練習しよう！' : currentSection === 3 ? '「因数分解で解く」へ進もう！' : currentSection === 7 ? '確認テストへ挑戦！' : (currentSection < 4 ? 'Section ' + (currentSection+1) + ' へ進もう！' : '確認テストへ挑戦！');
         banner.innerHTML = '<div style="text-align:center;padding:20px;margin-bottom:12px;background:linear-gradient(135deg,rgba(163,113,247,0.12),rgba(14,165,233,0.08));border:1px solid var(--purple);border-radius:14px">'
           + '<div style="font-size:36px;margin-bottom:8px">🎉</div>'
           + '<div style="font-family:Bebas Neue,sans-serif;font-size:22px;color:var(--purple);letter-spacing:2px;margin-bottom:6px">セクション ' + currentSection + ' クリア！</div>'
@@ -341,6 +341,7 @@ function checkSectionComplete() {
 // ===== SECTIONS DEF =====
 var SECTIONS = [
   { id:0, label:'📐 スタート',   title:'二次方程式の世界へようこそ', sub:'平方根と多項式の知識を使って、解の公式をマスターする' },
+  { id:8, label:'🆘 対策プリント', title:'学習診断テスト対策：グラフから式 → 交点 → 動く点', sub:'グラフから式を作るところから、1ステップずつ' },
   { id:1, label:'標準形とa,b,c', title:'標準形とa,b,cの見つけ方',    sub:'ax²+bx+c=0 に整えて、正確に係数を読み取る' },
   { id:2, label:'解の公式',      title:'解の公式の使い方',           sub:'4ステップで、どんな二次方程式も解ける' },
   { id:3, label:'いろいろな型',  title:'いろいろなパターン',         sub:'√が残る場合・重解・約分の注意点' },
@@ -397,9 +398,10 @@ function renderSection(id) {
   else if (id === 3) html += renderSection3();
   else if (id === 4) html += renderSection4();
   else if (id === 7) html += renderSection7();
+  else if (id === 8) html += renderSection8();
 
-  if ((id >= 1 && id <= 4) || id === 7) {
-    var NEXT = { 1:2, 2:3, 3:7, 7:4 };
+  if ((id >= 1 && id <= 4) || id === 7 || id === 8) {
+    var NEXT = { 1:2, 2:3, 3:7, 7:4, 8:7 };
     var nextLabel = id !== 4 ? '次のセクションへ →' : '🏆 結果を見る！';
     html += '<button class="next-section-btn" id="nextBtn" data-goto="' + (id !== 4 ? NEXT[id] : 'result') + '" style="display:none">' + nextLabel + '</button>';
   }
@@ -479,6 +481,7 @@ function renderSection0() {
     + 'Section 2：解の公式の使い方（基本パターン）<br>'
     + 'Section 3：いろいろなパターン（√が残る・重解・約分の注意）'
     + '</div></div>'
+    + '<button class="start-btn" data-goto="8" style="background:#ff5c5c;color:#fff;margin-bottom:10px">🆘 学習診断テスト対策プリントの解き方はこちら →</button><br>'
     + '<button class="start-btn" data-goto="1">📐 Section 1 から始める →</button>';
 }
 
@@ -717,6 +720,192 @@ function renderSection7() {
   qs.forEach(function(q, i) {
     var qid = q._qid;
     qMeta[qid] = { type:'choice', answer:q.a, xp:5, jp:q.q, choices:q.choices };
+    html += '<div class="q-card" data-card="' + qid + '">'
+      + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
+      + '<div class="q-text">' + q.q + '</div>'
+      + makeChoices(qid, q.choices, q.a, 5)
+      + makeFeedback(qid, q.exp)
+      + '</div>';
+  });
+  html += '</div>';
+  return html;
+}
+
+// ===== SECTION 8: 🆘 学習診断テスト対策プリント「グラフから式を作る → 交点 → 動く点と二次方程式」（2026-09-30 追加） =====
+// 座標平面の図（格子・直線・点・「右に□、上に□」の階段）を描く
+function qdGraph(c) {
+  var W = (c.xmax - c.xmin) * c.sx, H = (c.ymax - c.ymin) * c.sy, L = 34, T = 16;
+  function X(x) { return L + (x - c.xmin) * c.sx; }
+  function Y(y) { return T + (c.ymax - y) * c.sy; }
+  var s = '<svg viewBox="0 0 ' + (W + L + 44) + ' ' + (H + T + 34) + '" style="width:100%;max-width:' + (c.maxw || 420) + 'px;display:block;margin:8px auto;background:#0f1520;border-radius:10px">';
+  for (var gx = c.xmin; gx <= c.xmax + 1e-9; gx += c.gx) s += '<line x1="' + X(gx) + '" y1="' + Y(c.ymin) + '" x2="' + X(gx) + '" y2="' + Y(c.ymax) + '" stroke="rgba(120,160,255,0.22)"/>';
+  for (var gy = c.ymin; gy <= c.ymax + 1e-9; gy += c.gy) s += '<line x1="' + X(c.xmin) + '" y1="' + Y(gy) + '" x2="' + X(c.xmax) + '" y2="' + Y(gy) + '" stroke="rgba(120,160,255,0.22)"/>';
+  var ax = c.xmin <= 0 && c.xmax >= 0 ? 0 : c.xmin, ay = c.ymin <= 0 && c.ymax >= 0 ? 0 : c.ymin;
+  s += '<line x1="' + X(c.xmin) + '" y1="' + Y(ay) + '" x2="' + X(c.xmax) + '" y2="' + Y(ay) + '" stroke="#e6edf3" stroke-width="1.6"/>';
+  s += '<line x1="' + X(ax) + '" y1="' + Y(c.ymin) + '" x2="' + X(ax) + '" y2="' + Y(c.ymax) + '" stroke="#e6edf3" stroke-width="1.6"/>';
+  (c.xt || []).forEach(function(v) { s += '<text x="' + X(v[0]) + '" y="' + (Y(ay) + 15) + '" text-anchor="middle" fill="#9aa4b2" font-size="12">' + v[1] + '</text>'; });
+  (c.yt || []).forEach(function(v) { s += '<text x="' + (X(ax) - 6) + '" y="' + (Y(v[0]) + 4) + '" text-anchor="end" fill="#9aa4b2" font-size="12">' + v[1] + '</text>'; });
+  if (c.xl) s += '<text x="' + (X(c.xmax) + 4) + '" y="' + (Y(ay) + 4) + '" fill="#e6edf3" font-size="13">' + c.xl + '</text>';
+  if (c.yl) s += '<text x="' + (X(ax) + 4) + '" y="' + (Y(c.ymax) + 2) + '" fill="#e6edf3" font-size="13">' + c.yl + '</text>';
+  (c.lines || []).forEach(function(l) {
+    // y = a x + b を x1〜x2 で描く（枠の外は切る）
+    var x1 = l.x1 !== undefined ? l.x1 : c.xmin, x2 = l.x2 !== undefined ? l.x2 : c.xmax;
+    if (l.a !== 0) {
+      var ya = l.a * x1 + l.b, yb = l.a * x2 + l.b;
+      if (ya < c.ymin) x1 = (c.ymin - l.b) / l.a; if (ya > c.ymax) x1 = (c.ymax - l.b) / l.a;
+      if (yb < c.ymin) x2 = (c.ymin - l.b) / l.a; if (yb > c.ymax) x2 = (c.ymax - l.b) / l.a;
+    }
+    s += '<line x1="' + X(x1) + '" y1="' + Y(l.a * x1 + l.b) + '" x2="' + X(x2) + '" y2="' + Y(l.a * x2 + l.b) + '" stroke="' + l.color + '" stroke-width="3"/>';
+    if (l.label) s += '<text x="' + (X(x2) + 4) + '" y="' + (Y(l.a * x2 + l.b) + (l.ly || 4)) + '" fill="' + l.color + '" font-size="14" font-weight="bold">' + l.label + '</text>';
+  });
+  (c.stairs || []).forEach(function(st) {
+    var fx = st.from[0], fy = st.from[1];
+    s += '<line x1="' + X(fx) + '" y1="' + Y(fy) + '" x2="' + X(fx + st.dx) + '" y2="' + Y(fy) + '" stroke="#ffd84d" stroke-width="3" stroke-dasharray="5 3"/>';
+    s += '<line x1="' + X(fx + st.dx) + '" y1="' + Y(fy) + '" x2="' + X(fx + st.dx) + '" y2="' + Y(fy + st.dy) + '" stroke="#3ddc84" stroke-width="3" stroke-dasharray="5 3"/>';
+    s += '<text x="' + ((X(fx) + X(fx + st.dx)) / 2) + '" y="' + (Y(fy) + (st.dy >= 0 ? 16 : -6)) + '" text-anchor="middle" fill="#ffd84d" font-size="12" font-weight="bold">' + st.tr + '</text>';
+    s += '<text x="' + (X(fx + st.dx) + 5) + '" y="' + ((Y(fy) + Y(fy + st.dy)) / 2 + 4) + '" fill="#3ddc84" font-size="12" font-weight="bold">' + st.tu + '</text>';
+  });
+  (c.pts || []).forEach(function(p) {
+    s += '<circle cx="' + X(p.x) + '" cy="' + Y(p.y) + '" r="5" fill="' + p.color + '" stroke="#000"/>';
+    if (p.label) s += '<text x="' + (X(p.x) + (p.dx || 7)) + '" y="' + (Y(p.y) + (p.dy || -7)) + '" fill="' + p.color + '" font-size="12" font-weight="bold">' + p.label + '</text>';
+  });
+  return s + '</svg>';
+}
+function qdStep(title, body, open) {
+  return '<details class="qd-step"' + (open ? ' open' : '') + '><summary>' + title + '</summary><div class="qd-body">' + body + '</div></details>';
+}
+function qdGrid(extra) {
+  var c = { xmin:-5, xmax:5, ymin:-5, ymax:5, sx:32, sy:32, gx:1, gy:1, xl:'x', yl:'y',
+    xt:[[-5,'−5'],[5,'5']], yt:[[5,'5'],[-5,'−5']] };
+  for (var k in extra) c[k] = extra[k];
+  return qdGraph(c);
+}
+function renderSection8() {
+  var css = '<style>'
+    + '.qd-step{margin:10px 0;border:2px solid var(--border);border-radius:12px;background:rgba(255,255,255,0.03)}'
+    + '.qd-step summary{cursor:pointer;padding:12px 14px;font-size:16px;font-weight:bold;color:var(--gold);line-height:1.7}'
+    + '.qd-step[open] summary{border-bottom:1px solid var(--border)}'
+    + '.qd-body{padding:12px 16px;font-size:16px;line-height:2.1}'
+    + '.qd-big{font-size:20px;font-weight:bold;color:#fff;background:rgba(255,216,77,0.12);border-left:4px solid var(--gold);padding:6px 12px;margin:8px 0;border-radius:6px}'
+    + '.qd-ans{font-size:19px;font-weight:bold;color:#3ddc84;border:2px solid #3ddc84;border-radius:10px;padding:8px 12px;margin:10px 0;text-align:center}'
+    + '.qd-part{font-family:"Bebas Neue",sans-serif;font-size:22px;letter-spacing:2px;color:var(--purple);margin:26px 0 6px}'
+    + '</style>';
+  var html = css;
+  html += '<div class="rule-card">'
+    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">グラフを見て「式を求めなさい」って言われても、どこを見ればいいのか全然わからない…</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">見るところは<b>2つだけ</b>だ。「<b>y軸とぶつかるところ</b>」と「<b>右に何マス進むと、上に何マス上がるか</b>」。この2つが読めれば、式は必ず作れる。まずそこから一緒にやろう</div></div></div>'
+    + '<div class="chat-line"><div class="avatar" style="background:#b69cff;color:#111">🎭</div><div><div class="chat-name">なかむらしゅん</div><div class="chat-bubble">きょんさん、各ステップは<b>タップすると開く</b>ようにしてあります。開く前に「たぶんこうかな」って1回考えてから開くと、ぐっと身につきます。答えを先に見るのは、ネタバレしてから映画を見るようなもんです</div></div></div>'
+    + '</div>';
+
+  // ---------- PART 1：グラフから式を作る ----------
+  html += '<div class="qd-part">PART 1　グラフから直線の式を作る</div>';
+  html += '<div class="rule-card"><div class="rule-card-title">📐 直線の式は y ＝ （傾き）x ＋（切片）</div>'
+    + '<div class="rule-box">'
+    + '<div class="qd-big">① 切片 ＝ 線が y軸（たての軸）とぶつかる目盛り</div>'
+    + '<div class="qd-big">② 傾き ＝ 右に1マス進むと、上に何マス上がるか<br>（右に□マスで上に△マスなら　傾き ＝ △ ÷ □）</div>'
+    + '<div class="ex">・下がるときは「上に −△」と考えて、傾きは<b>マイナス</b>。</div>'
+    + '<div class="ex">・点は、線が<b>マス目の角（交差点）をぴったり通るところ</b>を使う。中途半端なところは読まない。</div>'
+    + '</div></div>';
+
+  html += '<div class="rule-card"><div class="rule-card-title">🔍 対策プリント(4)の直線 ℓ の式を作ってみよう</div>'
+    + qdGrid({ lines:[{a:2,b:-2,color:'#ff7a45',label:'ℓ'}], pts:[{x:0,y:-2,color:'#ff7a45',label:'(0, −2)',dx:-56,dy:4},{x:1,y:0,color:'#ff7a45',label:'(1, 0)',dx:8,dy:14},{x:2,y:2,color:'#ff7a45',label:'(2, 2)',dx:8,dy:4}], stairs:[{from:[0,-2],dx:1,dy:2,tr:'右に1',tu:'上に2'}] })
+    + qdStep('STEP 1　y軸とぶつかるところは？（タップ）', 'ℓ は y軸の <b>−2</b> のところを通っている → <b>切片は −2</b>', false)
+    + qdStep('STEP 2　右に1マス進むと、上に何マス？（タップ）', '(0, −2) から<b>右に1</b>マス進むと、(1, 0) で<b>上に2</b>マス上がっている → <b>傾きは 2</b><br>（(1, 0) から (2, 2) も、右に1・上に2。どこで数えても同じ）', false)
+    + qdStep('STEP 3　式にする（タップ）', '<div class="qd-big">y ＝ 2x − 2</div>確認：点 (2, 2) を入れると 2×2 − 2 ＝ 2 → ぴったり ✓<br>💡 もう1つの点で確かめると、読みまちがいに気づける', false)
+    + '</div>';
+
+  html += '<div class="rule-card"><div class="rule-card-title">🔍 直線 m の式（傾きが分数になるパターン）</div>'
+    + qdGrid({ lines:[{a:1/3,b:2,color:'#4aa8ff',label:'m',ly:-4}], pts:[{x:0,y:2,color:'#4aa8ff',label:'(0, 2)',dx:-44,dy:-8},{x:3,y:3,color:'#4aa8ff',label:'(3, 3)',dx:6,dy:-8}], stairs:[{from:[0,2],dx:3,dy:1,tr:'右に3',tu:'上に1'}] })
+    + qdStep('STEP 1　y軸とぶつかるところは？（タップ）', 'm は y軸の <b>2</b> を通る → <b>切片は 2</b>', false)
+    + qdStep('STEP 2　傾きは？（タップ）', '右に1マスだと、マス目の角をぴったり通らない。<br>そこで<b>角をぴったり通る次の点</b>をさがすと (3, 3)。<br>(0, 2) → (3, 3) は、<b>右に3</b>マスで<b>上に1</b>マス → 傾き ＝ 1 ÷ 3 ＝ <b>1/3</b>', false)
+    + qdStep('STEP 3　式にする（タップ）', '<div class="qd-big">y ＝ 1/3 x ＋ 2</div>確認：x ＝ 3 を入れると 1 ＋ 2 ＝ 3 → (3, 3) ✓', false)
+    + '<div class="note">⚠️ 傾きは「上 ÷ 右」。「右 ÷ 上」で 3 にしないこと！　きつい坂（ℓ）は大きい数、ゆるい坂（m）は小さい数になる。</div>'
+    + '</div>';
+
+  // ---------- PART 2：交点 ----------
+  html += '<div class="qd-part">PART 2　2本の直線の交点（プリント(4)）</div>';
+  html += '<div class="rule-card"><div class="rule-card-title">📐 交点 ＝ 2つの式を両方みたす点 → 連立方程式</div>'
+    + qdGrid({ lines:[{a:2,b:-2,color:'#ff7a45',label:'ℓ'},{a:1/3,b:2,color:'#4aa8ff',label:'m',ly:-4}], pts:[{x:2.4,y:2.8,color:'#ffd84d',label:'P',dx:-18,dy:-8}] })
+    + '<div class="ex">P は目盛りの角にないので、<b>グラフからは読めない</b>。だから計算で出す。</div>'
+    + qdStep('STEP 1　y が同じ → 右辺どうしを ＝ でつなぐ（タップ）', 'どちらも「y ＝」なので<div class="qd-big">2x − 2 ＝ 1/3 x ＋ 2</div>', false)
+    + qdStep('STEP 2　分数を消して x を求める（タップ）', '両辺を<b>3倍</b>する：6x − 6 ＝ x ＋ 6<br>x を左、数を右に移項：6x − x ＝ 6 ＋ 6 → 5x ＝ 12 → <b>x ＝ 12/5</b>', false)
+    + qdStep('STEP 3　y を求める（タップ）', 'ℓ の式に入れる：y ＝ 2 × 12/5 − 2 ＝ 24/5 − 10/5 ＝ <b>14/5</b><br>（m の式に入れても 1/3 × 12/5 ＋ 2 ＝ 4/5 ＋ 10/5 ＝ 14/5 で同じ ✓）', false)
+    + '<div class="qd-ans">答え　P（12/5 , 14/5）</div>'
+    + '</div>';
+
+  // ---------- PART 3：追いつく問題 ----------
+  html += '<div class="qd-part">PART 3　追いついた時刻と場所（プリント(5)）</div>';
+  var g5 = { xmin:0, xmax:60, ymin:0, ymax:3, sx:5.5, sy:70, gx:5, gy:0.5, xl:'（分）', yl:'（km）',
+    xt:[[0,'0'],[15,'15'],[20,'20'],[30,'30'],[40,'40'],[45,'45'],[60,'60']], yt:[[1,'1'],[2,'2'],[3,'3']], maxw:460 };
+  g5.lines = [{a:1/15,b:0,x1:0,x2:45,color:'#ff7a45',label:'兄',ly:-4},{a:3/20,b:-3,x1:20,x2:40,color:'#4aa8ff',label:'妹',ly:-8}];
+  g5.pts = [{x:15,y:1,color:'#ff7a45',label:'(15, 1)',dx:6,dy:14},{x:45,y:3,color:'#ff7a45'},{x:20,y:0,color:'#4aa8ff',label:'(20, 0)',dx:4,dy:-8},{x:40,y:3,color:'#4aa8ff',label:'(40, 3)',dx:-58,dy:-6},{x:36,y:2.4,color:'#ffd84d',label:'追いついた！',dx:8,dy:16}];
+  html += '<div class="rule-card"><div class="rule-card-title">📐 横が「時間（分）」、たてが「道のり（km）」のグラフ</div>'
+    + qdGraph(g5)
+    + '<div class="ex">ここでも同じ。<b>y軸とぶつかるところ</b>と<b>右にいくつで上にいくつ</b>を読む。1マスの大きさ（横5分・たて0.5km）に注意。</div>'
+    + qdStep('STEP 1　兄の式（タップ）', '兄は <b>0（原点）</b>から出発 → 切片は 0<br>角をぴったり通る点 (15, 1) → <b>右に15分で上に1km</b> → 傾き ＝ 1 ÷ 15 ＝ <b>1/15</b><div class="qd-big">兄：y ＝ 1/15 x</div>（x ＝ 45 で y ＝ 3 → 45分で図書館 ✓）', false)
+    + qdStep('STEP 2　妹の式（タップ）', '妹は y軸とぶつからない（20分に出発）ので、切片は<b>計算で出す</b>。<br>点 (20, 0) と (40, 3) → <b>右に20で上に3</b> → 傾き ＝ <b>3/20</b><br>y ＝ 3/20 x ＋ b に (20, 0) を入れる：0 ＝ 3/20 × 20 ＋ b ＝ 3 ＋ b → <b>b ＝ −3</b><div class="qd-big">妹：y ＝ 3/20 x − 3</div>💡 y軸で読めないときは「点を代入して b を出す」', false)
+    + qdStep('STEP 3　追いつく ＝ 2本の線の交点（タップ）', '1/15 x ＝ 3/20 x − 3<br>分母15と20の最小公倍数 <b>60</b> をかける：4x ＝ 9x − 180<br>→ −5x ＝ −180 → <b>x ＝ 36</b><br>y ＝ 1/15 × 36 ＝ 36/15 ＝ <b>12/5（＝2.4）</b>', false)
+    + qdStep('STEP 4　問題の聞き方に合わせて答える（タップ）', 'x は「8時から何分たったか」→ 36分 → <b>8時36分</b><br>y は「家からの道のり（km）」→ <b>12/5 km（2.4km）</b>', false)
+    + '<div class="qd-ans">答え　8時36分、家から 12/5 km（2.4km）の地点</div>'
+    + '</div>';
+
+  // ---------- PART 4：動く点と二次方程式 ----------
+  html += '<div class="qd-part">PART 4　動く点と面積 → 二次方程式（プリント(6)）</div>';
+  var tri = '<svg viewBox="0 0 360 215" style="width:100%;max-width:480px;display:block;margin:8px auto;background:#0f1520;border-radius:10px">'
+    + '<polygon points="40,20 40,62 100,170 310,170" fill="rgba(74,168,255,0.35)" stroke="#4aa8ff" stroke-width="2"/>'
+    + '<polygon points="40,62 40,170 100,170" fill="rgba(255,122,69,0.4)" stroke="#ff7a45" stroke-width="2"/>'
+    + '<polygon points="40,20 40,170 310,170" fill="none" stroke="#e6edf3" stroke-width="2.5"/>'
+    + '<rect x="40" y="158" width="12" height="12" fill="none" stroke="#e6edf3"/>'
+    + '<text x="28" y="20" fill="#e6edf3" font-size="15" font-weight="bold">A</text><text x="24" y="185" fill="#e6edf3" font-size="15" font-weight="bold">B</text><text x="316" y="185" fill="#e6edf3" font-size="15" font-weight="bold">C</text>'
+    + '<text x="24" y="66" fill="#ffd84d" font-size="15" font-weight="bold">P</text><text x="94" y="190" fill="#ffd84d" font-size="15" font-weight="bold">Q</text>'
+    + '<text x="46" y="44" fill="#ffd84d" font-size="13" font-weight="bold">x</text>'
+    + '<text x="46" y="122" fill="#ff7a45" font-size="13" font-weight="bold">9−x</text>'
+    + '<text x="62" y="205" fill="#ff7a45" font-size="13" font-weight="bold">2x</text>'
+    + '<text x="180" y="120" fill="#4aa8ff" font-size="13" font-weight="bold">四角形APQC</text>'
+    + '<text x="4" y="100" fill="#9aa4b2" font-size="12">9cm</text><text x="170" y="210" fill="#9aa4b2" font-size="12">BC ＝ 18cm</text>'
+    + '</svg>';
+  html += '<div class="rule-card"><div class="rule-card-title">📐 x 秒後の長さを、x を使って書く</div>'
+    + tri
+    + '<div class="ex">P は A から B へ<b>毎秒1cm</b>、Q は B から C へ<b>毎秒2cm</b>。ABは9cm、BCは18cm、∠B＝90°。</div>'
+    + qdStep('STEP 1　x 秒後の長さ（タップ）', 'AP ＝ 1 × x ＝ <b>x</b> cm<br>PB ＝ 9 − x cm（AB全体の9cmから AP を引く）<br>BQ ＝ 2 × x ＝ <b>2x</b> cm<div class="note">⚠️ 三角形PBQで使うのは <b>AP（x）ではなく PB（9−x）</b>。ここがいちばんまちがえやすい！</div>', false)
+    + qdStep('STEP 2　四角形は「大きい三角形 − 小さい三角形」（タップ）', '四角形APQCはそのままでは面積が出しにくい。<br><b>△ABC 全体から、△PBQ を切り取った形</b>と考える。<br>△ABC ＝ 18 × 9 ÷ 2 ＝ <b>81</b> cm²<br>△PBQ ＝ （底辺 BQ）×（高さ PB）÷ 2 ＝ 2x × (9 − x) ÷ 2 ＝ <b>x(9 − x)</b>', false)
+    + qdStep('STEP 3　方程式を作る（タップ）', '<div class="qd-big">81 − x(9 − x) ＝ 67</div>x(9 − x) ＝ 81 − 67 ＝ 14<br>9x − x² ＝ 14<br>全部を左に集めて整える：<b>x² − 9x ＋ 14 ＝ 0</b>', false)
+    + qdStep('STEP 4　因数分解で解く（タップ）', '足して −9、かけて 14 になる2つの数 → <b>−2 と −7</b><br>(x − 2)(x − 7) ＝ 0 → <b>x ＝ 2, 7</b>', false)
+    + qdStep('STEP 5　その答え、本当に使える？（範囲チェック・タップ）', 'P が B に着くのは 9 ÷ 1 ＝ 9秒後、Q が C に着くのは 18 ÷ 2 ＝ 9秒後 → x は <b>0〜9秒</b>の間だけ。<br>2 も 7 もこの中なので、<b>どちらも答え</b>。<br>確かめ：x＝2 → △PBQ ＝ 4×7÷2 ＝ 14、x＝7 → △PBQ ＝ 14×2÷2 ＝ 14 → どちらも 81−14＝67 ✓<div class="note">💡 範囲の外に出た答え（たとえば 11秒）は「不適」として消す。</div>', false)
+    + '<div class="qd-ans">答え　2秒後と7秒後</div>'
+    + '</div>';
+
+  // ---------- 練習 ----------
+  html += '<div class="qd-part">練習問題（同じ考え方で解けるか確認）</div>';
+  function E(rule, ok, ng, tip) { return '<span class="exp-rule"><span class="label">📐 ルール</span>' + rule + '</span><span class="exp-ok">✅ ' + ok + '</span>' + (ng ? '<span class="exp-ng">❌ ' + ng + '</span>' : '') + '<span class="exp-tip">💡 ' + tip + '</span>'; }
+  var qs = [
+    { q:'下のグラフの直線の式は？' + qdGrid({ lines:[{a:1,b:1,color:'#ff7a45'}], pts:[{x:0,y:1,color:'#ff7a45'},{x:1,y:2,color:'#ff7a45'}], maxw:300 }),
+      a:'y ＝ x ＋ 1', choices:['y ＝ x ＋ 1','y ＝ x − 1','y ＝ 2x ＋ 1','y ＝ −x ＋ 1'],
+      exp:E('切片 ＝ y軸とぶつかるところ、傾き ＝ 右1マスで上にいくつ', 'y軸の1を通る → 切片1。右に1で上に1 → 傾き1', '切片を x軸とぶつかるところ（−1）で読まない', 'y軸（たて）で読む') },
+    { q:'下のグラフの直線の式は？' + qdGrid({ lines:[{a:-2,b:3,color:'#ff7a45'}], pts:[{x:0,y:3,color:'#ff7a45'},{x:1,y:1,color:'#ff7a45'}], stairs:[{from:[0,3],dx:1,dy:-2,tr:'右に1',tu:'下に2'}], maxw:300 }),
+      a:'y ＝ −2x ＋ 3', choices:['y ＝ −2x ＋ 3','y ＝ 2x ＋ 3','y ＝ −2x − 3','y ＝ 3x − 2'],
+      exp:E('右下がりなら傾きはマイナス', '切片3、右に1で下に2 → 傾き −2', '下がっているのに 2 にしない', '「下に」はマイナス') },
+    { q:'下のグラフの直線の式は？' + qdGrid({ lines:[{a:0.5,b:-1,color:'#ff7a45'}], pts:[{x:0,y:-1,color:'#ff7a45'},{x:2,y:0,color:'#ff7a45'}], maxw:300 }),
+      a:'y ＝ 1/2 x − 1', choices:['y ＝ 1/2 x − 1','y ＝ 2x − 1','y ＝ 1/2 x ＋ 2','y ＝ −1/2 x − 1'],
+      exp:E('角をぴったり通る点を使う', '(0, −1) から (2, 0)：右に2で上に1 → 傾き 1/2、切片 −1', '「右÷上」で 2 にしない（上÷右）', 'ゆるい坂は分数の傾き') },
+    { q:'2直線 y ＝ x ＋ 1 と y ＝ −x ＋ 4 の交点の座標は？', a:'(3/2, 5/2)', choices:['(3/2, 5/2)','(5/2, 3/2)','(3, 4)','(1, 2)'],
+      exp:E('右辺どうしを ＝ でつなぐ', 'x ＋ 1 ＝ −x ＋ 4 → 2x ＝ 3 → x ＝ 3/2、y ＝ 3/2 ＋ 1 ＝ 5/2', 'x と y を入れかえない', '目盛りで読めない交点は計算で') },
+    { q:'兄は8時に家を出て y ＝ 1/15 x（x分後の道のり y km）で進む。妹は8時10分に出発し y ＝ 3/20 x − 3/2 で進む。妹が兄に追いつく時刻は？', a:'8時18分', choices:['8時18分','8時10分','8時36分','8時30分'],
+      exp:E('追いつく ＝ 2つの式の交点', '1/15 x ＝ 3/20 x − 3/2 → 60倍して 4x ＝ 9x − 90 → x ＝ 18 → 8時18分（道のり 18/15 ＝ 1.2km）', 'x は「8時から何分後か」', '分数は分母の最小公倍数をかけて消す') },
+    { q:'プリント(6)で、x 秒後の PB の長さは？', a:'9 − x (cm)', choices:['9 − x (cm)','x (cm)','2x (cm)','18 − 2x (cm)'],
+      exp:E('PB ＝ AB − AP', '9 − x', 'x は AP の長さ', '三角形PBQ に使うのは PB') },
+    { q:'プリント(6)で、△PBQ の面積を x で表すと？', a:'x(9 − x)', choices:['x(9 − x)','2x(9 − x)','x × 2x ÷ 2','(9 − x) ÷ 2'],
+      exp:E('底辺 BQ ＝ 2x、高さ PB ＝ 9 − x', '2x × (9 − x) ÷ 2 ＝ x(9 − x)', '÷2 を忘れると 2x(9 − x)', '三角形は ÷2') },
+    { q:'【類題】AB＝6cm、BC＝12cm、∠B＝90° の直角三角形。P は A→B を毎秒1cm、Q は B→C を毎秒2cm で同時に出発。四角形APQC が 28cm² になるのは何秒後？', a:'2秒後と4秒後', choices:['2秒後と4秒後','2秒後だけ','4秒後だけ','3秒後'],
+      exp:E('△ABC − △PBQ ＝ 28', '36 − x(6 − x) ＝ 28 → x² − 6x ＋ 8 ＝ 0 → (x−2)(x−4) ＝ 0。範囲は0〜6秒なので両方OK', '1つだけ答えない', '最後に範囲チェック') },
+    { q:'【類題・難】AB＝8cm、BC＝12cm、∠B＝90°。P は A→B を毎秒1cm、Q は B→C を毎秒3cm で同時に出発（Q は C に着いたら止まる）。四角形APQC が 30cm² になるのは何秒後？', a:'2秒後', choices:['2秒後','2秒後と6秒後','6秒後','4秒後'],
+      exp:E('Q が C に着くのは 12 ÷ 3 ＝ 4秒後 → x は 0〜4秒', '48 − 3x(8 − x) ÷ 2 ＝ 30 → x² − 8x ＋ 12 ＝ 0 → x ＝ 2, 6。6秒は範囲外なので不適', '6秒後もそのまま答えにしない', '「本当に動いている時間か」を必ず確認') }
+  ];
+  qs.forEach(function(q, i) { q._qid = 'math_quad_s8_q' + i; });
+  html += '<div class="practice-section">';
+  qs.forEach(function(q, i) {
+    var qid = q._qid;
+    qMeta[qid] = { type:'choice', answer:q.a, xp:5, jp:q.q.replace(/<svg[\s\S]*<\/svg>/, '（グラフ）'), choices:q.choices };
     html += '<div class="q-card" data-card="' + qid + '">'
       + '<div class="q-number">Q' + (i + 1) + ' / ' + qs.length + '</div>'
       + '<div class="q-text">' + q.q + '</div>'
@@ -1018,4 +1207,4 @@ repairWeakDB();
 updateXP();
 renderWeakBar();
 renderTabs();
-goSection(0);
+goSection(location.hash === '#taisaku' ? 8 : 0);

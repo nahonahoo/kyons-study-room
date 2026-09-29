@@ -28,6 +28,7 @@ const SUBJECTS = [
       { label:'Unit2（現在完了②）',         href:'english_reading/nh3_units123.html?unit=3',    weakDb:'nh3', qidPrefix:'3_' },
       { label:'Unit3（不定詞）',             href:'english_reading/nh3_units123.html?unit=4',    weakDb:'nh3', qidPrefix:'4_' },
       { label:'📘 中2英語復習（Unit1〜7）',  href:'english_reading/english_review_unit1-7.html', weakDb:'nh3',  qidPrefix:'nh3_rev_' },
+      { label:'🎧 リスニング・会話文・グラフ英語（入試対策）', href:'english_reading/eng_exam_listening.html', weakDb:'nh3', qidPrefix:'eng_ex_' },
     ]
   },
   {

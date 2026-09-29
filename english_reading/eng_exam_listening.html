@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英語｜リスニングと会話文（入試対策）</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/math.css">
+<style>
+:root { --purple: #3b82f6; }
+.listen-row { display: flex; gap: 8px; flex-wrap: wrap; margin: 8px 0 12px; }
+.listen-btn { background: rgba(59,130,246,0.15); border: 1px solid #3b82f6; color: #93c5fd; padding: 10px 18px; border-radius: 10px; font-size: 15px; font-family: inherit; font-weight: bold; cursor: pointer; }
+.listen-btn.playing { background: #3b82f6; color: #fff; }
+.en { font-family: 'Times New Roman', serif; font-size: 18px; letter-spacing: 0.03em; line-height: 1.9; }
+.dlg { background: var(--bg3); border: 1px dashed var(--border); border-radius: 8px; padding: 12px 16px; margin: 6px 0 12px; }
+.dlg .en { font-size: 17px; }
+.blank { display: inline-block; min-width: 70px; border-bottom: 2px solid var(--gold); color: var(--gold); text-align: center; font-weight: bold; }
+.choice-btn { text-align: left; }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="../index.html" title="ホームへ" style="font-size:1.3rem;text-decoration:none;flex-shrink:0;line-height:1;">🏠</a>
+  <div class="nav-title">🎧 英語 リスニング</div>
+  <div class="section-tabs" id="sectionTabs"></div>
+  <div class="coin-total" id="coinTotal">🪙 0 XP</div>
+</nav>
+
+<div class="xp-bar-wrap">
+  <div class="xp-top-row">
+    <div class="xp-badge" id="xpBadge">NSC入学</div>
+    <div class="xp-rank"  id="xpLevel">Lv.1 🥚</div>
+    <div class="xp-title" id="xpTitle">見習い研修生</div>
+    <div class="xp-next"  id="xpNext">次の昇格まで 20 XP</div>
+  </div>
+  <div class="xp-status-row" id="xpStatus">きょん「リスニング？なにそれ食えるの？」</div>
+  <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+</div>
+
+<div class="weak-bar">
+  <span class="weak-bar-label">🔥 弱点TOP</span>
+  <div id="weakItems" style="display:flex;flex-wrap:wrap;gap:6px;flex:1;align-items:center"></div>
+</div>
+
+<div class="main" id="mainContent"></div>
+<div id="toast" class="toast"></div>
+<div id="resultOverlay"></div>
+
+<script src="../assets/js/eng_exam_listening.js" defer></script>
+</body>
+</html>

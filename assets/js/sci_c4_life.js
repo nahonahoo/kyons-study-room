@@ -20,6 +20,15 @@ var answeredSet = JSON.parse(localStorage.getItem('sci_life_answered') || '{}');
 var sectionDone = JSON.parse(localStorage.getItem('sci_life_sections') || '{}');
 var weakDB      = JSON.parse(localStorage.getItem('sci_weakdb') || '{}');
 var attemptCounts = {};
+if (localStorage.getItem('sci_life_ver') !== '2') {
+  Object.keys(weakDB).forEach(function(k) { if (/^sci_life_s[1-4]_q\d+$/.test(k)) delete weakDB[k]; });
+  Object.keys(answeredSet).forEach(function(k) { if (/^sci_life_s[1-4]_q\d+$/.test(k)) delete answeredSet[k]; });
+  [1, 2, 3, 4].forEach(function(n) { delete sectionDone[n]; });
+  localStorage.setItem('sci_weakdb', JSON.stringify(weakDB));
+  localStorage.setItem('sci_life_answered', JSON.stringify(answeredSet));
+  localStorage.setItem('sci_life_sections', JSON.stringify(sectionDone));
+  localStorage.setItem('sci_life_ver', '2');
+}
 
 function updateXP() {
   var lv = getLevel(xp);
@@ -252,14 +261,14 @@ function checkSectionComplete() {
 
 var currentSection = 0;
 var SECTIONS = [
-  { id:0, label:'⚗️ スタート', title:'生物の成長と生殖・遺伝', sub:'実験の流れ・観察・グラフ読み取りを意識して整理しよう！' },
-  { id:1, label:'成長', title:'生物の成長と観察', sub:'細胞分裂・成長の様子・実験の手順を整理する' },
-  { id:2, label:'生殖', title:'生殖のしくみと条件設定', sub:'受精・発生・観察結果の読み取り' },
-  { id:3, label:'遺伝', title:'遺伝の規則性とグラフ読み取り', sub:'顕性・潜性・遺伝子の関係を図で考える' },
+  { id:0, label:'⚗️ スタート', title:'生命の連続性（成長・生殖・遺伝・進化）', sub:'命のバトンの渡し方を4つの話で整理しよう！' },
+  { id:1, label:'成長', title:'細胞分裂と生物の成長', sub:'根の観察・体細胞分裂の順番・染色体' },
+  { id:2, label:'生殖', title:'生物のふえ方（無性生殖・有性生殖）', sub:'分裂・栄養生殖・受精・発生・減数分裂' },
+  { id:3, label:'遺伝', title:'遺伝の規則性と遺伝子', sub:'顕性・潜性・分離の法則・かけ合わせの計算' },
   { id:5, label:'進化①', title:'生物の種類の多様性と進化①', sub:'5つのなかまの特徴と、地球に現れた順番（化石の順）' },
   { id:6, label:'進化②始祖鳥', title:'生物の種類の多様性と進化②', sub:'始祖鳥・相同器官・進化とは何か' },
   { id:7, label:'進化③入試', title:'生物の種類の多様性と進化③ 入試チャレンジ', sub:'難しめ。特徴の組み合わせ・共通点・文の誤り探し' },
-  { id:4, label:'確認', title:'確認テスト', sub:'実験イメージ・条件比較・因果関係を問う' }
+  { id:4, label:'確認', title:'確認テスト（成長・生殖・遺伝）', sub:'入試形式のまとめ問題' }
 ];
 
 function renderTabs() {
@@ -332,193 +341,258 @@ function setupEvents() {
     });
   });
 }
+// ===== Section 0〜4：成長・生殖・遺伝（2026-09-29 全面作り直し。東京書籍「生命の連続性」準拠） =====
+function lifeQs(html, sec, qs) {
+  qs.forEach(function(q, i) { html += makeChoices('sci_life_s' + sec + '_n' + i, q.jp, q.answer, q.choices, q.exp); });
+  return html;
+}
+function cellDivSVG() {
+  function cell(x, y, w, inner) { return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="90" rx="10" fill="rgba(61,220,132,0.10)" stroke="#3ddc84" stroke-width="2"/>' + inner; }
+  function X(cx, cy, c) { return '<line x1="' + (cx - 6) + '" y1="' + (cy - 7) + '" x2="' + (cx + 6) + '" y2="' + (cy + 7) + '" stroke="' + c + '" stroke-width="3.5" stroke-linecap="round"/><line x1="' + (cx + 6) + '" y1="' + (cy - 7) + '" x2="' + (cx - 6) + '" y2="' + (cy + 7) + '" stroke="' + c + '" stroke-width="3.5" stroke-linecap="round"/>'; }
+  function I(cx, cy, c) { return '<line x1="' + cx + '" y1="' + (cy - 7) + '" x2="' + cx + '" y2="' + (cy + 7) + '" stroke="' + c + '" stroke-width="3.5" stroke-linecap="round"/>'; }
+  var P = '#ff5ca8', Bl = '#4aa8ff';
+  var s = '<svg viewBox="0 0 372 250" style="width:100%;max-width:560px;display:block;margin:8px auto" role="img" aria-label="体細胞分裂の順番">';
+  // 上段
+  s += cell(4, 10, 112, '<circle cx="60" cy="55" r="20" fill="rgba(255,255,255,0.12)" stroke="#9aa4b2"/>');
+  s += cell(130, 10, 112, X(165, 38, P) + X(200, 42, Bl) + X(175, 72, Bl) + X(208, 70, P));
+  s += cell(256, 10, 112, X(312, 26, P) + X(312, 46, Bl) + X(312, 66, Bl) + X(312, 86, P) + '<line x1="312" y1="14" x2="312" y2="96" stroke="rgba(255,255,255,0.2)" stroke-dasharray="3 3"/>');
+  // 下段
+  s += cell(4, 138, 112, I(20, 160, P) + I(20, 178, Bl) + I(20, 196, Bl) + I(20, 214, P) + I(100, 160, P) + I(100, 178, Bl) + I(100, 196, Bl) + I(100, 214, P) + '<text x="60" y="192" text-anchor="middle" fill="#ffd84d" font-size="16">⇐ ⇒</text>');
+  s += cell(130, 138, 112, '<circle cx="158" cy="183" r="15" fill="rgba(255,255,255,0.12)" stroke="#9aa4b2"/><circle cx="214" cy="183" r="15" fill="rgba(255,255,255,0.12)" stroke="#9aa4b2"/><line x1="186" y1="140" x2="186" y2="226" stroke="#ffd84d" stroke-width="3"/>');
+  s += '<rect x="256" y="138" width="52" height="90" rx="10" fill="rgba(61,220,132,0.10)" stroke="#3ddc84" stroke-width="2"/><rect x="316" y="138" width="52" height="90" rx="10" fill="rgba(61,220,132,0.10)" stroke="#3ddc84" stroke-width="2"/><circle cx="282" cy="183" r="13" fill="rgba(255,255,255,0.12)" stroke="#9aa4b2"/><circle cx="342" cy="183" r="13" fill="rgba(255,255,255,0.12)" stroke="#9aa4b2"/>';
+  var labels = [[60,'分裂前'],[186,'① 染色体が現れる'],[312,'② 中央に並ぶ'],[60,'③ 両はしへ分かれる'],[186,'④ 核2つ・しきり'],[312,'⑤ 2つの細胞に']];
+  labels.forEach(function(l, i) { s += '<text x="' + l[0] + '" y="' + (i < 3 ? 116 : 244) + '" text-anchor="middle" fill="#e6edf3" font-size="12.5" font-weight="bold">' + l[1] + '</text>'; });
+  return s + '</svg>';
+}
+function punnett(p1, p2, cells, cap) {
+  var td = 'border:2px solid var(--border);padding:10px;text-align:center;font-size:18px;font-weight:bold;';
+  var h = '<table style="border-collapse:collapse;margin:8px auto">'
+    + '<tr><td style="' + td + 'color:var(--text2);font-size:13px">' + cap + '</td><td style="' + td + 'color:#4aa8ff">' + p2[0] + '</td><td style="' + td + 'color:#4aa8ff">' + p2[1] + '</td></tr>';
+  for (var r = 0; r < 2; r++) {
+    h += '<tr><td style="' + td + 'color:#ff5ca8">' + p1[r] + '</td>';
+    for (var c = 0; c < 2; c++) {
+      var v = cells[r][c];
+      h += '<td style="' + td + (v.indexOf('A') !== -1 ? 'color:var(--gold)' : 'color:#b69cff') + '">' + v + '</td>';
+    }
+    h += '</tr>';
+  }
+  return h + '</table>';
+}
+
 function renderSection0() {
-  return '<div class="chat-card">'
-    + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">生物の成長と遺伝って、なんかめちゃくちゃ大事っぽい！</div></div></div>'
-    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">この単元は「なぜ細胞が増えるのか」「どんな形で子どもに受け継がれるのか」を理解すると、テストが楽になる。実験では、条件を決めて、観察して、結果を表やグラフで読み取ることが大切だ。 </div></div></div>'
-    + '</div>'
+  var box = 'padding:12px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);font-size:15px;line-height:1.9;';
+  return evoChat([
+      ['kyon', '生命の連続性って、名前がもう難しそう…'],
+      ['nishi', '中身は4つの話だけだ。「体が大きくなるしくみ」「子どもをつくるしくみ」「親の特徴が子に伝わるしくみ」「長い時間で生物が変わっていくしくみ」。順番に1つずつ行こう'],
+      ['shun', 'きょんさん、ひとことで言うと「命のバトンの渡し方」の単元です。バトンの中身は遺伝子。今日はそのバトンを落とさず最後まで運びましょう']
+    ])
     + '<div class="rule-card">'
-    + '<div class="rule-card-title">🧪 実験で大事な流れ</div>'
-    + '<div class="ex">1. 条件を決める（例：水の量・温度・日光の有無）</div>'
-    + '<div class="ex">2. 実験器具を用意して操作する（ビーカー・温度計・種子・ろ紙など）</div>'
-    + '<div class="ex">3. 観察して記録する（発芽数・日数・高さ）</div>'
-    + '<div class="ex">4. 表やグラフで比較する</div>'
-    + '<div class="ex">5. 因果関係を説明する</div>'
-    + '<div class="note">💡 実験問題では「何を変えたか」「何を見たか」「どうしてそうなったか」がセットで問われることが多い。</div>'
-    + '<div class="rule-card-title" style="margin-top:14px;">🧭 視覚で見る実験イメージ</div>'
-    + '<div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;align-items:center;">'
-    + '<div class="mini-box" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);text-align:center;">条件設定<br><span style="font-size:11px;color:var(--text2);">水・温度・光</span></div>'
-    + '<div style="text-align:center;color:var(--gold);font-size:18px;">→</div>'
-    + '<div class="mini-box" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);text-align:center;">観察<br><span style="font-size:11px;color:var(--text2);">発芽数・高さ</span></div>'
-    + '<div style="text-align:center;color:var(--gold);font-size:18px;">→</div>'
-    + '<div class="mini-box" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);text-align:center;">表・グラフ<br><span style="font-size:11px;color:var(--text2);">比較・読み取り</span></div>'
-    + '<div style="text-align:center;color:var(--gold);font-size:18px;">→</div>'
-    + '<div class="mini-box" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);text-align:center;">因果関係<br><span style="font-size:11px;color:var(--text2);">なぜそうなったか</span></div>'
+    + '<div class="rule-card-title">🗺️ この単元の地図</div>'
+    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">'
+    + '<div style="' + box + '"><b style="color:var(--gold)">① 成長</b><br>細胞分裂で細胞がふえ、それぞれが大きくなる</div>'
+    + '<div style="' + box + '"><b style="color:var(--gold)">② 生殖</b><br>無性生殖と有性生殖。受精・発生・減数分裂</div>'
+    + '<div style="' + box + '"><b style="color:var(--gold)">③ 遺伝</b><br>遺伝子・顕性と潜性・分離の法則・3：1の計算</div>'
+    + '<div style="' + box + '"><b style="color:var(--gold)">④ 進化</b><br>化石の順番・始祖鳥・相同器官</div>'
     + '</div>'
+    + '<div class="note">💡 入試では「観察の手順の理由」「分裂の順番」「染色体の数」「かけ合わせの比の計算」がよく出る。</div>'
     + '</div>'
     + '<button class="start-btn" data-go="1">🧬 成長のしくみから始める →</button>'
     + '<button class="start-btn" data-go="5" style="margin-left:8px">🦅 始祖鳥・進化へジャンプ →</button>';
 }
+
 function renderSection1() {
-  var html = '<div class="rule-card">'
-    + '<div class="rule-card-title">📐 生物の成長と観察の流れ</div>'
-    + '<div class="rule-title">1. どの条件で調べるか</div>'
-    + '<div class="ex">温度や水の量、日光の有無などを同じにするか変えるかを決める。</div>'
-    + '<div class="rule-title">2. 何を観察するか</div>'
-    + '<div class="ex">発芽数、発芽した日数、草の高さなどを記録する。</div>'
-    + '<div class="rule-title">3. 結果を表やグラフに表す</div>'
-    + '<div class="ex">表やグラフから、どの条件でよく育つかを読み取る。</div>'
-    + '<div class="rule-title">4. なぜそうなったかを考える</div>'
-    + '<div class="ex">水や温度が適していると、発芽や成長が進みやすい。</div>'
-    + '<div class="note">💡 実験では「条件をそろえる」「結果を比較する」「因果関係を説明する」が重要です。重要語句は漢字で正しく書けるようにしましょう。</div>'
-    + '<div class="rule-card-title" style="margin-top:14px;">🧪 実験器具の例</div>'
-    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'
-    + '<div class="mini-box" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);">'
-    + '<div style="font-weight:bold;color:var(--gold);">器具</div>'
-    + '<div>ビーカー、ろ紙、種子、温度計、日光の有無をそろえるケース</div>'
-    + '</div>'
-    + '<div class="mini-box" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);">'
-    + '<div style="font-weight:bold;color:var(--gold);">観察項目</div>'
-    + '<div>発芽数、発芽した日数、草の高さ</div>'
-    + '</div>'
-    + '</div>'
-    + '<div class="rule-card-title" style="margin-top:14px;">📊 例：発芽数の比較</div>'
-    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'
-    + '<div class="mini-box" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);">'
-    + '<div style="font-weight:bold;color:var(--gold);">条件A</div>'
-    + '<div>水あり・20℃ → 8個発芽</div>'
-    + '</div>'
-    + '<div class="mini-box" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);">'
-    + '<div style="font-weight:bold;color:var(--gold);">条件B</div>'
-    + '<div>水なし・20℃ → 1個発芽</div>'
-    + '</div>'
-    + '</div>'
-    + '<div style="margin-top:10px;font-size:13px;color:var(--text2);">→ 水があるほうが発芽しやすいと考えられる。</div>'
-    + '<div class="rule-card-title" style="margin-top:16px;">📈 グラフで見ると</div>'
-    + '<div style="display:flex;align-items:flex-end;gap:10px;min-height:120px;margin-top:6px;">'
-    + '<div style="flex:1;text-align:center;">'
-    + '<div style="height:70px;background:linear-gradient(180deg,#34d399,#0f766e);border-radius:8px 8px 0 0;display:flex;align-items:flex-end;justify-content:center;color:#fff;font-weight:bold;">8</div>'
-    + '<div style="margin-top:4px;font-size:12px;">条件A</div>'
-    + '</div>'
-    + '<div style="flex:1;text-align:center;">'
-    + '<div style="height:18px;background:linear-gradient(180deg,#fca5a5,#b91c1c);border-radius:8px 8px 0 0;display:flex;align-items:flex-end;justify-content:center;color:#fff;font-weight:bold;">1</div>'
-    + '<div style="margin-top:4px;font-size:12px;">条件B</div>'
-    + '</div>'
-    + '</div>'
-    + '<div class="note" style="margin-top:10px;">💡 グラフの高さの違いから、どの条件が効果的かを読み取る練習をする。</div>'
-    + '<div class="rule-card-title" style="margin-top:16px;">🔗 1年・2年のつながる復習</div>'
-    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'
-    + '<div class="mini-box" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);">🔹 1年：物質の状態変化 → 水が液体→気体になるとき、粒の動きが変わる。</div>'
-    + '<div class="mini-box" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);">🔹 1年：光と音・力 → 実験条件の違いが結果にどう影響するかを見る。</div>'
-    + '<div class="mini-box" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);">🔹 2年：化学変化と物質の質量 → 変わっても、何が残るかを見極める。</div>'
-    + '<div class="mini-box" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);">🔹 2年：生物をつくる細胞 → 細胞が増えることが成長のもとになる。</div>'
-    + '<div class="mini-box" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);">🔹 2年：消化と吸収・呼吸 → 生物がエネルギーを取り入れる流れを思い出す。</div>'
-    + '<div class="mini-box" style="padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);">🔹 2年：気象観測・天気の変化 → 水蒸気や気温の変化と生物の成長を関連づけて考える。</div>'
-    + '</div>'
+  var html = evoChat([
+    ['kyon', '体が大きくなるのって、細胞が1個ずつ大きくなるから？'],
+    ['nishi', 'それだけではない。細胞分裂で<b>数がふえて</b>、ふえた細胞が<b>それぞれ大きくなる</b>。この2つのセットで成長するんだ']
+  ]);
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">🌱 根はどこがのびる？</div>'
+    + '<div class="ex">発芽したソラマメなどの根に等間隔の印をつけて数日観察すると、<b>根の先端に近い部分</b>の間隔がいちばん広がる。</div>'
+    + '<div class="ex">根の先端近くでは細胞分裂がさかんで、<b>小さい細胞がたくさん</b>ある。根もとに近いほど、細胞は大きい。</div>'
+    + '<div class="rule-card-title" style="margin-top:16px">🔬 タマネギの根の観察（手順と理由がセットで出る）</div>'
+    + '<div class="ex">① 根の先端を切りとり、<b>うすい塩酸</b>に入れてあたためる → <b>細胞どうしを離れやすくする</b>ため</div>'
+    + '<div class="ex">② 水で洗い、<b>染色液（酢酸オルセイン液・酢酸カーミン液など）</b>をたらす → <b>核や染色体を染めて見やすくする</b>ため</div>'
+    + '<div class="ex">③ カバーガラスをかけ、ろ紙の上から<b>指で押しつぶす</b> → <b>細胞の重なりを少なくする</b>ため</div>'
+    + '<div class="rule-card-title" style="margin-top:16px">✂️ 体細胞分裂の順番</div>'
+    + cellDivSVG()
+    + '<div class="ex">分裂の前に、染色体は<b>複製されて2倍</b>になっている → ① 核の中に<b>染色体</b>が見えるようになる → ② 染色体が細胞の<b>中央に並ぶ</b> → ③ 染色体が分かれて<b>両はしへ</b>移動 → ④ 両はしに<b>核が2つ</b>でき、中央に<b>しきり</b>ができる → ⑤ <b>2つの細胞</b>になり、それぞれが大きくなる</div>'
+    + '<div class="note">📐 ルール：体細胞分裂の前後で、<b>染色体の数は同じ</b>（コピーしてから半分ずつ分けるから）。<br>💡 覚え方：「現れる → 並ぶ → 分かれる → 2つになる」。整列して、左右に解散、の体育の授業。</div>'
     + '</div>';
-  var qs = [
-    { jp:'生物が大きくなるのは、細胞がどうなるからか。', answer:'分裂して増える', choices:['分裂して増える','蒸発する','消える','固まる'], exp:'細胞分裂によって細胞数が増え、からだが成長する。実験では「何が増えたか」を数値で確認する。' },
-    { jp:'実験で結果を比べるとき、変えるのはどこか。', answer:'条件', choices:['条件','結果だけ','名前','順番'], exp:'実験では条件をそろえたうえで、1つだけ変えて比較する。これで因果関係を見つけやすくなる。' },
-    { jp:'水が少ない条件で発芽数が少なかったとき、考えられることはどれか。', answer:'水分が少ないため発芽しにくかった', choices:['水分が少ないため発芽しにくかった','水が多いと成長しない','温度が下がっても同じだ','実験は無意味だった'], exp:'水分は発芽に関係しているので、条件の違いが結果の違いにつながると考える。' }
-  ];
-  qs.forEach(function(q, i) { q._qid = 'sci_life_s1_q' + i; });
-  qs.forEach(function(q) { html += makeChoices(q._qid, q.jp, q.answer, q.choices, q.exp); });
-  return html;
+  return lifeQs(html, 1, [
+    { jp:'生物のからだが成長するしくみとして、正しいものはどれか。', answer:'細胞分裂で細胞の数がふえ、それぞれが大きくなる', choices:['細胞分裂で細胞の数がふえ、それぞれが大きくなる','1つ1つの細胞が大きくなるだけで、数は変わらない','細胞がくっついて大きな1つの細胞になる','細胞の数が減って、残った細胞が大きくなる'],
+      exp:evoExp('成長＝細胞の数がふえる（細胞分裂）＋ふえた細胞が大きくなる。', '分裂 → ふえる → 大きくなる', '大きくなるだけ、は半分しか合っていない', '成長は「数」と「大きさ」の2段階') },
+    { jp:'発芽した根に等間隔で印をつけ、数日後に見た。印の間隔が最も広がっていたのはどこか。', answer:'根の先端に近い部分', choices:['根の先端に近い部分','根もと（種子に近い部分）','どこも同じように広がる','どこも広がらない'],
+      exp:evoExp('根の先端近くで細胞分裂がさかんなので、そこがよくのびる。', '先端に近い部分', '根もとはあまりのびない', 'のびるのは「先っぽの近く」') },
+    { jp:'根の先端近くの細胞と、根もとの細胞をくらべたときの説明として正しいものはどれか。', answer:'先端近くの細胞は小さく、分裂中のものが多い', choices:['先端近くの細胞は小さく、分裂中のものが多い','先端近くの細胞は大きく、分裂していない','どちらも同じ大きさである','根もとの細胞の方が小さく、分裂中のものが多い'],
+      exp:evoExp('分裂したばかりの細胞は小さい。先端近く＝分裂がさかん＝小さい細胞が多い。', '先端近く：小さい・分裂中が多い', '根もと：分裂を終えて大きくなった細胞', '生まれたて＝小さい') },
+    { jp:'タマネギの根の観察で、根をうすい塩酸に入れてあたためるのはなぜか。', answer:'細胞どうしを離れやすくするため', choices:['細胞どうしを離れやすくするため','核や染色体を染めるため','細胞分裂を速くするため','細胞の数をふやすため'],
+      exp:evoExp('塩酸＝細胞どうしの結びつきを弱めて、ばらばらにしやすくする。', '離れやすくする', '染めるのは染色液の役目', '塩酸は「ほぐす」、染色液は「染める」、押しつぶすは「重なりを減らす」') },
+    { jp:'観察で、酢酸オルセイン液などの染色液を使うのはなぜか。', answer:'核や染色体を染めて見やすくするため', choices:['核や染色体を染めて見やすくするため','細胞どうしを離れやすくするため','細胞を生きたままにするため','細胞壁をとかすため'],
+      exp:evoExp('染色液は核や染色体を赤っぽく染める。', '核・染色体を染める', '離れやすくするのは塩酸', '「染」色液は「染」める') },
+    { jp:'プレパラートをつくるとき、カバーガラスの上から押しつぶすのはなぜか。', answer:'細胞の重なりを少なくして見やすくするため', choices:['細胞の重なりを少なくして見やすくするため','細胞を分裂させるため','染色液を取りのぞくため','細胞を大きくするため'],
+      exp:evoExp('細胞が重なっていると観察しにくいので、うすく広げる。', '重なりを減らす', '分裂させるためではない', '手順と理由は3点セットで覚える') },
+    { jp:'細胞分裂のときに見られる、ひものようなものを何というか。', answer:'染色体', choices:['染色体','細胞膜','葉緑体','液胞'],
+      exp:evoExp('分裂のときに核の中に見える、ひも状のもの＝染色体。遺伝子をふくむ。', '染色体', '葉緑体は光合成をするところ', '染色液でよく「染」まる「体」') },
+    { jp:'体細胞分裂の順番として正しいものはどれか。<br>ア 染色体が中央に並ぶ　イ 核の中に染色体が現れる　ウ 2つの核ができ、しきりができる　エ 染色体が分かれて両はしへ移動する', answer:'イ→ア→エ→ウ', choices:['イ→ア→エ→ウ','ア→イ→エ→ウ','イ→エ→ア→ウ','ウ→イ→ア→エ'],
+      exp:evoExp('現れる（イ）→ 並ぶ（ア）→ 分かれる（エ）→ 2つになる（ウ）。', 'イ→ア→エ→ウ', '並ぶ前に分かれることはない', '体育：集合 → 整列 → 左右に解散 → 2チーム') },
+    { jp:'体細胞分裂の前後で、1つの細胞の染色体の数はどうなるか。', answer:'分裂の前と同じ', choices:['分裂の前と同じ','分裂の前の半分','分裂の前の2倍','分裂するたびに1本ずつ減る'],
+      exp:evoExp('分裂の前に染色体が複製されて2倍になり、それを半分ずつ分けるので、数は同じ。', '同じ数', '半分になるのは減数分裂（生殖細胞をつくるとき）', 'コピーしてから分けるので減らない') },
+    { jp:'体細胞分裂が始まる前、染色体はどうなっているか。', answer:'複製されて2倍になっている', choices:['複製されて2倍になっている','半分に減っている','すべて消えている','細胞の外に出ている'],
+      exp:evoExp('分裂の準備として、染色体は同じものがもう1組つくられる（複製）。', '複製されて2倍', '半分に減るのは減数分裂でできる生殖細胞', 'コピーしてから分ける') },
+    { jp:'顕微鏡で分裂中の細胞を探すとき、根のどの部分を観察するとよいか。', answer:'根の先端に近い部分', choices:['根の先端に近い部分','根もとに近い部分','根の表面の毛（根毛）','どこでも同じ'],
+      exp:evoExp('分裂がさかんなのは根の先端近く。', '先端近くを観察', '根もとは分裂中の細胞が少ない', 'よくのびる場所＝分裂がさかんな場所') },
+    { jp:'体細胞分裂で、植物の細胞と動物の細胞で異なる点はどれか。', answer:'植物の細胞は中央にしきりができて2つに分かれる', choices:['植物の細胞は中央にしきりができて2つに分かれる','動物の細胞だけ染色体が現れる','植物の細胞だけ染色体の数が半分になる','動物の細胞は分裂しない'],
+      exp:evoExp('植物の細胞は中央にしきりができ、動物の細胞はくびれるように2つに分かれる。染色体の動きは同じ。', '植物＝しきり', '染色体の数や動きは植物も動物も同じ', '植物は細胞壁があるので「しきり」') }
+  ]);
 }
+
 function renderSection2() {
-  var html = '<div class="rule-card">'
-    + '<div class="rule-card-title">📐 生殖のしくみと実験の見方</div>'
-    + '<div class="rule-title">受精の流れ</div>'
-    + '<div class="ex">精細胞と卵細胞が合体 → 受精卵ができる → 細胞分裂を繰り返して発生する。</div>'
-    + '<div class="rule-title">観察のポイント</div>'
-    + '<div class="ex">生殖では、どの時期にどんな変化が起きるかを順番で整理する。</div>'
-    + '<div class="ex">受精前の細胞と受精後の受精卵の違いを比較してイメージできるようにする。</div>'
-    + '<div class="note">💡 実験の図や模式図では、順番を追って「どこからどこへ変化したか」を説明できることが大切です。</div>'
-    + '<div class="rule-card-title" style="margin-top:16px;">🧫 観察表の読み取り例</div>'
-    + '<table style="width:100%;border-collapse:collapse;margin-top:8px;">'
-    + '<tr><th style="border:1px solid var(--border);padding:8px;">時期</th><th style="border:1px solid var(--border);padding:8px;">変化の内容</th></tr>'
-    + '<tr><td style="border:1px solid var(--border);padding:8px;">受精前</td><td style="border:1px solid var(--border);padding:8px;">精細胞と卵細胞は別々にある</td></tr>'
-    + '<tr><td style="border:1px solid var(--border);padding:8px;">受精後</td><td style="border:1px solid var(--border);padding:8px;">2つが合体し、受精卵になる</td></tr>'
-    + '<tr><td style="border:1px solid var(--border);padding:8px;">発生</td><td style="border:1px solid var(--border);padding:8px;">受精卵が細胞分裂を繰り返して成長する</td></tr>'
-    + '</table>'
-    + '<div class="note" style="margin-top:10px;">→ 「受精前」「受精後」「発生」の順序を説明できると、図や表の読み取りが安定します。</div>'
-    + '<div class="rule-card-title" style="margin-top:16px;">🔍 因果関係を言葉にするコツ</div>'
-    + '<div class="ex">「受精が起きると、受精卵ができる」「受精卵が分裂すると成長する」のように、原因と結果をつなげて書く。</div>'
+  var box = 'padding:12px;border:1px solid var(--border);border-radius:10px;background:rgba(255,255,255,0.03);font-size:15px;line-height:1.9;';
+  var html = evoChat([
+    ['kyon', 'ジャガイモって、いもを植えたらまたジャガイモになるよね。あれも子ども？'],
+    ['nishi', 'そうだ。オスとメスが関係しないふえ方を<b>無性生殖</b>という。受精するふえ方は<b>有性生殖</b>。この2つのちがいは「子の遺伝子が親と同じかどうか」だ'],
+    ['shun', 'きょんさん、無性生殖はコピー機、有性生殖はミックスジュースです。コピーは親とまったく同じ、ミックスは2人分の材料が半分ずつ入るので、味がちょっと変わります']
+  ]);
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">🔁 無性生殖（受精しない）</div>'
+    + '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">'
+    + '<div style="' + box + '"><b style="color:var(--gold)">分裂</b><br>ゾウリムシ・ミカヅキモ・アメーバ</div>'
+    + '<div style="' + box + '"><b style="color:var(--gold)">出芽</b><br>酵母・ヒドラ</div>'
+    + '<div style="' + box + '"><b style="color:var(--gold)">栄養生殖</b><br>ジャガイモのいも・サツマイモ・オランダイチゴのほふく茎・さし木</div>'
+    + '</div>'
+    + '<div class="note">📐 ルール：無性生殖の子は、親と<b>まったく同じ遺伝子</b> → 形質も親と同じ。</div>'
+
+    + '<div class="rule-card-title" style="margin-top:16px">💞 有性生殖（生殖細胞が受精する）</div>'
+    + '<div class="ex"><b>動物</b>：卵巣で<b>卵</b>、精巣で<b>精子</b>がつくられる → 受精して<b>受精卵</b> → 細胞分裂をくり返して<b>胚</b>になる → 親と同じ形に育つ。受精卵から親になるまでの過程を<b>発生</b>という。</div>'
+    + '<div class="ex"><b>被子植物</b>：花粉がめしべの柱頭につく（受粉）→ <b>花粉管</b>がのびる → 花粉管の中の<b>精細胞</b>と、胚珠の中の<b>卵細胞</b>が受精 → 受精卵は<b>胚</b>、胚珠は<b>種子</b>、子房は<b>果実</b>になる。</div>'
+    + '<div class="note">💡 植物は「卵細胞・精細胞」、動物は「卵・精子」と呼び方がちがう。</div>'
+
+    + '<div class="rule-card-title" style="margin-top:16px">➗ 減数分裂＝生殖細胞をつくる特別な分裂</div>'
+    + '<div style="' + box + 'text-align:center">'
+    + '親の体細胞 <b style="color:var(--gold)">46本</b>（ヒトの場合）<br>↓ 減数分裂（半分に）<br>卵 <b style="color:#ff5ca8">23本</b> ＋ 精子 <b style="color:#4aa8ff">23本</b><br>↓ 受精（合わせる）<br>受精卵 <b style="color:var(--gold)">46本</b>（もとの数にもどる）'
+    + '</div>'
+    + '<div class="note">📐 ルール：生殖細胞の染色体は体細胞の<b>半分</b>。受精で<b>もとの数</b>にもどる。だから何代たっても染色体の数は変わらない。<br>📐 有性生殖の子は、両親から遺伝子を<b>半分ずつ</b>受けつぐ → 親と<b>ちがう形質</b>が現れることがある。</div>'
     + '</div>';
-  var qs = [
-    { jp:'卵細胞と精細胞が合体することを何というか。', answer:'受精', choices:['受精','発育','分裂','消化'], exp:'受精とは、卵細胞と精細胞が合体して新しい個体の始まりを作ること。' },
-    { jp:'受精した後にできる細胞を何というか。', answer:'受精卵', choices:['受精卵','精子','排卵','子房'], exp:'受精卵は受精してできた細胞で、そこから分裂が始まる。' },
-    { jp:'図や模式図で「受精→受精卵→分裂」と見たとき、何をつないで説明すべきか。', answer:'変化の順番', choices:['変化の順番','色だけ','名前の大きさ','数字の並び'], exp:'実験や図の読み取りでは、どの順番で何が起きたかを整理できることが大切。' }
-  ];
-  qs.forEach(function(q, i) { q._qid = 'sci_life_s2_q' + i; });
-  qs.forEach(function(q) { html += makeChoices(q._qid, q.jp, q.answer, q.choices, q.exp); });
-  return html;
+  return lifeQs(html, 2, [
+    { jp:'受精によらず、親のからだの一部から新しい個体ができるふえ方を何というか。', answer:'無性生殖', choices:['無性生殖','有性生殖','減数分裂','発生'],
+      exp:evoExp('受精しない＝無性生殖。', 'ゾウリムシの分裂・ジャガイモのいも', '受精する＝有性生殖', '「無」性＝オス・メスが関係ない') },
+    { jp:'ゾウリムシやミカヅキモのふえ方はどれか。', answer:'分裂', choices:['分裂','出芽','栄養生殖','受精'],
+      exp:evoExp('からだが2つに分かれてふえる＝分裂（無性生殖）。', 'ゾウリムシ・アメーバ', '出芽は酵母・ヒドラ', '単細胞生物は「分裂」') },
+    { jp:'ジャガイモのいもや、さし木のように、植物のからだの一部から新しい個体ができるふえ方を何というか。', answer:'栄養生殖', choices:['栄養生殖','出芽','分裂','受粉'],
+      exp:evoExp('植物の根・茎・葉など（栄養器官）からふえる＝栄養生殖。', 'ジャガイモ・サツマイモ・さし木・オランダイチゴ', '受粉は有性生殖の一部', '「栄養」をたくわえた部分からふえる') },
+    { jp:'無性生殖でできた子の形質について正しいものはどれか。', answer:'親とまったく同じ形質になる', choices:['親とまったく同じ形質になる','親と必ずちがう形質になる','両親の形質が半分ずつ現れる','形質は親と関係なく決まる'],
+      exp:evoExp('無性生殖の子は親と同じ遺伝子をもつので、形質も同じ。', '親と同じ（コピー）', '両親の遺伝子を半分ずつ＝有性生殖', 'コピー機は同じものしか出さない') },
+    { jp:'農家がイチゴやジャガイモを無性生殖でふやすことが多い理由として適切なものはどれか。', answer:'親と同じよい形質をもつ個体をふやせるから', choices:['親と同じよい形質をもつ個体をふやせるから','いろいろな形質の個体ができるから','受精させる必要があるから','染色体の数を半分にできるから'],
+      exp:evoExp('おいしい・よく育つなど、親のよい形質をそのまま受けつげる。', '同じ形質でそろう', 'いろいろな形質ができるのは有性生殖', '品質をそろえたいときは無性生殖') },
+    { jp:'動物で、卵と精子が受精してできる細胞を何というか。', answer:'受精卵', choices:['受精卵','胚','卵細胞','精細胞'],
+      exp:evoExp('卵と精子の核が合体＝受精 → 受精卵。', '受精卵', '胚は受精卵が分裂を始めてからのもの', '受精「した」「卵」') },
+    { jp:'受精卵が細胞分裂を始めてから、自分で食物をとり始めるまでの間の子を何というか。', answer:'胚', choices:['胚','受精卵','成体','生殖細胞'],
+      exp:evoExp('分裂を始めた受精卵〜自分で食物をとる前＝胚（動物）。', '胚', '受精卵は分裂前', '植物では、種子の中の赤ちゃん部分も胚') },
+    { jp:'受精卵から、親と同じ形のからだができあがっていく過程を何というか。', answer:'発生', choices:['発生','成長','進化','遺伝'],
+      exp:evoExp('受精卵 → 胚 → 親と同じ形、の過程＝発生。', 'カエルの受精卵 → オタマジャクシ → カエル', '進化は何世代もかけた変化', '発生は1個体の中の変化') },
+    { jp:'被子植物で、花粉が柱頭についたあと、胚珠に向かってのびる管を何というか。', answer:'花粉管', choices:['花粉管','道管','師管','気孔'],
+      exp:evoExp('花粉から胚珠へのびる管＝花粉管。中を精細胞が運ばれる。', '花粉管', '道管・師管は水や養分の通り道', '精細胞の「専用通路」') },
+    { jp:'被子植物で受精が起こったあと、胚珠は何になるか。', answer:'種子', choices:['種子','果実','花粉','葉'],
+      exp:evoExp('胚珠 → 種子、子房 → 果実、受精卵 → 胚。', '胚珠 → 種子', '子房 → 果実と混同しない', '「しゅ」珠 → 「しゅ」子') },
+    { jp:'被子植物の受精で、花粉管の中を運ばれて卵細胞と受精するものはどれか。', answer:'精細胞', choices:['精細胞','精子','花粉','胚珠'],
+      exp:evoExp('植物は「精細胞」と「卵細胞」。動物は「精子」と「卵」。', '植物＝精細胞', '精子は動物の呼び方', '植物は「細胞」がつく') },
+    { jp:'卵や精子などの生殖細胞がつくられるときに行われる、染色体の数が半分になる細胞分裂を何というか。', answer:'減数分裂', choices:['減数分裂','体細胞分裂','出芽','栄養生殖'],
+      exp:evoExp('生殖細胞をつくるとき＝減数分裂。染色体が半分になる。', '減数分裂', '体細胞分裂は数が変わらない', '「減」数＝数が減る') },
+    { jp:'ヒトの体細胞の染色体は46本である。卵の染色体は何本か。', answer:'23本', choices:['23本','46本','92本','12本'],
+      exp:evoExp('生殖細胞（卵・精子）は、減数分裂で体細胞の半分になる。', '46 ÷ 2 ＝ 23本', '46本のままだと、受精卵が92本になってしまう', '生殖細胞は半分') },
+    { jp:'ヒトの受精卵の染色体は何本か。', answer:'46本', choices:['46本','23本','92本','69本'],
+      exp:evoExp('卵23本＋精子23本＝46本。もとの数にもどる。', '46本', '92本にはならない（生殖細胞が半分だから）', '半分 ＋ 半分 ＝ もとどおり') },
+    { jp:'有性生殖でできた子に、親と異なる形質が現れることがある理由として正しいものはどれか。', answer:'両親から遺伝子を半分ずつ受けつぐから', choices:['両親から遺伝子を半分ずつ受けつぐから','片方の親の遺伝子だけを受けつぐから','遺伝子を受けつがないから','体細胞分裂でふえるから'],
+      exp:evoExp('有性生殖では、両親の遺伝子が半分ずつ組み合わさる。', 'ミックスジュース', '片方だけ、は誤り', 'この「組み合わせの変化」が進化にもつながる') }
+  ]);
 }
+
 function renderSection3() {
-  var html = '<div class="rule-card">'
-    + '<div class="rule-card-title">📐 遺伝の規則性とグラフ読み取り</div>'
-    + '<div class="rule-title">遺伝子とは</div>'
-    + '<div class="ex">遺伝子は、形や性質を決める情報である。</div>'
-    + '<div class="ex">親から子に受け継がれ、特徴の現れ方に関係する。</div>'
-    + '<div class="rule-title">顕性と潜性（前の呼び方：優性・劣性）</div>'
-    + '<div class="ex">対立する形質の純系どうしをかけ合わせたとき、子に現れる形質を<b>顕性形質</b>、子に現れない形質を<b>潜性形質</b>という。</div>'
-    + '<div class="ex">丸い種子（純系）× しわのある種子（純系）→ 子はすべて丸い種子。丸が顕性、しわが潜性。</div>'
-    + '<div class="note">💡 今の教科書は「顕性・潜性」。「優性・劣性」は前の言い方で、「すぐれている・おとっている」という意味ではない。</div>'
-    + '<div class="rule-card-title" style="margin-top:16px;">📊 例：丸い種子としわのある種子</div>'
-    + '<table style="width:100%;border-collapse:collapse;margin-top:8px;">'
-    + '<tr><th style="border:1px solid var(--border);padding:8px;">親</th><th style="border:1px solid var(--border);padding:8px;">子どもの形質</th></tr>'
-    + '<tr><td style="border:1px solid var(--border);padding:8px;">丸い種子（純系）× しわのある種子（純系）</td><td style="border:1px solid var(--border);padding:8px;">子はすべて丸い種子</td></tr>'
-    + '<tr><td style="border:1px solid var(--border);padding:8px;">その子（丸い種子）どうし</td><td style="border:1px solid var(--border);padding:8px;">孫は 丸：しわ ＝ 3：1（しわがまた現れる）</td></tr>'
-    + '</table>'
-    + '<div class="note" style="margin-top:10px;">→ 子の代では顕性形質（丸）だけ、孫の代では潜性形質（しわ）も約4分の1現れる。</div>'
-    + '<div class="rule-card-title" style="margin-top:16px;">📈 観察結果の見方</div>'
-    + '<div class="ex">表の結果から、「顕性形質が多かった」「潜性形質は少なかった」というように、割合の違いを説明できることが大切。</div>'
-    + '<div class="ex">グラフで「どの形質がどれだけ多いか」を見て、どちらが顕性形質かを判断する。</div>'
+  var html = evoChat([
+    ['kyon', '顕性とか潜性とか、漢字がもう強そう…'],
+    ['nishi', '顕性は「顕（あらわ）れる」、潜性は「潜（ひそ）む」。子に<b>現れる方</b>が顕性、<b>かくれる方</b>が潜性だ。遺伝子を<b>A</b>と<b>a</b>の記号で考えると、計算問題もパターンで解ける'],
+    ['shun', 'きょんさん、Aは声の大きい先輩、aは静かな後輩です。2人が同じ部屋にいたら、聞こえるのは先輩の声だけ。後輩の声が聞こえるのは、後輩2人きり（aa）のときだけです']
+  ]);
+  html += '<div class="rule-card">'
+    + '<div class="rule-card-title">🧬 言葉の整理</div>'
+    + '<div class="ex"><b>形質</b>＝形や性質などの特徴／<b>遺伝</b>＝親の形質が子に伝わること</div>'
+    + '<div class="ex"><b>遺伝子</b>＝形質を決めるもの。細胞の核の中の<b>染色体</b>にある。遺伝子の本体は<b>DNA（デオキシリボ核酸）</b>という物質</div>'
+    + '<div class="ex"><b>純系</b>＝何代自家受粉しても同じ形質しか現れない系統／<b>対立形質</b>＝丸としわのように、どちらか一方しか現れない形質どうし</div>'
+    + '<div class="ex"><b>顕性形質</b>＝純系どうしをかけ合わせたとき子に<b>現れる</b>形質（前の呼び方：優性）／<b>潜性形質</b>＝子に<b>現れない</b>形質（前の呼び方：劣性）</div>'
+    + '<div class="ex"><b>分離の法則</b>＝減数分裂のとき、対になっている遺伝子が<b>別々の生殖細胞</b>に入ること（メンデルがエンドウで発見）</div>'
+
+    + '<div class="rule-card-title" style="margin-top:16px">📐 かけ合わせの表（エンドウの種子の形：丸A＝顕性、しわa＝潜性）</div>'
+    + '<div class="ex"><b>親</b>：丸の純系（AA）× しわの純系（aa）→ 生殖細胞はAとa → <b>子はすべてAa＝丸</b></div>'
+    + punnett(['A','A'], ['a','a'], [['Aa','Aa'],['Aa','Aa']], '親')
+    + '<div class="ex"><b>子どうし</b>：Aa × Aa → <b>孫は AA：Aa：aa ＝ 1：2：1</b> → <b>丸：しわ ＝ 3：1</b></div>'
+    + punnett(['A','a'], ['A','a'], [['AA','Aa'],['Aa','aa']], '子')
+    + '<div class="note">📐 ルール：Aが1つでもあれば顕性（丸）。aaのときだけ潜性（しわ）。<br>💡 計算のコツ：孫が全部で□個 → しわは□の4分の1、丸は4分の3。<br>💡 発展：Aa × aa（しわ）→ 丸：しわ＝1：1。丸がAAかAaかは、しわ（aa）とかけ合わせてしわが出るかで見分けられる。</div>'
     + '</div>';
-  var qs = [
-    { jp:'丸い種子（純系）としわのある種子（純系）をかけ合わせると、子はすべて丸い種子になった。子に現れた「丸」のような形質を何というか。', answer:'顕性形質', choices:['顕性形質','潜性形質','中性形質','複合形質'], exp:'子に現れる形質＝顕性形質（前の呼び方は優性）。「すぐれている」という意味ではない。' },
-    { jp:'同じかけ合わせで、子に現れなかった「しわ」のような形質を何というか。', answer:'潜性形質', choices:['潜性形質','顕性形質','中性形質','変異形質'], exp:'子に現れない形質＝潜性形質（前の呼び方は劣性）。孫の代で約4分の1現れる。' },
-    { jp:'親から子に受け継がれる情報を何というか。', answer:'遺伝子', choices:['遺伝子','細胞膜','核酸','酵素'], exp:'遺伝子は、形質を決める情報をもつ。' },
-    { jp:'丸い種子を作る遺伝子がある場合、子の形を調べたときに最も起こりやすいのはどれか。', answer:'丸い種子が現れやすい', choices:['丸い種子が現れやすい','しわのある種子だけになる','どちらも現れない','形は決まらない'], exp:'顕性の遺伝子（丸）を1つでももっていれば、丸い種子になる。図や表から比較できるように整理しよう。' }
-  ];
-  qs.forEach(function(q, i) { q._qid = 'sci_life_s3_q' + i; });
-  qs.forEach(function(q) { html += makeChoices(q._qid, q.jp, q.answer, q.choices, q.exp); });
-  return html;
+  return lifeQs(html, 3, [
+    { jp:'形や性質などの特徴を何というか。', answer:'形質', choices:['形質','遺伝子','染色体','純系'],
+      exp:evoExp('形・色・性質などの特徴＝形質。', '種子の丸・しわ、子葉の黄・緑', '遺伝子は形質を「決めるもの」', '形質＝見た目や性質そのもの') },
+    { jp:'形質を決めるもとになるものは何か。また、それは細胞の何の中にあるか。', answer:'遺伝子・染色体', choices:['遺伝子・染色体','染色体・遺伝子','DNA・細胞膜','形質・細胞壁'],
+      exp:evoExp('遺伝子は、核の中の染色体にある。', '遺伝子は染色体の中', '逆（染色体が遺伝子の中）ではない', '染色体＝本棚、遺伝子＝本') },
+    { jp:'遺伝子の本体である物質を何というか。', answer:'DNA（デオキシリボ核酸）', choices:['DNA（デオキシリボ核酸）','デンプン','タンパク質','ブドウ糖'],
+      exp:evoExp('遺伝子の本体はDNA（デオキシリボ核酸）。', 'DNA', 'タンパク質やデンプンではない', '本の「文字」にあたるのがDNA') },
+    { jp:'エンドウを使って遺伝の規則性を発見した人物はだれか。', answer:'メンデル', choices:['メンデル','ダーウィン','ニュートン','フック'],
+      exp:evoExp('メンデルはエンドウのかけ合わせで遺伝の規則性（分離の法則など）を見つけた。', 'メンデル', 'フックは細胞を名づけた人', 'エンドウ＝メンデル') },
+    { jp:'何代自家受粉をくり返しても、親と同じ形質しか現れない系統を何というか。', answer:'純系', choices:['純系','雑種','顕性','対立形質'],
+      exp:evoExp('ずっと同じ形質＝純系（遺伝子の組み合わせがAAやaa）。', 'AAの丸、aaのしわ', 'Aaは純系ではない', '「純」粋に同じ') },
+    { jp:'丸い種子（純系）としわのある種子（純系）をかけ合わせたところ、子はすべて丸い種子になった。「丸」のような形質を何というか。', answer:'顕性形質', choices:['顕性形質','潜性形質','対立形質','純系'],
+      exp:evoExp('純系どうしのかけ合わせで子に現れる形質＝顕性形質（前の呼び方は優性）。', '丸は顕性', '「すぐれている」という意味ではない', '顕＝あらわれる') },
+    { jp:'減数分裂のとき、対になっている遺伝子が別々の生殖細胞に入ることを何というか。', answer:'分離の法則', choices:['分離の法則','顕性の法則','体細胞分裂','受精'],
+      exp:evoExp('Aaの親 → 生殖細胞はAかaのどちらか1つ＝分離の法則。', 'Aa → A と a', '体細胞分裂では遺伝子は分かれない', 'ペアが「分離」して別々の細胞へ') },
+    { jp:'丸の純系（AA）としわの純系（aa）をかけ合わせた。子の遺伝子の組み合わせはどれか。', answer:'Aa', choices:['Aa','AA','aa','AAとaaが半分ずつ'],
+      exp:evoExp('親の生殖細胞はAとaだけ → 子はすべてAa。', 'Aa（形質は丸）', 'AAやaaはできない', '表を書けば必ずわかる') },
+    { jp:'遺伝子の組み合わせがAaの種子どうしをかけ合わせた。できる種子の遺伝子の組み合わせの比 AA：Aa：aa はどれか。', answer:'1：2：1', choices:['1：2：1','1：1：1','3：0：1','2：1：1'],
+      exp:evoExp('表を書くと AA 1マス、Aa 2マス、aa 1マス。', '1：2：1', 'Aaは表に2マスあるので2', 'かけ算の表を書く') },
+    { jp:'前の問題で、丸い種子としわのある種子の数の比はどれか。', answer:'3：1', choices:['3：1','1：1','1：3','2：1'],
+      exp:evoExp('AAとAaは丸（1＋2＝3）、aaだけしわ（1）。', '丸：しわ＝3：1', '1：2：1を形質の比と混同しない', 'Aが1つでもあれば丸') },
+    { jp:'Aa どうしのかけ合わせで種子が8000個できた。しわのある種子はおよそ何個か。', answer:'およそ2000個', choices:['およそ2000個','およそ6000個','およそ4000個','およそ8000個'],
+      exp:evoExp('しわは全体の4分の1。8000 × 1/4 ＝ 2000。', '2000個', '6000個は丸の数', '3：1 → 全体を4つに分ける') },
+    { jp:'【難】Aa どうしのかけ合わせでできた丸い種子のうち、遺伝子の組み合わせがAaのものの割合はどれか。', answer:'3分の2', choices:['3分の2','2分の1','4分の1','3分の1'],
+      exp:evoExp('丸はAA（1）とAa（2）の合計3。そのうちAaは2 → 2/3。', '3分の2', '全体の中のAa（2/4＝1/2）と混同しない', '「丸いものの中で」に注意') },
+    { jp:'【難】遺伝子の組み合わせがAaの丸い種子と、しわのある種子（aa）をかけ合わせた。丸：しわの比はどれか。', answer:'1：1', choices:['1：1','3：1','1：0','1：3'],
+      exp:evoExp('Aa × aa → Aa：aa ＝ 2：2 ＝ 1：1。', '丸：しわ＝1：1', '3：1はAa×Aaのとき', '表を書くとAaが2マス、aaが2マス') },
+    { jp:'【難】丸い種子がAAかAaかを調べたい。どの種子とかけ合わせて調べるとよいか。', answer:'しわのある種子（aa）', choices:['しわのある種子（aa）','丸い種子（AA）','丸い種子（Aa）','どれとかけ合わせても同じ'],
+      exp:evoExp('aaとかけ合わせると、AAなら子はすべて丸、Aaなら丸：しわ＝1：1でしわが出る。', 'しわとかけ合わせる', 'AAとかけ合わせると、どちらでも全部丸になって区別できない', 'しわが「出るか出ないか」で判定') }
+  ]);
 }
+
 function renderSection4() {
   var html = '<div class="rule-card">'
-    + '<div class="rule-card-title">📘 確認テスト</div>'
-    + '<div class="rule-title">実験イメージ・条件比較・因果関係でまとめる</div>'
-    + '<div class="ex">実験で見るべきは「何を変えたか」「何を観察したか」「なぜそうなったか」。</div>'
-    + '<div class="rule-title">考え方の整理</div>'
-    + '<div class="ex">① 条件を決める　② 観察結果を表にする　③ グラフで比較する　④ 因果関係を説明する</div>'
-    + '<div class="note">💡 近年の出題は、実験操作の流れをイメージできるか、表やグラフから原因と結果をつなげられるかが鍵です。</div>'
-    + '<div class="rule-card-title" style="margin-top:16px;">📝 まとめの書き方</div>'
-    + '<div class="ex">「条件Aでは発芽数が多かったため、水が必要だったと考えられる。」のように、結果と原因をつなぐ形で書く。</div>'
+    + '<div class="rule-card-title">📘 確認テスト（成長・生殖・遺伝）</div>'
+    + '<div class="ex">入試と同じように、手順の理由・順番・数・比を問う問題です。迷ったら、前のセクションの図と表を思い出そう。</div>'
     + '</div>';
-  var qs = [
-    { jp:'同じ種子を使い、温度だけを変えて観察した。どの条件をそろえるのが大切か。', answer:'種子の種類', choices:['種子の種類','観察者の名前','時間の長さ','机の色'], exp:'比較実験では、結果に影響する要因をできるだけ同じにして、変える条件を1つにする。' },
-    { jp:'発芽数が多かった実験結果から、最も言えることはどれか。', answer:'その条件のほうが発芽しやすかった', choices:['その条件のほうが発芽しやすかった','実験は失敗だった','水は関係ない','結果が読めない'], exp:'結果の違いは条件の違いに由来すると考え、因果関係を説明する。' },
-    { jp:'受精卵が分裂を繰り返してできる状態を何というか。', answer:'発生', choices:['発生','凍結','変形','脱落'], exp:'受精後は細胞分裂を繰り返しながら発生していく。' },
-    { jp:'卵細胞と精細胞が合体することを何というか。', answer:'受精', choices:['受精','消化','呼吸','分離'], exp:'受精は卵細胞と精細胞が合体すること。' },
-    { jp:'親から子に受け継がれる情報のもとを何というか。', answer:'遺伝子', choices:['遺伝子','細胞膜','液胞','核'], exp:'遺伝子は形質を決める情報の単位。' },
-    { jp:'対立形質の純系どうしをかけ合わせたとき、子に現れる方の形質を何というか。', answer:'顕性形質', choices:['顕性形質','潜性形質','中性形質','同位形質'], exp:'子に現れる形質＝顕性形質（前の呼び方は優性）。' },
-    { jp:'対立形質の純系どうしをかけ合わせたとき、子に現れない方の形質を何というか。', answer:'潜性形質', choices:['潜性形質','顕性形質','増強形質','中性形質'], exp:'子に現れない形質＝潜性形質（前の呼び方は劣性）。' },
-    { jp:'同じ種子を使い、水の量だけを変えた実験で、発芽数が多かったのはどの条件か。', answer:'水の量が多い条件', choices:['水の量が多い条件','水の量が少ない条件','温度が高い条件','日光がない条件'], exp:'実験では、変えた条件と結果の関係を対応させて考える。' },
-    { jp:'表で「条件Aでは8個、条件Bでは1個」だったとき、どの条件がよく発芽したといえるか。', answer:'条件A', choices:['条件A','条件B','どちらも同じ','わからない'], exp:'表の数の大きいほうが、よく発芽したと判断できる。' },
-    { jp:'発芽した種子の高さを調べたとき、実験で必ず記録するものはどれか。', answer:'高さの数値', choices:['高さの数値','机の色','観察者の気分','教科書のページ数'], exp:'観察結果は数値や量で記録すると比較しやすい。' },
-    { jp:'実験結果をグラフで見るとき、最初に確認するのはどれか。', answer:'どの高さが高いか', choices:['どの高さが高いか','色の濃さ','書いた人の名前','試験管の形'], exp:'グラフを見るときは、縦の高さや差を読み取ることが大切。' },
-    { jp:'同じ条件で2回観察した結果が違ったとき、まず考えることはどれか。', answer:'観察ミスや条件のずれがないか', choices:['観察ミスや条件のずれがないか','結果は何でもよい','実験はやり直しだ','図を消す'], exp:'結果がばらつくときは、条件や観察の仕方を見直す必要がある。' },
-    { jp:'受精後の受精卵がどのように成長していくか。', answer:'細胞分裂をくり返して成長する', choices:['細胞分裂をくり返して成長する','そのまま消える','形を変えない','卵細胞に戻る'], exp:'受精卵は細胞分裂を繰り返して、発生に向かう。' },
-    { jp:'遺伝子を調べるとき、何を見て判断するのが大切か。', answer:'形質の現れ方', choices:['形質の現れ方','試験管の大きさ','部屋の明るさ','時計の針'], exp:'遺伝子は形質の現れ方からその性質を推測する。' },
-    { jp:'親の形質と子の形質を比較するとき、どちらを見て理由を説明するか。', answer:'どの形質が多く現れたか', choices:['どの形質が多く現れたか','音の大きさ','書いた順番','紙の色'], exp:'顕性と潜性を見分けるためには、現れた形質の割合に注目する。' },
-    { jp:'「温度が高いほど発芽数が増えた」と言えるのは、どんなときか。', answer:'温度だけを変えて他は同じにしたとき', choices:['温度だけを変えて他は同じにしたとき','複数の条件を同時に変えたとき','結果を見ないとき','条件が書いていないとき'], exp:'条件を1つに絞って比較しないと、原因をはっきりさせにくい。' },
-    { jp:'実験の考察で大切なのは、結果だけでなく何か。', answer:'その結果になった理由', choices:['その結果になった理由','見た人の数','机の高さ','言葉の長さ'], exp:'考察では、なぜその結果になったのかを原因とつなげて書く。' }
-  ];
-  qs.forEach(function(q, i) { q._qid = 'sci_life_s4_q' + i; });
-  qs.forEach(function(q) { html += makeChoices(q._qid, q.jp, q.answer, q.choices, q.exp); });
-  return html;
+  return lifeQs(html, 4, [
+    { jp:'タマネギの根の観察の手順と理由の組み合わせとして正しいものはどれか。', answer:'うすい塩酸 → 細胞どうしを離れやすくする', choices:['うすい塩酸 → 細胞どうしを離れやすくする','うすい塩酸 → 核を染める','染色液 → 細胞の重なりを少なくする','押しつぶす → 細胞分裂を進める'],
+      exp:evoExp('塩酸＝ほぐす、染色液＝染める、押しつぶす＝重なりを減らす。', '塩酸 → 離れやすく', '染めるのは染色液', '3点セットで覚える') },
+    { jp:'体細胞分裂と減数分裂のちがいとして正しいものはどれか。', answer:'減数分裂では、できる細胞の染色体の数がもとの半分になる', choices:['減数分裂では、できる細胞の染色体の数がもとの半分になる','体細胞分裂では、染色体の数が半分になる','どちらも染色体の数は2倍になる','減数分裂は根の先端でだけ起こる'],
+      exp:evoExp('体細胞分裂：数は同じ。減数分裂：数が半分（生殖細胞をつくるとき）。', '減数分裂＝半分', '体細胞分裂で半分になる、は誤り', '「減」数分裂') },
+    { jp:'ある植物の体細胞の染色体は16本である。この植物の精細胞と、受精卵からできた胚の細胞の染色体はそれぞれ何本か。', answer:'精細胞8本、胚の細胞16本', choices:['精細胞8本、胚の細胞16本','精細胞16本、胚の細胞16本','精細胞8本、胚の細胞8本','精細胞16本、胚の細胞32本'],
+      exp:evoExp('生殖細胞（精細胞）は半分の8本。受精卵は8＋8＝16本、胚の細胞は体細胞分裂でふえるので16本のまま。', '8本と16本', '胚の細胞を8本にしない', '生殖細胞だけが半分') },
+    { jp:'次のうち、無性生殖だけを選んだ組み合わせはどれか。<br>ア ゾウリムシの分裂　イ カエルの受精　ウ ジャガイモのいもからの芽　エ アブラナの受粉', answer:'アとウ', choices:['アとウ','アとイ','イとエ','ウとエ'],
+      exp:evoExp('受精・受粉が関係するものは有性生殖。', 'ア（分裂）とウ（栄養生殖）', 'イ・エは有性生殖', '「受」の字がついたら有性生殖') },
+    { jp:'被子植物で受精したあと、子房と胚珠はそれぞれ何になるか。', answer:'子房 → 果実、胚珠 → 種子', choices:['子房 → 果実、胚珠 → 種子','子房 → 種子、胚珠 → 果実','子房 → 胚、胚珠 → 果実','子房 → 花粉、胚珠 → 種子'],
+      exp:evoExp('子房 → 果実、胚珠 → 種子、受精卵 → 胚。', '子房が果実', '逆にしない', '子房（外側）が果実、胚珠（内側）が種子') },
+    { jp:'カエルの発生の順番として正しいものはどれか。', answer:'受精卵 → 細胞分裂 → 胚 → オタマジャクシ → カエル', choices:['受精卵 → 細胞分裂 → 胚 → オタマジャクシ → カエル','胚 → 受精卵 → オタマジャクシ → カエル','オタマジャクシ → 受精卵 → 胚 → カエル','受精卵 → カエル → 胚 → オタマジャクシ'],
+      exp:evoExp('受精卵が分裂をくり返して胚になり、やがて自分で食物をとる個体になる。', '受精卵 → 胚 → 個体', '胚が受精卵より先、はない', '発生は「受精卵」からスタート') },
+    { jp:'有性生殖と無性生殖をくらべた説明として正しいものはどれか。', answer:'有性生殖では、親と異なる形質の子が生まれることがある', choices:['有性生殖では、親と異なる形質の子が生まれることがある','無性生殖では、両親の遺伝子を半分ずつ受けつぐ','有性生殖の子は、必ず親とまったく同じ形質になる','無性生殖では、減数分裂でできた生殖細胞が受精する'],
+      exp:evoExp('有性生殖：両親の遺伝子を半分ずつ → 形質が変わることがある。無性生殖：親と同じ遺伝子。', '有性生殖は形質が変わりうる', '無性生殖に受精や減数分裂はない', 'コピー（無性）とミックス（有性）') },
+    { jp:'純系の丸（AA）と純系のしわ（aa）をかけ合わせてできた子を、自家受粉させた。孫の丸としわの比はどれか。', answer:'3：1', choices:['3：1','1：1','1：2：1','すべて丸'],
+      exp:evoExp('子はすべてAa → Aa × Aa → 丸：しわ＝3：1。', '3：1', '1：2：1は遺伝子の組み合わせの比', '「子」はすべて丸、「孫」で3：1') },
+    { jp:'前の問題で、孫の種子が1200個できた。丸い種子はおよそ何個か。', answer:'およそ900個', choices:['およそ900個','およそ300個','およそ600個','およそ1200個'],
+      exp:evoExp('丸は全体の4分の3。1200 × 3/4 ＝ 900。', '900個', '300個はしわの数', '4つに分けて3つ分') },
+    { jp:'【難】前の問題の孫の丸い種子900個のうち、遺伝子の組み合わせがAAのものはおよそ何個か。', answer:'およそ300個', choices:['およそ300個','およそ600個','およそ450個','およそ900個'],
+      exp:evoExp('丸の中は AA：Aa ＝ 1：2。900 × 1/3 ＝ 300。', 'AAは300個（Aaは600個）', '丸全体の半分（450）ではない', '1：2：1 の「1」と「2」をよく見る') },
+    { jp:'遺伝子について正しいものはどれか。', answer:'遺伝子は染色体にあり、本体はDNAである', choices:['遺伝子は染色体にあり、本体はDNAである','遺伝子は細胞膜にあり、本体はタンパク質である','遺伝子は体細胞分裂のたびに半分に減る','遺伝子は親から子へ伝わることはない'],
+      exp:evoExp('遺伝子＝核の中の染色体にある。本体はDNA。', '染色体・DNA', '体細胞分裂で遺伝子は減らない', '染色体＝本棚、遺伝子＝本、DNA＝文字') },
+    { jp:'【難】ある遺伝子の組み合わせが不明な丸い種子を、しわのある種子（aa）とかけ合わせたところ、丸としわがほぼ同じ数できた。この丸い種子の遺伝子の組み合わせはどれか。', answer:'Aa', choices:['Aa','AA','aa','決められない'],
+      exp:evoExp('AA × aa なら子はすべて丸。しわが出た（1：1）ので、もとの丸はAa。', 'Aa', 'AAならしわは出ない', 'しわが出た ＝ aをもっていた') }
+  ]);
 }
+
 // ===== 生物の種類の多様性と進化（Section 5・6・7） =====
 // 解説は CLAUDE.md の解説カード形式（📐ルール ✅正例 ❌誤例 💡覚え方）
 function evoExp(rule, ok, ng, tip) {

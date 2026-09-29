@@ -204,7 +204,7 @@ function makeChoices(qid, jp, answer, choices, exp) {
     + '</div>'
     + '<div class="q-feedback correct-fb" id="fb_'  + qid + '" style="' + (done?'display:block':'display:none') + '">✓ 正解！</div>'
     + '<div class="q-feedback wrong-fb"   id="fbw_' + qid + '" style="display:none">✗ もう一度チャレンジ！</div>'
-    + '<div class="exp-card" id="exp_card_' + qid + '">'
+    + '<div class="exp-card" id="exp_card_' + qid + '" style="' + (answeredSet[qid] ? '' : 'display:none') + '">'
     + '<div class="exp-card-title">📌 解説</div>'
     + '<div style="color:var(--text);font-size:13px;line-height:2.0">' + exp + '</div>'
     + '</div>'
@@ -259,6 +259,7 @@ function handleChoice(qid, choice) {
   else markWrong(qid, meta, choice);
 }
 function markCorrect(qid, meta, choice) {
+  var _ec = document.getElementById('exp_card_' + qid); if (_ec) _ec.style.display = 'block';
   speak('正解！');
   recordResult(qid, true);
   var lvUp = addXP(meta.xp || 4, qid);
@@ -283,6 +284,7 @@ function markCorrect(qid, meta, choice) {
   checkSectionComplete();
 }
 function markWrong(qid, meta, choice) {
+  var _ec = document.getElementById('exp_card_' + qid); if (_ec) _ec.style.display = 'block';
   speak('もう一度！');
   recordResult(qid, false);
   attemptCounts[qid] = (attemptCounts[qid] || 0) + 1;

@@ -203,7 +203,7 @@ function makeFeedback(qid, explanation) {
   var shown = answeredSet[qid] ? 'display:block' : 'display:none';
   return '<div class="q-feedback correct-fb" id="fb_'  + qid + '" style="' + shown + '">✓ 正解！</div>'
     + '<div class="q-feedback wrong-fb"   id="fbw_' + qid + '" style="display:none">✗ もう一度チャレンジ！</div>'
-    + '<div class="exp-card" id="exp_card_' + qid + '">'
+    + '<div class="exp-card" id="exp_card_' + qid + '" style="' + (answeredSet[qid] ? '' : 'display:none') + '">'
     + '<div class="exp-card-title">📌 解説</div>'
     + '<div style="color:var(--text);font-size:13px;line-height:2.0">' + explanation + '</div>'
     + '</div>'
@@ -223,6 +223,7 @@ function handleChoice(qid, choice) {
   else                         markWrong(qid, meta, choice);
 }
 function markCorrect(qid, meta, choice) {
+  var _ec = document.getElementById('exp_card_' + qid); if (_ec) _ec.style.display = 'block';
   speak('正解！');
   recordResult(qid, true);
   var lvUp = addXP(meta.xp, qid);
@@ -252,6 +253,7 @@ function markCorrect(qid, meta, choice) {
   checkSectionComplete();
 }
 function markWrong(qid, meta, choice) {
+  var _ec = document.getElementById('exp_card_' + qid); if (_ec) _ec.style.display = 'block';
   speak('もう一度！');
   recordResult(qid, false);
   attemptCounts[qid] = (attemptCounts[qid] || 0) + 1;
@@ -1070,13 +1072,13 @@ function renderSection4() {
     { qid:'sci_force_s4_in0', jp:'物体が地球から引っ張られる力を何というか。', answer:'重力', exp:'重力は地球の中心に向かって働く力。単位はN（ニュートン）。質量1kgの物体には約10Nの重力が働く。' },
     { qid:'sci_force_s4_in1', jp:'バネや輪ゴムが元の形に戻ろうとする力を何というか。', answer:'弾性力', exp:'弾性力（ばねの力）は変形したものが元に戻ろうとするときに生じる力。フックの法則に従い、伸びに比例する。' },
     { qid:'sci_force_s4_in2', jp:'面が物体を垂直に押し返す力を何というか。', answer:'垂直抗力', exp:'机の上に置いた本には重力が下向きに働くが、机が上向きに垂直抗力を与えることでつり合いが保たれる。' },
-    { qid:'sci_force_s4_in3', jp:'力の大きさを表す単位は何か。', answer:'N（ニュートン）', exp:'力の単位はN（ニュートン）。1Nは約100gの物体にかかる重力の大きさ。500gの物体には約5Nの重力が働く。' },
+    { qid:'sci_force_s4_in3', jp:'力の大きさを表す単位は何か。カタカナで答えよ。', answer:'ニュートン', exp:'力の単位はN（ニュートン）。1Nは約100gの物体にかかる重力の大きさ。500gの物体には約5Nの重力が働く。' },
     { qid:'sci_force_s4_in4', jp:'光が鏡などの面で跳ね返る現象を何というか。', answer:'反射', exp:'反射の法則：入射角＝反射角。光が鏡に当たるとき、入射光と反射光は法線に対して同じ角度になる。' },
-    { qid:'sci_force_s4_in5', jp:'光が異なる物質の境界面で折れ曲がる現象を何というか。', answer:'屈折', exp:'光は空気→水に進むとき境界面に近づく方向（法線から遠ざかる）に屈折する。水→空気のときは逆。' },
+    { qid:'sci_force_s4_in5', jp:'光が異なる物質の境界面で折れ曲がる現象を何というか。', answer:'屈折', exp:'光は空気→水に進むとき、法線に近づく向きに屈折する（入射角 ＞ 屈折角）。水→空気のときは逆で、法線から遠ざかる。' },
     { qid:'sci_force_s4_in6', jp:'凸レンズの中心を通る軸（光軸）に平行な光が凸レンズを通った後に集まる点を何というか。', answer:'焦点', exp:'焦点はレンズの中心から等距離に2か所ある。凸レンズによる像の作図では焦点が重要な基準点になる。' },
-    { qid:'sci_force_s4_in7', jp:'空気中での音の速さは約何 m/s か。', answer:'340 m/s', exp:'音速は気温や媒質によって異なるが、気温15℃の空気中で約340 m/s。光速（約30万km/s）に比べてはるかに遅い。' },
-    { qid:'sci_force_s4_in8', jp:'1秒間に振動する回数を何というか。また単位は何か。', answer:'振動数・Hz', exp:'振動数の単位はHz（ヘルツ）。振動数が多い→音が高い、少ない→音が低い。振幅は音の大きさを決める。' },
-    { qid:'sci_force_s4_in9', jp:'フックの法則とは何か。「ばねの伸びは〜」で答えよ。', answer:'ばねの伸びは加えた力に比例する', exp:'フックの法則：ばねの伸びは加えた力に比例する。グラフにすると原点を通る直線になる。比例定数はばね定数。' },
+    { qid:'sci_force_s4_in7', jp:'空気中での音の速さは約何 m/s か。数字で答えよ。', answer:'340', exp:'音速は気温や媒質によって異なるが、気温15℃の空気中で約340 m/s。光速（約30万km/s）に比べてはるかに遅い。' },
+    { qid:'sci_force_s4_in8', jp:'1秒間に振動する回数を何というか。', answer:'振動数', exp:'振動数の単位はHz（ヘルツ）。振動数が多い→音が高い、少ない→音が低い。振幅は音の大きさを決める。' },
+    { qid:'sci_force_s4_in9', jp:'フックの法則：ばねの伸びは、ばねに加えた力の大きさに（　　）する。（　　）に入る言葉は？', answer:'比例', exp:'フックの法則：ばねの伸びは加えた力に比例する。グラフにすると原点を通る直線になる。比例定数はばね定数。' },
   ];
 
   inputQs.forEach(function(q) {
@@ -1102,10 +1104,10 @@ function renderSection4() {
       answer: '2力の作用線がずれている',
       choices: ['2力の大きさが等しい','2力の向きが反対','2力が一直線上にある','2力の作用線がずれている'],
       exp: 'つり合いの3条件：①大きさが等しい ②向きが反対 ③同一直線上。同一直線上でないと回転が生じてしまう。' },
-    { jp: '光が水中から空気中に出るとき、入射角が一定以上になると全反射する。この一定の角度を何というか。',
-      answer: '臨界角',
-      choices: ['臨界角','入射角','反射角','屈折角'],
-      exp: '臨界角を超えると光は境界面で完全に反射（全反射）する。光ファイバーはこの全反射を利用して光を遠くまで送る。' },
+    { jp: '光が水中から空気中へ進むとき、入射角がある大きさより大きくなると、光が境界面ですべて反射する。この現象を何というか。',
+      answer: '全反射',
+      choices: ['全反射','乱反射','屈折','直進'],
+      exp: '水→空気では屈折角が入射角より大きいので、入射角を大きくしていくと光が空気中へ出られなくなり、すべて反射する（全反射）。光ファイバーはこれを利用している。' },
     { jp: '物体が焦点の内側（F内）にあるとき、凸レンズでできる像はどれか。',
       answer: '正立の虚像',
       choices: ['正立の虚像','倒立の実像','倒立の虚像','像はできない'],
@@ -1147,10 +1149,17 @@ function renderSection4() {
   ];
 
   choiceQs.forEach(function(q, i) { q._qid = 'sci_force_s4_ch' + i; });
-  shuffleArray(choiceQs);
+  choiceQs = shuffleArray(choiceQs);
 
-  choiceQs.forEach(function(q) {
-    html += makeChoices(q._qid, q.jp, q.answer, q.choices, q.exp);
+  choiceQs.forEach(function(q, i) {
+    var qid = q._qid;
+    qMeta[qid] = { type:'choice', answer:q.answer, xp:4, jp:q.jp, choices:q.choices };
+    html += '<div class="q-card" data-card="' + qid + '">'
+      + '<div class="q-number">Q' + (i + 1) + ' / ' + choiceQs.length + '</div>'
+      + '<div class="q-text">' + q.jp + '</div>'
+      + makeChoices(qid, q.choices, q.answer, 4)
+      + makeFeedback(qid, q.exp)
+      + '</div>';
   });
 
   return html;

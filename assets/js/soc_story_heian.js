@@ -235,5 +235,5 @@ renderStory({
   onelineHead:'約400年を1行で',
   oneline:'<span class="hl">平安京</span>で出直し → 最澄・空海の新しい仏教 → 藤原氏の<span class="hl">摂関政治</span>（道長で最高潮） → 遣唐使ストップで<span class="hl">国風文化</span>（かな・源氏物語・枕草子） → 地方で<span class="hl">武士</span>が誕生 → 上皇の<span class="hl">院政</span> → 武士が争いを決着させ<span class="hl">平清盛</span>が天下 → <span class="hl">壇ノ浦</span>で源氏が勝って鎌倉へ！',
   myths:MYTHS, pairs:PAIRS, checks:CHECKS,
-  nextNote:'<a href="soc_story_nara.html" style="color:var(--pop-c)">👈 前号「奈良時代」</a>　／　次号「鎌倉時代ストーリー新聞」をお楽しみに'
+  nextNote:'<a href="soc_story_nara.html" style="color:var(--pop-c)">👈 前号「奈良時代」</a>　／　<a href="soc_story_kamakura.html" style="color:var(--pop-c)">次号「鎌倉時代」へ 👉</a>'
 });

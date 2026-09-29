@@ -1,0 +1,308 @@
+// ===== 歴史ストーリー新聞：飛鳥時代（聖徳太子〜平城京） =====
+// クイズ・XP・弱点DBとは非連携の読み物ページ（3秒チェックもXPなし）
+
+// 会話の吹き出し
+var CAST = {
+  kyon:   { name:'きょん',          av:'😄', cls:'av-kyon' },
+  nishi:  { name:'西村',            av:'慶', cls:'av-nishi' },
+  shun:   { name:'なかむらしゅん',  av:'🎭', cls:'av-shun' },
+  kuruma: { name:'くるま',          av:'🚗', cls:'av-kuruma' },
+  iwakura:{ name:'イワクラ',        av:'🎸', cls:'av-iwakura' }
+};
+function talk(lines){
+  var h = '<div class="talk">';
+  lines.forEach(function(l){
+    var c = CAST[l[0]];
+    h += '<div class="chat-line"><div class="avatar ' + c.cls + '">' + c.av + '</div><div><div class="chat-name">' + c.name + '</div><div class="chat-bubble">' + l[1] + '</div></div></div>';
+  });
+  return h + '</div>';
+}
+function goro(t){ return '<div class="goro">🎵 <b>語呂合わせ</b>　' + t + '</div>'; }
+function sticky(icon, text, color){
+  var c = color || 'var(--gold)';
+  var bg = color === 'var(--red)' ? 'rgba(233,69,96,0.1)' : color === 'var(--blue)' ? 'rgba(74,158,255,0.08)' : 'rgba(245,197,24,0.08)';
+  return '<div class="sticky" style="border-color:' + c + ';background:' + bg + ';color:' + c + '"><span class="sticky-icon">' + icon + '</span>' + text + '</div>';
+}
+
+// ===== 登場人物 =====
+var CHARAS = [
+  ['👑','推古天皇','すいこてんのう','日本で<span class="hl">最初の女性の天皇</span>。聖徳太子のおば。たとえるなら、会社の社長'],
+  ['🧠','聖徳太子','厩戸皇子（うまやとのおうじ）','推古天皇を助けて政治をした天才。<span class="hl">冠位十二階・十七条の憲法・遣隋使・法隆寺</span>の人'],
+  ['🐎','蘇我馬子','そがのうまこ','最強の豪族・蘇我氏のボス。仏教推し。聖徳太子と組んで政治を進めた'],
+  ['📜','小野妹子','おののいもこ','<span class="hl">遣隋使</span>として隋へ。名前に「子」がつくけど<span class="hl-red">男性</span>'],
+  ['😈','蘇我入鹿','そがのいるか','馬子の孫。太子の死後、好き放題して…645年に倒される'],
+  ['⚔️','中大兄皇子','なかのおおえのおうじ','<span class="hl">大化の改新</span>のリーダー。のちの<span class="hl">天智天皇</span>（同じ人！）'],
+  ['🤝','中臣鎌足','なかとみのかまたり','中大兄皇子の相棒。のちに「藤原」の姓をもらい<span class="hl">藤原鎌足</span>に（同じ人！）。藤原氏のご先祖'],
+  ['🏹','大海人皇子','おおあまのおうじ','天智天皇の弟。<span class="hl">壬申の乱</span>で勝って<span class="hl">天武天皇</span>に'],
+  ['🏯','持統天皇','じとうてんのう','天武天皇の奥さん。夫の仕事を引きつぎ、<span class="hl">藤原京</span>をつくった']
+];
+
+// ===== 年表 =====
+var TIMELINE = [
+  ['538','百済（くだら）から<span class="hl">仏教</span>が伝わる（6世紀なかば）'],
+  ['587','仏教をめぐる争いで、蘇我氏が物部氏をたおす'],
+  ['593','<span class="hl">聖徳太子</span>が推古天皇を助けて政治をはじめる'],
+  ['603','<span class="hl">冠位十二階</span>'],
+  ['604','<span class="hl">十七条の憲法</span>'],
+  ['607','<span class="hl">遣隋使</span>（小野妹子）／このころ<span class="hl">法隆寺</span>'],
+  ['622','聖徳太子が亡くなる → 蘇我氏がやりたい放題'],
+  ['645','<span class="hl-red">大化の改新</span>はじまる（中大兄皇子・中臣鎌足が蘇我入鹿をたおす）'],
+  ['663','<span class="hl-red">白村江の戦い</span>で大敗'],
+  ['672','<span class="hl-red">壬申の乱</span> → 天武天皇'],
+  ['694','<span class="hl">藤原京</span>（持統天皇）'],
+  ['701','<span class="hl">大宝律令</span>'],
+  ['710','<span class="hl-blue">平城京</span>へ → 奈良時代スタート']
+];
+
+// ===== 本文（7つの記事） =====
+var STAGES = [
+  { no:'0', theme:'var(--text2)',
+    title:'前夜：豪族がバチバチの国に「仏教」がやってきた（〜592年）',
+    items:[
+      'このころの日本は、<span class="hl">大王（おおきみ）</span>を中心にした<span class="hl">ヤマト王権</span>。でも実際は、力の強い<span class="hl">豪族</span>たちがそれぞれ土地と人を持っていて、けっこうバラバラ',
+      '朝鮮半島や中国から来た<span class="hl">渡来人</span>が、漢字・仏教・焼き物（須恵器）・機織りなどの最新技術を持ちこむ',
+      '<span class="hl-blue big">538年</span>ごろ、百済から<span class="hl">仏教</span>が正式に伝わる',
+      'ここで大ゲンカ勃発！　<span class="hl">蘇我氏</span>「仏教を受け入れよう！」VS <span class="hl">物部氏</span>「外国の神なんてダメ！」→ 587年、<span class="hl-red">蘇我氏の勝ち</span>'
+    ],
+    talk:[
+      ['kyon','仏教を入れるかどうかでケンカって、スケールでかすぎない！？'],
+      ['nishi','宗教だけの話じゃない。仏教を入れる＝中国や朝鮮の進んだ文化・技術を丸ごと取り入れる、という国の方針の争いだ'],
+      ['shun','きょん、ここの結論だけ覚えておけばいい。「蘇我氏が勝った」。だからこのあと仏教の文化がどんどん広がる'],
+      ['kyon','勝った方が推しを広める！わかりやすい！']
+    ],
+    stickyIcon:'🔗', stickyText:'→ 勝った蘇我馬子が、次の主役・聖徳太子と手を組む！' },
+
+  { no:'1', theme:'var(--gold)',
+    title:'聖徳太子の大改革！「実力主義」と「役人のルール」（593〜622年）',
+    items:[
+      '<span class="hl-blue big">593年</span>、<span class="hl">推古天皇</span>（日本初の女性天皇）を助けるため、おいの<span class="hl">聖徳太子</span>が政治に参加。<span class="hl">蘇我馬子</span>と協力して、<span class="hl-red">天皇を中心とした国づくり</span>をめざす',
+      '<span class="hl-blue big">603年</span> <span class="hl big">冠位十二階</span>：それまでは「家がらで出世」だったのを、<span class="hl-red">家がらにとらわれず、才能や手がらのある人</span>を役人に取り立てる制度に。位は冠（かんむり）の色で見分けた',
+      '<span class="hl-blue big">604年</span> <span class="hl big">十七条の憲法</span>：<span class="hl-red">役人（豪族）の心がまえ</span>を書いたもの。「<span class="hl">和</span>を大切にしなさい」「<span class="hl">仏教</span>をあつく敬いなさい」「<span class="hl">天皇</span>の命令には必ず従いなさい」',
+      '<span class="hl-blue big">607年</span> <span class="hl big">遣隋使</span>：<span class="hl">小野妹子</span>を中国の<span class="hl">隋</span>へ送る。目的は<span class="hl-red">隋の進んだ制度や文化を学ぶ</span>こと＋<span class="hl-red">対等な付き合い</span>をめざすこと。一緒に行った<span class="hl">留学生や僧</span>が、のちに大化の改新で大活躍',
+      '持っていった手紙に「<span class="hl">日出づる処の天子</span>、書を日没する処の天子に致す（日がのぼる国の天子から、日がしずむ国の天子へ手紙を送ります）」→ 隋の皇帝（煬帝）は「対等なつもりか！」とムッとした。でも隋は高句麗と対立していたので、日本とは仲良くしておきたかった'
+    ],
+    talk:[
+      ['kuruma','きょんさん！冠位十二階って、ネタが面白ければ新人でも上に行けるってことですよね！？最高じゃないっすか！'],
+      ['kyon','家がらじゃなくて実力！吉本と同じだ！！'],
+      ['iwakura','私が気になるのは冠の色。位が色でわかるって、楽屋に入った瞬間に偉さがバレるってことでしょ。ちょっと怖い'],
+      ['nishi','そう、ひと目で序列がわかる。いちばん上は紫だったとされる。そして十七条の憲法は国民全員のルールではなく、役人の心がまえ。ここはテストでよく狙われる'],
+      ['kyon','聖徳太子って、10人の話を一度に聞けたってほんと？'],
+      ['nishi','それは伝説だ。ただ、それくらい優秀だったと伝えられている、という話']
+    ],
+    goro:'<b>593</b> 国民（こくみ）のために太子が政治　／　<b>603</b> 群れ見る（むれみ）冠 十二階　／　<b>604</b> 群れよ（むれよ）、和の心で十七条　／　<b>607</b> 無礼な（むれいな）手紙で小野妹子',
+    stickyIcon:'📌', stickyText:'テストに出る！「冠位十二階＝家がらより才能」「十七条の憲法＝役人の心がまえ」「遣隋使＝小野妹子・隋の制度を学ぶ」。3つとも聖徳太子とセットで覚える' },
+
+  { no:'2', theme:'var(--amber)',
+    title:'日本初の仏教ブーム「飛鳥文化」',
+    items:[
+      '聖徳太子と蘇我氏が仏教を大切にしたので、お寺や仏像がどんどんつくられた。これが日本で最初の仏教中心の文化＝<span class="hl big">飛鳥文化</span>',
+      '<span class="hl big">法隆寺</span>（奈良県）：聖徳太子が建てたお寺。<span class="hl-red">現存する世界最古の木造建築</span>で、<span class="hl">世界遺産</span>',
+      '法隆寺の<span class="hl">釈迦三尊像</span>（しゃかさんぞんぞう）、<span class="hl">玉虫厨子</span>（たまむしのずし：玉虫の羽でかざった小さな仏壇）が代表作',
+      '中国・朝鮮の影響を強く受け、さらにその先のインドや西アジア・ギリシャの文化の影響もどこかに見られる、国際色ゆたかな文化'
+    ],
+    talk:[
+      ['kyon','世界最古の木造建築って、1400年くらい木が腐らずに建ってるってこと！？'],
+      ['iwakura','私ならそんな古い建物、怖くて泊まれない。でも見に行くのはいいかも'],
+      ['nishi','入試では「文化の名前」と「代表的な建物・作品」の組み合わせがよく出る。飛鳥文化＝法隆寺、とセットで'],
+      ['shun','次の奈良時代は「天平文化」で東大寺。平安時代は「国風文化」。この順番もあとで効いてくる']
+    ],
+    stickyIcon:'📌', stickyText:'テストに出る！「飛鳥文化 ＝ 法隆寺・釈迦三尊像・玉虫厨子」。飛鳥文化は「日本で最初の仏教文化」' },
+
+  { no:'3', theme:'var(--red)',
+    title:'蘇我氏の暴走 → クーデター！「大化の改新」（622〜646年ごろ）',
+    items:[
+      '<span class="hl-blue">622年</span>に聖徳太子が亡くなると、<span class="hl">蘇我蝦夷（えみし）・入鹿（いるか）</span>の親子がやりたい放題。天皇をしのぐほどの力をふるい、太子の子（山背大兄王）までほろぼしてしまう',
+      '「このままじゃ国が蘇我氏のものになる！」と立ち上がったのが、<span class="hl">中大兄皇子</span>と<span class="hl">中臣鎌足</span>',
+      '<span class="hl-blue big">645年</span>、2人は宮殿で<span class="hl-red">蘇我入鹿をたおし</span>、父の蝦夷も自害。ここから始まる政治の大改革が<span class="hl big">大化の改新</span>',
+      'このとき「<span class="hl">大化</span>」という<span class="hl-red">日本で最初の元号</span>を定めた',
+      '改革の中身：<span class="hl big">公地公民</span>＝それまで豪族が持っていた土地と人々を、すべて<span class="hl-red">国（天皇）のもの</span>にする。豪族は役人として給料をもらう立場に'
+    ],
+    talk:[
+      ['kyon','うわ、クーデターじゃん！！宮殿で！？'],
+      ['kuruma','きょんさん、中大兄皇子と中臣鎌足ってコンビ感すごくないっすか！ボケとツッコミ、どっちがどっちなんですか！'],
+      ['nishi','漫才コンビではないが、名コンビだ。鎌足はのちに「藤原」の姓をもらって藤原鎌足になる。奈良・平安で大活躍する藤原氏のご先祖だ'],
+      ['shun','公地公民、ここが核心。「土地も人も国のもの」。豪族の持ち物を取り上げて、天皇中心の国にするための改革'],
+      ['kyon','事務所ごとにバラバラだった芸人を、全部ひとつの会社に移籍させた感じ！？'],
+      ['nishi','たとえとしては近い。ただ本当に全国に行き渡るのは、このあと701年の大宝律令のころだ']
+    ],
+    goro:'<b>645</b> 蒸し米（むしごめ）たいて大化の改新',
+    stickyIcon:'📌', stickyText:'テストに出る！「大化の改新 ＝ 645年・中大兄皇子と中臣鎌足・蘇我氏をたおす・公地公民」', stickyColor:'var(--red)' },
+
+  { no:'4', theme:'var(--blue)',
+    title:'海外遠征で大敗！「白村江の戦い」と国の守り（663年〜）',
+    items:[
+      '朝鮮半島で、仲の良かった<span class="hl">百済</span>が<span class="hl">唐</span>（隋のあとの中国の王朝）と<span class="hl">新羅</span>にほろぼされる',
+      '日本は百済を助けるために大軍を送るが、<span class="hl-blue big">663年</span> <span class="hl-red big">白村江の戦い</span>で唐・新羅の連合軍に<span class="hl-red">大敗</span>',
+      '「唐と新羅が日本に攻めてくるかも！」→ 九州北部に<span class="hl">水城</span>（みずき：大きな堤防）や<span class="hl">山城</span>をつくり、九州を守る兵士<span class="hl big">防人</span>（さきもり）を置いた',
+      '中大兄皇子は都を<span class="hl">近江（滋賀県）の大津宮</span>に移し、668年に即位して<span class="hl">天智天皇</span>に。670年、日本で初めての全国的な<span class="hl">戸籍</span>をつくる'
+    ],
+    talk:[
+      ['kyon','負けたら今度は守りを固める…ちゃんと反省してる！'],
+      ['iwakura','防人って、東の方の人がわざわざ九州まで行かされたんでしょ。私だったら旅費だけでつらい'],
+      ['nishi','その通りで、東国の農民から選ばれ、とても重い負担だった。奈良時代の『万葉集』には防人の歌も残っている'],
+      ['shun','ここは「負けた→守りを固めた→国内をまとめ直した」の流れ。戸籍づくりは、全国の人を把握して税をとるための準備']
+    ],
+    goro:'<b>663</b> ろく・ろく・見（6・6・3）ずに攻めて白村江で大敗',
+    stickyIcon:'🔗', stickyText:'→ 天智天皇が亡くなると、今度はあとつぎをめぐって国内で大ゲンカに！', stickyColor:'var(--blue)' },
+
+  { no:'5', theme:'var(--red)',
+    title:'おじ VS おい！「壬申の乱」と天皇パワーの強化（672年〜）',
+    items:[
+      '天智天皇の死後、あとつぎをめぐって<span class="hl">弟の大海人皇子</span> VS <span class="hl">息子の大友皇子</span>（大海人皇子から見ると、おい）が対立',
+      '<span class="hl-blue big">672年</span> <span class="hl-red big">壬申の乱</span>：古代最大の内乱。<span class="hl-red">大海人皇子が勝利</span>し、<span class="hl big">天武天皇</span>として即位',
+      '天武天皇は戦いに勝ったことで強い力を持ち、豪族をおさえて<span class="hl-red">天皇中心の国づくり</span>を一気に進めた。「<span class="hl">天皇</span>」という呼び名や「<span class="hl">日本</span>」という国名も、このころから使われ始めたと考えられている',
+      '日本で最も古いお金のひとつ、<span class="hl">富本銭</span>（ふほんせん）もこのころつくられた',
+      '天武天皇の奥さんの<span class="hl">持統天皇</span>が仕事を引きつぎ、<span class="hl-blue big">694年</span>、中国の都にならった日本で初めての本格的な都<span class="hl big">藤原京</span>を完成させる'
+    ],
+    talk:[
+      ['kyon','おじさんとおいっ子で国を取り合うって、ドロドロのドラマじゃん…'],
+      ['kuruma','きょんさん、それでおじさんが勝ってからパワーアップするの、少年マンガの展開っすね！アツい！'],
+      ['nishi','勝った天武天皇に逆らえる豪族がいなくなった。だから天皇の力がぐっと強くなる。ここが大事なポイントだ'],
+      ['shun','「天智天皇（兄）」と「天武天皇（弟）」、名前が似てるから注意。<br>天智＝大化の改新の中大兄皇子。天武＝壬申の乱の大海人皇子']
+    ],
+    goro:'<b>672</b> ろく・な・に（6・7・2）もなく、おじが勝つ壬申の乱',
+    stickyIcon:'⚠️', stickyText:'まちがえ注意！　天智天皇＝兄＝中大兄皇子＝大化の改新・白村江　／　天武天皇＝弟＝大海人皇子＝壬申の乱', stickyColor:'var(--red)' },
+
+  { no:'6', theme:'var(--green)',
+    title:'ついに完成！法律で動く国「大宝律令」→ 平城京へ（701〜710年）',
+    items:[
+      '<span class="hl-blue big">701年</span>、唐の法律にならって<span class="hl big">大宝律令</span>が完成。<span class="hl">律</span>＝刑罰のきまり、<span class="hl">令</span>＝政治のしくみのきまり',
+      'これで、天皇を中心に法律（律令）にもとづいて政治をする<span class="hl-red big">律令国家</span>のしくみが整った',
+      '中央には役所（<span class="hl">二官八省</span>）を置き、地方は<span class="hl">国・郡・里</span>に分けて、都から<span class="hl">国司</span>を送った。九州には<span class="hl">大宰府</span>を置いて外国との窓口と守りをまかせた',
+      '人々には口分田（くぶんでん）を配って、かわりに税を納めさせるしくみ（<span class="hl">班田収授法</span>）→ くわしくは次の奈良時代で！',
+      '<span class="hl-blue big">710年</span>、奈良に新しい都<span class="hl big">平城京</span>をつくって引っ越し → <span class="hl-blue">奈良時代</span>のスタート'
+    ],
+    talk:[
+      ['kyon','聖徳太子の「天皇中心の国にしたい」が、ここでやっと完成したってこと！？'],
+      ['nishi','そう。593年に聖徳太子が目指した国のかたちが、約100年かけて701年の大宝律令で形になった。飛鳥時代はその100年の物語だ'],
+      ['iwakura','100年かけて完成って、私、ちょっと感動した。聖徳太子に見せてあげたかったね'],
+      ['kuruma','きょんさん！次は奈良時代っすよね！大仏っすよね！楽しみっす！！']
+    ],
+    goro:'<b>701</b> な・お・い（7・0・1）っそう国をまとめる大宝律令　／　<b>710</b> なんと（710）きれいな平城京',
+    stickyIcon:'📌', stickyText:'テストに出る！「大宝律令 ＝ 701年・唐にならう・律（刑罰）と令（政治のしくみ）・律令国家」', stickyColor:'var(--green)' }
+];
+
+// ===== よくある勘違い =====
+var MYTHS = [
+  ['小野妹子は女性','<b>男性</b>。昔は男性の名前にも「子」がついた'],
+  ['十七条の憲法は、国民みんなが守るルール','<b>役人（豪族）の心がまえ</b>。今の日本国憲法とはまったく別物'],
+  ['冠位十二階は、家がらで位が決まる','<b>家がらにとらわれず、才能や手がら</b>で位を与えた（それが新しかった）'],
+  ['大化の改新は645年の1日で終わった','645年に蘇我氏をたおして<b>始まった、一連の改革</b>のこと'],
+  ['中大兄皇子と天智天皇は別の人','<b>同じ人</b>（即位して天智天皇に）。中臣鎌足と藤原鎌足も<b>同じ人</b>'],
+  ['壬申の乱で勝ったのは天智天皇','勝ったのは<b>大海人皇子＝天武天皇</b>（天智天皇の弟）'],
+  ['遣隋使と遣唐使は同じ','607年の小野妹子は<b>遣隋使</b>（隋）。隋がほろびたあとの630年からが<b>遣唐使</b>（唐）']
+];
+
+// ===== 人物とできごとの組み合わせ（入試の組み合わせ問題対策） =====
+var PAIRS = [
+  ['聖徳太子（＋蘇我馬子）','冠位十二階（603）・十七条の憲法（604）・遣隋使（607）・法隆寺'],
+  ['小野妹子','遣隋使（607）'],
+  ['中大兄皇子＋中臣鎌足','大化の改新（645）・公地公民'],
+  ['天智天皇（＝中大兄皇子）','白村江の戦いのあとの守り・近江大津宮・初の全国的な戸籍'],
+  ['天武天皇（＝大海人皇子）','壬申の乱（672）で勝利・天皇中心の政治を強める'],
+  ['持統天皇','藤原京（694）'],
+  ['（文武天皇のとき）','大宝律令（701）']
+];
+
+// ===== 3秒チェック（タップで答え） =====
+var CHECKS = [
+  ['才能や手がらのある人を役人に取り立てるため、603年に定めた制度は？','冠位十二階'],
+  ['役人の心がまえを示した、604年のきまりは？','十七条の憲法'],
+  ['607年、遣隋使として隋に送られたのはだれ？','小野妹子'],
+  ['聖徳太子が建てた、現存する世界最古の木造建築は？','法隆寺'],
+  ['645年、蘇我氏をたおして改革を始めた2人は？','中大兄皇子と中臣鎌足'],
+  ['土地と人々を国（天皇）のものにする方針を何という？','公地公民'],
+  ['日本で最初の元号は？','大化'],
+  ['663年、百済を助けに行って唐・新羅に大敗した戦いは？','白村江の戦い'],
+  ['九州を守るために置かれた兵士を何という？','防人（さきもり）'],
+  ['672年のあとつぎ争いで勝ち、天武天皇になったのはだれ？','大海人皇子'],
+  ['持統天皇がつくった、日本初の本格的な都は？','藤原京'],
+  ['701年、唐にならってつくられた法律は？','大宝律令（律＝刑罰、令＝政治のしくみ）'],
+  ['【並べかえ】冠位十二階・大化の改新・遣隋使・壬申の乱を古い順に','冠位十二階（603）→ 遣隋使（607）→ 大化の改新（645）→ 壬申の乱（672）']
+];
+
+function renderStoryPage(){
+  var html = '';
+
+  html += '<div class="masthead">';
+  html += '<div class="masthead-kicker">号外！</div>';
+  html += '<div class="masthead-title">飛鳥時代ストーリー新聞</div>';
+  html += '<div class="masthead-sub">🗞️ 聖徳太子から平城京まで（592〜710年ごろ）<br>テスト前にサクッと読んで「流れ」を掴もう！（クイズじゃないよ）</div>';
+  html += '<div class="series">'
+    + '<span class="now">① 飛鳥（いまここ）</span>'
+    + '<span class="soon">② 奈良（準備中）</span>'
+    + '<span class="soon">③ 平安（準備中）</span>'
+    + '<a href="soc_history_story.html">📰 戦後日本</a>'
+    + '</div>';
+  html += '<div class="masthead-rule"></div>';
+  html += '</div>';
+
+  html += '<div class="tagline-box">豪族がバチバチにケンカしていた国が、「天皇を中心に、法律で動く国」に大変身するまでの、約120年の大河ドラマ！<br><span style="font-size:14px;color:var(--text2);font-weight:normal">主役は聖徳太子 → 中大兄皇子 → 天武天皇へとバトンタッチ</span></div>';
+
+  // 登場人物
+  html += '<div class="sec-head">🎭 まずは登場人物（キャラ図鑑）</div>';
+  html += '<div class="chara-grid">';
+  CHARAS.forEach(function(c){
+    html += '<div class="chara"><div class="chara-name">' + c[0] + ' ' + c[1] + ' <small>' + c[2] + '</small></div><div class="chara-desc">' + c[3] + '</div></div>';
+  });
+  html += '</div>';
+
+  // 年表
+  html += '<div class="sec-head">📅 たての年表（上から古い順）</div>';
+  html += '<div class="tl">';
+  TIMELINE.forEach(function(t){ html += '<div class="tl-item"><span class="tl-year">' + t[0] + '</span>' + t[1] + '</div>'; });
+  html += '</div>';
+
+  // 記事
+  html += '<div class="sec-head">📰 本日の記事</div>';
+  STAGES.forEach(function(s, i){
+    html += '<div class="clip-card">';
+    html += '<div class="clip-tape" style="background:' + s.theme + '"></div>';
+    html += '<div class="clip-head"><div class="clip-num" style="background:' + s.theme + '">' + s.no + '</div><div class="clip-title">' + s.title + '</div></div>';
+    html += '<ul class="clip-body">';
+    s.items.forEach(function(it){ html += '<li>' + it + '</li>'; });
+    html += '</ul>';
+    if(s.talk) html += talk(s.talk);
+    if(s.goro) html += goro(s.goro);
+    html += sticky(s.stickyIcon, s.stickyText, s.stickyColor);
+    html += '</div>';
+    if(i < STAGES.length - 1) html += '<div class="arrow-down">↓</div>';
+  });
+
+  // まとめ
+  html += '<div class="sec-head">🧭 120年を1行で</div>';
+  html += '<div class="tagline-box" style="font-size:16px">豪族バラバラ → <span class="hl">聖徳太子</span>「実力主義と役人のルール」 → 蘇我氏が暴走 → <span class="hl">大化の改新</span>「土地も人も国のもの」 → <span class="hl">白村江</span>で負けて守りを固める → <span class="hl">壬申の乱</span>で天皇パワーUP → <span class="hl">大宝律令</span>で法律の国が完成！</div>';
+
+  // 勘違い
+  html += '<div class="sec-head">🚫 よくある勘違い（ここで直しておこう）</div>';
+  MYTHS.forEach(function(m){
+    html += '<div class="myth"><span class="ng">✕ ' + m[0] + '</span><br><span class="ok">○ </span>' + m[1] + '</div>';
+  });
+
+  // 組み合わせ表
+  html += '<div class="sec-head">🔗 人物とできごとの組み合わせ（入試の組み合わせ問題に）</div>';
+  html += '<div style="overflow-x:auto"><table class="pair-table"><tr><th>人物</th><th>できごと</th></tr>';
+  PAIRS.forEach(function(p){ html += '<tr><td style="white-space:nowrap;font-weight:bold">' + p[0] + '</td><td>' + p[1] + '</td></tr>'; });
+  html += '</table></div>';
+
+  // 3秒チェック
+  html += '<div class="sec-head">⏱️ 3秒チェック（考えてからタップ）</div>';
+  CHECKS.forEach(function(c, i){
+    html += '<div class="flip"><div>Q' + (i + 1) + '. ' + c[0] + '</div><button class="flip-btn" data-flip="' + i + '">答えを見る</button><div class="flip-ans" id="flip_' + i + '">→ ' + c[1] + '</div></div>';
+  });
+
+  html += '<div class="end-note">📰 発行：きょん＆西村新聞社　／　これは「流れ」を掴むための読み物です。<br>クイズで確かめたいときは、ホームの「歴史」ページへ！<br>次号「奈良時代ストーリー新聞」をお楽しみに</div>';
+
+  document.getElementById('paperMain').innerHTML = html;
+
+  document.querySelectorAll('.flip-btn[data-flip]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var a = document.getElementById('flip_' + b.getAttribute('data-flip'));
+      var open = a.style.display === 'block';
+      a.style.display = open ? 'none' : 'block';
+      b.textContent = open ? '答えを見る' : 'かくす';
+    });
+  });
+}
+
+renderStoryPage();

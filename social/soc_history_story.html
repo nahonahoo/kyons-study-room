@@ -18,6 +18,11 @@
   linear-gradient(var(--gold),var(--gold)) top/100% 3px no-repeat,
   linear-gradient(var(--border),var(--border)) bottom/100% 1px no-repeat; }
 
+.series{ display:flex; flex-wrap:wrap; gap:6px; justify-content:center; margin:10px 0 4px; font-size:12px; }
+.series a, .series span{ padding:3px 10px; border-radius:14px; border:1px solid var(--border); color:var(--text2); text-decoration:none; }
+.series .now{ background:var(--amber); color:#000; border-color:var(--amber); font-weight:bold; }
+.series .soon{ opacity:0.5; }
+
 .graph-card{ background:var(--bg2); border:1px solid var(--border); border-radius:14px; padding:20px 18px 16px; margin:22px 0; }
 .graph-card-title{ font-size:13px; color:var(--amber); font-weight:bold; letter-spacing:1px; margin-bottom:4px; }
 .graph-note{ font-size:11px; color:var(--text2); text-align:center; margin-top:4px; }

@@ -189,19 +189,81 @@ var SCRIPTS = {
 };
 
 var speechOK = (typeof window !== 'undefined' && 'speechSynthesis' in window);
+// iPhoneなどに入っている「遊び用の声」「古い機械音声」は除外
+var BAD_VOICE = /Albert|Bad News|Bahh|Bells|Boing|Bubbles|Cellos|Deranged|Good News|Hysterical|Jester|Organ|Superstar|Trinoids|Whisper|Wobble|Zarvox|Junior|Ralph|Fred|Kathy|Princess|Grandma|Grandpa|Eddy|Flo|Reed|Rocko|Sandy|Shelley|Novelty/i;
+// 上ほど優先（質の良い声）
+var GOOD_VOICE = [
+  /Natural|Neural|Online/i,
+  /Premium|Enhanced|プレミアム|拡張/i,
+  /Google US English/i,
+  /Samantha|Ava|Allison|Susan|Nicky|Zoe|Joelle|Noelle|Alex|Aaron|Tom|Evan|Nathan/i,
+  /Google UK English/i,
+  /Daniel|Karen|Moira|Tessa|Serena|Kate|Oliver|Catherine|Gordon/i
+];
+var FEMALE_VOICE = /Samantha|Ava|Allison|Susan|Nicky|Zoe|Joelle|Noelle|Karen|Moira|Tessa|Serena|Kate|Catherine|Aria|Jenny|Zira|Female|Google US English/i;
 var enVoices = [];
+function voiceScore(v){
+  if(BAD_VOICE.test(v.name)) return -1000;
+  var s = 0;
+  for(var i = 0; i < GOOD_VOICE.length; i++){ if(GOOD_VOICE[i].test(v.name)){ s += (GOOD_VOICE.length - i) * 20; break; } }
+  if(/Microsoft (Zira|David|Mark)/i.test(v.name) && !/Online|Natural/i.test(v.name)) s -= 10;
+  if(v.lang === 'en-US' || v.lang === 'en_US') s += 6; else if(/en[-_]GB/.test(v.lang)) s += 4; else s += 1;
+  return s;
+}
 function loadVoices(){
   if(!speechOK) return;
-  enVoices = window.speechSynthesis.getVoices().filter(function(v){ return v.lang && v.lang.indexOf('en') === 0; });
-  var us = enVoices.filter(function(v){ return v.lang === 'en-US'; });
-  if(us.length >= 2) enVoices = us.concat(enVoices.filter(function(v){ return v.lang !== 'en-US'; }));
+  enVoices = window.speechSynthesis.getVoices().filter(function(v){ return v.lang && v.lang.toLowerCase().indexOf('en') === 0 && !BAD_VOICE.test(v.name); });
+  enVoices.sort(function(a, b){ return voiceScore(b) - voiceScore(a); });
+  refreshVoiceSelects();
 }
 if(speechOK){ loadVoices(); window.speechSynthesis.onvoiceschanged = loadVoices; }
 
-var playingBtn = null;
+function savedVoice(n){ try { return localStorage.getItem('nh3_exl_voice' + n) || ''; } catch(e){ return ''; } }
+function findVoice(name){ for(var i = 0; i < enVoices.length; i++){ if(enVoices[i].name === name) return enVoices[i]; } return null; }
+// 声1（1人目・質問の読み上げ）と声2（2人目）を決める
+function pickVoices(){
+  var v1 = findVoice(savedVoice(1)) || enVoices[0] || null;
+  var v2 = findVoice(savedVoice(2));
+  if(!v2 && v1){
+    var wantFemale = !FEMALE_VOICE.test(v1.name);
+    for(var i = 0; i < enVoices.length; i++){
+      var v = enVoices[i];
+      if(v.name !== v1.name && voiceScore(v) >= voiceScore(v1) - 40 && FEMALE_VOICE.test(v.name) === wantFemale){ v2 = v; break; }
+    }
+    if(!v2) v2 = v1;
+  }
+  return [v1, v2];
+}
+function voiceRate(slow){
+  var base = 0.9;
+  try { var r = parseFloat(localStorage.getItem('nh3_exl_rate')); if(r >= 0.6 && r <= 1.2) base = r; } catch(e){}
+  return slow ? Math.max(0.55, base - 0.2) : base;
+}
+
+var playingBtn = null, speakToken = 0;
 function stopSpeech(){
+  speakToken++;
   if(speechOK) window.speechSynthesis.cancel();
   if(playingBtn){ playingBtn.classList.remove('playing'); playingBtn = null; }
+}
+function speakQueue(queue, slow, btn){
+  var token = speakToken;
+  var voices = pickVoices();
+  var i = 0;
+  function next(){
+    if(token !== speakToken) return;
+    if(i >= queue.length){ if(playingBtn === btn){ if(btn) btn.classList.remove('playing'); playingBtn = null; } return; }
+    var item = queue[i++];
+    var u = new SpeechSynthesisUtterance(item.text);
+    var v = item.who === 1 ? voices[1] : voices[0];
+    if(v){ u.voice = v; u.lang = v.lang; } else { u.lang = 'en-US'; }
+    u.rate = voiceRate(slow);
+    u.pitch = 1;
+    u.onend = function(){ setTimeout(next, slow ? 700 : 450); };
+    u.onerror = function(){ setTimeout(next, 100); };
+    window.speechSynthesis.speak(u);
+  }
+  next();
 }
 function speakScript(id, slow, btn){
   var s = SCRIPTS[id]; if(!s) return;
@@ -213,27 +275,67 @@ function speakScript(id, slow, btn){
   var queue = [];
   s.lines.forEach(function(l){
     if(l[0] !== 'N' && speakers.indexOf(l[0]) < 0) speakers.push(l[0]);
-    queue.push({ who:l[0], text:l[1] });
+    queue.push({ who: l[0] === 'N' ? 0 : (speakers.indexOf(l[0]) % 2), text: l[1] });
   });
-  if(s.q) queue.push({ who:'N', text:'Question. ' + s.q });
-  queue.forEach(function(item, i){
-    var u = new SpeechSynthesisUtterance(item.text);
-    u.lang = 'en-US';
-    u.rate = slow ? 0.68 : 0.9;
-    var idx = item.who === 'N' ? -1 : speakers.indexOf(item.who);
-    u.pitch = idx === 0 ? 1.2 : idx === 1 ? 0.8 : 1.0;
-    if(enVoices.length >= 2 && idx >= 0) u.voice = enVoices[idx % enVoices.length];
-    else if(enVoices.length) u.voice = enVoices[0];
-    if(i === queue.length - 1){
-      u.onend = function(){ if(playingBtn === btn){ btn.classList.remove('playing'); playingBtn = null; } };
-    }
-    window.speechSynthesis.speak(u);
-  });
+  if(s.q) queue.push({ who:0, text:'Question. ' + s.q });
+  speakQueue(queue, slow, btn);
 }
 document.addEventListener('click', function(e){
   var b = e.target.closest ? e.target.closest('.listen-btn') : null;
-  if(b) speakScript(b.getAttribute('data-lid'), b.getAttribute('data-slow') === '1', b);
+  if(b){ speakScript(b.getAttribute('data-lid'), b.getAttribute('data-slow') === '1', b); return; }
+  var t = e.target.closest ? e.target.closest('.voice-try') : null;
+  if(t){
+    stopSpeech();
+    var n = t.getAttribute('data-n');
+    playingBtn = t; t.classList.add('playing');
+    speakQueue([{ who: n === '2' ? 1 : 0, text: n === '2' ? 'Hi. I’m the second speaker. Can you hear me clearly?' : 'Hello. I’m the first speaker. What time will you come to school?' }], false, t);
+  }
 });
+document.addEventListener('change', function(e){
+  var el = e.target;
+  if(el && el.classList && el.classList.contains('voice-sel')){
+    try { localStorage.setItem('nh3_exl_voice' + el.getAttribute('data-n'), el.value); } catch(err){}
+    refreshVoiceSelects();
+  }
+  if(el && el.classList && el.classList.contains('rate-sel')){
+    try { localStorage.setItem('nh3_exl_rate', el.value); } catch(err){}
+    refreshVoiceSelects();
+  }
+});
+function voiceOptions(n){
+  var cur = savedVoice(n);
+  var h = '<option value="">おまかせ（おすすめを自動で選ぶ）</option>';
+  enVoices.forEach(function(v){
+    h += '<option value="' + v.name.replace(/"/g, '') + '"' + (v.name === cur ? ' selected' : '') + '>' + v.name + '（' + v.lang + '）</option>';
+  });
+  return h;
+}
+function refreshVoiceSelects(){
+  if(typeof document === 'undefined') return;
+  var sels = document.querySelectorAll('.voice-sel');
+  for(var i = 0; i < sels.length; i++){ sels[i].innerHTML = voiceOptions(sels[i].getAttribute('data-n')); }
+  var v = pickVoices();
+  var info = document.querySelectorAll('.voice-now');
+  for(var j = 0; j < info.length; j++){
+    info[j].textContent = v[0] ? ('いま使っている声：1人目＝' + v[0].name + '／2人目＝' + (v[1] ? v[1].name : v[0].name)) : '英語の声が見つかりません';
+  }
+}
+// 声の設定パネル（S0・聞き取りセクションに表示）
+function voicePanel(open){
+  var rate = 0.9;
+  try { var r = parseFloat(localStorage.getItem('nh3_exl_rate')); if(r >= 0.6 && r <= 1.2) rate = r; } catch(e){}
+  var rates = [[0.75,'ゆっくりめ'],[0.85,'少しゆっくり'],[0.9,'ふつう（おすすめ）'],[1.0,'本番に近い速さ']];
+  return '<details class="voice-panel"' + (open ? ' open' : '') + ' style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:8px 0 14px">'
+    + '<summary style="cursor:pointer;color:#93c5fd;font-weight:bold;font-size:14px">🔧 声が聞き取りにくいときは、ここで声を選ぶ</summary>'
+    + '<div style="font-size:13px;color:var(--text2);line-height:2;margin-top:8px">試し聞きして、一番はっきり聞こえる声を選んでね（この端末に記憶されます）</div>'
+    + '<div style="margin:6px 0"><div style="font-size:13px">1人目の声（質問も読む）</div><select class="voice-sel" data-n="1" style="width:100%;max-width:420px;padding:8px;border-radius:8px;background:var(--bg2);color:var(--text);border:1px solid var(--border);font-size:14px">' + voiceOptions(1) + '</select> <button class="listen-btn voice-try" data-n="1" style="padding:6px 12px;font-size:13px;margin-top:6px">▶ 試し聞き</button></div>'
+    + '<div style="margin:6px 0"><div style="font-size:13px">2人目の声</div><select class="voice-sel" data-n="2" style="width:100%;max-width:420px;padding:8px;border-radius:8px;background:var(--bg2);color:var(--text);border:1px solid var(--border);font-size:14px">' + voiceOptions(2) + '</select> <button class="listen-btn voice-try" data-n="2" style="padding:6px 12px;font-size:13px;margin-top:6px">▶ 試し聞き</button></div>'
+    + '<div style="margin:6px 0"><div style="font-size:13px">話す速さ（🐢ボタンはこれよりさらにゆっくり）</div><select class="rate-sel" style="padding:8px;border-radius:8px;background:var(--bg2);color:var(--text);border:1px solid var(--border);font-size:14px">'
+    + rates.map(function(x){ return '<option value="' + x[0] + '"' + (Math.abs(x[0] - rate) < 0.001 ? ' selected' : '') + '>' + x[1] + '</option>'; }).join('') + '</select></div>'
+    + '<div class="voice-now" style="font-size:12px;color:var(--text2);margin-top:6px"></div>'
+    + '<div style="font-size:12px;color:var(--text2);line-height:1.9;margin-top:6px">💡 iPhoneの場合：設定 → アクセシビリティ → 読み上げコンテンツ → 声 → 英語 から「Samantha」や「Ava」の<strong>拡張／プレミアム</strong>版をダウンロードすると、声がきれいになることがある（ダウンロード後、このページを開き直す）</div>'
+    + '</details>';
+}
 function listenBtns(id){
   return '<div class="listen-row">'
     + '<button class="listen-btn" data-lid="' + id + '" data-slow="0">▶ 英語を聞く</button>'
@@ -404,6 +506,7 @@ function renderSection(id){
     html += '<button class="next-section-btn" id="nextBtn" data-goto="' + (id < 5 ? id+1 : 'result') + '" style="display:none">' + nextLabel + '</button>';
   }
   document.getElementById('mainContent').innerHTML = html;
+  refreshVoiceSelects();
   bindEvents();
   if(sectionDone[id]){ var nb = document.getElementById('nextBtn'); if(nb) nb.style.display = 'block'; }
   checkSectionComplete();
@@ -468,7 +571,7 @@ function renderSection0(){
     + '<div class="rule-card-title">📐 愛知県の英語（R5〜R7）</div>'
     + '<div class="rule-box"><div class="rule-title">聞き取り検査（放送）</div><div class="ex">第1問：対話と質問を聞いて、答えを選ぶ<br>第2問：対話と質問を聞いたあと、a〜dの答えが読まれる。<strong>一つずつ「正」か「誤」かをマーク</strong><br>第3問：アナウンスやスピーチを聞いて、問1・問2に答える</div><div class="note">💡 コツ：①数字（時刻・値段・人数）はメモ ②「but」「then」「so」のあとが大事 ③最後の一言で予定が変わることが多い</div></div>'
     + '<div class="rule-box"><div class="rule-title">筆記検査</div><div class="ex">1 会話文の空所に入る文を選ぶ（3問）<br>2 グラフ2つ＋英語の発表原稿の空所・<strong>並べ替え（7語から6語、2・4・6番目を答える）</strong><br>3 長文（空所補充・内容一致を二つ選ぶ）<br>4 会話文＋表（料金表・時間表を読んで正しいものを二つ）</div></div>'
-    + '<div class="rule-box"><div class="rule-title">🔊 音声テスト</div><div class="ex">下のボタンを押して、英語が聞こえるか確かめよう（スマホはマナーモードを解除）</div>' + listenBtns('demo') + '<div class="note">💡 2人の会話は声の高さを変えて読み上げる。🐢で何回でもゆっくり聞ける。答えたあとに解説で英文と和訳が見られる</div></div>'
+    + '<div class="rule-box"><div class="rule-title">🔊 音声テスト</div><div class="ex">下のボタンを押して、英語が聞こえるか確かめよう（スマホはマナーモードを解除）</div>' + listenBtns('demo') + voicePanel(true) + '<div class="note">💡 2人の会話は1人目と2人目で別の声（端末に良い声が1つしかないときは同じ声）。1行ごとに少し間があく。🐢で何回でもゆっくり聞ける。答えたあとに解説で英文と和訳が見られる</div></div>'
     + '</div>'
 
     + '<button class="start-btn" data-goto="1">🎧 Section 1：対話を聞いて答える →</button>';
@@ -511,6 +614,7 @@ function renderSection1(){
       answer:'Next to the post office.', choices:['Next to the post office.','At the first corner.','In front of the station.','Next to the hospital.'],
       exp:'📐 「It’s next to the post office.」 next to＝〜のとなり<br>💡 道案内：go straight（まっすぐ）turn left（左に曲がる）the second corner（2つ目の角）' + transcript('L8') },
   ];
+  html += voicePanel(false);
   html += '<div style="font-size:13px;color:var(--text2);margin:8px 0 16px;font-weight:bold">── 聞いて答えよう ──</div>';
   html += renderQs(qs);
   return html;
@@ -552,6 +656,7 @@ function renderSection2(){
       answer:'Students should bring something to drink.', choices:['Students should bring something to drink.','The bus will leave at four p.m.','It will rain in the afternoon.','Students will have lunch at school.'],
       exp:'📐 「please bring something to drink」＝飲み物を持ってきて<br>❌ 4時は学校に「戻る」時刻。天気は sunny and hot' + transcript('A1') },
   ];
+  html += voicePanel(false);
   html += '<div style="font-size:13px;color:var(--text2);margin:8px 0 16px;font-weight:bold">── 第2問型：1番（a〜d を一つずつ判定） ──</div>';
   html += renderQs(d1);
   html += '<div style="font-size:13px;color:var(--text2);margin:20px 0 16px;font-weight:bold">── 第2問型：2番 ──</div>';
@@ -729,6 +834,7 @@ function renderSection5(){
       answer:'$26.99', choices:['$26.99','$29.99','$21.99','$16.99'],
       exp:'📐 Weekday → Adult → Special の列 ＝ $26.99' },
   ]);
+  html = html.replace('</div></div></div>', '</div></div></div>' + voicePanel(false));
   html += renderQs(qs);
   return html;
 }

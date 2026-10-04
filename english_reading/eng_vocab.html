@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英単語ネタ帳｜中学3年間の英単語</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Bebas+Neue&family=Lexend:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/eng_vocab.css?v=2">
+</head>
+<body>
+
+<div class="head">
+<nav class="top-nav">
+  <a class="home" href="../index.html" title="ホームへ">🏠</a>
+  <div class="nav-title">📖 英単語ネタ帳</div>
+  <div class="nav-stat">🔥<b id="navStreak">0</b>日</div>
+  <div class="nav-stat">🪙<b id="navXp">0</b>XP</div>
+</nav>
+
+<div class="tabs" id="tabs">
+  <button class="tab on" data-tab="home">🏠 ホーム</button>
+  <button class="tab" data-tab="howto">📜 覚え方</button>
+  <button class="tab" data-tab="pattern">🎭 パターン芸人</button>
+  <button class="tab" data-tab="book">📒 ネタ帳</button>
+  <button class="tab" data-tab="settings">⚙ 設定</button>
+</div>
+</div>
+
+<div class="main" id="view"></div>
+
+<div class="stage" id="stage">
+  <div class="stage-top">
+    <button class="close" data-act="quit">✕ やめる</button>
+    <div class="prog"><div id="progFill" style="width:0%"></div></div>
+    <div class="stage-count" id="stageCount"></div>
+  </div>
+  <div class="stage-body" id="stageBody"></div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="modal-inner">
+    <button class="modal-close" data-act="closeModal">✕</button>
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="../assets/js/eng_vocab_data.js?v=2" defer></script>
+<script src="../assets/js/eng_vocab.js?v=2" defer></script>
+</body>
+</html>

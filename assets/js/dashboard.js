@@ -22,6 +22,7 @@ const SUBJECTS = [
   {
     key:'nh3', name:'英語', icon:'🇬🇧', color:'#3b82f6',
     links:[
+      { label:'📖 英単語ネタ帳（中学3年間・呪文で覚える）', href:'english_reading/eng_vocab.html' },
       { label:'Unit0 基礎復習',              href:'english_reading/nh3_unit0.html',             weakDb:'nh3',  qidPrefix:'s' },
       { label:'Unit1（受け身）',             href:'english_reading/nh3_units123.html?unit=1',    weakDb:'nh3', qidPrefix:'1_' },
       { label:'Unit2（現在完了①）',         href:'english_reading/nh3_units123.html?unit=2',    weakDb:'nh3', qidPrefix:'2_' },

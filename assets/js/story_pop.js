@@ -8,7 +8,7 @@ var STORY_SERIES = [
   { key:'nara',    label:'② 奈良',   href:'soc_story_nara.html' },
   { key:'heian',   label:'③ 平安',   href:'soc_story_heian.html' },
   { key:'kamakura',label:'④ 鎌倉',   href:'soc_story_kamakura.html' },
-  { key:'muromachi',label:'⑤ 室町',  href:'' },
+  { key:'muromachi',label:'⑤ 室町',  href:'soc_story_muromachi.html' },
   { key:'postwar', label:'📰 戦後日本', href:'soc_history_story.html' }
 ];
 

@@ -88,7 +88,7 @@ function renderStoryPage(){
   html += '<div class="masthead-kicker">号外！</div>';
   html += '<div class="masthead-title">戦後日本ストーリー新聞</div>';
   html += '<div class="masthead-sub">🗞️ テスト前にサクッと読んで「流れ」を掴もう！（クイズじゃないよ）</div>';
-  html += '<div class="series"><a href="soc_story_asuka.html">① 飛鳥</a><a href="soc_story_nara.html">② 奈良</a><a href="soc_story_heian.html">③ 平安</a><a href="soc_story_kamakura.html">④ 鎌倉</a><span class="soon">⑤ 室町（準備中）</span><span class="now">📰 戦後日本（いまここ）</span></div>';
+  html += '<div class="series"><a href="soc_story_asuka.html">① 飛鳥</a><a href="soc_story_nara.html">② 奈良</a><a href="soc_story_heian.html">③ 平安</a><a href="soc_story_kamakura.html">④ 鎌倉</a><a href="soc_story_muromachi.html">⑤ 室町</a><span class="now">📰 戦後日本（いまここ）</span></div>';
   html += '<div class="masthead-rule"></div>';
   html += '</div>';
 

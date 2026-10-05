@@ -234,5 +234,5 @@ renderStory({
   onelineHead:'約150年を1行で',
   oneline:'頼朝が<span class="hl">守護・地頭</span>を置いて鎌倉幕府 → <span class="hl">御恩と奉公</span>で武士をまとめる → 北条氏の<span class="hl">執権政治</span>、<span class="hl">承久の乱</span>に勝って<span class="hl">御成敗式目</span> → 二毛作・定期市でくらしが進歩、力強い鎌倉文化と新しい仏教 → <span class="hl">元寇</span>を守りきるが恩賞なし → 御家人の不満で<span class="hl">1333年</span>幕府ほろぶ！',
   myths:MYTHS, pairs:PAIRS, checks:CHECKS,
-  nextNote:'<a href="soc_story_heian.html" style="color:var(--pop-c)">👈 前号「平安時代」</a>　／　次号「室町時代ストーリー新聞」をお楽しみに'
+  nextNote:'<a href="soc_story_heian.html" style="color:var(--pop-c)">👈 前号「平安時代」</a>　／　<a href="soc_story_muromachi.html" style="color:var(--pop-c)">次号「室町時代」へ 👉</a>'
 });

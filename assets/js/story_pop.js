@@ -10,6 +10,7 @@ var STORY_SERIES = [
   { key:'kamakura',label:'④ 鎌倉',   href:'soc_story_kamakura.html' },
   { key:'muromachi',label:'⑤ 室町',  href:'soc_story_muromachi.html' },
   { key:'azuchi',  label:'⑥ 安土桃山', href:'soc_story_azuchi.html' },
+  { key:'edo1',    label:'⑦ 江戸前半', href:'soc_story_edo1.html' },
   { key:'postwar', label:'📰 戦後日本', href:'soc_history_story.html' }
 ];
 

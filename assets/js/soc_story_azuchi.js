@@ -245,5 +245,5 @@ renderStory({
   onelineHead:'約60年を1行で',
   oneline:'ヨーロッパで<span class="hl">宗教改革</span>（イエズス会が海外布教）と<span class="hl">大航海時代</span>（スペイン・ポルトガルがアジアへ） → 1543<span class="hl">鉄砲</span>・1549<span class="hl">キリスト教</span>が日本に → <span class="hl">信長</span>が鉄砲と楽市・楽座で統一目前、本能寺で倒れる → <span class="hl">秀吉</span>が1590全国統一、<span class="hl">太閤検地・刀狩</span>で兵農分離、<span class="hl">朝鮮侵略</span>で力を落とす → 豪華な<span class="hl">桃山文化</span> → 秀吉の死 → 1600関ヶ原へ！',
   myths:MYTHS, pairs:PAIRS, checks:CHECKS,
-  nextNote:'<a href="soc_story_muromachi.html" style="color:var(--pop-c)">👈 前号「室町時代」</a>　／　次号「江戸時代（前半）ストーリー新聞」をお楽しみに'
+  nextNote:'<a href="soc_story_muromachi.html" style="color:var(--pop-c)">👈 前号「室町時代」</a>　／　<a href="soc_story_edo1.html" style="color:var(--pop-c)">次号「江戸時代・前半」へ 👉</a>'
 });

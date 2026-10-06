@@ -238,5 +238,5 @@ renderStory({
   onelineHead:'約240年を1行で',
   oneline:'後醍醐天皇の<span class="hl">建武の新政</span>が武士の不満で失敗 → 尊氏が京都に北朝、<span class="hl">南北朝時代</span> → 義満が<span class="hl">南北朝統一</span>・<span class="hl">勘合貿易</span>・金閣で全盛期 → 座・馬借・土倉で商業がさかえ、村は<span class="hl">惣</span>で団結して<span class="hl">土一揆</span> → <span class="hl">応仁の乱</span>で幕府が弱まり、<span class="hl">下剋上</span>の戦国時代 → <span class="hl">1573年</span>信長が将軍を追い出して幕府ほろぶ！',
   myths:MYTHS, pairs:PAIRS, checks:CHECKS,
-  nextNote:'<a href="soc_story_kamakura.html" style="color:var(--pop-c)">👈 前号「鎌倉時代」</a>　／　次号「安土桃山時代ストーリー新聞」をお楽しみに'
+  nextNote:'<a href="soc_story_kamakura.html" style="color:var(--pop-c)">👈 前号「鎌倉時代」</a>　／　<a href="soc_story_azuchi.html" style="color:var(--pop-c)">次号「安土桃山時代」へ 👉</a>'
 });

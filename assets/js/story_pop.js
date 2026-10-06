@@ -9,6 +9,7 @@ var STORY_SERIES = [
   { key:'heian',   label:'③ 平安',   href:'soc_story_heian.html' },
   { key:'kamakura',label:'④ 鎌倉',   href:'soc_story_kamakura.html' },
   { key:'muromachi',label:'⑤ 室町',  href:'soc_story_muromachi.html' },
+  { key:'azuchi',  label:'⑥ 安土桃山', href:'soc_story_azuchi.html' },
   { key:'postwar', label:'📰 戦後日本', href:'soc_history_story.html' }
 ];
 

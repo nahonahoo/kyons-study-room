@@ -73,6 +73,7 @@ const SUBJECTS = [
       { label:'🗞️ 歴史ストーリー③ 平安時代（平安京〜壇ノ浦）', href:'social/soc_story_heian.html' },
       { label:'🗞️ 歴史ストーリー④ 鎌倉時代（鎌倉幕府の成立〜滅亡）', href:'social/soc_story_kamakura.html' },
       { label:'🗞️ 歴史ストーリー⑤ 室町時代（建武の新政〜室町幕府の滅亡）', href:'social/soc_story_muromachi.html' },
+      { label:'🗞️ 歴史ストーリー⑥ 安土桃山時代（鉄砲・キリスト教〜信長・秀吉の全国統一）', href:'social/soc_story_azuchi.html' },
       { label:'🗞️ 歴史ストーリー 戦後日本', href:'social/soc_history_story.html' },
       { label:'地理（世界・日本）', href:'social/soc_geography.html', weakDb:'soc', qidPrefix:'soc_geo_' },
       { label:'⚖️ 公民（人権・政治・経済）入試頻出', href:'social/soc_civics.html', weakDb:'soc', qidPrefix:'soc_civ_' },

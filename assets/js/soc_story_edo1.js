@@ -238,5 +238,5 @@ renderStory({
   onelineHead:'江戸時代前半を1行で',
   oneline:'1600<span class="hl">関ヶ原</span> → 1603家康が<span class="hl">江戸幕府</span> → 親藩・譜代・外様の配置、<span class="hl">武家諸法度</span>（1615）・<span class="hl">参勤交代</span>（1635）で大名を統制 → 朱印船貿易から<span class="hl">禁教</span>へ → <span class="hl">島原・天草一揆</span>（1637）→ 1639<span class="hl">「鎖国」</span>完成・1641出島 → <span class="hl">四つの口</span>（長崎・対馬・薩摩・松前）で琉球・アイヌ・朝鮮・オランダ・中国と交流 → <span class="hl">身分制度</span>と五人組で百姓を統制 → 260年の平和！',
   myths:MYTHS, pairs:PAIRS, checks:CHECKS,
-  nextNote:'<a href="soc_story_azuchi.html" style="color:var(--pop-c)">👈 前号「安土桃山時代」</a>　／　次号「江戸時代・中期（産業の発達と元禄文化・三大改革）ストーリー新聞」をお楽しみに'
+  nextNote:'<a href="soc_story_azuchi.html" style="color:var(--pop-c)">👈 前号「安土桃山時代」</a>　／　<a href="soc_story_edo2.html" style="color:var(--pop-c)">次号「江戸時代・中期」へ 👉</a>'
 });

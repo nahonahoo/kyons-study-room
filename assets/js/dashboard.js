@@ -75,6 +75,7 @@ const SUBJECTS = [
       { label:'🗞️ 歴史ストーリー⑤ 室町時代（建武の新政〜室町幕府の滅亡）', href:'social/soc_story_muromachi.html' },
       { label:'🗞️ 歴史ストーリー⑥ 安土桃山時代（鉄砲・キリスト教〜信長・秀吉の全国統一）', href:'social/soc_story_azuchi.html' },
       { label:'🗞️ 歴史ストーリー⑦ 江戸時代・前半（関ヶ原〜幕藩体制・「鎖国」・身分制度）', href:'social/soc_story_edo1.html' },
+      { label:'🗞️ 歴史ストーリー⑧ 江戸時代・中期（産業の発達・元禄文化・享保〜寛政の改革）', href:'social/soc_story_edo2.html' },
       { label:'🗞️ 歴史ストーリー 戦後日本', href:'social/soc_history_story.html' },
       { label:'地理（世界・日本）', href:'social/soc_geography.html', weakDb:'soc', qidPrefix:'soc_geo_' },
       { label:'⚖️ 公民（人権・政治・経済）入試頻出', href:'social/soc_civics.html', weakDb:'soc', qidPrefix:'soc_civ_' },

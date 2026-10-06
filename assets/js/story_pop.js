@@ -11,6 +11,7 @@ var STORY_SERIES = [
   { key:'muromachi',label:'⑤ 室町',  href:'soc_story_muromachi.html' },
   { key:'azuchi',  label:'⑥ 安土桃山', href:'soc_story_azuchi.html' },
   { key:'edo1',    label:'⑦ 江戸前半', href:'soc_story_edo1.html' },
+  { key:'edo2',    label:'⑧ 江戸中期', href:'soc_story_edo2.html' },
   { key:'postwar', label:'📰 戦後日本', href:'soc_history_story.html' }
 ];
 
@@ -20,7 +21,12 @@ var CAST = {
   nishi:  { name:'西村',            av:'慶' },
   shun:   { name:'なかむらしゅん',  av:'🎭' },
   kuruma: { name:'くるま',          av:'🚗' },
-  iwakura:{ name:'イワクラ',        av:'🎸' }
+  iwakura:{ name:'イワクラ',        av:'🎸' },
+  // 2026-10-06 追加（口調はWebで確認。どちらもきょんの後輩で敬語）
+  kemuri: { name:'ケムリ',          av:'🚬' },   // 令和ロマン。一人称「僕」、淡々・低テンション、「〜だと思います」と断定しない、大喜利の細かいボケ
+  kyogoku:{ name:'京極風斗',        av:'🖼️' },  // 9番街レトロ。一人称「僕」、落ち着いた低音・淡々、知的で少し毒、京都・浮世絵・骨格好き
+  sasaki: { name:'佐々木（エバース）', av:'⚾' }, // ボケ。宮城出身・元野球部。日常の雑談からシュールな詭弁へ
+  machida:{ name:'町田（エバース）',  av:'🚗' }   // ツッコミ。神奈川出身・元カーディーラー営業。佐々木の詭弁に翻弄される
 };
 
 // 記事ごとの色（帯・番号・★）

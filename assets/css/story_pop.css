@@ -92,6 +92,7 @@ body{
 .talk .chat-name{ font-size:12px; font-weight:800; color:var(--c); }
 .talk .chat-bubble{ font-size:16px; font-weight:700; line-height:1.95; color:var(--tx); background:color-mix(in srgb, var(--c) 13%, var(--card)); border:2.5px solid var(--c); border-radius:16px; box-shadow:3px 3px 0 color-mix(in srgb, var(--c) 40%, transparent); }
 .c-kyon{ --c:#ff7aa8; } .c-nishi{ --c:#6cb6ff; } .c-shun{ --c:#b69cff; } .c-kuruma{ --c:#4fe08f; } .c-iwakura{ --c:#ffab5c; }
+.c-kemuri{ --c:#c9c9c9; } .c-kyogoku{ --c:#5fd3d3; } .c-sasaki{ --c:#f4ff3a; } .c-machida{ --c:#ff8c6b; }
 .talk .c-nishi .avatar{ font-size:14px; }
 
 /* ---- 語呂合わせ（付箋） ---- */

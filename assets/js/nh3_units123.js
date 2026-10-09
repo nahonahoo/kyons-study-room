@@ -1,13 +1,13 @@
 // ===== LEVELS =====
 var LEVELS = [
   { lv:1, min:0,   label:'Lv.1 🥚', badge:'NSC入学',       title:'見習い研修生',       status:'きょん「英語？なにそれ食えるの？」' },
-  { lv:2, min:20,  label:'Lv.2 🎤', badge:'NSC卒業',       title:'一般社員',           status:'きょん「なんとなくわかってきた気がする」' },
-  { lv:3, min:45,  label:'Lv.3 🎭', badge:'劇場デビュー',   title:'主任',               status:'きょん「にっくん、俺英語できるかも」' },
+  { lv:2, min:15,  label:'Lv.2 🎤', badge:'NSC卒業',       title:'一般社員',           status:'きょん「なんとなくわかってきた気がする」' },
+  { lv:3, min:40,  label:'Lv.3 🎭', badge:'劇場デビュー',   title:'主任',               status:'きょん「にっくん、俺英語できるかも」' },
   { lv:4, min:80,  label:'Lv.4 ⭐', badge:'準レギュラー獲得', title:'係長',             status:'きょん「もしかして俺天才？」' },
-  { lv:5, min:120, label:'Lv.5 📺', badge:'全国ネット',     title:'課長',               status:'きょん「にっくんより賢くなってきた」' },
-  { lv:6, min:170, label:'Lv.6 🌟', badge:'冠番組獲得',    title:'部長',               status:'きょん「英語で漫才できるかもしれない」' },
-  { lv:7, min:230, label:'Lv.7 🏆', badge:'M-1決勝進出',   title:'取締役',             status:'きょん「もうにっくんいらないかも」' },
-  { lv:8, min:300, label:'Lv.8 👑', badge:'M-1グランプリ優勝', title:'社長',           status:'きょん「俺、令和ロマンに勝ったわ」' },
+  { lv:5, min:140, label:'Lv.5 📺', badge:'全国ネット',     title:'課長',               status:'きょん「にっくんより賢くなってきた」' },
+  { lv:6, min:220, label:'Lv.6 🌟', badge:'冠番組獲得',    title:'部長',               status:'きょん「英語で漫才できるかもしれない」' },
+  { lv:7, min:320, label:'Lv.7 🏆', badge:'M-1決勝進出',   title:'取締役',             status:'きょん「もうにっくんいらないかも」' },
+  { lv:8, min:440, label:'Lv.8 👑', badge:'M-1グランプリ優勝', title:'社長',           status:'きょん「俺、令和ロマンに勝ったわ」' },
 ];
 // ===== 旧nh3u_*キーをnh3_*（教科共通プール）に統合（一度だけ実行） =====
 // これまでUnit1〜4のXP/weakDBだけ別キー(nh3u_)に保存されていたため、

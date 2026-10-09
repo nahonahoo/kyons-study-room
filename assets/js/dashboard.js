@@ -142,17 +142,24 @@ function isUnitWeak(dbKey, qidPrefix) {
 }
 
 // ====== レベル計算 ======
-function getLevel(xp) {
-  let lv = LEVELS[0];
-  for (const l of LEVELS) { if (xp >= l.minXp) lv = l; }
+// 教科ごとのレベルは、各教科ページと同じ表（0/15/40/80/140/220/320/440）で計算する。
+// きょんの総合レベルは全教科の合計XPなので、上の LEVELS（100〜2000）を使う。
+const SUBJECT_MINS = [0, 15, 40, 80, 140, 220, 320, 440];
+const SUBJECT_LEVELS = LEVELS.map((l, i) => Object.assign({}, l, { minXp: SUBJECT_MINS[i] }));
+
+function getLevel(xp, table) {
+  const T = table || LEVELS;
+  let lv = T[0];
+  for (const l of T) { if (xp >= l.minXp) lv = l; }
   return lv;
 }
 
-function getLevelProgress(xp) {
-  const cur = getLevel(xp);
-  const idx = LEVELS.indexOf(cur);
-  if (idx === LEVELS.length - 1) return { pct: 100, from: xp, to: '最高ランク到達！' };
-  const next = LEVELS[idx + 1];
+function getLevelProgress(xp, table) {
+  const T = table || LEVELS;
+  const cur = getLevel(xp, T);
+  const idx = T.indexOf(cur);
+  if (idx === T.length - 1) return { pct: 100, from: xp, to: '最高ランク到達！' };
+  const next = T[idx + 1];
   const pct = Math.round(((xp - cur.minXp) / (next.minXp - cur.minXp)) * 100);
   return { pct, from: xp - cur.minXp, to: next.minXp - cur.minXp };
 }
@@ -173,6 +180,10 @@ function renderKyon() {
   document.getElementById('kyonStatusLine').textContent = 'Lv.' + lv.lv + ' — 全教科合計XP';
   document.getElementById('kyonQuote').textContent = lv.quote;
   document.getElementById('totalXpVal').textContent = total;
+  // 教科ページの右上「🪙」と同じ、使えるXP（ショップで使った分を引いた数）
+  const spent = parseInt(localStorage.getItem('shop_spent') || '0', 10) || 0;
+  const coinEl = document.getElementById('coinXpLine');
+  if (coinEl) coinEl.textContent = spent > 0 ? '🪙 使えるXP: ' + Math.max(0, total - spent) + '（ショップで ' + spent + ' 使用）' : '🪙 使えるXP: ' + total;
 
   const bar = document.getElementById('totalXpBar');
   bar.style.width = Math.min(prog.pct, 100) + '%';
@@ -205,8 +216,8 @@ function renderSubjects() {
   SUBJECTS.forEach(s => {
     const xp = getXp(s.key);
     const weak = getWeakCount(s.key);
-    const lv = getLevel(xp);
-    const prog = getLevelProgress(xp);
+    const lv = getLevel(xp, SUBJECT_LEVELS);
+    const prog = getLevelProgress(xp, SUBJECT_LEVELS);
     const hasLinks = s.links.length > 0;
 
     const div = document.createElement('div');

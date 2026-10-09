@@ -1,13 +1,13 @@
 // ===== LEVELS =====
 var LEVELS = [
-  { lv:1, min:0,   max:20,  badge:'🥚 NSC入学',      title:'見習い研修生',  status:'きょん「確率？なにそれ食えるの？」' },
-  { lv:2, min:20,  max:55,  badge:'🎤 NSC卒業',      title:'一般社員',      status:'きょん「数えるだけなら、いけるかも」' },
-  { lv:3, min:55,  max:110, badge:'🎭 劇場デビュー',  title:'主任',          status:'きょん「にっくん、俺、箱ひげ図読めるかも」' },
-  { lv:4, min:110, max:185, badge:'⭐ 準レギュラー',  title:'係長',          status:'きょん「もしかして俺天才？」' },
-  { lv:5, min:185, max:280, badge:'📺 全国ネット',    title:'課長',          status:'きょん「にっくんより数え漏れ少なくなってきた」' },
-  { lv:6, min:280, max:400, badge:'🌟 冠番組',        title:'部長',          status:'きょん「確率で漫才できるかもしれない」' },
-  { lv:7, min:400, max:550, badge:'🏆 M-1決勝',      title:'取締役',        status:'きょん「もうにっくんいらないかも」' },
-  { lv:8, min:550, max:9999,badge:'👑 M-1優勝',      title:'社長',          status:'きょん「俺、令和ロマンに勝ったわ」' },
+  { lv:1, min:0,   max:15,  badge:'🥚 NSC入学',      title:'見習い研修生',  status:'きょん「確率？なにそれ食えるの？」' },
+  { lv:2, min:15,  max:40,  badge:'🎤 NSC卒業',      title:'一般社員',      status:'きょん「数えるだけなら、いけるかも」' },
+  { lv:3, min:40,  max:80, badge:'🎭 劇場デビュー',  title:'主任',          status:'きょん「にっくん、俺、箱ひげ図読めるかも」' },
+  { lv:4, min:80, max:140, badge:'⭐ 準レギュラー',  title:'係長',          status:'きょん「もしかして俺天才？」' },
+  { lv:5, min:140, max:220, badge:'📺 全国ネット',    title:'課長',          status:'きょん「にっくんより数え漏れ少なくなってきた」' },
+  { lv:6, min:220, max:320, badge:'🌟 冠番組',        title:'部長',          status:'きょん「確率で漫才できるかもしれない」' },
+  { lv:7, min:320, max:440, badge:'🏆 M-1決勝',      title:'取締役',        status:'きょん「もうにっくんいらないかも」' },
+  { lv:8, min:440, max:9999,badge:'👑 M-1優勝',      title:'社長',          status:'きょん「俺、令和ロマンに勝ったわ」' },
 ];
 function getLevel(v){ for(var i=LEVELS.length-1;i>=0;i--){ if(v>=LEVELS[i].min) return LEVELS[i]; } return LEVELS[0]; }
 

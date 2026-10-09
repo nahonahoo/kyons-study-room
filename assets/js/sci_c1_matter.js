@@ -2,12 +2,12 @@
 var LEVELS = [
   { lv:1, min:0,   label:'Lv.1 🥚',  badge:'NSC入学',        title:'見習い研修生',  status:'きょん「理科？なにそれ食えるの？」' },
   { lv:2, min:15,  label:'Lv.2 🎤',  badge:'NSC卒業',        title:'一般社員',      status:'きょん「なんとなくわかってきた気がする」' },
-  { lv:3, min:30,  label:'Lv.3 🎭',  badge:'劇場デビュー',    title:'主任',          status:'きょん「にっくん、俺理科できるかも」' },
-  { lv:4, min:50,  label:'Lv.4 ⭐',  badge:'準レギュラー獲得', title:'係長',          status:'きょん「もしかして俺天才？」' },
-  { lv:5, min:75,  label:'Lv.5 📺',  badge:'全国ネット',      title:'課長',          status:'きょん「にっくんより賢くなってきた」' },
-  { lv:6, min:105, label:'Lv.6 🌟',  badge:'冠番組獲得',      title:'部長',          status:'きょん「理科で漫才できるかもしれない」' },
-  { lv:7, min:140, label:'Lv.7 🏆',  badge:'M-1決勝進出',    title:'取締役',        status:'きょん「もうにっくんいらないかも」' },
-  { lv:8, min:180, label:'Lv.8 👑',  badge:'M-1グランプリ優勝',title:'社長',         status:'きょん「俺、令和ロマンに勝ったわ」' },
+  { lv:3, min:40,  label:'Lv.3 🎭',  badge:'劇場デビュー',    title:'主任',          status:'きょん「にっくん、俺理科できるかも」' },
+  { lv:4, min:80,  label:'Lv.4 ⭐',  badge:'準レギュラー獲得', title:'係長',          status:'きょん「もしかして俺天才？」' },
+  { lv:5, min:140,  label:'Lv.5 📺',  badge:'全国ネット',      title:'課長',          status:'きょん「にっくんより賢くなってきた」' },
+  { lv:6, min:220, label:'Lv.6 🌟',  badge:'冠番組獲得',      title:'部長',          status:'きょん「理科で漫才できるかもしれない」' },
+  { lv:7, min:320, label:'Lv.7 🏆',  badge:'M-1決勝進出',    title:'取締役',        status:'きょん「もうにっくんいらないかも」' },
+  { lv:8, min:440, label:'Lv.8 👑',  badge:'M-1グランプリ優勝',title:'社長',         status:'きょん「俺、令和ロマンに勝ったわ」' },
 ];
 var MAX_XP = 200;
 var xp = parseInt(localStorage.getItem('sci_xp') || '0');

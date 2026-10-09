@@ -5,13 +5,13 @@
 // ===== XPレベル定義 =====
 var LEVELS=[
   {lv:1,emoji:'🥚',title:'NSC入学',role:'見習い研修生',quote:'「英語？なにそれ食えるの？」',minXp:0},
-  {lv:2,emoji:'🎤',title:'NSC卒業',role:'一般社員',quote:'「なんとなくわかってきた気がする」',minXp:100},
-  {lv:3,emoji:'🎭',title:'劇場デビュー',role:'主任',quote:'「にっくん、俺英語できるかも」',minXp:250},
-  {lv:4,emoji:'⭐',title:'準レギュラー獲得',role:'係長',quote:'「もしかして俺天才？」',minXp:450},
-  {lv:5,emoji:'📺',title:'全国ネット',role:'課長',quote:'「にっくんより賢くなってきた」',minXp:700},
-  {lv:6,emoji:'🌟',title:'冠番組獲得',role:'部長',quote:'「英語で漫才できるかもしれない」',minXp:1000},
-  {lv:7,emoji:'🏆',title:'M-1決勝進出',role:'取締役',quote:'「もうにっくんいらないかも」',minXp:1400},
-  {lv:8,emoji:'👑',title:'M-1グランプリ優勝',role:'社長',quote:'「俺、令和ロマンに勝ったわ」',minXp:2000},
+  {lv:2,emoji:'🎤',title:'NSC卒業',role:'一般社員',quote:'「なんとなくわかってきた気がする」',minXp:15},
+  {lv:3,emoji:'🎭',title:'劇場デビュー',role:'主任',quote:'「にっくん、俺英語できるかも」',minXp:40},
+  {lv:4,emoji:'⭐',title:'準レギュラー獲得',role:'係長',quote:'「もしかして俺天才？」',minXp:80},
+  {lv:5,emoji:'📺',title:'全国ネット',role:'課長',quote:'「にっくんより賢くなってきた」',minXp:140},
+  {lv:6,emoji:'🌟',title:'冠番組獲得',role:'部長',quote:'「英語で漫才できるかもしれない」',minXp:220},
+  {lv:7,emoji:'🏆',title:'M-1決勝進出',role:'取締役',quote:'「もうにっくんいらないかも」',minXp:320},
+  {lv:8,emoji:'👑',title:'M-1グランプリ優勝',role:'社長',quote:'「俺、令和ロマンに勝ったわ」',minXp:440},
 ];
 
 // ===== セクション定義 =====

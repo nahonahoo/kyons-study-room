@@ -231,6 +231,7 @@ function renderSubjects() {
         ${weak > 0 ? `<span class="weak-badge">弱点 ${weak}問</span>` : ''}
       </div>
       <div style="font-size:0.82rem;color:var(--muted);">${lv.emoji} Lv.${lv.lv} ${lv.title} — ${xp} XP</div>
+      ${s.key === 'nh3' && vocabSummary() ? `<div style="font-size:0.8rem;color:var(--green);margin-top:4px;">${vocabSummary()}</div>` : ''}
       <div class="subject-xp-bar">
         <div class="subject-xp-fill" style="width:${Math.min(prog.pct,100)}%;background:${s.color};"></div>
       </div>
@@ -314,6 +315,22 @@ function renderCalendar() {
   }
 }
 
+// ====== 英単語ネタ帳のようす（英語カードの下に出す） ======
+// nh3_vocab_srs：{単語:{b:箱,...}}（箱3以上＝覚えた）、nh3_vocab_meta：{streak, last（日番号）, days:{日番号:回数}}
+function vocabSummary() {
+  try {
+    const srs = JSON.parse(localStorage.getItem('nh3_vocab_srs') || '{}');
+    const meta = JSON.parse(localStorage.getItem('nh3_vocab_meta') || '{}');
+    const d = new Date();
+    const t = Math.floor((d.getTime() - d.getTimezoneOffset() * 60000) / 86400000);
+    let learned = 0; for (const k in srs) if (srs[k] && srs[k].b >= 3) learned++;
+    const streak = (meta.last === t || meta.last === t - 1) ? (meta.streak || 0) : 0;
+    const todayN = (meta.days && meta.days[t]) || 0;
+    if (!learned && !streak && !todayN && !Object.keys(srs).length) return '';
+    return '📖 ネタ帳：覚えた単語 ' + learned + ' 語' + (streak ? '・🔥' + streak + '日連続' : '') + (todayN ? '・今日 ' + todayN + ' 問' : '');
+  } catch(e) { return ''; }
+}
+
 // ====== 初期化 ======
 function init() {
   renderKyon();
@@ -323,3 +340,10 @@ function init() {
 }
 
 init();
+
+// スマホで「戻る」や別タブからホームへ帰ってきたとき、画面が古いまま（bfcache・タブ復帰）だと
+// 教科ページで増えたXPがホームに出ない。表示し直すたびに読み直す。
+window.addEventListener('pageshow', function(e) { if (e.persisted) init(); });
+document.addEventListener('visibilitychange', function() { if (document.visibilityState === 'visible') init(); });
+window.addEventListener('focus', init);
+window.addEventListener('storage', init);

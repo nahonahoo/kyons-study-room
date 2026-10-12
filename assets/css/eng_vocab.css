@@ -122,6 +122,8 @@ button { font-family: inherit; letter-spacing: inherit; cursor: pointer; }
 .ch.c1 b { color: #7dd3fc; }
 .ch.c2 b { color: #f9a8d4; }
 .ch.sp { width: 14px; }
+.ch.gap b { color: var(--text2); font-size: 28px; }
+.ch.gap i { font-size: 12px; }
 .ch.trap { border: 2px dashed var(--red); background: rgba(255,107,129,.08); }
 .ch.trap i::after { content: ' ⚠'; color: var(--red); font-size: 12px; }
 .ch.lit { background: rgba(245,197,24,.22); transform: translateY(-4px); border-color: var(--gold); }

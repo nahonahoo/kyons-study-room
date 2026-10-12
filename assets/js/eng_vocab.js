@@ -75,6 +75,12 @@ const V = (window.VOCAB || []);
 const BY = {};
 V.forEach((e, i) => { e.key = e.w.toLowerCase(); e.i = i; BY[e.key] = e; });
 const WORDSET = new Set(V.map(e => e.key));
+// 熟語（New Horizon の慣用句・熟語。pos が「熟」）。w の「~」は何かが入る場所、「~ing」は動詞のing形が入る印
+function isIdiom(e) { return !!e && e.pos === '熟'; }
+// 呪文を唱えないチャンク：空白・〜・句読点だけ
+function isGap(c) { return c === ' ' || c === '~' || c === '' || /^[?.,!]+$/.test(c); }
+// 読み上げ用の形（~ は something、~ing は doing）
+function speakForm(w) { return w.replace(/~ing/g, 'doing').replace(/~/g, 'something'); }
 
 // ====== 保存 ======
 function load(k, def) { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : def; } catch (e) { return def; } }
@@ -153,8 +159,12 @@ function nextNew(n) {
   const out = [];
   meta.pins = (meta.pins || []).filter(k => BY[k] && !srs[k]);
   for (const k of meta.pins) { if (out.length >= n) break; out.push(k); }
-  for (const k of getOrder()) { if (out.length >= n) break; if (!srs[k] && out.indexOf(k) < 0) out.push(k); }
+  for (const k of getOrder()) { if (out.length >= n) break; if (!srs[k] && out.indexOf(k) < 0 && !isIdiom(BY[k])) out.push(k); }
   return out;
+}
+// 熟語の新ネタ：★印（教科書で重要）→ 学年 → 並び順
+function nextNewIdiom(n) {
+  return V.filter(e => isIdiom(e) && !srs[e.key]).sort((a, b) => ((b.st || 0) - (a.st || 0)) || (a.g - b.g) || (a.i - b.i)).slice(0, n).map(e => e.key);
 }
 
 // ====== 小道具 ======
@@ -209,14 +219,14 @@ const TTS = {
   },
 };
 const wait = ms => new Promise(r => setTimeout(r, ms));
-function sayWord(e) { TTS.cancel(); return TTS.speak(e.w, 'en', meta.rate); }
+function sayWord(e) { TTS.cancel(); return TTS.speak(speakForm(e.w), 'en', meta.rate); }
 // 呪文をチャンクごとに読み、そのチャンクを光らせる（カラオケ）
 async function chant(e, root) {
   TTS.cancel(); const g = TTS.gen;
   const els = root ? root.querySelectorAll('.chunks .ch') : [];
   for (let i = 0; i < e.c.length; i++) {
     if (g !== TTS.gen) break;
-    if (e.c[i] === ' ') { await wait(250); continue; }
+    if (isGap(e.c[i])) { await wait(250); continue; }
     els.forEach(x => x.classList.remove('lit'));
     if (els[i]) els[i].classList.add('lit');
     await TTS.speak(e.k[i], 'ja', 1.0);
@@ -234,11 +244,13 @@ function chunksHtml(e, small) {
   let ci = 0;
   return '<div class="chunks' + (small ? ' small' : '') + '">' + e.c.map((c, i) => {
     if (c === ' ') return '<span class="ch sp" data-i="' + i + '"></span>';
+    if (c === '~') return '<span class="ch gap" data-i="' + i + '"><b>〜</b><i>なにか</i></span>';
+    if (isGap(c)) return '<span class="ch gap" data-i="' + i + '"><b>' + esc(c) + '</b><i></i></span>';
     const cls = 'ch c' + (ci++ % 3) + (x.indexOf(i) >= 0 ? ' trap' : '');
     return '<span class="' + cls + '" data-i="' + i + '"><b>' + esc(c) + '</b><i>' + esc(e.k[i]) + '</i></span>';
   }).join('') + '</div>';
 }
-function chantText(e) { return e.k.filter((k, i) => e.c[i] !== ' ').join('・'); }
+function chantText(e) { return e.k.filter((k, i) => !isGap(e.c[i])).join('・'); }
 // which：1＝1本目のネタ、2＝2本目（わからない単語だけにある）
 function netaHtml(e, which) {
   const two = which === 2 && e.n2 && e.n2.length;
@@ -277,7 +289,7 @@ function cardHtml(e, opt) {
       (st.lv ? '<span class="tag box">' + st.label + '</span>' : '') + '</div>' +
     '<div class="wc-meaning">' + esc(e.m) + (e.m2 ? '<small>ほかに：' + esc(e.m2) + '</small>' : '') + '</div>' +
     chunksHtml(e) +
-    '<div class="sound-row">聞こえる音：<b>' + esc(e.r) + '</b>　／　書くための呪文：<span class="spell">' + esc(chantText(e)) + '</span></div>' +
+    '<div class="sound-row">' + (e.r ? '聞こえる音：<b>' + esc(e.r) + '</b>　／　' : '') + '書くための呪文：<span class="spell">' + esc(chantText(e)) + '</span></div>' +
     trapHtml(e) + vsHtml(e) +
     '<div class="btn-row"><button class="pill gold" data-act="say" data-k="' + esc(e.key) + '">🔊 本当の音</button>' +
       '<button class="pill gold" data-act="chant" data-k="' + esc(e.key) + '">🗣 呪文を唱える</button>' +
@@ -295,7 +307,28 @@ const MIS = [
   [/igh/, 'ai'], [/gh/, ''], [/^kn/, 'n'], [/^wr/, 'r'], [/wh/, 'w'], [/th/, 's'], [/th/, 'z'], [/ow/, 'ou'],
   [/ay/, 'ei'], [/ai/, 'ei'], [/oo/, 'u'], [/i/, 'e'], [/e/, 'i'], [/o/, 'a'], [/qu/, 'kw'], [/le$/, 'ru'], [/v/, 'b'],
 ];
+const PREPS = ['at', 'to', 'for', 'of', 'in', 'on', 'with', 'from', 'about', 'by', 'up', 'out', 'off', 'over', 'into', 'after'];
+function idiomMisspell(e, n) {
+  const w = e.w; const toks = w.split(' '); const out = []; const seen = new Set([w.toLowerCase()]);
+  const add = s => { if (out.length < n && !seen.has(s.toLowerCase()) && !WORDSET.has(s.toLowerCase())) { seen.add(s.toLowerCase()); out.push(s); } };
+  // 前置詞を別の前置詞に
+  const pi = toks.map((t, i) => PREPS.indexOf(t.toLowerCase()) >= 0 ? i : -1).filter(i => i >= 0);
+  shuffle(pi).forEach(i => shuffle(PREPS).slice(0, 3).forEach(pp => { if (pp !== toks[i].toLowerCase()) { const t2 = toks.slice(); t2[i] = pp; add(t2.join(' ')); } }));
+  // ~ing と to ~ の入れかえ
+  if (w.indexOf('~ing') >= 0) add(w.replace('~ing', 'to ~'));
+  else if (/\bto ~$/.test(w)) add(w.replace(/to ~$/, '~ing'));
+  // 前置詞を抜く・足す
+  if (pi.length && toks.length > 2) { const t2 = toks.slice(); t2.splice(pi[0], 1); add(t2.join(' ')); }
+  if (!pi.length) { add(w + ' to'); add(w + ' at'); }
+  // 足りなければ1語のつづりをくずす
+  if (out.length < n) {
+    const wi = toks.map((t, i) => /^[A-Za-z]{3,}$/.test(t) ? i : -1).filter(i => i >= 0);
+    shuffle(wi).forEach(i => { if (out.length >= n) return; const m = misspell({ w: toks[i], c: [toks[i]], x: [] }, 1)[0]; if (m) { const t2 = toks.slice(); t2[i] = m; add(t2.join(' ')); } });
+  }
+  return out.slice(0, n);
+}
 function misspell(e, n) {
+  if (isIdiom(e)) return idiomMisspell(e, n);
   const w = e.w, low = w.toLowerCase();
   const out = []; const seen = new Set([low]);
   // わなチャンクの範囲（そこを変えた誤答を優先）
@@ -393,7 +426,13 @@ function homeHtml() {
   h += '<div class="sub-btns">' +
     '<button class="sub-btn" data-act="startMini">⚡ 1分だけ<small>3問だけ。すきま時間に</small></button>' +
     '<button class="sub-btn" data-act="startRadio">🎧 聞き流し<small>音→呪文→つづり→意味を自動で</small></button>' +
-    '</div></div>';
+    '</div>';
+  const idioms = V.filter(isIdiom);
+  if (idioms.length) {
+    const idDue = dueKeys().filter(k => isIdiom(BY[k])).length; const idNew = nextNewIdiom(meta.newPer).length;
+    h += '<button class="sub-btn wide" style="margin-top:10px" data-act="startIdiom">📚 熟語ネタ合わせ<small>New Horizon の熟語・慣用句 ' + idioms.length + '個。復習 ' + idDue + ' ＋ 新ネタ ' + idNew + '（look at／be good at／look forward to ~ing など）</small></button>';
+  }
+  h += '</div>';
 
   h += boostCardHtml();
   // ライブ動員（覚えた単語＝お客さん）
@@ -406,11 +445,13 @@ function homeHtml() {
   // 学年ごとの進み具合
   h += '<div class="card"><h2>📊 学年ごとの進み具合</h2>';
   [1, 2, 3].forEach(g => {
-    const ws = V.filter(e => e.g === g); const got = ws.filter(e => srs[e.key] && srs[e.key].b >= LEARNED_BOX).length;
+    const ws = V.filter(e => e.g === g && !isIdiom(e)); const got = ws.filter(e => srs[e.key] && srs[e.key].b >= LEARNED_BOX).length;
     const seen = ws.filter(e => srs[e.key]).length;
     h += '<div class="grade-row"><div>中' + g + '</div><div class="bar"><div style="width:' + (got / ws.length * 100).toFixed(1) + '%"></div></div><div class="num">' + got + '/' + ws.length + '</div></div>';
     h += '<div class="muted" style="margin:-4px 0 6px 94px;font-size:12px">練習した ' + seen + '語</div>';
   });
+  const idw = V.filter(isIdiom); const idg = idw.filter(e => srs[e.key] && srs[e.key].b >= LEARNED_BOX).length;
+  if (idw.length) h += '<div class="grade-row"><div style="font-size:12px">📚 熟語</div><div class="bar"><div style="width:' + (idg / idw.length * 100).toFixed(1) + '%;background:var(--gold)"></div></div><div class="num">' + idg + '/' + idw.length + '</div></div>';
   const uw = V.filter(e => e.u); const ug = uw.filter(e => srs[e.key] && srs[e.key].b >= LEARNED_BOX).length;
   h += '<div class="grade-row"><div style="color:var(--pink);font-size:12px;line-height:1.4">わからない<br>リスト</div><div class="bar"><div style="width:' + (ug / uw.length * 100).toFixed(1) + '%;background:var(--pink)"></div></div><div class="num">' + ug + '/' + uw.length + '</div></div>';
   h += '<p class="note" style="margin-top:8px">「わからない単語一覧」の単語から先に出します（⚙設定で変えられます）。「覚えた」は3回続けて思い出せた単語です。</p></div>';
@@ -481,7 +522,7 @@ function patternHtml() {
 
 // ====== ネタ帳（図鑑） ======
 const book = { q: '', f: 'all', limit: 60 };
-const FILTERS = [['all', 'ぜんぶ'], ['g1', '中1'], ['g2', '中2'], ['g3', '中3'], ['unk', 'わからないリスト'], ['due', '復習どき'], ['learning', '練習中'], ['got', '覚えた'], ['none', 'まだ'], ['trap', '⚠わなあり']];
+const FILTERS = [['all', 'ぜんぶ'], ['g1', '中1'], ['g2', '中2'], ['g3', '中3'], ['unk', 'わからないリスト'], ['due', '復習どき'], ['learning', '練習中'], ['got', '覚えた'], ['none', 'まだ'], ['trap', '⚠わなあり'], ['idiom', '📚熟語']];
 function bookShellHtml() {
   return '<div class="card"><h2>📒 ネタ帳（全' + V.length + '語）</h2>' +
     '<input class="search" id="bookQ" type="search" placeholder="英語か日本語でさがす（例：friend／友達）" value="' + esc(book.q) + '" autocomplete="off">' +
@@ -502,6 +543,7 @@ function bookMatches() {
       case 'got': if (!s || s.b < LEARNED_BOX) return false; break;
       case 'none': if (s) return false; break;
       case 'trap': if (!e.x || !e.x.length) return false; break;
+      case 'idiom': if (!isIdiom(e)) return false; break;
     }
     if (!q) return true;
     return e.key.indexOf(q) >= 0 || e.m.indexOf(q) >= 0 || (e.m2 && e.m2.indexOf(q) >= 0) || (e.r && e.r.indexOf(q) >= 0);
@@ -585,6 +627,17 @@ function startSession(mode, opt) {
     while (ri < rev.length) q.push(rev[ri++]);
     // 最後にもう一度：今日の新ネタをつづり選択で確認
     shuffle(newWords).forEach(k => q.push({ k: k, t: BY[k].w.replace(/[^A-Za-z]/g, '').length <= 2 ? 'meaning' : 'spell', late: true }));
+  } else if (mode === 'idiom') {
+    const due = dueKeys().filter(k => isIdiom(BY[k])).slice(0, 20);
+    newWords = nextNewIdiom(meta.newPer);
+    const rev = due.map(k => ({ k: k, t: typeFor(k) }));
+    let ri = 0;
+    newWords.forEach(k => {
+      for (let j = 0; j < 2 && ri < rev.length; j++) q.push(rev[ri++]);
+      q.push({ k: k, t: 'intro' }); q.push({ k: k, t: 'build', fresh: true });
+    });
+    while (ri < rev.length) q.push(rev[ri++]);
+    shuffle(newWords).forEach(k => q.push({ k: k, t: 'spell', late: true }));
   } else if (mode === 'mini') {
     let ks = dueKeys().slice(0, 3);
     if (ks.length < 3) {
@@ -678,7 +731,7 @@ function mutateChunk(c, avoid) {
   return null;
 }
 function renderBuild(body, e, it) {
-  let parts = e.c.filter(c => c !== ' ');
+  let parts = e.c.filter(c => !isGap(c));
   if (parts.length < 2) parts = e.w.replace(/ /g, '').split('');
   const avoid = parts.slice(); const decoys = [];
   for (const c of shuffle(parts)) { if (decoys.length >= 2) break; const m = mutateChunk(c, avoid.concat(decoys)); if (m) decoys.push(m); }
@@ -686,13 +739,13 @@ function renderBuild(body, e, it) {
   body._b = { parts: parts, tiles: tiles, picked: [], tries: 0 };
   body.innerHTML = '<div class="q-label">🧩 呪文を聞いて、パーツを順番に並べよう' + (it.fresh ? '（いま覚えた単語）' : '') + '</div>' +
     '<div class="q-prompt">' + esc(e.m) + '</div>' +
-    '<div class="chant-hint">' + e.k.filter((k, i) => e.c[i] !== ' ').map(k => '<span>' + esc(k) + '</span>').join('') + '</div>' +
+    '<div class="chant-hint">' + e.k.filter((k, i) => !isGap(e.c[i])).map(k => '<span>' + esc(k) + '</span>').join('') + '</div>' +
     '<div class="btn-row"><button class="pill gold" data-act="chantOnly">🗣 呪文を聞く</button><button class="pill" data-act="say" data-k="' + esc(e.key) + '">🔊 本当の音</button></div>' +
     '<div class="slots" id="slots"></div><div class="tiles" id="tiles"></div><div id="fb"></div>';
   drawBuild(body);
   if (it.fresh) chantSilent(e); else sayWord(e);
 }
-async function chantSilent(e) { TTS.cancel(); const g = TTS.gen; for (let i = 0; i < e.c.length; i++) { if (g !== TTS.gen) return; if (e.c[i] !== ' ') await TTS.speak(e.k[i], 'ja', 1.0); } }
+async function chantSilent(e) { TTS.cancel(); const g = TTS.gen; for (let i = 0; i < e.c.length; i++) { if (g !== TTS.gen) return; if (!isGap(e.c[i])) await TTS.speak(e.k[i], 'ja', 1.0); } }
 function drawBuild(body) {
   const b = body._b;
   $('slots').innerHTML = b.parts.map((p, i) => b.picked[i] != null ? '<div class="slot filled">' + esc(b.tiles[b.picked[i]]) + '</div>' : '<div class="slot"></div>').join('');
@@ -755,7 +808,7 @@ function feedbackHtml(e, kind, your, isJp, headTxt) {
       '<span class="muted">正しい</span><span class="' + (isJp ? 'jp-right' : 'right') + '">' + esc(isJp ? e.m : e.w) + '</span></div>';
   }
   h += '<div class="fb-sec"><b>📌 ' + esc(e.w) + '</b>＝' + esc(e.m) + '</div>' + chunksHtml(e, true) +
-    '<div class="sound-row">聞こえる音：<b>' + esc(e.r) + '</b>　／　呪文：<span class="spell">' + esc(chantText(e)) + '</span></div>' + trapHtml(e) + vsHtml(e);
+    '<div class="sound-row">' + (e.r ? '聞こえる音：<b>' + esc(e.r) + '</b>　／　' : '') + '呪文：<span class="spell">' + esc(chantText(e)) + '</span></div>' + trapHtml(e) + vsHtml(e);
   if (kind !== 'ok') {
     (e.p || []).forEach(id => { const p = PAT_BY_ID[id]; if (p) h += '<div class="fb-sec"><b>📐 ルール（' + esc(p.name) + '）</b>：' + esc(p.rule) + '</div>'; });
     h += netaHtml(e, e.n2 ? 2 : 1);
@@ -797,6 +850,7 @@ function finish() {
   h += '<div class="muted" style="margin-top:8px">ライブのお客さん：<b style="color:var(--gold)">' + n + '人</b>／' + V.length + '席　🔥' + curStreak() + '日連続</div></div>';
   h += '<button class="big-btn" data-act="quit">ホームにもどる</button>';
   if (S.mode === 'boost') h += '<div class="sub-btns"><button class="sub-btn" data-act="startBoost">🎯 もう10問<small>わからない単語 特訓</small></button><button class="sub-btn" data-act="startRadio">🎧 今日の単語を聞き流す<small>耳で復習</small></button></div>';
+  else if (S.mode === 'idiom') h += '<div class="sub-btns"><button class="sub-btn" data-act="startIdiom">➕ 熟語をもう1回<small>復習＋新ネタ</small></button><button class="sub-btn" data-act="startRadio">🎧 今日の単語を聞き流す<small>耳で復習</small></button></div>';
   else if (S.mode !== 'pat') h += '<div class="sub-btns"><button class="sub-btn" data-act="startMore">➕ おかわり<small>新ネタ +' + meta.newPer + '語</small></button><button class="sub-btn" data-act="startRadio">🎧 今日の単語を聞き流す<small>耳で復習</small></button></div>';
   $('stageBody').innerHTML = h;
   $('stageCount').textContent = '';
@@ -835,7 +889,7 @@ const RADIO = {
       step('🗣 書くための呪文');
       for (let i = 0; i < e.c.length; i++) {
         if (!await ok()) return;
-        if (e.c[i] === ' ') { await wait(250); continue; }
+        if (isGap(e.c[i])) { await wait(250); continue; }
         root.querySelectorAll('.ch').forEach(x => x.classList.remove('lit'));
         const el = root.querySelector('.ch[data-i="' + i + '"]'); if (el) el.classList.add('lit');
         await TTS.speak(e.k[i], 'ja', 1.0);
@@ -881,6 +935,7 @@ document.addEventListener('click', ev => {
     case 'startDaily': startSession('daily'); break;
     case 'startMore': if (S) { S = null; } startSession('more'); break;
     case 'startMini': startSession('mini'); break;
+    case 'startIdiom': startSession('idiom'); break;
     case 'startPat': startSession('pat', { p: el.dataset.p }); break;
     case 'startRadio': TTS.cancel(); RADIO.start(); break;
     case 'startBoost': startSession('boost'); break;
@@ -893,7 +948,7 @@ document.addEventListener('click', ev => {
     case 'radioNext': RADIO.gen++; try { speechSynthesis.cancel(); } catch (e) {} RADIO.paused = false; if (RADIO.resume) { RADIO.resume(); RADIO.resume = null; } RADIO.i++; RADIO.loop(RADIO.gen); break;
     case 'hintChant': {
       const e = BY[S.queue[S.idx].k]; body._hinted = true;
-      $('hint').innerHTML = '<div class="chant-hint">' + e.k.filter((x, i) => e.c[i] !== ' ').map(x => '<span>' + esc(x) + '</span>').join('') + '</div>';
+      $('hint').innerHTML = '<div class="chant-hint">' + e.k.filter((x, i) => !isGap(e.c[i])).map(x => '<span>' + esc(x) + '</span>').join('') + '</div>';
       chantSilent(e); break;
     }
     case 'chantOnly': chantSilent(BY[S.queue[S.idx].k]); break;
@@ -937,7 +992,7 @@ document.addEventListener('click', ev => {
 function submitType() {
   const body = $('stageBody'); const inp = $('typeIn'); if (!inp || inp.disabled) return;
   const it = S.queue[S.idx]; const e = BY[it.k];
-  const norm = s => s.trim().replace(/\s+/g, ' ').replace(/[’`]/g, "'");
+  const norm = s => s.replace(/[~?.,!]/g, ' ').trim().replace(/\s+/g, ' ').replace(/[’`]/g, "'");
   const v = norm(inp.value); if (!v) return;
   const right = norm(e.w);
   body._tries++;
@@ -952,7 +1007,7 @@ function submitType() {
   const d = lev(v.toLowerCase(), right.toLowerCase());
   if (body._tries === 1) { // 1回目のまちがい：呪文ヒントを出してもう一回
     $('hint').innerHTML = '<div class="diff">' + diffHtml(v, e.w) + '</div><div class="muted" style="text-align:center">' + (d <= 1 ? 'おしい！あと1文字。' : '') + '呪文ヒントを聞いて、もう一回！</div>' +
-      '<div class="chant-hint" style="justify-content:center;display:flex">' + e.k.filter((x, i) => e.c[i] !== ' ').map(x => '<span>' + esc(x) + '</span>').join('') + '</div>';
+      '<div class="chant-hint" style="justify-content:center;display:flex">' + e.k.filter((x, i) => !isGap(e.c[i])).map(x => '<span>' + esc(x) + '</span>').join('') + '</div>';
     chantSilent(e); inp.select();
     return;
   }
@@ -979,4 +1034,6 @@ $('modal').addEventListener('click', ev => { if (ev.target === $('modal')) close
 TTS.init();
 saveAll();
 setTab(meta.seenHowto || Object.keys(srs).length ? 'home' : 'howto');
+// 点検用（tools/site の自動テストから中の状態を見る）
+window.__vocab = { get S() { return S; }, V: V, BY: BY, isIdiom: isIdiom, setTab: setTab };
 })();

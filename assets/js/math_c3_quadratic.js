@@ -797,7 +797,7 @@ function renderSection8() {
   html += '<div class="rule-card">'
     + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">グラフを見て「式を求めなさい」って言われても、どこを見ればいいのか全然わからない…</div></div></div>'
     + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">見るところは<b>2つだけ</b>だ。「<b>y軸とぶつかるところ</b>」と「<b>右に何マス進むと、上に何マス上がるか</b>」。この2つが読めれば、式は必ず作れる。まずそこから一緒にやろう</div></div></div>'
-    + '<div class="chat-line"><div class="avatar" style="background:#b69cff;color:#111">🎭</div><div><div class="chat-name">なかむらしゅん</div><div class="chat-bubble">きょんさん、各ステップは<b>タップすると開く</b>ようにしてあります。開く前に「たぶんこうかな」って1回考えてから開くと、ぐっと身につきます。答えを先に見るのは、ネタバレしてから映画を見るようなもんです</div></div></div>'
+    + '<div class="chat-line"><div class="avatar" style="background:#b69cff;color:#111">🎭</div><div><div class="chat-name">なかむらしゅん</div><div class="chat-bubble">きょんさん、各ステップは<b>タップすると開く</b>ようにしてあります。開く前に「たぶんこうかな」って1回考えてから開くと、ぐっと身につくんです。答えを先に見るのは、ネタバレしてから映画を見るようなもんですわ</div></div></div>'
     + '</div>';
 
   // ---------- PART 1：グラフから式を作る ----------

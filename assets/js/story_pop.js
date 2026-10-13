@@ -15,6 +15,7 @@ var STORY_SERIES = [
   { key:'edo3',    label:'⑨ 江戸後半', href:'soc_story_edo3.html' },
   { key:'bakumatsu',label:'⑩ 開国',    href:'soc_story_bakumatsu.html' },
   { key:'meiji',   label:'⑪ 明治維新', href:'soc_story_meiji.html' },
+  { key:'kenpo',   label:'⑫ 憲法',    href:'soc_story_kenpo.html' },
   { key:'postwar', label:'📰 戦後日本', href:'soc_history_story.html' }
 ];
 
@@ -22,7 +23,7 @@ var STORY_SERIES = [
 var CAST = {
   kyon:   { name:'きょん',          av:'😄' },
   nishi:  { name:'西村',            av:'慶' },
-  shun:   { name:'なかむらしゅん',  av:'🎭' },   // 9番街レトロ・ツッコミ。大阪出身の関西弁。きょんには「きょんさん」＋です・ます＋関西弁（ほんまに・〜やと思います・できひん）。僕。ひょうきんで熱い。相方は「京極」。賭け事・お金ネタ禁止
+  shun:   { name:'なかむらしゅん',  av:'🎭' },   // 9番街レトロ・ツッコミ。大阪出身の関西弁。きょんには「きょんさん」＋です・ます＋関西弁（ほんまに・〜やと思います・できひん）。僕。ひょうきんで熱い。相方は「京極」。賭け事ネタは本人が「言うたらあかん」と止める自虐の形だけOK
   kuruma: { name:'くるま',          av:'🚗' },
   iwakura:{ name:'イワクラ',        av:'🎸' },
   // 2026-10-06 追加（口調はWebで確認。どちらもきょんの後輩で敬語）

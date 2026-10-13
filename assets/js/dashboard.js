@@ -79,6 +79,7 @@ const SUBJECTS = [
       { label:'🗞️ 歴史ストーリー⑨ 江戸時代・後半（国学・蘭学・化政文化・外国船・天保の改革）', href:'social/soc_story_edo3.html' },
       { label:'🗞️ 歴史ストーリー⑩ 開国と江戸幕府の滅亡（市民革命・産業革命・黒船来航・不平等条約・大政奉還）', href:'social/soc_story_bakumatsu.html' },
       { label:'🗞️ 歴史ストーリー⑪ 明治維新（廃藩置県・三大改革・文明開化・国境・西南戦争）', href:'social/soc_story_meiji.html' },
+      { label:'🗞️ 歴史ストーリー⑫ 自由民権運動と大日本帝国憲法（建白書・政党・秩父事件・憲法・帝国議会）', href:'social/soc_story_kenpo.html' },
       { label:'🗞️ 歴史ストーリー 戦後日本', href:'social/soc_history_story.html' },
       { label:'地理（世界・日本）', href:'social/soc_geography.html', weakDb:'soc', qidPrefix:'soc_geo_' },
       { label:'⚖️ 公民（人権・政治・経済）入試頻出', href:'social/soc_civics.html', weakDb:'soc', qidPrefix:'soc_civ_' },

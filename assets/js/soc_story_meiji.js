@@ -282,5 +282,5 @@ renderStory({
   onelineHead:'明治維新を1行で',
   oneline:'<span class="hl">五箇条の御誓文</span>（1868）で方針 → <span class="hl">版籍奉還</span> → <span class="hl">廃藩置県</span>（1871）で中央集権 → <span class="hl">四民平等</span> → 富国強兵の三大改革（<span class="hl">学制</span>・<span class="hl">徴兵令</span>・<span class="hl">地租改正</span>） → <span class="hl">殖産興業</span>（富岡製糸場・鉄道）と<span class="hl">文明開化</span> → <span class="hl">岩倉使節団</span>（条約改正は失敗）・征韓論 → 北海道開拓・<span class="hl">樺太千島交換条約</span>・<span class="hl">琉球処分</span> → <span class="hl">西南戦争</span>（1877）で武士の時代が終わる → 自由民権運動へ！',
   myths:MYTHS, pairs:PAIRS, checks:CHECKS,
-  nextNote:'<a href="soc_story_bakumatsu.html" style="color:var(--pop-c)">👈 前号「開国と倒幕」</a>　／　次号「自由民権運動と大日本帝国憲法ストーリー新聞」をお楽しみに'
+  nextNote:'<a href="soc_story_bakumatsu.html" style="color:var(--pop-c)">👈 前号「開国と倒幕」</a>　／　<a href="soc_story_kenpo.html" style="color:var(--pop-c)">次号「自由民権運動と大日本帝国憲法」へ 👉</a>'
 });

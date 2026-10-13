@@ -269,5 +269,5 @@ renderStory({
   onelineHead:'開国から幕府の滅亡までを1行で',
   oneline:'欧米で<span class="hl">市民革命</span>（三権分立・人権宣言）と<span class="hl">産業革命</span>（イギリス） → アジアへ進出・<span class="hl">アヘン戦争</span> → <span class="hl">ペリー</span>来航1853・<span class="hl">日米和親条約</span>（下田・函館） → <span class="hl">日米修好通商条約</span>1858（5港・領事裁判権・関税自主権なし） → 金の流出と物価上昇・<span class="hl">安政の大獄</span>・<span class="hl">桜田門外の変</span> → 尊王攘夷 → 攘夷は無理 → <span class="hl">薩長同盟</span>1866 → <span class="hl">大政奉還</span>1867・王政復古 → <span class="hl">戊辰戦争</span>（無血開城・五稜郭） → 明治維新へ！',
   myths:MYTHS, pairs:PAIRS, checks:CHECKS,
-  nextNote:'<a href="soc_story_edo3.html" style="color:var(--pop-c)">👈 前号「江戸時代・後半」</a>　／　次号「明治維新（五箇条の御誓文〜富国強兵・文明開化）ストーリー新聞」をお楽しみに'
+  nextNote:'<a href="soc_story_edo3.html" style="color:var(--pop-c)">👈 前号「江戸時代・後半」</a>　／　<a href="soc_story_meiji.html" style="color:var(--pop-c)">次号「明治維新」へ 👉</a>'
 });

@@ -88,7 +88,7 @@ function renderStoryPage(){
   html += '<div class="masthead-kicker">号外！</div>';
   html += '<div class="masthead-title">戦後日本ストーリー新聞</div>';
   html += '<div class="masthead-sub">🗞️ テスト前にサクッと読んで「流れ」を掴もう！（クイズじゃないよ）</div>';
-  html += '<div class="series"><a href="soc_story_asuka.html">① 飛鳥</a><a href="soc_story_nara.html">② 奈良</a><a href="soc_story_heian.html">③ 平安</a><a href="soc_story_kamakura.html">④ 鎌倉</a><a href="soc_story_muromachi.html">⑤ 室町</a><a href="soc_story_azuchi.html">⑥ 安土桃山</a><a href="soc_story_edo1.html">⑦ 江戸前半</a><a href="soc_story_edo2.html">⑧ 江戸中期</a><a href="soc_story_edo3.html">⑨ 江戸後半</a><a href="soc_story_bakumatsu.html">⑩ 開国</a><a href="soc_story_meiji.html">⑪ 明治維新</a><a href="soc_story_kenpo.html">⑫ 憲法</a><a href="soc_story_nichiro.html">⑬ 日清・日露</a><a href="soc_story_meijibunka.html">⑭ 明治の文化</a><span class="now">📰 戦後日本（いまここ）</span></div>';
+  html += '<div class="series"><a href="soc_story_asuka.html">① 飛鳥</a><a href="soc_story_nara.html">② 奈良</a><a href="soc_story_heian.html">③ 平安</a><a href="soc_story_kamakura.html">④ 鎌倉</a><a href="soc_story_muromachi.html">⑤ 室町</a><a href="soc_story_azuchi.html">⑥ 安土桃山</a><a href="soc_story_edo1.html">⑦ 江戸前半</a><a href="soc_story_edo2.html">⑧ 江戸中期</a><a href="soc_story_edo3.html">⑨ 江戸後半</a><a href="soc_story_bakumatsu.html">⑩ 開国</a><a href="soc_story_meiji.html">⑪ 明治維新</a><a href="soc_story_kenpo.html">⑫ 憲法</a><a href="soc_story_nichiro.html">⑬ 日清・日露</a><a href="soc_story_meijibunka.html">⑭ 明治の文化</a><a href="soc_story_taisen1.html">⑮ 第一次大戦</a><a href="soc_story_taisho.html">⑯ 大正デモクラシー</a><span class="now">📰 戦後日本（いまここ）</span></div>';
   html += '<div class="masthead-rule"></div>';
   html += '</div>';
 

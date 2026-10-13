@@ -272,5 +272,5 @@ renderStory({
   onelineHead:'明治の産業と文化を1行で',
   oneline:'<span class="hl">軽工業</span>から産業革命（大阪紡績会社・生糸で世界一） → <span class="hl">八幡製鉄所</span>（1901・下関条約の賠償金）で<span class="hl">重工業</span>へ → <span class="hl">財閥</span>の成長と労働問題 → <span class="hl">工場法</span>（1911） → <span class="hl">足尾銅山鉱毒事件</span>と<span class="hl">田中正造</span> → 義務教育6年・就学率ほぼ100% → 文学（<span class="hl">漱石・鷗外・一葉</span>・子規）・美術（<span class="hl">黒田清輝・横山大観</span>）・音楽（滝廉太郎）・科学（<span class="hl">北里・野口</span>） → 大正時代へ！',
   myths:MYTHS, pairs:PAIRS, checks:CHECKS,
-  nextNote:'<a href="soc_story_nichiro.html" style="color:var(--pop-c)">👈 前号「日清・日露戦争」</a>　／　次号「大正時代（第一次世界大戦・大正デモクラシー）ストーリー新聞」をお楽しみに'
+  nextNote:'<a href="soc_story_nichiro.html" style="color:var(--pop-c)">👈 前号「日清・日露戦争」</a>　／　<a href="soc_story_taisen1.html" style="color:var(--pop-c)">次号⑮「第一次世界大戦」へ 👉</a>'
 });

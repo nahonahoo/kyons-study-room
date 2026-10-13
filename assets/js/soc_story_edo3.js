@@ -265,5 +265,5 @@ renderStory({
   onelineHead:'江戸時代後半を1行で',
   oneline:'<span class="hl">国学</span>（宣長）・<span class="hl">蘭学</span>（解体新書・伊能忠敬）で新しい学問 → <span class="hl">寺子屋</span>で庶民も読み書き → 江戸の町人の<span class="hl">化政文化</span>（膝栗毛・八犬伝・北斎・広重） → ロシア・イギリスの船が来て<span class="hl">異国船打払令</span>（1825） → 天保のききん・<span class="hl">大塩の乱</span>（1837） → 水野忠邦の<span class="hl">天保の改革</span>（株仲間解散・上知令で失敗） → 幕府が弱まり<span class="hl">雄藩</span>（薩摩・長州）が成長 → 開国へ！',
   myths:MYTHS, pairs:PAIRS, checks:CHECKS,
-  nextNote:'<a href="soc_story_edo2.html" style="color:var(--pop-c)">👈 前号「江戸時代・中期」</a>　／　次号「開国と江戸幕府の滅亡（ペリー来航〜大政奉還）ストーリー新聞」をお楽しみに'
+  nextNote:'<a href="soc_story_edo2.html" style="color:var(--pop-c)">👈 前号「江戸時代・中期」</a>　／　<a href="soc_story_bakumatsu.html" style="color:var(--pop-c)">次号「開国と江戸幕府の滅亡」へ 👉</a>'
 });

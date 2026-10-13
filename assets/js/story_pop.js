@@ -13,6 +13,7 @@ var STORY_SERIES = [
   { key:'edo1',    label:'⑦ 江戸前半', href:'soc_story_edo1.html' },
   { key:'edo2',    label:'⑧ 江戸中期', href:'soc_story_edo2.html' },
   { key:'edo3',    label:'⑨ 江戸後半', href:'soc_story_edo3.html' },
+  { key:'bakumatsu',label:'⑩ 開国',    href:'soc_story_bakumatsu.html' },
   { key:'postwar', label:'📰 戦後日本', href:'soc_history_story.html' }
 ];
 

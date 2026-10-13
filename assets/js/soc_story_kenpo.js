@@ -250,5 +250,5 @@ renderStory({
   onelineHead:'自由民権運動と憲法を1行で',
   oneline:'<span class="hl">民撰議院設立の建白書</span>（1874・板垣） → <span class="hl">自由民権運動</span>が農民にも広がる・<span class="hl">国会期成同盟</span>（1880）・五日市憲法 → 払い下げ事件で<span class="hl">国会開設の勅諭</span>（1881） → <span class="hl">自由党</span>（板垣）・<span class="hl">立憲改進党</span>（大隈） → デフレで<span class="hl">秩父事件</span>（1884） → <span class="hl">伊藤博文</span>がドイツで調査・<span class="hl">内閣制度</span>（1885） → <span class="hl">大日本帝国憲法</span>（1889・天皇主権） → 第1回選挙（約1%）と<span class="hl">帝国議会</span>（1890） → 条約改正・日清日露へ！',
   myths:MYTHS, pairs:PAIRS, checks:CHECKS,
-  nextNote:'<a href="soc_story_meiji.html" style="color:var(--pop-c)">👈 前号「明治維新」</a>　／　次号「日清・日露戦争と条約改正ストーリー新聞」をお楽しみに'
+  nextNote:'<a href="soc_story_meiji.html" style="color:var(--pop-c)">👈 前号「明治維新」</a>　／　<a href="soc_story_nichiro.html" style="color:var(--pop-c)">次号「日清・日露戦争と条約改正」へ 👉</a>'
 });

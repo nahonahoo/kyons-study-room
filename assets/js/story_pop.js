@@ -16,6 +16,8 @@ var STORY_SERIES = [
   { key:'bakumatsu',label:'⑩ 開国',    href:'soc_story_bakumatsu.html' },
   { key:'meiji',   label:'⑪ 明治維新', href:'soc_story_meiji.html' },
   { key:'kenpo',   label:'⑫ 憲法',    href:'soc_story_kenpo.html' },
+  { key:'nichiro', label:'⑬ 日清・日露', href:'soc_story_nichiro.html' },
+  { key:'meijibunka',label:'⑭ 明治の文化', href:'soc_story_meijibunka.html' },
   { key:'postwar', label:'📰 戦後日本', href:'soc_history_story.html' }
 ];
 
@@ -106,6 +108,7 @@ function renderStory(S){
     html += '<ul class="clip-body">';
     s.items.forEach(function(it){ html += '<li>' + it + '</li>'; });
     html += '</ul>';
+    if(s.extra) html += '<div class="clip-extra">' + s.extra + '</div>';   // 比較表など（任意）
     if(s.talk) html += talk(s.talk);
     if(s.goro) html += goro(s.goro);
     if(s.stickyText) html += sticky(s.stickyIcon, s.stickyText);

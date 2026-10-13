@@ -122,6 +122,10 @@ body{
 .myth b{ color:#f4ff3a; }
 
 /* ---- 組み合わせ表 ---- */
+.clip-extra{ margin:14px 0 6px; }
+.clip-extra .pair-table td, .clip-extra .pair-table th{ font-size:15px; }
+.clip-extra .pair-table td:first-child{ white-space:nowrap; }
+.clip-extra .cap{ font-family:'Mochiy Pop One',sans-serif; font-size:15px; color:var(--pop-y); margin:0 0 8px 4px; }
 .pair-wrap{ overflow-x:auto; border:3px solid var(--pop-y); border-radius:14px; box-shadow:5px 5px 0 color-mix(in srgb, var(--pop-y) 40%, transparent); background:var(--card); }
 .pair-table{ width:100%; border-collapse:collapse; font-size:15px; font-weight:700; line-height:1.8; }
 .pair-table th, .pair-table td{ border-bottom:1.5px solid #2c3444; padding:8px 10px; vertical-align:top; text-align:left; }

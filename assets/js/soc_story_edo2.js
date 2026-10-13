@@ -248,5 +248,5 @@ renderStory({
   onelineHead:'江戸時代中期を1行で',
   oneline:'新田開発・<span class="hl">備中ぐわ</span>・<span class="hl">干鰯</span>・<span class="hl">商品作物</span>で農業が発達 → 五街道・西廻り東廻り航路・<span class="hl">三都</span>（大阪＝天下の台所）で全国に<span class="hl">貨幣経済</span> → 綱吉の<span class="hl">文治政治</span>と上方町人の<span class="hl">元禄文化</span> → 財政赤字 → 吉宗の<span class="hl">享保の改革</span>（米） → 貧富の差・<span class="hl">百姓一揆</span>・打ちこわし → <span class="hl">田沼</span>の商業政策（株仲間・わいろ・ききんで失脚） → 定信の<span class="hl">寛政の改革</span>（きびしすぎて6年） → 天保の改革へ！',
   myths:MYTHS, pairs:PAIRS, checks:CHECKS,
-  nextNote:'<a href="soc_story_edo1.html" style="color:var(--pop-c)">👈 前号「江戸時代・前半」</a>　／　次号「江戸時代・後半（化政文化・天保の改革・ゆれる幕府）ストーリー新聞」をお楽しみに'
+  nextNote:'<a href="soc_story_edo1.html" style="color:var(--pop-c)">👈 前号「江戸時代・前半」</a>　／　<a href="soc_story_edo3.html" style="color:var(--pop-c)">次号「江戸時代・後半」へ 👉</a>'
 });

@@ -84,6 +84,8 @@ const SUBJECTS = [
       { label:'🗞️ 歴史ストーリー⑭ 産業と明治の文化（八幡製鉄所・足尾銅山・漱石・鷗外・北里・野口）', href:'social/soc_story_meijibunka.html' },
       { label:'🗞️ 歴史ストーリー⑮ 第一次世界大戦と国際協調（サラエボ事件・二十一か条・ロシア革命・ベルサイユ条約・国際連盟）', href:'social/soc_story_taisen1.html' },
       { label:'🗞️ 歴史ストーリー⑯ 大正デモクラシー（米騒動・原敬・普通選挙法・水平社・関東大震災・ラジオ）', href:'social/soc_story_taisho.html' },
+      { label:'🗞️ 歴史ストーリー⑰ 戦争への道（世界恐慌・満州事変・五・一五・二・二六・日中戦争・国家総動員法）', href:'social/soc_story_showa1.html' },
+      { label:'🗞️ 歴史ストーリー⑱ 第二次世界大戦と太平洋戦争（ポーランド侵攻・ホロコースト・三国同盟・真珠湾・ミッドウェー）', href:'social/soc_story_taisen2.html' },
       { label:'🗞️ 歴史ストーリー 戦後日本', href:'social/soc_history_story.html' },
       { label:'地理（世界・日本）', href:'social/soc_geography.html', weakDb:'soc', qidPrefix:'soc_geo_' },
       { label:'⚖️ 公民（人権・政治・経済）入試頻出', href:'social/soc_civics.html', weakDb:'soc', qidPrefix:'soc_civ_' },

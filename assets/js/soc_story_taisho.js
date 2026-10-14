@@ -263,5 +263,5 @@ renderStory({
   onelineHead:'大正デモクラシーを1行で',
   oneline:'<span class="hl">大戦景気</span>と<span class="hl">成金</span>・物価上昇 → <span class="hl">米騒動</span>（1918） → <span class="hl">原敬</span>の政党内閣 → 護憲運動・<span class="hl">民本主義</span>（吉野作造）・<span class="hl">天皇機関説</span>（美濃部達吉）＝<span class="hl">大正デモクラシー</span> → <span class="hl">全国水平社</span>（1922）・<span class="hl">新婦人協会</span> → <span class="hl">関東大震災</span>（1923） → <span class="hl">普通選挙法</span>と<span class="hl">治安維持法</span>（1925）・<span class="hl">ラジオ</span>放送 → 昭和へ！',
   myths:MYTHS, pairs:PAIRS, checks:CHECKS,
-  nextNote:'<a href="soc_story_taisen1.html" style="color:var(--pop-c)">👈 前号「第一次世界大戦」</a>　／　次号「昭和の始まりと世界恐慌ストーリー新聞」をお楽しみに'
+  nextNote:'<a href="soc_story_taisen1.html" style="color:var(--pop-c)">👈 前号「第一次世界大戦」</a>　／　<a href="soc_story_showa1.html" style="color:var(--pop-c)">次号⑰「戦争への道」へ 👉</a>'
 });

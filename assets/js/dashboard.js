@@ -87,7 +87,8 @@ const SUBJECTS = [
       { label:'🗞️ 歴史ストーリー⑰ 戦争への道（世界恐慌・満州事変・五・一五・二・二六・日中戦争・国家総動員法）', href:'social/soc_story_showa1.html' },
       { label:'🗞️ 歴史ストーリー⑱ 第二次世界大戦と太平洋戦争（ポーランド侵攻・ホロコースト・三国同盟・真珠湾・ミッドウェー）', href:'social/soc_story_taisen2.html' },
       { label:'🗞️ 歴史ストーリー⑲ 戦時下の暮らしと終戦（学徒出陣・疎開・空襲・沖縄戦・原爆・8月15日）', href:'social/soc_story_shusen.html' },
-      { label:'🗞️ 歴史ストーリー 戦後日本', href:'social/soc_history_story.html' },
+      { label:'🗞️ 歴史ストーリー⑳ 戦後の改革（GHQ・農地改革・日本国憲法・冷戦・朝鮮戦争・独立）', href:'social/soc_story_sengo1.html' },
+      { label:'🗞️ 歴史ストーリー㉑ 高度成長と今（高度経済成長・公害・沖縄返還・石油危機・冷戦の終わり・バブル・震災）', href:'social/soc_story_sengo2.html' },
       { label:'地理（世界・日本）', href:'social/soc_geography.html', weakDb:'soc', qidPrefix:'soc_geo_' },
       { label:'⚖️ 公民（人権・政治・経済）入試頻出', href:'social/soc_civics.html', weakDb:'soc', qidPrefix:'soc_civ_' },
     ]

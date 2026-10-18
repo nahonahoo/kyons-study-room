@@ -23,7 +23,8 @@ var STORY_SERIES = [
   { key:'showa1',  label:'⑰ 戦争への道', href:'soc_story_showa1.html' },
   { key:'taisen2', label:'⑱ 第二次大戦', href:'soc_story_taisen2.html' },
   { key:'shusen',  label:'⑲ 暮らしと終戦', href:'soc_story_shusen.html' },
-  { key:'postwar', label:'📰 戦後日本', href:'soc_history_story.html' }
+  { key:'sengo1',  label:'⑳ 戦後の改革', href:'soc_story_sengo1.html' },
+  { key:'sengo2',  label:'㉑ 高度成長と今', href:'soc_story_sengo2.html' }
 ];
 
 // 会話のキャラ（口調ルールが確定しているメンバーのみ）

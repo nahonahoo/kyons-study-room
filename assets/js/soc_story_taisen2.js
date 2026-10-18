@@ -255,5 +255,5 @@ renderStory({
   onelineHead:'第二次世界大戦と太平洋戦争を1行で',
   oneline:'<span class="hl">独ソ不可侵条約</span> → <span class="hl">ポーランド侵攻</span>（1939）で大戦 → ドイツがパリ占領・<span class="hl">レジスタンス</span>・<span class="hl">ホロコースト</span> → <span class="hl">大西洋憲章</span>（枢軸国 vs 連合国） → 日本の<span class="hl">南進</span>・<span class="hl">三国同盟</span>（1940）・<span class="hl">日ソ中立条約</span>（1941） → 石油禁輸・<span class="hl">東条英機</span>内閣 → <span class="hl">マレー半島上陸・真珠湾攻撃</span>（1941.12.8） → 大東亜共栄圏の実態 → <span class="hl">ミッドウェー海戦</span>（1942）で後退 → サイパン陥落（1944）・空襲へ',
   myths:MYTHS, pairs:PAIRS, checks:CHECKS,
-  nextNote:'<a href="soc_story_showa1.html" style="color:var(--pop-c)">👈 前号「戦争への道」</a>　／　次号⑲「戦時下の暮らしと終戦ストーリー新聞」をお楽しみに'
+  nextNote:'<a href="soc_story_showa1.html" style="color:var(--pop-c)">👈 前号「戦争への道」</a>　／　<a href="soc_story_shusen.html" style="color:var(--pop-c)">次号⑲「暮らしと終戦」へ 👉</a>'
 });

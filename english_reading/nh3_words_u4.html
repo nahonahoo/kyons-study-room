@@ -37,6 +37,10 @@ h3.sec { color:var(--gold); font-size:16px; margin:22px 0 8px; border-left:4px s
 .tag { font-size:12px; border-radius:999px; padding:1px 8px; background:var(--bg3); color:var(--text2); border:1px solid var(--border); }
 .tag.ok { color:var(--green); border-color:var(--green); }
 .tag.ng { color:var(--red); border-color:var(--red); }
+.tag.wk { color:#9cc7ff; border-color:#1f6feb; }
+.myspell { font-size:14px; color:var(--text2); margin:2px 0 6px; }
+.myspell s { color:#f87171; font-family:Georgia,serif; font-size:16px; }
+.myspell b { color:var(--gold); font-family:Georgia,serif; font-size:16px; }
 .wmean { font-size:17px; margin:6px 0; }
 .pos { display:inline-block; font-size:12px; background:#1f3a5f; color:#9cc7ff; border-radius:6px; padding:0 6px; margin-right:8px; vertical-align:middle; }
 .pron { color:var(--text2); font-size:14px; margin-left:6px; }
@@ -96,14 +100,14 @@ h3.sec { color:var(--gold); font-size:16px; margin:22px 0 8px; border-left:4px s
   <div class="nav-stat">🪙 <b id="navXp">0</b> XP</div>
 </nav>
 <div class="wrap">
-  <div class="notice">📌 いま入っているのは、教科書（令和7年度版）Unit4〜6 の新出語のうち、確認できた分です。<b>Read and Think の単語の一部と、Stage Activity・Let’s Read の単語はまだ入っていません。</b>EIGO NO PARTNER のページの写真があれば、全部そろえます。</div>
+  <div class="notice">📌 <b>📒ワーク</b>の印は、EIGO NO PARTNER の「語句の確認」にのっている語（Unit4 Part 1・Read and Think 1・2、Unit5 Part 1・2・Read and Think 1・2）。それ以外は教科書（令和7年度版）の新出語です。<b>Unit4 Part 2、Unit6、Stage Activity・Let’s Read のワークのページはまだ入っていません。</b></div>
   <div class="warn" id="ttsWarn">⚠️ このブラウザでは読み上げが使えません。Safari や Chrome で開いてみてください。</div>
   <div id="filters"></div>
   <div id="tabs"></div>
   <div id="main"></div>
 </div>
 <div id="toast" class="toast"></div>
-<script src="../assets/js/nh3_words_u4_data.js?v=1" defer></script>
-<script src="../assets/js/nh3_words_u4.js?v=1" defer></script>
+<script src="../assets/js/nh3_words_u4_data.js?v=2" defer></script>
+<script src="../assets/js/nh3_words_u4.js?v=2" defer></script>
 </body>
 </html>

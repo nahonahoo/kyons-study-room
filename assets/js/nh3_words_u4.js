@@ -147,9 +147,10 @@ function cardHtml(e, opt) {
   var badge = isDone(e) ? '<span class="tag ok">覚えた</span>' : isWeak(e) ? '<span class="tag ng">苦手</span>' : s ? '<span class="tag">練習中</span>' : '';
   return '<div class="wcard" data-key="' + esc(e.key) + '">'
     + '<div class="wtop"><button class="say big" data-act="say" data-key="' + esc(e.key) + '" title="読み上げ">🔊</button>'
-    + '<div class="wword">' + esc(e.w) + '</div>' + badge + '</div>'
+    + '<div class="wword">' + esc(e.w) + '</div>' + badge + (e.wk ? '<span class="tag wk">📒ワーク</span>' : '') + '</div>'
     + '<div class="wmean"><span class="pos">' + esc(e.pos) + '</span>' + esc(e.m) + (e.r ? '<span class="pron">（' + esc(e.r) + '）</span>' : '') + '</div>'
     + chunksHtml(e)
+    + (e.my ? '<div class="myspell">⚠️ まちがえやすい：<s>' + esc(e.my) + '</s> → <b>' + esc(e.w) + '</b></div>' : '')
     + '<div class="wbtns"><button class="mini" data-act="chant" data-key="' + esc(e.key) + '">🪄 書くための呪文を聞く</button></div>'
     + '<div class="wex"><button class="say" data-act="ex" data-key="' + esc(e.key) + '" title="例文">🔊</button><div><div class="exen">' + esc(e.ex) + '</div><div class="exjp">' + esc(e.exj) + '</div></div></div>'
     + (opt.neta && e.n ? '<div class="neta">' + e.n.map(bubble).join('') + '</div>' : '')
@@ -158,16 +159,17 @@ function cardHtml(e, opt) {
 }
 
 // ====== 絞り込み ======
-var view = { unit: 0, weak: false, tab: 'list' };
+var view = { unit: 0, weak: false, wk: false, tab: 'list' };
 function pool() {
-  return W.filter(function (e) { return (!view.unit || e.u === view.unit) && (!view.weak || isWeak(e)); });
+  return W.filter(function (e) { return (!view.unit || e.u === view.unit) && (!view.weak || isWeak(e)) && (!view.wk || e.wk); });
 }
 function renderFilters() {
   var units = [[0, '全部'], [4, 'Unit4'], [5, 'Unit5'], [6, 'Unit6']];
   $('filters').innerHTML = units.map(function (u) {
     var n = W.filter(function (e) { return !u[0] || e.u === u[0]; }).length;
     return '<button class="chip' + (view.unit === u[0] ? ' on' : '') + '" data-unit="' + u[0] + '">' + u[1] + '<small>' + n + '語</small></button>';
-  }).join('') + '<button class="chip weak' + (view.weak ? ' on' : '') + '" data-act="weak">🔴 苦手だけ<small>' + W.filter(isWeak).length + '語</small></button>';
+  }).join('') + '<button class="chip weak' + (view.weak ? ' on' : '') + '" data-act="weak">🔴 苦手だけ<small>' + W.filter(isWeak).length + '語</small></button>'
+    + '<button class="chip' + (view.wk ? ' on' : '') + '" data-act="wk">📒 ワークの語だけ<small>' + W.filter(function (e) { return e.wk; }).length + '語</small></button>';
   var tabs = [['list', '📖 一覧'], ['listen', '🎧 聞き流し'], ['quiz', '🎯 練習']];
   $('tabs').innerHTML = tabs.map(function (t) { return '<button class="tab' + (view.tab === t[0] ? ' on' : '') + '" data-tab="' + t[0] + '">' + t[1] + '</button>'; }).join('');
 }
@@ -244,7 +246,7 @@ function levelOf(e) { var s = stats[e.key]; return s ? s.ok : 0; }
 function startQuiz(onlyWrite) {
   var p = pool(); if (!p.length) return;
   var order = shuffle(p).sort(function (a, b) {
-    function pri(e) { return isWeak(e) ? 0 : !stats[e.key] ? 1 : isDone(e) ? 3 : 2; }
+    function pri(e) { return isWeak(e) ? 0 : (e.my && !isDone(e)) ? 1 : !stats[e.key] ? 2 : isDone(e) ? 4 : 3; }
     return pri(a) - pri(b);
   }).slice(0, 10);
   Q = { items: order.map(function (e) {
@@ -290,6 +292,7 @@ function meanHead(e) { var s = String(e.m).replace(/（[^）]*）/g, '').replace
 function misspellings(e, n) {
   var w = e.w, out = [];
   function add(s) { if (s && s !== w && out.indexOf(s) < 0 && /[a-z]/i.test(s)) out.push(s); }
+  if (e.my) add(e.my); // ワークで出てきた書きまちがい
   var rules = [
     function () { return w.replace(/([a-z])\1/i, '$1'); },                      // 重ね文字を1つに
     function () { return w.replace(/([bcdfglmnprst])(?!\1)([aeiou])/i, '$1$1$2'); }, // 文字を重ねすぎ
@@ -335,7 +338,9 @@ function judgeChoice(i) {
 }
 function checkType() {
   var it = Q.items[Q.idx]; if (it.done) return;
-  var v = unify($('qin').value), a = unify(it.e.w);
+  // 熟語の「~」「...」（何かが入る場所）は打たなくてもよい
+  function core(x) { return unify(x).replace(/\.\.\.|…|~/g, ' ').replace(/\s+/g, ' ').trim(); }
+  var v = core($('qin').value), a = core(it.e.w);
   if (!v) { toast('英語を入力してね'); return; }
   it.done = true; $('qin').disabled = true;
   var ok = v === a || v === a.replace(/[.!?]$/, '');
@@ -377,6 +382,7 @@ document.addEventListener('click', function (ev) {
   if (t.hasAttribute('data-ci')) { judgeChoice(parseInt(t.getAttribute('data-ci'), 10)); return; }
   var a = t.getAttribute('data-act'), e = BY[t.getAttribute('data-key')];
   if (a === 'weak') { view.weak = !view.weak; render(); }
+  else if (a === 'wk') { view.wk = !view.wk; render(); }
   else if (a === 'say' && e) sayWord(e);
   else if (a === 'ex' && e) sayEx(e);
   else if (a === 'chant' && e) chant(e, t.closest('.wcard'));

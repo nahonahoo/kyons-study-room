@@ -51,9 +51,7 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
 .tbl.sw td:not(:first-child), .tbl.sw th { white-space: nowrap; padding: 8px 4px; }
 .onetbl td.nm { white-space: nowrap; font-size: 14px; color: #c9d1d9; width: 1%; }
 .one { display: flex; gap: 8px; align-items: flex-start; }
-.hs { display: none; }
-body.show-hs .hs { display: table-row; }
-.hs-btn { margin-top: 16px; background: var(--bg3); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 14px; font-family: inherit; cursor: pointer; }
+.onetbl tr.dim .en, .onetbl tr.dim .jp, .onetbl tr.dim td.nm { opacity: 0.6; }
 details.more { margin-top: 26px; }
 details.more > summary { cursor: pointer; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; font-size: 15px; color: var(--text2); list-style: none; }
 details.more[open] > summary { color: var(--gold); }
@@ -74,9 +72,9 @@ details.more[open] > summary { color: var(--gold); }
 <div class="wrap" id="top">
 
 <div class="page-head"><a href="../index.html" title="ホームへ">🏠</a><h1>📖 英語の時制表</h1></div>
-<div class="lead">同じ文の、動詞だけを変えた表。<span class="hl">金色</span>のところだけ見ればOK。</div>
+<div class="lead">同じ文の、動詞だけを変えた表。<span class="hl">金色</span>のところだけ見ればOK。<br>薄い色の <span class="bh">📘高校</span> は高校で習う形（中学では見るだけでOK）。</div>
 
-<!-- 1文で全部（このページの本体） -->
+<!-- 1文で全部（このページの本体）。高校の形も並べ、薄い色＋📘印で区別する -->
 <div class="card" id="one">
 <h2>する側：くるまを<span class="hl">見る</span></h2>
 <table class="tbl onetbl">
@@ -85,29 +83,60 @@ details.more[open] > summary { color: var(--gold); }
   <tr><td class="nm">未来</td><td><div class="one"><button class="say" data-say="I will watch Kuruma.">🔊</button><div><div class="en">I <span class="hl">will watch</span> Kuruma.</div><div class="jp">くるまを見るだろう</div></div></div></td></tr>
   <tr><td class="nm">現在進行</td><td><div class="one"><button class="say" data-say="I am watching Kuruma.">🔊</button><div><div class="en">I <span class="hl">am watching</span> Kuruma.</div><div class="jp">（今）くるまを見ている</div></div></div></td></tr>
   <tr><td class="nm">過去進行</td><td><div class="one"><button class="say" data-say="I was watching Kuruma.">🔊</button><div><div class="en">I <span class="hl">was watching</span> Kuruma.</div><div class="jp">（そのとき）くるまを見ていた</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">未来進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I will be watching Kuruma.">🔊</button><div><div class="en">I <span class="hl">will be watching</span> Kuruma.</div><div class="jp">（そのとき）くるまを見ているだろう</div></div></div></td></tr>
   <tr><td class="nm">現在完了</td><td><div class="one"><button class="say" data-say="I have watched Kuruma.">🔊</button><div><div class="en">I <span class="hl">have watched</span> Kuruma.</div><div class="jp">くるまを見たことがある／もう見た</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">過去完了<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I had watched Kuruma.">🔊</button><div><div class="en">I <span class="hl">had watched</span> Kuruma.</div><div class="jp">（その時までに）くるまを見ていた</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">未来完了<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I will have watched Kuruma.">🔊</button><div><div class="en">I <span class="hl">will have watched</span> Kuruma.</div><div class="jp">（その時までに）くるまを見たことになる</div></div></div></td></tr>
   <tr><td class="nm">現在完了進行</td><td><div class="one"><button class="say" data-say="I have been watching Kuruma.">🔊</button><div><div class="en">I <span class="hl">have been watching</span> Kuruma.</div><div class="jp">ずっとくるまを見続けている</div></div></div></td></tr>
-  <tr class="hs"><td class="nm">未来進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I will be watching Kuruma.">🔊</button><div><div class="en">I <span class="hl">will be watching</span> Kuruma.</div><div class="jp">（そのとき）くるまを見ているだろう</div></div></div></td></tr>
-  <tr class="hs"><td class="nm">過去完了<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I had watched Kuruma.">🔊</button><div><div class="en">I <span class="hl">had watched</span> Kuruma.</div><div class="jp">（その時までに）くるまを見ていた</div></div></div></td></tr>
-  <tr class="hs"><td class="nm">未来完了<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I will have watched Kuruma.">🔊</button><div><div class="en">I <span class="hl">will have watched</span> Kuruma.</div><div class="jp">（その時までに）くるまを見たことになる</div></div></div></td></tr>
-  <tr class="hs"><td class="nm">過去完了進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I had been watching Kuruma.">🔊</button><div><div class="en">I <span class="hl">had been watching</span> Kuruma.</div><div class="jp">（その時まで）ずっと見続けていた</div></div></div></td></tr>
-  <tr class="hs"><td class="nm">未来完了進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I will have been watching Kuruma.">🔊</button><div><div class="en">I <span class="hl">will have been watching</span> Kuruma.</div><div class="jp">（その時まで）ずっと見続けていることになる</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">過去完了進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I had been watching Kuruma.">🔊</button><div><div class="en">I <span class="hl">had been watching</span> Kuruma.</div><div class="jp">（その時まで）ずっと見続けていた</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">未来完了進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I will have been watching Kuruma.">🔊</button><div><div class="en">I <span class="hl">will have been watching</span> Kuruma.</div><div class="jp">（その時まで）ずっと見続けていることになる</div></div></div></td></tr>
 </table>
 <h2 style="margin-top:22px">される側（受け身）：くるまに<span class="hl">見られる</span></h2>
 <table class="tbl onetbl">
   <tr><td class="nm">現在</td><td><div class="one"><button class="say" data-say="I am watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">am watched</span> by Kuruma.</div><div class="jp">くるまに見られる</div></div></div></td></tr>
   <tr><td class="nm">過去</td><td><div class="one"><button class="say" data-say="I was watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">was watched</span> by Kuruma.</div><div class="jp">くるまに見られた</div></div></div></td></tr>
   <tr><td class="nm">未来</td><td><div class="one"><button class="say" data-say="I will be watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">will be watched</span> by Kuruma.</div><div class="jp">くるまに見られるだろう</div></div></div></td></tr>
-  <tr class="hs"><td class="nm">現在完了<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I have been watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">have been watched</span> by Kuruma.</div><div class="jp">ずっとくるまに見られてきた</div></div></div></td></tr>
-  <tr class="hs"><td class="nm">現在進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I am being watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">am being watched</span> by Kuruma.</div><div class="jp">（今）くるまに見られている</div></div></div></td></tr>
-  <tr class="hs"><td class="nm">過去進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I was being watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">was being watched</span> by Kuruma.</div><div class="jp">（そのとき）くるまに見られていた</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">現在進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I am being watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">am being watched</span> by Kuruma.</div><div class="jp">（今）くるまに見られている</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">過去進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I was being watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">was being watched</span> by Kuruma.</div><div class="jp">（そのとき）くるまに見られていた</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">現在完了<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I have been watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">have been watched</span> by Kuruma.</div><div class="jp">ずっとくるまに見られてきた</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">過去完了<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I had been watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">had been watched</span> by Kuruma.</div><div class="jp">（その時まで）くるまに見られていた</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">未来完了<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I will have been watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">will have been watched</span> by Kuruma.</div><div class="jp">（その時まで）くるまに見られていたことになる</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">未来進行<br>完了進行</td><td><span class="jp">受け身では、ほぼ使われない形なので表にのせていない</span></td></tr>
 </table>
 <h2 style="margin-top:22px">もしも</h2>
 <table class="tbl onetbl">
   <tr><td class="nm">もしも</td><td><div class="one"><button class="say" data-say="If I watched Kuruma every day, I would be funnier.">🔊</button><div><div class="en">If I <span class="hl">watched</span> Kuruma every day, I would be funnier.</div><div class="jp">毎日くるまを見ていたら、もっとおもしろくなれるのに</div></div></div></td></tr>
   <tr><td class="nm">願い</td><td><div class="one"><button class="say" data-say="I wish I could watch Kuruma live.">🔊</button><div><div class="en">I wish I <span class="hl">could watch</span> Kuruma live.</div><div class="jp">くるまを生で見られたらいいのに</div></div></div></td></tr>
 </table>
-<button class="hs-btn" type="button" data-act="hs">📘 高校の形も見る</button>
+<h2 style="margin-top:28px">🥋 空手：今も続けている</h2>
+<table class="tbl onetbl">
+  <tr><td class="nm">現在</td><td><div class="one"><button class="say" data-say="I practice karate every week.">🔊</button><div><div class="en">I <span class="hl">practice</span> karate every week.</div><div class="jp">毎週空手を練習する</div></div></div></td></tr>
+  <tr><td class="nm">過去</td><td><div class="one"><button class="say" data-say="I practiced karate yesterday.">🔊</button><div><div class="en">I <span class="hl">practiced</span> karate yesterday.</div><div class="jp">昨日空手を練習した</div></div></div></td></tr>
+  <tr><td class="nm">未来</td><td><div class="one"><button class="say" data-say="I will practice karate tomorrow.">🔊</button><div><div class="en">I <span class="hl">will practice</span> karate tomorrow.</div><div class="jp">明日空手を練習するだろう</div></div></div></td></tr>
+  <tr><td class="nm">現在進行</td><td><div class="one"><button class="say" data-say="I am practicing karate now.">🔊</button><div><div class="en">I <span class="hl">am practicing</span> karate now.</div><div class="jp">（今）空手を練習している</div></div></div></td></tr>
+  <tr><td class="nm">過去進行</td><td><div class="one"><button class="say" data-say="I was practicing karate when Kyon called me.">🔊</button><div><div class="en">I <span class="hl">was practicing</span> karate when Kyon called me.</div><div class="jp">きょんから電話が来たとき、空手を練習していた</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">未来進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I will be practicing karate at seven tomorrow.">🔊</button><div><div class="en">I <span class="hl">will be practicing</span> karate at seven tomorrow.</div><div class="jp">明日の7時、空手を練習しているだろう</div></div></div></td></tr>
+  <tr><td class="nm">現在完了</td><td><div class="one"><button class="say" data-say="I have practiced karate for ten years.">🔊</button><div><div class="en">I <span class="hl">have practiced</span> karate for ten years.</div><div class="jp">10年間空手を続けている（今も）</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">過去完了<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I had practiced karate for many years when I entered junior high school.">🔊</button><div><div class="en">I <span class="hl">had practiced</span> karate for many years when I entered junior high school.</div><div class="jp">中学に入ったとき、もう何年も空手を続けていた</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">未来完了<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="Next year, I will have practiced karate for eleven years.">🔊</button><div><div class="en">Next year, I <span class="hl">will have practiced</span> karate for eleven years.</div><div class="jp">来年で、空手を11年続けたことになる</div></div></div></td></tr>
+  <tr><td class="nm">現在完了進行</td><td><div class="one"><button class="say" data-say="I have been practicing karate for ten years.">🔊</button><div><div class="en">I <span class="hl">have been practicing</span> karate for ten years.</div><div class="jp">10年間ずっと空手をやり続けている</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">過去完了進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I had been practicing karate for two hours when Kyon called me.">🔊</button><div><div class="en">I <span class="hl">had been practicing</span> karate for two hours when Kyon called me.</div><div class="jp">きょんから電話が来たとき、2時間ずっと練習し続けていた</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">未来完了進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="Next year, I will have been practicing karate for eleven years.">🔊</button><div><div class="en">Next year, I <span class="hl">will have been practicing</span> karate for eleven years.</div><div class="jp">来年で、11年間ずっと空手をやり続けていることになる</div></div></div></td></tr>
+  <tr><td class="nm">受け身</td><td><div class="one"><button class="say" data-say="I was praised by my coach after the tournament.">🔊</button><div><div class="en">I <span class="hl">was praised</span> by my coach after the tournament.</div><div class="jp">大会のあと、コーチにほめられた</div></div></div></td></tr>
+  <tr><td class="nm">もしも</td><td><div class="one"><button class="say" data-say="If I had more time, I would practice karate every day.">🔊</button><div><div class="en">If I had more time, I <span class="hl">would practice</span> karate every day.</div><div class="jp">もっと時間があれば、毎日空手を練習するのに</div></div></div></td></tr>
+</table>
+<h2 style="margin-top:28px">🎹 ピアノ：12歳でやめた</h2>
+<p class="jp" style="margin:0 0 6px">もうやめたので、作れるのは過去の形だけ。今・未来は「もしも」になる。</p>
+<table class="tbl onetbl">
+  <tr><td class="nm">過去</td><td><div class="one"><button class="say" data-say="I played the piano for eight years.">🔊</button><div><div class="en">I <span class="hl">played</span> the piano for eight years.</div><div class="jp">8年間ピアノを弾いていた</div></div></div></td></tr>
+  <tr><td class="nm">過去</td><td><div class="one"><button class="say" data-say="I stopped playing the piano when I was twelve.">🔊</button><div><div class="en">I <span class="hl">stopped</span> playing the piano when I was twelve.</div><div class="jp">12歳のときにピアノをやめた</div></div></div></td></tr>
+  <tr><td class="nm">過去進行</td><td><div class="one"><button class="say" data-say="I was practicing the piano when my mother called me.">🔊</button><div><div class="en">I <span class="hl">was practicing</span> the piano when my mother called me.</div><div class="jp">お母さんに呼ばれたとき、ピアノを練習していた</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">過去完了<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="When I entered junior high school, I had already stopped playing the piano.">🔊</button><div><div class="en">When I entered junior high school, I <span class="hl">had</span> already stopped playing the piano.</div><div class="jp">中学に入ったとき、もうピアノをやめていた</div></div></div></td></tr>
+  <tr class="dim"><td class="nm">過去完了進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I had been playing the piano for eight years when I stopped.">🔊</button><div><div class="en">I <span class="hl">had been playing</span> the piano for eight years when I stopped.</div><div class="jp">やめたとき、8年間ずっとピアノを弾き続けていた</div></div></div></td></tr>
+  <tr><td class="nm">現在完了</td><td><div class="one"><button class="say" data-say="I have played the piano.">🔊</button><div><div class="en">I <span class="hl">have played</span> the piano.</div><div class="jp">ピアノを弾いたことがある（経験なら⭕）</div></div></div></td></tr>
+  <tr><td class="nm">現在完了</td><td><div class="one"><span style="width:34px;flex-shrink:0"></span><div><div class="en"><span class="ng">✕ I have played the piano for eight years.</span></div><div class="jp">「今も続けている」意味になってしまう</div></div></div></td></tr>
+  <tr><td class="nm">もしも</td><td><div class="one"><button class="say" data-say="If I still played the piano, I would play Mrs. GREEN APPLE's songs.">🔊</button><div><div class="en">If I still <span class="hl">played</span> the piano, I would play Mrs. GREEN APPLE’s songs.</div><div class="jp">もし今もピアノを弾いていたら、ミセスの曲を弾くのに</div></div></div></td></tr>
+</table>
 </div>
 
 <details class="more" id="more">
@@ -378,6 +407,6 @@ details.more[open] > summary { color: var(--gold); }
 </div>
 
 </div>
-<script src="../assets/js/eng_tense_chart.js?v=4" defer></script>
+<script src="../assets/js/eng_tense_chart.js?v=5" defer></script>
 </body>
 </html>

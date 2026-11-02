@@ -7,13 +7,6 @@ if(window.self!==window.top){
     document.querySelectorAll('.links a').forEach(function(a){a.setAttribute('target','_top');});
   });
 }
-// 「📘 高校の形も見る」：ふだんは中学の形だけ見せ、押したときだけ高校の行を出す
-document.addEventListener('click',function(e){
-  var b=e.target.closest?e.target.closest('[data-act="hs"]'):null;
-  if(!b)return;
-  var on=document.body.classList.toggle('show-hs');
-  b.textContent=on?'📘 高校の形をかくす':'📘 高校の形も見る';
-});
 var currentSay=null;
 document.addEventListener('click',function(e){
   var btn=e.target.closest?e.target.closest('[data-say]'):null;

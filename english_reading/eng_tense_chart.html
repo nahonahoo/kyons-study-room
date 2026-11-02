@@ -48,6 +48,7 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
 .tbl th, .tbl td { border-bottom: 1px solid var(--border); padding: 8px 6px; text-align: left; font-size: 15px; line-height: 1.9; vertical-align: top; }
 .tbl th { color: var(--gold); font-size: 14px; }
 .tbl td:first-child { min-width: 5.5em; }
+.tbl.sw td:not(:first-child), .tbl.sw th { white-space: nowrap; padding: 8px 4px; }
 .steps { list-style: none; padding: 0; }
 .steps li { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin: 8px 0; }
 .no { display: inline-block; background: var(--gold); color: #000; font-weight: bold; border-radius: 6px; padding: 0 8px; margin-right: 8px; }
@@ -75,7 +76,7 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
   <a href="#karate">⑤ have？過去形？</a>
   <a href="#love">⑥ love は6マス✕</a>
   <a href="#qa">⑦ 疑問文・否定文</a>
-  <a href="#passive">⑧ 受け身×時制</a>
+  <a href="#passive">⑧ 受け身（3つ目のスイッチ）</a>
   <a href="#pp">⑨ 過去分詞</a>
 </div>
 
@@ -91,6 +92,7 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
 ① for ten years・今も続けている → ② ずっと続く動作 → 完了進行 <span class="hl2">have been ＋ 〜ing</span> → ③ 今 → <span class="hl">have</span><br>
 <span class="en">I <span class="hl">have</span> <span class="hl2">been practicing</span> karate for ten years.</span></div>
 <p><strong>大原則：「いつ？」を決めるのは、動詞のかたまりの先頭の1語だけ。</strong></p>
+<div class="tip">❓ 受け身（〜される）はどこに入るの？<br>→ 受け身は「形」の仲間ではなく、<strong>3つ目のスイッチ「する側？ される側？」</strong>。時制（時×形）とは別に、上から重ねて使う。くわしくは <a href="#passive" style="color:var(--gold)">⑧ 受け身</a>。</div>
 <a class="top-link" href="#top">▲ 上へ</a>
 </div>
 
@@ -106,6 +108,7 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
   <tr><td class="form">完了進行形<br>have been＋〜ing</td><td class="h">過去完了進行形<br><span class="bh">📘</span></td><td class="j">現在完了進行形<br><span class="bj">⭐</span></td><td class="h">未来完了進行形<br><span class="bh">📘</span></td></tr>
 </table>
 <p>名前のつけ方もルールどおり：「<strong>時</strong>」＋「<strong>形</strong>」。過去＋進行形＝過去進行形、現在＋完了形＝現在完了形。</p>
+<p>⚠️ この12部屋に受け身は入っていない。受け身は別のスイッチで、12部屋のどれにでも「される側バージョン」を作れる（→ <a href="#passive" style="color:var(--gold)">⑧</a>）。</p>
 <a class="top-link" href="#top">▲ 上へ</a>
 </div>
 
@@ -228,8 +231,30 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
 
 <!-- ⑧ -->
 <div class="card" id="passive">
-<h2>⑧ 受け身×時制（be のところだけ変身）</h2>
-<div class="parts">受け身 ＝ <span class="hl">be</span> ＋ <span class="hl2">過去分詞</span>。うしろの「watched by Nishimura」はずっと同じ。前の be だけが時制で変わる。</div>
+<h2>⑧ 受け身：時制とは別の、3つ目のスイッチ</h2>
+<p><strong>受け身は「形」（ふつう・進行・完了・完了進行）の仲間ではない。</strong>「時」「形」とは別の、3つ目のスイッチ。文法の名前では「態（たい）」という。</p>
+<table class="tbl">
+  <tr><th>スイッチ</th><th>答える質問</th><th>選べるもの</th></tr>
+  <tr><td>① 時</td><td>いつ？</td><td>過去・現在・未来</td></tr>
+  <tr><td>② 形</td><td>時間の中でどんな様子？</td><td>ふつう・進行（最中）・完了（つながり）・完了進行</td></tr>
+  <tr><td>③ 態</td><td>主役は<strong>する側</strong>？ <strong>される側</strong>？</td><td>する側（能動態）・される側（受動態＝受け身）</td></tr>
+</table>
+<h3>📐 なぜ「形」の仲間ではないのか（理屈）</h3>
+<ul class="steps">
+  <li><span class="no">1</span>①時と②形は「時間」についての質問。③は「だれが主役か」についての質問。<strong>質問の種類がちがうから、スイッチも別</strong>。</li>
+  <li><span class="no">2</span>証拠：形と受け身は<strong>同時に使える</strong>。<span class="en">I have been praised.</span>（ほめられてきた）は「完了形」かつ「受け身」。</li>
+  <li><span class="no">3</span>もし受け身が「形」の1つなら、1マスに形は1つしか入らないので、完了と同時には選べないはず。同時に選べる＝別のスイッチ。</li>
+  <li><span class="no">4</span>だから「時制は12個」というときは①×②だけを数える。③をONにすると、12部屋それぞれに「される側バージョン」ができる。</li>
+</ul>
+<table class="tbl sw">
+  <tr><th>英文</th><th>①時</th><th>②形</th><th>③態</th></tr>
+  <tr><td class="en">I practice karate.</td><td>現在</td><td>ふつう</td><td>する側</td></tr>
+  <tr><td class="en">I <span class="hl">am</span> <span class="hl2">praised</span> by my coach.</td><td>現在</td><td>ふつう</td><td><strong>される側</strong></td></tr>
+  <tr><td class="en">I have practiced karate.</td><td>現在</td><td>完了</td><td>する側</td></tr>
+  <tr><td class="en">I <span class="hl">have been</span> <span class="hl2">praised</span> by my coach.</td><td>現在</td><td>完了</td><td><strong>される側</strong></td></tr>
+</table>
+<h3>受け身の作り方：be を12部屋の表に入れる</h3>
+<div class="parts">受け身 ＝ <span class="hl">be</span> ＋ <span class="hl2">過去分詞</span>。この <span class="hl">be</span> を、ふつうの動詞と同じように12部屋の表に入れて時制を決める（現在 → am ／ 過去 → was ／ 未来 → will be ／ 現在完了 → have been ／ 現在進行 → am being）。うしろの「watched by Nishimura」はずっと同じ。</div>
 <div class="row"><div class="when">現在</div><button class="say" data-say="I am watched by Nishimura every day.">🔊</button><div class="body"><div class="en"><span class="hl">I am</span> <span class="hl2">watched</span> by Nishimura every day.</div><div class="jp">私は毎日、西村に見張られている。<span class="bj">⭐</span></div></div></div>
 <div class="row"><div class="when">過去</div><button class="say" data-say="I was praised by my coach after the tournament.">🔊</button><div class="body"><div class="en"><span class="hl">I was</span> <span class="hl2">praised</span> by my coach after the tournament.</div><div class="jp">大会のあと、私はコーチにほめられた。<span class="bj">⭐</span></div></div></div>
 <div class="row"><div class="when">未来</div><button class="say" data-say="I will be invited to Kyon's live show.">🔊</button><div class="body"><div class="en"><span class="hl">I will be</span> <span class="hl2">invited</span> to Kyon’s live show.</div><div class="jp">私はきょんのライブに招待されるだろう。<span class="bj">⭐</span></div></div></div>

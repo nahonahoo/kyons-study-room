@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英語｜時制表（迷ったらここを見る）</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/english.css">
+<style>
+/* 見るだけの早見表。クイズ・XP・弱点DBなし */
+body { background: var(--bg); color: var(--text); }
+.wrap { max-width: 760px; margin: 0 auto; padding: 16px 16px 60px; }
+.page-head { display: flex; align-items: center; gap: 10px; margin: 6px 0 4px; }
+.page-head a { font-size: 1.3rem; text-decoration: none; }
+h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; line-height: 1.6; }
+.lead { font-size: 15px; color: var(--text2); line-height: 2; letter-spacing: 0.04em; margin: 4px 0 14px; }
+.toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 18px; }
+.toc a { background: var(--bg3); border: 1px solid var(--border); border-radius: 20px; padding: 6px 14px; font-size: 14px; color: var(--text); text-decoration: none; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 18px; margin: 18px 0; scroll-margin-top: 12px; }
+.card h2 { font-size: 19px; color: var(--gold); margin: 0 0 10px; line-height: 1.7; letter-spacing: 0.05em; }
+.card h3 { font-size: 16px; color: #58a6ff; margin: 18px 0 6px; line-height: 1.8; }
+.card p, .card li { font-size: 15px; line-height: 2; letter-spacing: 0.04em; }
+.card ul, .card ol { padding-left: 1.3em; margin: 6px 0; }
+.en { font-family: Georgia, 'Times New Roman', serif; font-size: 17px; letter-spacing: 0.03em; }
+.jp { font-size: 14px; color: var(--text2); line-height: 1.9; }
+.hl { color: var(--gold); font-weight: bold; }
+.hl2 { color: #58a6ff; font-weight: bold; }
+.hl3 { color: #ff7eb6; font-weight: bold; }
+.ng { color: #f87171; }
+.ok { color: #3fb950; }
+.bj { display: inline-block; font-size: 12px; color: #000; background: var(--gold); border-radius: 6px; padding: 0 6px; font-weight: bold; white-space: nowrap; }
+.bh { display: inline-block; font-size: 12px; color: #c9d1d9; background: #30363d; border-radius: 6px; padding: 0 6px; white-space: nowrap; }
+.say { background: var(--bg3); border: 1px solid var(--border); border-radius: 50%; width: 34px; height: 34px; font-size: 15px; cursor: pointer; flex-shrink: 0; }
+.say.playing { background: var(--gold); }
+.row { display: flex; gap: 10px; align-items: flex-start; padding: 10px 0; border-top: 1px solid var(--border); }
+.row:first-of-type { border-top: none; }
+.row .when { flex: 0 0 44px; font-size: 14px; font-weight: bold; color: var(--text2); padding-top: 4px; }
+.row .body { flex: 1; min-width: 0; }
+.parts { background: rgba(245,197,24,0.08); border-left: 3px solid var(--gold); border-radius: 6px; padding: 8px 12px; font-size: 15px; line-height: 2; margin: 4px 0 8px; }
+/* 時制マップ（12部屋）：名前だけなのでスマホでも横にはみ出さない */
+.map { width: 100%; border-collapse: collapse; table-layout: fixed; }
+.map th, .map td { border: 1px solid var(--border); padding: 8px 4px; text-align: center; font-size: 14px; line-height: 1.8; vertical-align: middle; }
+.map th { background: rgba(245,197,24,0.12); color: var(--gold); }
+.map td.form { font-weight: bold; color: #58a6ff; font-size: 13px; }
+.map td.j { background: rgba(245,197,24,0.06); }
+.map td.h { color: var(--text2); }
+.tbl { width: 100%; border-collapse: collapse; }
+.tbl th, .tbl td { border-bottom: 1px solid var(--border); padding: 8px 6px; text-align: left; font-size: 15px; line-height: 1.9; vertical-align: top; }
+.tbl th { color: var(--gold); font-size: 14px; }
+.tbl td:first-child { min-width: 5.5em; }
+.steps { list-style: none; padding: 0; }
+.steps li { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin: 8px 0; }
+.no { display: inline-block; background: var(--gold); color: #000; font-weight: bold; border-radius: 6px; padding: 0 8px; margin-right: 8px; }
+.vs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0; }
+.vs > div { border: 1px solid var(--border); border-radius: 10px; padding: 12px; font-size: 15px; line-height: 2; }
+.vs .yes { border-color: var(--green); background: rgba(63,185,80,0.06); }
+.vs .no2 { border-color: #f87171; background: rgba(248,113,113,0.06); }
+.tip { background: rgba(88,166,255,0.08); border: 1px solid #58a6ff; border-radius: 10px; padding: 10px 14px; font-size: 15px; line-height: 2; margin-top: 10px; }
+.links a { display: block; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; margin: 8px 0; color: var(--text); text-decoration: none; font-size: 15px; }
+.top-link { display: block; text-align: right; font-size: 13px; margin-top: 8px; color: var(--text2); }
+@media (max-width: 420px) { .vs { grid-template-columns: 1fr; } .map th, .map td { font-size: 12px; padding: 6px 2px; } }
+</style>
+</head>
+<body>
+<div class="wrap" id="top">
+
+<div class="page-head"><a href="../index.html" title="ホームへ">🏠</a><h1>📖 英語の時制表</h1></div>
+<div class="lead">迷ったらここを見る早見表。主語はぜんぶ <span class="en">I</span>。例文は空手（10年・今も続けている）とピアノ（4歳〜12歳・もうやめた）。🔊で音も聞ける。</div>
+
+<div class="toc">
+  <a href="#how">① 迷ったら3ステップ</a>
+  <a href="#map">② 12時制マップ</a>
+  <a href="#forms">③ 形ごとの作り方</a>
+  <a href="#signal">④ 合図の語</a>
+  <a href="#karate">⑤ have？過去形？</a>
+  <a href="#love">⑥ love は6マス✕</a>
+  <a href="#qa">⑦ 疑問文・否定文</a>
+  <a href="#passive">⑧ 受け身×時制</a>
+  <a href="#pp">⑨ 過去分詞</a>
+</div>
+
+<!-- ① -->
+<div class="card" id="how">
+<h2>① 迷ったら、この3ステップ</h2>
+<ul class="steps">
+  <li><span class="no">1</span>文の中の<strong>合図の語</strong>を探す（yesterday / now / for ten years / tomorrow …）→「いつ？」と「どんな形？」が決まる</li>
+  <li><span class="no">2</span><strong>形の部品</strong>を選ぶ：ふつう ／ <span class="hl2">be ＋ 〜ing</span>（進行）／ <span class="hl2">have ＋ 過去分詞</span>（完了）／ <span class="hl2">have been ＋ 〜ing</span>（完了進行）</li>
+  <li><span class="no">3</span><strong>先頭の1語</strong>を「いつ？」に合わせる：過去 → <span class="hl">was / had / 〜ed</span> ／ 現在 → <span class="hl">am / have / 原形</span> ／ 未来 → <span class="hl">will ＋ 原形</span></li>
+</ul>
+<div class="tip">例：「私は10年間ずっと空手をやり続けている」<br>
+① for ten years・今も続けている → ② ずっと続く動作 → 完了進行 <span class="hl2">have been ＋ 〜ing</span> → ③ 今 → <span class="hl">have</span><br>
+<span class="en">I <span class="hl">have</span> <span class="hl2">been practicing</span> karate for ten years.</span></div>
+<p><strong>大原則：「いつ？」を決めるのは、動詞のかたまりの先頭の1語だけ。</strong></p>
+<a class="top-link" href="#top">▲ 上へ</a>
+</div>
+
+<!-- ② -->
+<div class="card" id="map">
+<h2>② 12時制マップ（「いつ？」×「どんな形？」）</h2>
+<p>3 × 4 ＝ 12部屋。<span class="bj">⭐中学・入試</span> の7部屋をまず使えればOK。<span class="bh">📘高校</span> の5部屋は「そういう部屋もある」と見るだけ。</p>
+<table class="map">
+  <tr><th>形 ＼ 時</th><th>過去</th><th>現在</th><th>未来</th></tr>
+  <tr><td class="form">ふつう</td><td class="j">過去形<br><span class="bj">⭐</span></td><td class="j">現在形<br><span class="bj">⭐</span></td><td class="j">未来形<br><span class="bj">⭐</span></td></tr>
+  <tr><td class="form">進行形<br>be＋〜ing</td><td class="j">過去進行形<br><span class="bj">⭐</span></td><td class="j">現在進行形<br><span class="bj">⭐</span></td><td class="h">未来進行形<br><span class="bh">📘</span></td></tr>
+  <tr><td class="form">完了形<br>have＋過去分詞</td><td class="h">過去完了形<br><span class="bh">📘</span></td><td class="j">現在完了形<br><span class="bj">⭐</span></td><td class="h">未来完了形<br><span class="bh">📘</span></td></tr>
+  <tr><td class="form">完了進行形<br>have been＋〜ing</td><td class="h">過去完了進行形<br><span class="bh">📘</span></td><td class="j">現在完了進行形<br><span class="bj">⭐</span></td><td class="h">未来完了進行形<br><span class="bh">📘</span></td></tr>
+</table>
+<p>名前のつけ方もルールどおり：「<strong>時</strong>」＋「<strong>形</strong>」。過去＋進行形＝過去進行形、現在＋完了形＝現在完了形。</p>
+<a class="top-link" href="#top">▲ 上へ</a>
+</div>
+
+<!-- ③ -->
+<div class="card" id="forms">
+<h2>③ 形ごとの作り方と例文（主語はぜんぶ I）</h2>
+
+<h3>🔹 ふつうの形</h3>
+<div class="parts">部品：動詞だけ。過去は <span class="hl">〜ed（不規則動詞は形が変わる）</span>、未来は <span class="hl">will ＋ 原形</span> か <span class="hl">am going to ＋ 原形</span></div>
+<div class="row"><div class="when">過去</div><button class="say" data-say="I practiced karate yesterday.">🔊</button><div class="body"><div class="en">I <span class="hl">practiced</span> karate yesterday.</div><div class="jp">私は昨日空手を練習した。<span class="bj">⭐</span></div></div></div>
+<div class="row"><div class="when">現在</div><button class="say" data-say="I practice karate every week.">🔊</button><div class="body"><div class="en">I <span class="hl">practice</span> karate every week.</div><div class="jp">私は毎週空手を練習する。<span class="bj">⭐</span></div></div></div>
+<div class="row"><div class="when">未来</div><button class="say" data-say="I will practice karate tomorrow.">🔊</button><div class="body"><div class="en">I <span class="hl">will</span> practice karate tomorrow.</div><div class="jp">私は明日空手を練習するだろう。（I am going to practice 〜 でもOK）<span class="bj">⭐</span></div></div></div>
+
+<h3>🔹 進行形（〜している最中）</h3>
+<div class="parts">部品：<span class="hl2">be ＋ 〜ing</span>。先頭の be が時を決める（was / am / will be）</div>
+<div class="row"><div class="when">過去</div><button class="say" data-say="I was practicing karate when Kyon called me.">🔊</button><div class="body"><div class="en">I <span class="hl">was</span> <span class="hl2">practicing</span> karate when Kyon called me.</div><div class="jp">きょんから電話が来たとき、私は空手を練習している最中だった。<span class="bj">⭐</span></div></div></div>
+<div class="row"><div class="when">現在</div><button class="say" data-say="I am practicing karate now.">🔊</button><div class="body"><div class="en">I <span class="hl">am</span> <span class="hl2">practicing</span> karate now.</div><div class="jp">私は今、空手を練習している最中だ。<span class="bj">⭐</span></div></div></div>
+<div class="row"><div class="when">未来</div><button class="say" data-say="I will be practicing karate at seven tomorrow.">🔊</button><div class="body"><div class="en">I <span class="hl">will</span> <span class="hl2">be practicing</span> karate at seven tomorrow.</div><div class="jp">明日の7時、私は空手を練習している最中だろう。<span class="bh">📘高校</span></div></div></div>
+
+<h3>🔹 完了形（過去から「その時」までつながっている）</h3>
+<div class="parts">部品：<span class="hl2">have ＋ 過去分詞</span>。先頭の have が時を決める（had / have / will have）</div>
+<div class="row"><div class="when">過去</div><button class="say" data-say="When I entered junior high school, I had already stopped playing the piano.">🔊</button><div class="body"><div class="en">When I entered junior high school, I <span class="hl">had</span> already <span class="hl2">stopped</span> playing the piano.</div><div class="jp">中学に入ったとき、私はもうピアノをやめていた。<span class="bh">📘高校</span></div></div></div>
+<div class="row"><div class="when">現在</div><button class="say" data-say="I have practiced karate for ten years.">🔊</button><div class="body"><div class="en">I <span class="hl">have</span> <span class="hl2">practiced</span> karate for ten years.</div><div class="jp">私は10年間空手を続けている（今も）。<span class="bj">⭐</span></div></div></div>
+<div class="row"><div class="when">未来</div><button class="say" data-say="Next year, I will have practiced karate for eleven years.">🔊</button><div class="body"><div class="en">Next year, I <span class="hl">will</span> <span class="hl2">have practiced</span> karate for eleven years.</div><div class="jp">来年で、私は空手を11年間続けたことになる。<span class="bh">📘高校</span></div></div></div>
+<p>現在完了の3つの意味：<strong>継続</strong>（ずっと〜している）・<strong>経験</strong>（〜したことがある）・<strong>完了</strong>（もう〜した）。</p>
+
+<h3>🔹 完了進行形（ずっと〜し続けている）</h3>
+<div class="parts">部品：<span class="hl2">have been ＋ 〜ing</span>。先頭の have が時を決める（had / have / will have）</div>
+<div class="row"><div class="when">過去</div><button class="say" data-say="I had been practicing karate for two hours when Kyon called me.">🔊</button><div class="body"><div class="en">I <span class="hl">had</span> <span class="hl2">been practicing</span> karate for two hours when Kyon called me.</div><div class="jp">きょんから電話が来たとき、私は2時間ずっと空手を練習し続けていた。<span class="bh">📘高校</span></div></div></div>
+<div class="row"><div class="when">現在</div><button class="say" data-say="I have been practicing karate for ten years.">🔊</button><div class="body"><div class="en">I <span class="hl">have</span> <span class="hl2">been practicing</span> karate for ten years.</div><div class="jp">私は10年間ずっと空手をやり続けている。<span class="bj">⭐</span></div></div></div>
+<div class="row"><div class="when">未来</div><button class="say" data-say="Next year, I will have been practicing karate for eleven years.">🔊</button><div class="body"><div class="en">Next year, I <span class="hl">will</span> <span class="hl2">have been practicing</span> karate for eleven years.</div><div class="jp">来年で、私は11年間ずっと空手をやり続けていることになる。<span class="bh">📘高校</span></div></div></div>
+<a class="top-link" href="#top">▲ 上へ</a>
+</div>
+
+<!-- ④ -->
+<div class="card" id="signal">
+<h2>④ 合図の語（これが見えたら、この時制）</h2>
+<table class="tbl">
+  <tr><th>時制</th><th>合図の語</th></tr>
+  <tr><td>過去形</td><td class="en">yesterday / last 〜 / 〜 ago / when I was 〜 / in 2020</td></tr>
+  <tr><td>現在形</td><td class="en">every day / every week / usually / often / always</td></tr>
+  <tr><td>未来</td><td class="en">tomorrow / next 〜 / someday / in the future</td></tr>
+  <tr><td>進行形</td><td class="en">now / right now / Look! / then / when 〜</td></tr>
+  <tr><td>現在完了<br>（継続）</td><td class="en">for 〜（期間） / since 〜（始まった時） / How long 〜?</td></tr>
+  <tr><td>現在完了<br>（経験）</td><td class="en">before / ever / never / once / twice / 〜 times</td></tr>
+  <tr><td>現在完了<br>（完了）</td><td class="en">already / just / yet</td></tr>
+</table>
+<div class="tip">⚠️ <span class="en">yesterday / last 〜 / 〜 ago / when I was 〜</span> は<strong>現在完了と一緒に使えない</strong>。<br>理屈：現在完了は「今」につながる形。「昨日」「12歳のとき」のように過去の1点をはっきり言うと、今とつながらなくなるから。<br>
+<span class="ng en">✕ I have stopped playing the piano when I was twelve.</span><br><span class="ok en">⭕ I stopped playing the piano when I was twelve.</span></div>
+<div class="tip">💡 <span class="en">for</span> と <span class="en">since</span>：<span class="en">for</span> のうしろは「長さ」（for ten years）、<span class="en">since</span> のうしろは「始まった時」（since I was little）。</div>
+<a class="top-link" href="#top">▲ 上へ</a>
+</div>
+
+<!-- ⑤ -->
+<div class="card" id="karate">
+<h2>⑤ have？ 過去形？ →「今も手に持ってる？」で決める</h2>
+<div class="vs">
+  <div class="yes">🥋 <strong>空手</strong>：10年前に始めて、今も続けている<br>→ 今も手に持ってる → <span class="hl">have</span><br><span class="en">I <span class="hl">have</span> practiced karate for ten years.</span> <button class="say" data-say="I have practiced karate for ten years.">🔊</button></div>
+  <div class="no2">🎹 <strong>ピアノ</strong>：4歳で始めて、12歳でやめた<br>→ もう手放した → <span class="hl">過去形</span><br><span class="en">I <span class="hl">played</span> the piano for eight years.</span> <button class="say" data-say="I played the piano for eight years.">🔊</button></div>
+</div>
+<p><span class="ng en">✕ I have played the piano for eight years.</span><br>→ have にすると「今もピアノを続けている」という意味になってしまう。</p>
+<p>経験も have：<span class="en">I <span class="hl">have</span> won a karate tournament.</span>（空手の大会で優勝したことがある）</p>
+<h3>⚠️ have は2種類ある</h3>
+<table class="tbl">
+  <tr><th>うしろに来るもの</th><th>have の役目</th><th>例</th></tr>
+  <tr><td>過去分詞</td><td>完了形の部品</td><td class="en">I have <span class="hl2">practiced</span> karate.</td></tr>
+  <tr><td>名詞（もの）</td><td>「持っている」という動詞</td><td class="en">I have <span class="hl2">a black belt</span>.</td></tr>
+</table>
+<a class="top-link" href="#top">▲ 上へ</a>
+</div>
+
+<!-- ⑥ -->
+<div class="card" id="love">
+<h2>⑥ love は12マスのうち6マスが✕</h2>
+<p><strong>love は「気持ち・状態」を表す動詞なので、12マスのうち 〜ing が入る6マス（進行形3つ ＋ 完了進行形3つ、過去・現在・未来それぞれ）は、テストでは✕になる。</strong><span class="en ng">I am loving you.</span> も✕。<span class="en ok">I love you.</span> が正しい。</p>
+<table class="map">
+  <tr><th>形 ＼ 時</th><th>過去</th><th>現在</th><th>未来</th></tr>
+  <tr><td class="form">ふつう</td><td class="ok">⭕ loved</td><td class="ok">⭕ love</td><td class="ok">⭕ will love</td></tr>
+  <tr><td class="form">進行形<br><span class="hl3">〜ing</span></td><td class="ng">✕ was loving</td><td class="ng">✕ am loving</td><td class="ng">✕ will be loving</td></tr>
+  <tr><td class="form">完了形</td><td class="ok">⭕ had loved</td><td class="ok">⭕ have loved</td><td class="ok">⭕ will have loved</td></tr>
+  <tr><td class="form">完了進行形<br><span class="hl3">〜ing</span></td><td class="ng">✕ had been loving</td><td class="ng">✕ have been loving</td><td class="ng">✕ will have been loving</td></tr>
+</table>
+<h3>📐 なぜ✕なのか（理屈）</h3>
+<ul class="steps">
+  <li><span class="no">1</span><span class="hl3">〜ing</span> は「動作の途中」を表す部品。</li>
+  <li><span class="no">2</span>空手の練習は動作。「始める → 途中 → 終わる」がある。だから <span class="en">I am practicing karate.</span> ⭕</li>
+  <li><span class="no">3</span>love は気持ち・状態。好きになったらスイッチがONのまま続くだけで、「途中」がない。</li>
+  <li><span class="no">4</span>途中がないものに、途中の部品 <span class="hl3">〜ing</span> はつけられない。完了進行形（have been ＋ 〜ing）も中に同じ 〜ing が入っているので✕。合計6マス。</li>
+  <li><span class="no">5</span>「ずっと好き」と言いたいときは、〜ing が入らない完了形：<span class="en ok">I have loved this song for three years.</span> ⭕</li>
+</ul>
+<h3>同じ理屈で 〜ing にできない動詞</h3>
+<table class="tbl">
+  <tr><th>動詞</th><th>⭕ 正しい</th><th>✕</th></tr>
+  <tr><td>love（大好き）</td><td class="en">I love Mrs. GREEN APPLE.</td><td class="en ng">I am loving 〜</td></tr>
+  <tr><td>like（好き）</td><td class="en">I like karate.</td><td class="en ng">I am liking 〜</td></tr>
+  <tr><td>know（知っている）</td><td class="en">I know the answer.</td><td class="en ng">I am knowing 〜</td></tr>
+  <tr><td>want（ほしい）</td><td class="en">I want a new karate uniform.</td><td class="en ng">I am wanting 〜</td></tr>
+  <tr><td>have（持っている）</td><td class="en">I have a black belt.</td><td class="en ng">I am having a black belt.</td></tr>
+</table>
+<div class="tip">💡 チェック方法：日本語で「今まさに〜している最中」と言ってみる。<br>「今まさに空手を練習している最中」→ 自然 → 動作 → 〜ing ⭕<br>「今まさにこの歌を好きでいる最中」→ 変 → 気持ち・状態 → 〜ing ✕<br>💡 have は「持っている」なら状態で✕。「食べる」の意味なら動作なので ⭕（<span class="en">I am having lunch.</span>）。<br>💡 CMの「I’m lovin’ it」は、広告のためにわざとルールを破った特別な言い方。テストでは使わない。</div>
+<a class="top-link" href="#top">▲ 上へ</a>
+</div>
+
+<!-- ⑦ -->
+<div class="card" id="qa">
+<h2>⑦ 疑問文・否定文の作り方</h2>
+<div class="parts">ルール：<strong>先頭の1語（am / was / will / have）があれば</strong>、疑問文はそれを前に出す、否定文はそのうしろに not。<br><strong>先頭の1語がないとき（ふつうの現在・過去）だけ</strong> do / did の出番。</div>
+<table class="tbl">
+  <tr><th>時制</th><th>疑問文 — 答え</th><th>否定文</th></tr>
+  <tr><td>現在形</td><td class="en"><span class="hl">Do</span> you practice karate? — Yes, I <span class="hl">do</span>.</td><td class="en">I <span class="hl">don’t</span> practice karate.</td></tr>
+  <tr><td>過去形</td><td class="en"><span class="hl">Did</span> you play the piano? — Yes, I <span class="hl">did</span>.</td><td class="en">I <span class="hl">didn’t</span> play the piano.</td></tr>
+  <tr><td>未来</td><td class="en"><span class="hl">Will</span> you practice karate? — Yes, I <span class="hl">will</span>.</td><td class="en">I <span class="hl">won’t</span> (will not) practice karate.</td></tr>
+  <tr><td>進行形</td><td class="en"><span class="hl">Are</span> you practicing karate? — Yes, I <span class="hl">am</span>.</td><td class="en">I <span class="hl">am not</span> practicing karate.</td></tr>
+  <tr><td>現在完了</td><td class="en"><span class="hl">Have</span> you ever won a tournament? — Yes, I <span class="hl">have</span>.</td><td class="en">I <span class="hl">haven’t</span> finished my practice yet.</td></tr>
+  <tr><td>受け身</td><td class="en"><span class="hl">Were</span> you praised by your coach? — Yes, I <span class="hl">was</span>.</td><td class="en">I <span class="hl">wasn’t</span> praised by my coach.</td></tr>
+</table>
+<p>答えも、聞かれた先頭の1語で返す（Have you 〜? → Yes, I have.）。</p>
+<a class="top-link" href="#top">▲ 上へ</a>
+</div>
+
+<!-- ⑧ -->
+<div class="card" id="passive">
+<h2>⑧ 受け身×時制（be のところだけ変身）</h2>
+<div class="parts">受け身 ＝ <span class="hl">be</span> ＋ <span class="hl2">過去分詞</span>。うしろの「watched by Nishimura」はずっと同じ。前の be だけが時制で変わる。</div>
+<div class="row"><div class="when">現在</div><button class="say" data-say="I am watched by Nishimura every day.">🔊</button><div class="body"><div class="en"><span class="hl">I am</span> <span class="hl2">watched</span> by Nishimura every day.</div><div class="jp">私は毎日、西村に見張られている。<span class="bj">⭐</span></div></div></div>
+<div class="row"><div class="when">過去</div><button class="say" data-say="I was praised by my coach after the tournament.">🔊</button><div class="body"><div class="en"><span class="hl">I was</span> <span class="hl2">praised</span> by my coach after the tournament.</div><div class="jp">大会のあと、私はコーチにほめられた。<span class="bj">⭐</span></div></div></div>
+<div class="row"><div class="when">未来</div><button class="say" data-say="I will be invited to Kyon's live show.">🔊</button><div class="body"><div class="en"><span class="hl">I will be</span> <span class="hl2">invited</span> to Kyon’s live show.</div><div class="jp">私はきょんのライブに招待されるだろう。<span class="bj">⭐</span></div></div></div>
+<div class="row"><div class="when">助動詞</div><button class="say" data-say="I can be seen from the back of the hall.">🔊</button><div class="body"><div class="en"><span class="hl">I can be</span> <span class="hl2">seen</span> from the back of the hall.</div><div class="jp">会場のうしろからでも、私の姿は見える（見られる）。<span class="bj">⭐</span></div></div></div>
+<div class="row"><div class="when">完了</div><button class="say" data-say="I have been watched by Nishimura since this morning.">🔊</button><div class="body"><div class="en"><span class="hl">I have been</span> <span class="hl2">watched</span> by Nishimura since this morning.</div><div class="jp">私は今朝からずっと西村に見張られている。<span class="bh">📘発展</span></div></div></div>
+<div class="row"><div class="when">進行</div><button class="say" data-say="I am being watched by Nishimura right now.">🔊</button><div class="body"><div class="en"><span class="hl">I am being</span> <span class="hl2">watched</span> by Nishimura right now.</div><div class="jp">私は今まさに西村に見張られている最中だ。<span class="bh">📘高校</span></div></div></div>
+<div class="tip">💡 will のうしろは原形なので <span class="en">will <span class="hl">be</span></span>。have のうしろは過去分詞なので <span class="en">have <span class="hl">been</span></span>（be → was → been）。<br>✕ 未来進行の受け身（will be being 〜）と完了進行の受け身（have been being 〜）は、ほぼ使われないので覚えなくてOK。</div>
+<a class="top-link" href="#top">▲ 上へ</a>
+</div>
+
+<!-- ⑨ -->
+<div class="card" id="pp">
+<h2>⑨ 過去分詞（完了形と受け身で使う「3番目の形」）</h2>
+<p>原形 → 過去形 → <span class="hl">過去分詞</span>。3拍子で言って覚える。</p>
+<table class="tbl">
+  <tr><th>型</th><th>例</th></tr>
+  <tr><td>規則動詞<br>（〜ed）</td><td class="en">practice, practiced, <span class="hl">practiced</span> ／ play, played, <span class="hl">played</span> ／ study, studied, <span class="hl">studied</span></td></tr>
+  <tr><td>ABB型<br>（過去形と同じ）</td><td class="en">make, made, <span class="hl">made</span> ／ win, won, <span class="hl">won</span> ／ teach, taught, <span class="hl">taught</span> ／ build, built, <span class="hl">built</span></td></tr>
+  <tr><td>ABC型<br>（全部ちがう）</td><td class="en">write, wrote, <span class="hl">written</span> ／ see, saw, <span class="hl">seen</span> ／ take, took, <span class="hl">taken</span> ／ be, was, <span class="hl">been</span> ／ sing, sang, <span class="hl">sung</span></td></tr>
+  <tr><td>AAA型<br>（全部同じ）</td><td class="en">cut, cut, <span class="hl">cut</span> ／ put, put, <span class="hl">put</span> ／ read, read, <span class="hl">read</span></td></tr>
+</table>
+<p>💡 ABC型は最後が <strong>n</strong> で終わるものが多い（written / seen / taken / been / known / given）。</p>
+<a class="top-link" href="#top">▲ 上へ</a>
+</div>
+
+<div class="card links">
+<h2>✏️ 練習したくなったら</h2>
+<a href="eng_tense_passive.html">⏳ 時制と受け身 まとめ（問題80問・何回でもやり直せる）</a>
+<a href="eng_passive_review.html">🔁 受け身 総復習（問題86問・何回でもやり直せる）</a>
+<a href="../index.html">🏠 ホームへ戻る</a>
+</div>
+
+</div>
+<script src="../assets/js/eng_tense_chart.js?v=1" defer></script>
+</body>
+</html>

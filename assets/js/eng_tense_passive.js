@@ -677,101 +677,24 @@ function showTokkuComplete(){
 // ============================
 var DATA={};
 
-// 中学で習う／高校で習う の札
-function BJ(){return ' <span class="bj">⭐中学・入試</span>';}
-function BH(){return ' <span class="bh">📘高校・見るだけ</span>';}
-function cell(en,jp,lv){return '<span class="cell-en">'+en+'</span><br><span class="cell-jp">'+jp+'</span><br>'+(lv?BJ():BH());}
-
-// 12時制の表（空手）。時を決めるのは先頭の1語（金色）
-function tenseGrid(){
-  return compareCard('🗂 12時制の表（空手バージョン・主語はぜんぶ I）<br><span style="font-size:13px;color:#8b949e">📱 スマホでは表を横にスライドすると「未来」の列が出てくるよ →</span>',['形 ＼ 時','過去','現在','未来'],[
-    ['<strong>ふつう</strong>',cell('I '+H('practiced')+' karate.','空手を練習した',1),cell('I '+H('practice')+' karate.','空手を練習する',1),cell('I '+H('will')+' practice karate.','空手を練習するだろう',1)],
-    ['<strong>進行形</strong><br>be ＋ 〜ing<br>（〜している最中）',cell('I '+H('was')+' '+H2('practicing')+' karate.','空手を練習している最中だった',1),cell('I '+H('am')+' '+H2('practicing')+' karate.','空手を練習している最中だ',1),cell('I '+H('will')+' '+H2('be practicing')+' karate.','空手を練習している最中だろう',0)],
-    ['<strong>完了形</strong><br>have ＋ 過去分詞<br>（ずっと・もう・したことある）',cell('I '+H('had')+' '+H2('practiced')+' karate.','（その時までに）空手を練習していた',0),cell('I '+H('have')+' '+H2('practiced')+' karate.','（今までずっと）空手を練習してきた',1),cell('I '+H('will')+' '+H2('have practiced')+' karate.','（その時までに）空手を練習したことになる',0)],
-    ['<strong>完了進行形</strong><br>have been ＋ 〜ing<br>（ずっと〜し続けている）',cell('I '+H('had')+' '+H2('been practicing')+' karate.','（その時まで）ずっと練習し続けていた',0),cell('I '+H('have')+' '+H2('been practicing')+' karate.','（今まで）ずっと練習し続けている',1),cell('I '+H('will')+' '+H2('have been practicing')+' karate.','（その時まで）ずっと練習し続けていることになる',0)]
-  ]);
-}
-
-// 受け身×時制の表（西村に見張られる）
-function passiveGrid(){
-  return compareCard('🗂 受け身×時制の表（主語はぜんぶ I ／ 西村に見張られる）',['時制','英語','意味'],[
-    ['現在',H('I am')+' '+H2('watched')+' by Nishimura.','私は西村に見張られている。'+BJ()],
-    ['過去',H('I was')+' '+H2('watched')+' by Nishimura.','私は西村に見張られた。'+BJ()],
-    ['未来',H('I will be')+' '+H2('watched')+' by Nishimura.','私は西村に見張られるだろう。'+BJ()],
-    ['助動詞',H('I can be')+' '+H2('watched')+' by Nishimura.','私は西村に見張られることがある（ありうる）。'+BJ()],
-    ['現在完了',H('I have been')+' '+H2('watched')+' by Nishimura.','私は（ずっと）西村に見張られてきた。'+BH()],
-    ['現在進行',H('I am being')+' '+H2('watched')+' by Nishimura.','私は今まさに西村に見張られている最中だ。'+BH()],
-    ['過去進行',H('I was being')+' '+H2('watched')+' by Nishimura.','私はそのとき西村に見張られている最中だった。'+BH()],
-    ['過去完了',H('I had been')+' '+H2('watched')+' by Nishimura.','私は（その時まで）西村に見張られていた。'+BH()],
-    ['未来完了',H('I will have been')+' '+H2('watched')+' by Nishimura.','私は（その時まで）西村に見張られていたことになる。'+BH()]
-  ])+'<div class="grammar-rule" style="margin-top:8px"><div class="en">✕ 未来進行の受け身（will be being watched）と、完了進行の受け身（have been being watched）は、ほぼ使われないので覚えなくてOK。</div></div>';
-}
-
-// love の12マス：〜ing（途中の部品）が入る6マスは✕。理屈つきで並べて見せる
-function okCell(s){return '<span class="cell-en">⭕ '+s+'</span>';}
-function ngCell(s){return '<span class="cell-en" style="color:#f87171">✕ '+s+'</span>';}
-function loveCards(){
-  var html=compareCard('🥋 空手と ❤️ love のちがい：「途中」があるか？',['','practice karate（空手を練習する）','love this song（この歌が好き）'],[
-    ['種類','動作（体を動かすこと）','気持ち・状態'],
-    ['始まり → 途中 → 終わり','ある（道場に来て始める → 練習の途中 → 終わって帰る）','ない（好きになったら、スイッチがONのまま続くだけ）'],
-    ['「今まさに〜している最中」','今まさに空手を練習している最中 → 自然','今まさにこの歌を好きでいる最中 → 変'],
-    ['〜ing（途中の部品）','つけられる → I am practicing karate. ⭕','つけられない → I am loving this song. ✕']
-  ]);
-  html+=compareCard('❤️ love を12マスに入れてみると…（〜ing が入る6マスが全部✕）<br><span style="font-size:13px;color:#8b949e">📱 スマホでは表を横にスライド →</span>',['形 ＼ 時','過去','現在','未来'],[
-    ['<strong>ふつう</strong>',okCell('I loved this song.'),okCell('I love this song.'),okCell('I will love this song.')],
-    ['<strong>進行形</strong><br>be ＋ '+H3('〜ing'),ngCell('I was loving this song.'),ngCell('I am loving this song.'),ngCell('I will be loving this song.')],
-    ['<strong>完了形</strong><br>have ＋ 過去分詞',okCell('I had loved this song.'),okCell('I have loved this song.'),okCell('I will have loved this song.')],
-    ['<strong>完了進行形</strong><br>have been ＋ '+H3('〜ing'),ngCell('I had been loving this song.'),ngCell('I have been loving this song.'),ngCell('I will have been loving this song.')]
-  ]);
-  html+='<div class="grammar-card"><div class="grammar-card-title">📐 なぜ✕なのか（理屈）</div><ul class="step-list">'
-    +'<li><span class="step-no">1</span>'+H3('〜ing')+' は「動作の途中」を表す部品。</li>'
-    +'<li><span class="step-no">2</span>love / like / know / want は動作ではなく「気持ち・状態」。スイッチがONのまま続いているだけで、「途中」がない。</li>'
-    +'<li><span class="step-no">3</span>途中がないものに、途中の部品 '+H3('〜ing')+' はつけられない。だから '+H3('〜ing')+' が入るマスは全部✕。</li>'
-    +'<li><span class="step-no">4</span>進行形（be ＋ 〜ing）の3マスだけでなく、完了進行形（have been ＋ 〜ing）の3マスも✕。中に同じ '+H3('〜ing')+' が入っているから。合計6マス。</li>'
-    +'<li><span class="step-no">5</span>〜ing が入らない6マス（ふつう3つ・完了形3つ）は⭕。「ずっと好き」と言いたいときは完了形：I have loved this song for three years. ⭕</li>'
-    +'</ul></div>';
-  html+=compareCard('📋 同じ理屈で〜ingにできない動詞（気持ち・状態の仲間）',['動詞','⭕ 正しい','✕ テストでは✕'],[
-    ['love（大好き）','I love Mrs. GREEN APPLE.','I am loving Mrs. GREEN APPLE.'],
-    ['like（好き）','I like karate.','I am liking karate.'],
-    ['know（知っている）','I know the answer.','I am knowing the answer.'],
-    ['want（ほしい）','I want a new karate uniform.','I am wanting a new karate uniform.'],
-    ['have（持っている）','I have a black belt.','I am having a black belt.']
-  ]);
-  html+='<div class="grammar-rule" style="margin-top:8px"><div class="en">💡 チェック方法：日本語で「今まさに〜している最中」と言ってみる。自然なら動作（〜ing ⭕）、変なら気持ち・状態（〜ing ✕）。<br>💡 have は「持っている」なら状態で✕。でも「食べる」の意味なら動作なので ⭕（I am having lunch. ＝ お昼を食べている最中）。<br>💡 ハンバーガー屋さんのCMの「I’m lovin’ it」は、広告のためにわざとルールを破った特別な言い方。テストでは使わない。</div></div>';
-  return html;
-}
-
 // ----- S0 時制の表 -----
 DATA[0]={type:'intro',
-  title:'時制は「いつ？」×「どんな形？」の表',
-  sub:'英語の時制は12個あるけど、ルールは2つだけ。主語はずっと I のまま、動詞のところだけが変身する。<br>📖 迷ったらいつでも <a href="eng_tense_chart.html" style="color:var(--gold);font-weight:bold">時制表</a> を見てOK。',
+  title:'時制：動詞だけが変身する',
+  sub:'主語はずっと I。変わるのは金色の動詞だけ。<br>📖 迷ったらいつでも <a href="eng_tense_chart.html" style="color:var(--gold);font-weight:bold">時制表</a> を見てOK。',
   talk:[
-    {who:'kyon',text:'にっくん、時制って12個もあるんでしょ？過去完了進行形とか、名前だけで頭が痛い…'},
-    {who:'nishi',text:'12個を1個ずつ覚える必要はない。「いつ？（過去・現在・未来）」が3つ、「どんな形？（ふつう・進行・完了・完了進行）」が4つ。3×4＝12。表のマス目にすぎない。'},
-    {who:'shun',text:'きょんさん、マンションの部屋番号みたいなもんです。「3階の2号室」って言うたら1部屋に決まるやないですか。「過去の進行形」って言うたら、1個に決まるんですわ。'},
-    {who:'kyon',text:'部屋番号！ 12部屋あるマンションね。'},
-    {who:'nishi',text:'もう1つ大事なルール。「いつ？」を決めるのは、動詞のかたまりの先頭の1語だけ。表の金色の語を見てごらん。'},
-    {who:'nishi',text:'それと、表の中で入試に出るのは「⭐中学・入試」の7部屋だけ。「📘高校」の5部屋は、見て「そういう部屋もあるんだ」と思えば十分だ。'},
-    {who:'kyon',text:'あれ？ 受け身はどこの部屋に入るの？'},
-    {who:'nishi',text:'いい質問だ。受け身はこの表の中にはない。「時」と「形」は時間の質問だけど、受け身は「主役はする側か、される側か」という別の質問。だから3つ目のスイッチになる。④でくわしくやろう。'}
+    {who:'kyon',text:'時制って12個もあるんでしょ？ 名前だけで頭が痛い…'},
+    {who:'nishi',text:'中学で使うのは7つだけ。変わるのは動詞のところだけだ。下を眺めるだけでいい。'}
   ],
-  formulaTitle:'📐 時制のルールは2つだけ',
-  formula:'時制 ＝ '+H('時')+'（過去・現在・未来）× '+H2('形')+'（ふつう・進行・完了・完了進行）<br><small style="color:var(--text2)">I '+H('have')+' '+H2('been practicing')+' karate.（先頭の have が「現在」、been practicing が「完了進行」）</small>',
-  ruleTitle:'形を作る部品',
+  formulaTitle:'📐 空手で7つ',
+  formula:'I '+H('practice')+' karate.（練習する）<br>I '+H('practiced')+' karate.（練習した）<br>I '+H('will practice')+' karate.（練習するだろう）<br>I '+H('am practicing')+' karate.（練習している）<br>I '+H('was practicing')+' karate.（練習していた）<br>I '+H('have practiced')+' karate.（ずっと続けている）<br>I '+H('have been practicing')+' karate.（ずっとやり続けている）',
+  ruleTitle:'見るところは1つ',
   rules:[
-    '進行形 ＝ '+H2('be ＋ 〜ing')+'（〜している最中）',
-    '完了形 ＝ '+H2('have ＋ 過去分詞')+'（ずっと〜している／もう〜した／〜したことがある）',
-    '完了進行形 ＝ '+H2('have been ＋ 〜ing')+'（ずっと〜し続けている）',
-    '時を決めるのは先頭の1語：過去 → was / had / 過去形 ／ 現在 → am / have / 原形 ／ 未来 → will ＋ 原形',
-    '❓ 受け身（〜される）は「形」の仲間ではなく、3つ目のスイッチ「する側？ される側？」。くわしくは ④ 受け身×時制',
-    '❓ If I were 〜（もしもの話）は過去形でも「今」の話。4つ目のスイッチ。くわしくは ⑥ もしも（仮定法）'
+    '先頭の語で「いつ？」が決まる：was・過去形 → 過去 ／ am・have・原形 → 現在 ／ will → 未来'
   ],
-  visual:tenseGrid(),
   ex:[
-    ['I practice karate.','私は空手を練習します。（現在）'],
-    ['I am practicing karate.','私は空手を練習しているところです。（現在進行形）'],
-    ['I have practiced karate for ten years.','私は10年間空手を続けています。（現在完了形）'],
-    ['I have been practicing karate for ten years.','私は10年間ずっと空手をやり続けています。（現在完了進行形）']
+    ['I practice karate.','私は空手を練習します。'],
+    ['I am practicing karate.','私は空手を練習しているところです。'],
+    ['I have practiced karate for ten years.','私は10年間空手を続けています。']
   ],
   qs:[
     {q:'I have been practicing karate.',jp:'この文の「いつ？（現在）」を決めている語は？',a:'have',choices:['have','been','practicing'],exp:E('時を決めるのは先頭の1語','I <strong>have</strong> been practicing karate.（have ＝ 現在）','been や practicing を見ても時はわからない','先頭が had なら過去、will なら未来になる'),xp:2},
@@ -786,29 +709,21 @@ DATA[0]={type:'intro',
 // ----- S1 過去・現在・未来（ふつうの形）-----
 DATA[1]={type:'grammar',
   title:'① ふつうの形：過去・現在・未来',
-  sub:'まずは1階の3部屋。いつもすること（現在）・もう終わったこと（過去）・これからのこと（未来）。',
+  sub:'もう終わったこと・いつものこと・これからのこと。',
   talk:[
-    {who:'kyon',text:'ピアノは4歳から12歳まで習ってたんだよね。空手は今も続けてる。'},
-    {who:'nishi',text:'その2つは時制の教材にぴったりだ。もうやめたピアノは「過去」、毎週やっている空手は「現在」。'},
-    {who:'shun',text:'きょんさん、ピアノは played、空手は practice。「もう終わったら ed がつく」って覚えたらええんです。played の ed は「エンディング」の ed ですわ。'},
-    {who:'kyon',text:'ed はエンディング！ うまいこと言うじゃん。'},
-    {who:'nishi',text:'未来は will ＋ 原形、または be going to ＋ 原形。will のうしろは必ず原形だ。'}
+    {who:'shun',text:'きょんさん、ピアノはもうやめたから played。played の ed は「エンディング」の ed ですわ。'},
+    {who:'kyon',text:'ed はエンディング！'}
   ],
-  formula:'過去：I '+H('played')+' the piano.（もう終わった）<br>現在：I '+H('practice')+' karate.（いつもしている）<br>未来：I '+H('will')+' practice karate. ／ I '+H('am going to')+' practice karate.',
-  ruleTitle:'合図の語',
+  formula:'過去：I '+H('played')+' the piano.（もうやめた）<br>現在：I '+H('practice')+' karate every week.<br>未来：I '+H('will practice')+' karate tomorrow.',
+  ruleTitle:'合図',
   rules:[
-    '過去の合図：'+H3('yesterday / last 〜 / 〜 ago / when I was 〜 / at twelve'),
-    '現在の合図：'+H3('every day / every Saturday / usually / often'),
-    '未来の合図：'+H3('tomorrow / next 〜 / someday'),
-    '⚠️ will のうしろは原形（will practiced ✕）'
+    '過去 → yesterday / 〜 ago / when I was 〜',
+    '未来 → tomorrow / next 〜（will のうしろは原形）'
   ],
   ex:[
     ['I played the piano from age four to age twelve.','私は4歳から12歳までピアノを弾いていました。'],
-    ['I stopped playing the piano at twelve.','私は12歳でピアノをやめました。'],
     ['I practice karate every week.','私は毎週空手を練習します。'],
-    ['I won a karate tournament.','私は空手の大会で優勝しました。'],
-    ['I will practice karate tomorrow.','私は明日空手を練習するでしょう。'],
-    ['I am going to watch the M-1 final this year.','私は今年M-1の決勝を見るつもりです。']
+    ['I will practice karate tomorrow.','私は明日空手を練習するでしょう。']
   ],
   qs:[
     {q:'I ___ karate every Saturday.',jp:'私は毎週土曜日に空手を練習します。',a:'practice',choices:['practice','practiced','practicing'],exp:E('every Saturday（毎週）→ 現在','I practice karate every Saturday.','I practiced karate every Saturday.（昔のことになる）','いつもしていることは現在形'),xp:3},
@@ -831,31 +746,23 @@ DATA[1]={type:'grammar',
 
 // ----- S2 進行形 -----
 DATA[2]={type:'grammar',
-  title:'② 進行形：「今まさに〜している最中」',
-  sub:'be ＋ 〜ing。時を決めるのは be（am / was）。',
+  title:'② 進行形：今まさに〜している最中',
+  sub:'be ＋ 〜ing。',
   talk:[
-    {who:'kyon',text:'進行形って、今まさにやってる最中ってこと？'},
-    {who:'nishi',text:'そう。be ＋ 〜ing。am なら「今」、was なら「そのとき」。先頭の1語で時が決まるのは表と同じだ。'},
-    {who:'shun',text:'きょんさん、進行形はテレビの「生中継」です。〜ing の ing は「イング＝いま中継中」。録画（過去のふつうの形）とはちがうんですわ。'},
-    {who:'kyon',text:'生中継！ I am practicing karate. で、今まさに道場から中継中ね。'},
-    {who:'nishi',text:'1つ大事な注意がある。love / like / know / want のような「気持ち・状態」の動詞は、進行形にできない。だから I am loving you. はテストでは✕。I love you. が正しい。'},
-    {who:'kyon',text:'えっ、なんで？ 「愛している」って「〜している」じゃん。'},
-    {who:'nishi',text:'理由ははっきりしている。〜ing は「動作の途中」を表す部品だ。空手の練習には始まりと終わりがあるから「途中」がある。でも「好き」は気持ちのスイッチがONのまま続いているだけで、「途中」がない。途中がないものに、途中の部品はつけられない。下の表で、love が使えるマスと使えないマスを見くらべよう。'}
+    {who:'shun',text:'きょんさん、進行形はテレビの「生中継」です。ing は「いま中継中」の ing ですわ。'}
   ],
-  formula:'今：I '+H('am')+' '+H2('practicing')+' karate now.<br>そのとき：I '+H('was')+' '+H2('practicing')+' karate when Kyon called me.',
-  ruleTitle:'進行形のルール',
+  formula:'今：I '+H('am practicing')+' karate now.<br>そのとき：I '+H('was practicing')+' karate when Kyon called me.',
+  ruleTitle:'気をつけること1つ',
   rules:[
-    '① be（am / was）＋ 動詞の ing 形',
-    '② 今 → am、そのとき（過去）→ was',
-    '③ 合図：'+H3('now / right now / then / when 〜 / at seven last night'),
-    '⚠️ 進行形にできない動詞：love / like / know / want / have（持っている）。〜ing が入る6マス（進行形3つ＋完了進行形3つ）は全部✕'
+    'love / like / know / want は 〜ing にしない（気持ちには「途中」がないから）'
   ],
-  visual:loveCards(),
+  visual:compareCard('⭕ と ✕',['⭕','✕'],[
+    ['I love Mrs. GREEN APPLE.','I am loving Mrs. GREEN APPLE.'],
+    ['I know the answer.','I am knowing the answer.']
+  ]),
   ex:[
     ['I am practicing karate now.','私は今、空手を練習しているところです。'],
-    ['I am wearing my karate uniform.','私は空手着を着ています。'],
-    ['I was practicing karate when Kyon called me.','きょんから電話が来たとき、私は空手を練習していました。'],
-    ['I am laughing at Kuruma’s joke now.','私は今、くるまのギャグで笑っているところです。']
+    ['I was practicing karate when Kyon called me.','きょんから電話が来たとき、私は空手を練習していました。']
   ],
   qs:[
     {q:'I ___ practicing karate now.',jp:'私は今、空手を練習しているところです。',a:'am',choices:['am','was','have'],exp:E('now → 今 → am ＋ 〜ing','I am practicing karate now.','I was practicing karate now.',''),xp:3},
@@ -881,41 +788,21 @@ DATA[2]={type:'grammar',
 // ----- S3 完了形（空手とピアノのちがい）-----
 DATA[3]={type:'grammar',
   title:'③ 完了形：空手は have、ピアノは過去形',
-  sub:'完了形は「過去から今までつながっている」形。今も続いている空手と、もうやめたピアノで、ちがいがはっきりわかる。',
+  sub:'今も続けている → have。もうやめた → 過去形。',
   talk:[
-    {who:'kyon',text:'空手10年、ピアノ8年。どっちも「〜年間やってた」でしょ？ 同じ言い方でいいんじゃないの？'},
-    {who:'nishi',text:'そこが完了形のいちばん大事なところだ。空手は今も続いている。だから I have practiced karate for ten years. ピアノは12歳でやめた。だから I played the piano for eight years.'},
-    {who:'shun',text:'きょんさん、have は「今も手に持ってる」の have です。空手はまだ手に持ってるから have。ピアノはもう手放したから、ふつうの過去形なんですわ。'},
-    {who:'kyon',text:'今も手に持ってたら have！ これはわかりやすい！'},
-    {who:'nishi',text:'だから I have played the piano for eight years. と言うと「今もピアノを続けている」という意味になってしまう。もうひとつ、ずっと続けている動作を強く言いたいときは have been ＋ 〜ing だ。'}
+    {who:'shun',text:'きょんさん、have は「今も手に持ってる」の have です。空手はまだ手に持ってる。ピアノはもう手放した。'},
+    {who:'kyon',text:'今も手に持ってたら have！'}
   ],
-  formula:'今も続いている（空手）：I '+H('have')+' '+H2('practiced')+' karate for ten years.<br>もうやめた（ピアノ）：I '+H('played')+' the piano for eight years.',
-  ruleTitle:'「今も手に持ってる？」で決める',
+  formula:'空手（今も続けている）：I '+H('have practiced')+' karate for ten years.<br>ピアノ（もうやめた）：I '+H('played')+' the piano for eight years.',
+  ruleTitle:'気をつけること',
   rules:[
-    '✅ 今も続いている・今につながっている → '+H('have')+' ＋ 過去分詞（現在完了）',
-    '✅ もう終わった・やめた → 過去形',
-    '⚠️ '+H3('ago / yesterday / last 〜 / when I was 〜')+' がある文は現在完了にしない',
-    '完了形の3つの意味：継続（'+H3('for / since')+'）・経験（'+H3('before / ever / never / 〜 times')+'）・完了（'+H3('already / just / yet')+'）'
-  ],
-  visual:changeCard('🥋 空手と 🎹 ピアノで見くらべ',[
-    ['空手：10年前に始めて、今も続けている','I '+H('have')+' practiced karate '+H3('for ten years')+'.','今も手に持ってる → have（継続）'],
-    ['ピアノ：4歳で始めて、12歳でやめた','I '+H('played')+' the piano '+H3('for eight years')+'.','もう手放した → 過去形'],
-    ['（✕）I have played the piano for eight years.','（○）I played the piano for eight years.','have にすると「今もピアノを続けている」になってしまう'],
-    ['空手を今もずっとやり続けている（動作を強く）','I '+H('have')+' '+H2('been practicing')+' karate for ten years.','現在完了進行形（have been ＋ 〜ing）'],
-    ['空手の大会で優勝したことがある','I '+H('have')+' won a karate tournament '+H3('before')+'.','経験も have（今の自分につながっている）']
-  ]),
-  more:[
-    {title:'📘 高校で習う完了形（見るだけでOK）',note:'<div class="en">先頭が had なら「過去のある時まで」、will have なら「未来のある時まで」。部品は同じ。</div>',ex:[
-      ['When I entered junior high school, I had already stopped playing the piano.','中学に入ったとき、私はもうピアノをやめていました。（過去完了）'],
-      ['Next year, I will have practiced karate for eleven years.','来年で、私は空手を11年間続けたことになります。（未来完了）']
-    ]}
+    '✕ I have played the piano for eight years.（今も続けている意味になる）',
+    'ago / yesterday / when I was 〜 があったら have は使わない'
   ],
   ex:[
-    ['I have practiced karate for ten years.','私は10年間空手を続けています。（継続）'],
-    ['I have been practicing karate for ten years.','私は10年間ずっと空手をやり続けています。（完了進行）'],
-    ['I played the piano for eight years.','私は8年間ピアノを弾いていました。（もうやめた）'],
-    ['I have won a karate tournament before.','私は前に空手の大会で優勝したことがあります。（経験）'],
-    ['I have already finished my karate practice.','私はもう空手の練習を終えました。（完了）']
+    ['I have practiced karate for ten years.','私は10年間空手を続けています。'],
+    ['I have been practicing karate for ten years.','私は10年間ずっと空手をやり続けています。'],
+    ['I played the piano for eight years.','私は8年間ピアノを弾いていました。（もうやめた）']
   ],
   qs:[
     {q:'I ___ practiced karate for ten years.',jp:'私は10年間空手を続けています。',a:'have',choices:['have','has','am'],exp:E('今も続いている → I have ＋ 過去分詞','I have practiced karate for ten years.','I has practiced karate.（I のときは have）','空手は今も手に持ってる → have'),xp:3},
@@ -936,53 +823,23 @@ DATA[3]={type:'grammar',
   ]
 };
 
-// 受け身は「形」ではなく3つ目のスイッチ（態）。時・形・態の3つで英文を仕分けて見せる
-function switchCard(){
-  return compareCard('🎛 英語の動詞は3つのスイッチで決まる',['スイッチ','答える質問','選べるもの'],[
-    ['① 時','いつ？','過去・現在・未来'],
-    ['② 形','時間の中でどんな様子？','ふつう・進行・完了・完了進行'],
-    ['③ 態（たい）','主役は'+H('する側')+'？ '+H('される側')+'？','する側（能動態）・される側（受け身）']
-  ])+'<div class="grammar-card"><div class="grammar-card-title">📐 なぜ受け身は「形」の仲間ではないのか（理屈）</div><ul class="step-list">'
-    +'<li><span class="step-no">1</span>①時と②形は「時間」の質問。③は「だれが主役か」の質問。質問の種類がちがうから、スイッチも別。</li>'
-    +'<li><span class="step-no">2</span>証拠：形と受け身は同時に使える。I '+H('have been')+' '+H2('praised')+'.（ほめられてきた）は「完了形」かつ「受け身」。</li>'
-    +'<li><span class="step-no">3</span>もし受け身が「形」の1つなら、1マスに形は1つしか入らないので、完了と同時には選べないはず。同時に選べる ＝ 別のスイッチ。</li>'
-    +'<li><span class="step-no">4</span>作り方：受け身の '+H('be')+' を12部屋の表に入れて時制を決め（am / was / will be / have been）、うしろに過去分詞をつける。</li>'
-    +'</ul></div>'
-    +compareCard('🔍 3つのスイッチで仕分けてみる',['英文','① 時','② 形','③ 態'],[
-    ['I practice karate.','現在','ふつう','する側'],
-    ['I '+H('am')+' '+H2('praised')+' by my coach.','現在','ふつう','<strong>される側</strong>'],
-    ['I have practiced karate.','現在','完了','する側'],
-    ['I '+H('have been')+' '+H2('praised')+' by my coach.','現在','完了','<strong>される側</strong>']
-  ]);
-}
-
 // ----- S4 受け身×時制 -----
 DATA[4]={type:'grammar',
-  title:'④ 受け身×時制：3つ目のスイッチ',
-  sub:'受け身は be ＋ 過去分詞。その be を、上の表と同じように時制に合わせて変えるだけ。主語は I のまま「私は〜される」。',
+  title:'④ 受け身：be のところだけ変わる',
+  sub:'受け身は be ＋ 過去分詞。うしろはずっと同じ。',
   talk:[
-    {who:'kyon',text:'受け身にも時制ってあるの？ もう無理なんだけど…'},
-    {who:'nishi',text:'受け身は「時」「形」とは別の3つ目のスイッチだ。「時」と「形」は時間の質問、受け身は「主役はする側か、される側か」の質問。質問がちがうから別のスイッチになる。その証拠に、I have been praised.（ほめられてきた）は完了形でもあり、受け身でもある。'},
-    {who:'nishi',text:'作り方も、新しく覚えることはほとんどない。受け身の be を、時制の表どおりに変身させて、最後に過去分詞をつけるだけだ。例文は、私が勉強を見張っている場面にしよう。'},
-    {who:'kyon',text:'にっくんに見張られるの！？ I am watched by Nishimura. …毎日見張られてる気がする。'},
-    {who:'shun',text:'きょんさん、うしろの watched by Nishimura は、ずーっと同じ形で動かへんのです。変わるのは前の am のとこだけ。am → was → will be → have been。着ぐるみの中身は同じで、頭だけかぶりかえてる感じですわ。'},
-    {who:'nishi',text:'中学の入試に出るのは am / was / will be / can be の4つ。have been は中3の発展、am being などは高校。表で確認しよう。'}
+    {who:'kyon',text:'にっくんに見張られる文なの！？'},
+    {who:'shun',text:'きょんさん、変わるのは前の am のとこだけ。頭だけかぶりかえてる着ぐるみですわ。'}
   ],
-  formula:'受け身 ＝ '+H('be')+' ＋ '+H2('過去分詞')+'。'+H('be')+' の部分だけ時制で変身<br><small style="color:var(--text2)">I '+H('am')+' / '+H('was')+' / '+H('will be')+' / '+H('have been')+' '+H2('watched')+' by Nishimura.</small>',
-  ruleTitle:'be の変身パターン',
+  formula:'I '+H('am')+' watched by Nishimura.（見張られる）<br>I '+H('was')+' watched by Nishimura.（見張られた）<br>I '+H('will be')+' watched by Nishimura.（見張られるだろう）<br>I '+H('have been')+' watched by Nishimura.（ずっと見張られている）',
+  ruleTitle:'気をつけること',
   rules:[
-    '現在：'+H('am')+' ＋ 過去分詞 ／ 過去：'+H('was')+' ＋ 過去分詞',
-    '未来：'+H('will be')+' ＋ 過去分詞（will のうしろは原形 be）',
-    '助動詞：'+H('can be')+' ＋ 過去分詞',
-    '現在完了：'+H('have been')+' ＋ 過去分詞（be の過去分詞は been）'
+    'will のうしろは be、have のうしろは been'
   ],
-  visual:switchCard()+passiveGrid(),
   ex:[
-    ['I am watched by Nishimura every day.','私は毎日、西村に見張られています。'],
     ['I was praised by my coach after the tournament.','大会のあと、私はコーチにほめられました。'],
     ['I will be invited to Kyon’s live show.','私はきょんのライブに招待されるでしょう。'],
-    ['I am called a genius by Kyon.','私はきょんに天才と呼ばれています。'],
-    ['I have been watched by Nishimura since this morning.','私は今朝からずっと西村に見張られています。']
+    ['I am called a genius by Kyon.','私はきょんに天才と呼ばれています。']
   ],
   qs:[
     {q:'I ___ watched by Nishimura every day.',jp:'私は毎日、西村に見張られています。',a:'am',choices:['am','was','have'],exp:E('every day → 現在 → am ＋ 過去分詞','I am watched by Nishimura every day.','I was watched by Nishimura every day.',''),xp:3},
@@ -1005,29 +862,20 @@ DATA[4]={type:'grammar',
 
 // ----- S5 芸人でまとめ（主語はぜんぶ I）-----
 DATA[5]={type:'grammar',
-  title:'⑤ 芸人でまとめ：主語は I のまま、全時制',
-  sub:'お笑いを見る「私」の1年。主語はずっと I、動詞だけが時間旅行する。',
+  title:'⑤ 芸人でまとめ',
+  sub:'主語はずっと I。動詞だけが変わる。',
   talk:[
-    {who:'kuruma',text:'きょんさん！時制なんて「いつ？」と「どんな形？」の2つだけっす！主語は I のままで、動詞だけタイムマシンに乗せたらいいんすよ！'},
-    {who:'kyon',text:'くるま！来てくれたの！？ タイムマシン！'},
-    {who:'kuruma',text:'僕の漫才を毎日見てる？それは現在！ 去年のM-1を見た？それは過去！ 何回も見たことある？それは現在完了！ 全部 I でいけます！'},
-    {who:'nishi',text:'例文は全部お笑いを見る側の「私」だ。先頭の1語に注目して解いてみよう。'}
+    {who:'kuruma',text:'きょんさん！主語は I のままで、動詞だけタイムマシンに乗せたらいいんすよ！'}
   ],
-  formula:'I '+H('watch')+' 〜.（毎日）→ I '+H('watched')+' 〜.（去年）→ I '+H('am')+' '+H2('watching')+' 〜.（今）→ I '+H('have')+' '+H2('seen')+' 〜.（何回も）→ I '+H('will')+' watch 〜.（来年）',
-  ruleTitle:'迷ったら3つ確認',
+  formula:'I '+H('watch')+' 〜（毎日）→ I '+H('watched')+' 〜（去年）→ I '+H('am watching')+' 〜（今）→ I '+H('have seen')+' 〜（何回も）',
+  ruleTitle:'迷ったら',
   rules:[
-    '① 合図の語は？（every day / last 〜 / now / for・since / tomorrow）',
-    '② 先頭の1語は合ってる？（am / was / have / will）',
-    '③ うしろの形は合ってる？（〜ing ／ 過去分詞 ／ 原形）'
+    '合図の語を見る（every day / last 〜 / now / many times）'
   ],
   ex:[
     ['I watch Reiwa Roman’s manzai every day.','私は毎日、令和ロマンの漫才を見ます。'],
     ['I watched the M-1 final last December.','私は去年の12月にM-1の決勝を見ました。'],
-    ['I am laughing at Cotton’s comedy sketch now.','私は今、コットンのコントで笑っているところです。'],
-    ['I have seen Reiwa Roman’s manzai many times.','私は令和ロマンの漫才を何回も見たことがあります。'],
-    ['I have been laughing since Kuruma started talking.','くるまが話し始めてから、私はずっと笑っています。'],
-    ['I am going to go to Kyon’s live show next month.','私は来月、きょんのライブに行くつもりです。'],
-    ['I was surprised at Kuruma’s joke.','私はくるまのギャグに驚きました。']
+    ['I have seen Reiwa Roman’s manzai many times.','私は令和ロマンの漫才を何回も見たことがあります。']
   ],
   qs:[
     {q:'I ___ Reiwa Roman’s manzai every day.',jp:'私は毎日、令和ロマンの漫才を見ます。',a:'watch',choices:['watch','watched','watching'],exp:E('every day → 現在形','I watch Reiwa Roman’s manzai every day.','',''),xp:3},
@@ -1048,10 +896,9 @@ DATA[5]={type:'grammar',
 // ----- S6 確認テスト -----
 DATA[6]={type:'test',
   title:'時制と受け身 確認テスト',
-  sub:'全部まぜた22問。主語はぜんぶ I。まちがえた問題は🔥特訓に入るから安心して。',
+  sub:'全部まぜた22問。まちがえた問題は🔥特訓に入るから安心して。',
   talk:[
-    {who:'nishi',text:'迷ったら「合図の語」「先頭の1語」「うしろの形」。それと、空手は have、ピアノは過去形。'},
-    {who:'kyon',text:'今も手に持ってたら have！ ed はエンディング！ 生中継は ing！'}
+    {who:'kyon',text:'ed はエンディング！ ing は生中継！ have は今も手に持ってる！'}
   ],
   qs:[
     {q:'I ___ karate every week.',jp:'私は毎週空手を練習します。',a:'practice',choices:['practice','practiced','practicing'],exp:E('every week → 現在形','I practice karate every week.','',''),xp:3},
@@ -1082,37 +929,20 @@ DATA[6]={type:'test',
 // ----- S8 もしも（仮定法）：4つ目のスイッチ -----
 // id は 8（確認テスト6・特訓7 の記録とずれないよう新しい番号）。タブでは「芸人でまとめ」と「確認テスト」の間
 DATA[8]={type:'grammar',
-  title:'⑥ もしもの話（仮定法）：4つ目のスイッチ',
-  sub:'現実とちがう「もしも」の話では、時制を1つ過去にずらす。「先頭の1語で時が決まる」のただ1つの例外。',
+  title:'⑥ もしも：過去形なのに「今」の話',
+  sub:'現実とちがう「もしも」は、過去形にずらす。',
   talk:[
-    {who:'kyon',text:'「もし俺がお金持ちなら」って If I were rich… でしょ？ でも were って過去形じゃん。先頭の1語が過去なら、過去の話なんじゃないの？'},
-    {who:'nishi',text:'いいところに気づいた。そこが4つ目のスイッチ「本当の話？ もしもの話？」だ。現実とちがう「もしも」の話では、時制を1つ過去にずらす。だから過去形でも「今」の話になる。'},
-    {who:'shun',text:'きょんさん、過去形の本当の意味は「遠い」なんです。時間が遠かったら昔の話、現実から遠かったら「もしも」の話。どっちも遠いから、おんなじ過去形を使うんですわ。'},
-    {who:'kyon',text:'遠いから過去形！ じゃあ If I were rich は、今お金持ちじゃない俺の話なんだ。'},
-    {who:'nishi',text:'そう。ただし「明日雨が降ったら」みたいに本当に起こりうる話は、ずらさないふつうの if だ。「現実とちがう？」で見分けよう。'}
+    {who:'shun',text:'きょんさん、過去形は「遠い」って意味なんです。現実から遠い「もしも」も、過去形を使うんですわ。'}
   ],
-  formula:'もしも（今）：If I '+H('were')+' 〜, I '+H('would')+' ＋ 原形.<br>願い（今）：I wish I '+H('were')+' 〜. ／ I wish I '+H('could')+' ＋ 原形.',
-  ruleTitle:'作り方のルール',
+  formula:'If I '+H('were')+' Kuruma, I '+H('would')+' make everyone laugh.（もし私がくるまなら、みんなを笑わせるのに）<br>I wish I '+H('could')+' see Kyon’s live show.（きょんのライブが見られたらいいのに）',
+  ruleTitle:'気をつけること',
   rules:[
-    '① もしもの部分は過去形。be動詞は主語が I でも '+H('were'),
-    '② 結果の部分は '+H('would / could')+' ＋ 原形（will → would、can → could と1つ過去にずらす）',
-    '③ 願いは I wish ＋ 過去形',
-    '⚠️ 本当に起こりうる話（明日の雨）は、ずらさないふつうの if：If it rains tomorrow, I will stay home.'
+    'be動詞は I でも were',
+    '明日の雨のように本当に起こりうる話はずらさない：If it rains tomorrow, I will stay home.'
   ],
-  visual:compareCard('🔍 本当の話 と もしもの話（どちらも「今」の話）',['','英文','意味'],[
-    ['本当の話','I '+H('am')+' busy, so I '+H('can’t')+' practice karate.','忙しいから、空手を練習できない。'],
-    ['もしもの話','If I '+H('were')+' not busy, I '+H('could')+' practice karate.','もし忙しくなければ、空手を練習できるのに。（実際は忙しい）']
-  ])+'<div class="grammar-card"><div class="grammar-card-title">📐 なぜ過去形を使うのか（理屈）</div><ul class="step-list">'
-    +'<li><span class="step-no">1</span>過去形の本当の意味は「遠い」。</li>'
-    +'<li><span class="step-no">2</span>時間が遠い → 昔の話（ふつうの過去形）。</li>'
-    +'<li><span class="step-no">3</span>現実から遠い → もしもの話（仮定法）。</li>'
-    +'<li><span class="step-no">4</span>どちらも「遠い」だから同じ過去形。だから If I were 〜 は「今」の話でも過去形。</li>'
-    +'</ul></div>',
   ex:[
     ['If I were Kuruma, I would make everyone laugh.','もし私がくるまなら、みんなを笑わせるのに。'],
-    ['If I still played the piano, I would play Mrs. GREEN APPLE’s songs.','もし今もピアノを弾いていたら、ミセスの曲を弾くのに。（実際はやめた）'],
-    ['If I had more time, I would practice karate every day.','もっと時間があれば、毎日空手を練習するのに。'],
-    ['I wish I were as funny as Kuruma.','くるまくらいおもしろかったらいいのに。'],
+    ['If I still played the piano, I would play Mrs. GREEN APPLE’s songs.','もし今もピアノを弾いていたら、ミセスの曲を弾くのに。'],
     ['I wish I could see Kyon’s live show.','きょんのライブが見られたらいいのに。']
   ],
   qs:[

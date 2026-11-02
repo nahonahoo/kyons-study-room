@@ -49,6 +49,14 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
 .tbl th { color: var(--gold); font-size: 14px; }
 .tbl td:first-child { min-width: 5.5em; }
 .tbl.sw td:not(:first-child), .tbl.sw th { white-space: nowrap; padding: 8px 4px; }
+.onetbl td.nm { white-space: nowrap; font-size: 14px; color: #c9d1d9; width: 1%; }
+.one { display: flex; gap: 8px; align-items: flex-start; }
+.hs { display: none; }
+body.show-hs .hs { display: table-row; }
+.hs-btn { margin-top: 16px; background: var(--bg3); color: var(--text); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; font-size: 14px; font-family: inherit; cursor: pointer; }
+details.more { margin-top: 26px; }
+details.more > summary { cursor: pointer; background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; font-size: 15px; color: var(--text2); list-style: none; }
+details.more[open] > summary { color: var(--gold); }
 .steps { list-style: none; padding: 0; }
 .steps li { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin: 8px 0; }
 .no { display: inline-block; background: var(--gold); color: #000; font-weight: bold; border-radius: 6px; padding: 0 8px; margin-right: 8px; }
@@ -66,10 +74,45 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
 <div class="wrap" id="top">
 
 <div class="page-head"><a href="../index.html" title="ホームへ">🏠</a><h1>📖 英語の時制表</h1></div>
-<div class="lead">迷ったらここを見る早見表。主語はぜんぶ <span class="en">I</span>。例文は空手（10年・今も続けている）とピアノ（4歳〜12歳・もうやめた）。🔊で音も聞ける。</div>
+<div class="lead">同じ文の、動詞だけを変えた表。<span class="hl">金色</span>のところだけ見ればOK。</div>
 
+<!-- 1文で全部（このページの本体） -->
+<div class="card" id="one">
+<h2>する側：くるまを<span class="hl">見る</span></h2>
+<table class="tbl onetbl">
+  <tr><td class="nm">現在</td><td><div class="one"><button class="say" data-say="I watch Kuruma.">🔊</button><div><div class="en">I <span class="hl">watch</span> Kuruma.</div><div class="jp">くるまを見る（いつも）</div></div></div></td></tr>
+  <tr><td class="nm">過去</td><td><div class="one"><button class="say" data-say="I watched Kuruma.">🔊</button><div><div class="en">I <span class="hl">watched</span> Kuruma.</div><div class="jp">くるまを見た</div></div></div></td></tr>
+  <tr><td class="nm">未来</td><td><div class="one"><button class="say" data-say="I will watch Kuruma.">🔊</button><div><div class="en">I <span class="hl">will watch</span> Kuruma.</div><div class="jp">くるまを見るだろう</div></div></div></td></tr>
+  <tr><td class="nm">現在進行</td><td><div class="one"><button class="say" data-say="I am watching Kuruma.">🔊</button><div><div class="en">I <span class="hl">am watching</span> Kuruma.</div><div class="jp">（今）くるまを見ている</div></div></div></td></tr>
+  <tr><td class="nm">過去進行</td><td><div class="one"><button class="say" data-say="I was watching Kuruma.">🔊</button><div><div class="en">I <span class="hl">was watching</span> Kuruma.</div><div class="jp">（そのとき）くるまを見ていた</div></div></div></td></tr>
+  <tr><td class="nm">現在完了</td><td><div class="one"><button class="say" data-say="I have watched Kuruma.">🔊</button><div><div class="en">I <span class="hl">have watched</span> Kuruma.</div><div class="jp">くるまを見たことがある／もう見た</div></div></div></td></tr>
+  <tr><td class="nm">現在完了進行</td><td><div class="one"><button class="say" data-say="I have been watching Kuruma.">🔊</button><div><div class="en">I <span class="hl">have been watching</span> Kuruma.</div><div class="jp">ずっとくるまを見続けている</div></div></div></td></tr>
+  <tr class="hs"><td class="nm">未来進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I will be watching Kuruma.">🔊</button><div><div class="en">I <span class="hl">will be watching</span> Kuruma.</div><div class="jp">（そのとき）くるまを見ているだろう</div></div></div></td></tr>
+  <tr class="hs"><td class="nm">過去完了<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I had watched Kuruma.">🔊</button><div><div class="en">I <span class="hl">had watched</span> Kuruma.</div><div class="jp">（その時までに）くるまを見ていた</div></div></div></td></tr>
+  <tr class="hs"><td class="nm">未来完了<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I will have watched Kuruma.">🔊</button><div><div class="en">I <span class="hl">will have watched</span> Kuruma.</div><div class="jp">（その時までに）くるまを見たことになる</div></div></div></td></tr>
+  <tr class="hs"><td class="nm">過去完了進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I had been watching Kuruma.">🔊</button><div><div class="en">I <span class="hl">had been watching</span> Kuruma.</div><div class="jp">（その時まで）ずっと見続けていた</div></div></div></td></tr>
+  <tr class="hs"><td class="nm">未来完了進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I will have been watching Kuruma.">🔊</button><div><div class="en">I <span class="hl">will have been watching</span> Kuruma.</div><div class="jp">（その時まで）ずっと見続けていることになる</div></div></div></td></tr>
+</table>
+<h2 style="margin-top:22px">される側（受け身）：くるまに<span class="hl">見られる</span></h2>
+<table class="tbl onetbl">
+  <tr><td class="nm">現在</td><td><div class="one"><button class="say" data-say="I am watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">am watched</span> by Kuruma.</div><div class="jp">くるまに見られる</div></div></div></td></tr>
+  <tr><td class="nm">過去</td><td><div class="one"><button class="say" data-say="I was watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">was watched</span> by Kuruma.</div><div class="jp">くるまに見られた</div></div></div></td></tr>
+  <tr><td class="nm">未来</td><td><div class="one"><button class="say" data-say="I will be watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">will be watched</span> by Kuruma.</div><div class="jp">くるまに見られるだろう</div></div></div></td></tr>
+  <tr class="hs"><td class="nm">現在完了<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I have been watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">have been watched</span> by Kuruma.</div><div class="jp">ずっとくるまに見られてきた</div></div></div></td></tr>
+  <tr class="hs"><td class="nm">現在進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I am being watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">am being watched</span> by Kuruma.</div><div class="jp">（今）くるまに見られている</div></div></div></td></tr>
+  <tr class="hs"><td class="nm">過去進行<br><span class="bh">📘高校</span></td><td><div class="one"><button class="say" data-say="I was being watched by Kuruma.">🔊</button><div><div class="en">I <span class="hl">was being watched</span> by Kuruma.</div><div class="jp">（そのとき）くるまに見られていた</div></div></div></td></tr>
+</table>
+<h2 style="margin-top:22px">もしも</h2>
+<table class="tbl onetbl">
+  <tr><td class="nm">もしも</td><td><div class="one"><button class="say" data-say="If I watched Kuruma every day, I would be funnier.">🔊</button><div><div class="en">If I <span class="hl">watched</span> Kuruma every day, I would be funnier.</div><div class="jp">毎日くるまを見ていたら、もっとおもしろくなれるのに</div></div></div></td></tr>
+  <tr><td class="nm">願い</td><td><div class="one"><button class="say" data-say="I wish I could watch Kuruma live.">🔊</button><div><div class="en">I wish I <span class="hl">could watch</span> Kuruma live.</div><div class="jp">くるまを生で見られたらいいのに</div></div></div></td></tr>
+</table>
+<button class="hs-btn" type="button" data-act="hs">📘 高校の形も見る</button>
+</div>
+
+<details class="more" id="more">
+<summary>📖 くわしい説明（読まなくてOK。困ったときだけ）</summary>
 <div class="toc">
-  <a href="#all">🗺 全体の地図</a>
   <a href="#how">① 迷ったら3ステップ</a>
   <a href="#map">② 12時制マップ</a>
   <a href="#forms">③ 形ごとの作り方</a>
@@ -81,19 +124,6 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
   <a href="#ifwish">⑨ もしも（仮定法）</a>
   <a href="#bunshi">⑩ 分詞</a>
   <a href="#pp">⑪ 過去分詞</a>
-</div>
-
-<!-- 全体の地図 -->
-<div class="card" id="all">
-<h2>🗺 まずここだけ：動詞は4つのスイッチで決まる</h2>
-<table class="tbl">
-  <tr><th>スイッチ</th><th>質問</th><th>例（主語は I）</th></tr>
-  <tr><td>① 時</td><td>いつ？</td><td class="en">I <span class="hl">practiced</span> / <span class="hl">practice</span> / <span class="hl">will</span> practice</td></tr>
-  <tr><td>② 形</td><td>どんな様子？</td><td class="en">I am <span class="hl2">practicing</span> / have <span class="hl2">practiced</span></td></tr>
-  <tr><td>③ 態</td><td>する側？ される側？</td><td class="en">I practice ／ I am <span class="hl2">praised</span></td></tr>
-  <tr><td>④ もしも</td><td>本当の話？ もしもの話？</td><td class="en">If I <span class="hl">were</span> rich, I <span class="hl">would</span> 〜</td></tr>
-</table>
-<div class="tip">ふだんの文は <strong>①②③</strong> だけ考えればOK。<br><strong>④</strong> は if や I wish で「現実とちがうこと」を言うときだけ（→ <a href="#ifwish" style="color:var(--gold)">⑨</a>）。<br>迷ったら、下の「① 3ステップ」から順に見ていこう。</div>
 </div>
 
 <!-- ① -->
@@ -109,7 +139,7 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
 <span class="en">I <span class="hl">have</span> <span class="hl2">been practicing</span> karate for ten years.</span></div>
 <p><strong>大原則：「いつ？」を決めるのは、動詞のかたまりの先頭の1語だけ。</strong><br>（ただ1つの例外は「もしもの話」。If I <span class="hl">were</span> 〜 は過去形でも「今」の話 → <a href="#ifwish" style="color:var(--gold)">⑨</a>）</p>
 <div class="tip">❓ 受け身（〜される）はどこに入るの？<br>→ 受け身は「形」の仲間ではなく、<strong>3つ目のスイッチ「する側？ される側？」</strong>。時制（時×形）とは別に、上から重ねて使う。くわしくは <a href="#passive" style="color:var(--gold)">⑧ 受け身</a>。</div>
-<a class="top-link" href="#top">▲ 上へ</a>
+<a class="top-link" href="#more">▲ くわしい説明の目次へ</a>
 </div>
 
 <!-- ② -->
@@ -125,7 +155,7 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
 </table>
 <p>名前のつけ方もルールどおり：「<strong>時</strong>」＋「<strong>形</strong>」。過去＋進行形＝過去進行形、現在＋完了形＝現在完了形。</p>
 <p>⚠️ この12部屋に受け身は入っていない。受け身は別のスイッチで、12部屋のどれにでも「される側バージョン」を作れる（→ <a href="#passive" style="color:var(--gold)">⑧</a>）。</p>
-<a class="top-link" href="#top">▲ 上へ</a>
+<a class="top-link" href="#more">▲ くわしい説明の目次へ</a>
 </div>
 
 <!-- ③ -->
@@ -156,7 +186,7 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
 <div class="row"><div class="when">過去</div><button class="say" data-say="I had been practicing karate for two hours when Kyon called me.">🔊</button><div class="body"><div class="en">I <span class="hl">had</span> <span class="hl2">been practicing</span> karate for two hours when Kyon called me.</div><div class="jp">きょんから電話が来たとき、私は2時間ずっと空手を練習し続けていた。<span class="bh">📘高校</span></div></div></div>
 <div class="row"><div class="when">現在</div><button class="say" data-say="I have been practicing karate for ten years.">🔊</button><div class="body"><div class="en">I <span class="hl">have</span> <span class="hl2">been practicing</span> karate for ten years.</div><div class="jp">私は10年間ずっと空手をやり続けている。<span class="bj">⭐</span></div></div></div>
 <div class="row"><div class="when">未来</div><button class="say" data-say="Next year, I will have been practicing karate for eleven years.">🔊</button><div class="body"><div class="en">Next year, I <span class="hl">will</span> <span class="hl2">have been practicing</span> karate for eleven years.</div><div class="jp">来年で、私は11年間ずっと空手をやり続けていることになる。<span class="bh">📘高校</span></div></div></div>
-<a class="top-link" href="#top">▲ 上へ</a>
+<a class="top-link" href="#more">▲ くわしい説明の目次へ</a>
 </div>
 
 <!-- ④ -->
@@ -175,7 +205,7 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
 <div class="tip">⚠️ <span class="en">yesterday / last 〜 / 〜 ago / when I was 〜</span> は<strong>現在完了と一緒に使えない</strong>。<br>理屈：現在完了は「今」につながる形。「昨日」「12歳のとき」のように過去の1点をはっきり言うと、今とつながらなくなるから。<br>
 <span class="ng en">✕ I have stopped playing the piano when I was twelve.</span><br><span class="ok en">⭕ I stopped playing the piano when I was twelve.</span></div>
 <div class="tip">💡 <span class="en">for</span> と <span class="en">since</span>：<span class="en">for</span> のうしろは「長さ」（for ten years）、<span class="en">since</span> のうしろは「始まった時」（since I was little）。</div>
-<a class="top-link" href="#top">▲ 上へ</a>
+<a class="top-link" href="#more">▲ くわしい説明の目次へ</a>
 </div>
 
 <!-- ⑤ -->
@@ -193,7 +223,7 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
   <tr><td>過去分詞</td><td>完了形の部品</td><td class="en">I have <span class="hl2">practiced</span> karate.</td></tr>
   <tr><td>名詞（もの）</td><td>「持っている」という動詞</td><td class="en">I have <span class="hl2">a black belt</span>.</td></tr>
 </table>
-<a class="top-link" href="#top">▲ 上へ</a>
+<a class="top-link" href="#more">▲ くわしい説明の目次へ</a>
 </div>
 
 <!-- ⑥ -->
@@ -225,7 +255,7 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
   <tr><td>have（持っている）</td><td class="en">I have a black belt.</td><td class="en ng">I am having a black belt.</td></tr>
 </table>
 <div class="tip">💡 チェック方法：日本語で「今まさに〜している最中」と言ってみる。<br>「今まさに空手を練習している最中」→ 自然 → 動作 → 〜ing ⭕<br>「今まさにこの歌を好きでいる最中」→ 変 → 気持ち・状態 → 〜ing ✕<br>💡 have は「持っている」なら状態で✕。「食べる」の意味なら動作なので ⭕（<span class="en">I am having lunch.</span>）。<br>💡 CMの「I’m lovin’ it」は、広告のためにわざとルールを破った特別な言い方。テストでは使わない。</div>
-<a class="top-link" href="#top">▲ 上へ</a>
+<a class="top-link" href="#more">▲ くわしい説明の目次へ</a>
 </div>
 
 <!-- ⑦ -->
@@ -242,7 +272,7 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
   <tr><td>受け身</td><td class="en"><span class="hl">Were</span> you praised by your coach? — Yes, I <span class="hl">was</span>.</td><td class="en">I <span class="hl">wasn’t</span> praised by my coach.</td></tr>
 </table>
 <p>答えも、聞かれた先頭の1語で返す（Have you 〜? → Yes, I have.）。</p>
-<a class="top-link" href="#top">▲ 上へ</a>
+<a class="top-link" href="#more">▲ くわしい説明の目次へ</a>
 </div>
 
 <!-- ⑧ -->
@@ -280,7 +310,7 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
 <div class="row"><div class="when">完了</div><button class="say" data-say="I have been watched by Nishimura since this morning.">🔊</button><div class="body"><div class="en"><span class="hl">I have been</span> <span class="hl2">watched</span> by Nishimura since this morning.</div><div class="jp">私は今朝からずっと西村に見張られている。<span class="bh">📘発展</span></div></div></div>
 <div class="row"><div class="when">進行</div><button class="say" data-say="I am being watched by Nishimura right now.">🔊</button><div class="body"><div class="en"><span class="hl">I am being</span> <span class="hl2">watched</span> by Nishimura right now.</div><div class="jp">私は今まさに西村に見張られている最中だ。<span class="bh">📘高校</span></div></div></div>
 <div class="tip">💡 will のうしろは原形なので <span class="en">will <span class="hl">be</span></span>。have のうしろは過去分詞なので <span class="en">have <span class="hl">been</span></span>（be → was → been）。<br>✕ 未来進行の受け身（will be being 〜）と完了進行の受け身（have been being 〜）は、ほぼ使われないので覚えなくてOK。</div>
-<a class="top-link" href="#top">▲ 上へ</a>
+<a class="top-link" href="#more">▲ くわしい説明の目次へ</a>
 </div>
 
 <!-- ⑨ -->
@@ -306,7 +336,7 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
 <div class="row"><div class="when">願い</div><button class="say" data-say="I wish I were as funny as Kuruma.">🔊</button><div class="body"><div class="en">I wish I <span class="hl">were</span> as funny as Kuruma.</div><div class="jp">くるまくらいおもしろかったらいいのに。</div></div></div>
 <div class="row"><div class="when">願い</div><button class="say" data-say="I wish I could see Kyon's live show.">🔊</button><div class="body"><div class="en">I wish I <span class="hl">could</span> see Kyon’s live show.</div><div class="jp">きょんのライブが見られたらいいのに。</div></div></div>
 <div class="tip">⚠️ 起こりうる話は、ずらさないふつうの if：<span class="en">If it <span class="hl">rains</span> tomorrow, I <span class="hl">will</span> stay home.</span>（明日雨が降ったら家にいる）<br>💡 見分け方：「現実とちがう？（お金持ちじゃない、くるまじゃない）」→ ずらす ／「本当に起こるかも？（明日の雨）」→ ずらさない。</div>
-<a class="top-link" href="#top">▲ 上へ</a>
+<a class="top-link" href="#more">▲ くわしい説明の目次へ</a>
 </div>
 
 <!-- ⑩ -->
@@ -320,7 +350,7 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
   <tr><td class="en">The song <span class="ng">is</span> <span class="hl2">sung</span> by Mrs. GREEN APPLE.<br><span class="jp">（受け身）</span></td><td class="en">a song <span class="hl2">sung</span> by Mrs. GREEN APPLE<br><span class="jp">ミセスが歌う歌</span></td></tr>
 </table>
 <div class="tip">💡 〜ing なら「〜している」（進行形の仲間）、過去分詞なら「〜される・〜された」（受け身の仲間）。意味もそのまま持ってくる。</div>
-<a class="top-link" href="#top">▲ 上へ</a>
+<a class="top-link" href="#more">▲ くわしい説明の目次へ</a>
 </div>
 
 <!-- ⑪ -->
@@ -335,8 +365,10 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
   <tr><td>AAA型<br>（全部同じ）</td><td class="en">cut, cut, <span class="hl">cut</span> ／ put, put, <span class="hl">put</span> ／ read, read, <span class="hl">read</span></td></tr>
 </table>
 <p>💡 ABC型は最後が <strong>n</strong> で終わるものが多い（written / seen / taken / been / known / given）。</p>
-<a class="top-link" href="#top">▲ 上へ</a>
+<a class="top-link" href="#more">▲ くわしい説明の目次へ</a>
 </div>
+
+</details>
 
 <div class="card links">
 <h2>✏️ 練習したくなったら</h2>
@@ -346,6 +378,6 @@ h1 { font-size: 24px; color: var(--gold); margin: 0; letter-spacing: 0.06em; lin
 </div>
 
 </div>
-<script src="../assets/js/eng_tense_chart.js?v=3" defer></script>
+<script src="../assets/js/eng_tense_chart.js?v=4" defer></script>
 </body>
 </html>

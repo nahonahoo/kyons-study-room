@@ -163,7 +163,7 @@ function localSmartGrade(val,answer){
   });
   var rate=matched.length/aW.length;
   // 時制を決める大事な語：be動詞・have・will・been など
-  var gWords=['am','is','are','was','were','be','been','being','have','has','had','do','does','did','not','will','can'];
+  var gWords=['am','is','are','was','were','be','been','being','have','has','had','do','does','did','not','will','can','would','could'];
   var aG=aW.filter(function(w){return gWords.indexOf(w)!==-1;});
   var vG=aG.filter(function(w){return vW.indexOf(w)!==-1;});
   var gramOk=aG.length===0||vG.length===aG.length;
@@ -392,6 +392,7 @@ var SECTIONS=[
   {id:3,label:'完了形'},
   {id:4,label:'受け身×時制'},
   {id:5,label:'芸人でまとめ'},
+  {id:8,label:'もしも（仮定法）'},
   {id:6,label:'確認テスト'},
   {id:7,label:'🔥特訓'}
 ];
@@ -428,12 +429,14 @@ document.addEventListener('click',function(e){
 // ===== RENDER =====
 function renderSection(sid){
   if(sid===TOKKU_SID){renderTokkuMode();return;}
+  // セクションidは記録とずれないよう固定。並び順（タブの順）は SECTIONS の順で決める
+  var order=SECTIONS.map(function(s){return s.id;}),pos=order.indexOf(sid);
   var html='<div class="progress-dots">';
-  SECTIONS.forEach(function(s){
+  SECTIONS.forEach(function(s,i){
     if(s.id===TOKKU_SID)return;
     var cls='dot';
-    if(s.id<sid)cls+=' done';
-    if(s.id===sid)cls+=' current';
+    if(i<pos)cls+=' done';
+    if(i===pos)cls+=' current';
     html+='<div class="'+cls+'"></div>';
   });
   html+='</div>';
@@ -446,7 +449,7 @@ function renderSection(sid){
 
   var isLast=(sid===TEST_SID);
   var label=isLast?'🔥 特訓で弱点をつぶす →':'次のセクションへ →';
-  html+='<button class="next-section-btn" id="nextBtn" data-sec="'+(sid+1)+'">'+label+'</button>';
+  html+='<button class="next-section-btn" id="nextBtn" data-sec="'+order[pos+1]+'">'+label+'</button>';
 
   document.getElementById('mainContent').innerHTML=html;
 
@@ -760,7 +763,8 @@ DATA[0]={type:'intro',
     '完了形 ＝ '+H2('have ＋ 過去分詞')+'（ずっと〜している／もう〜した／〜したことがある）',
     '完了進行形 ＝ '+H2('have been ＋ 〜ing')+'（ずっと〜し続けている）',
     '時を決めるのは先頭の1語：過去 → was / had / 過去形 ／ 現在 → am / have / 原形 ／ 未来 → will ＋ 原形',
-    '❓ 受け身（〜される）は「形」の仲間ではなく、3つ目のスイッチ「する側？ される側？」。くわしくは ④ 受け身×時制'
+    '❓ 受け身（〜される）は「形」の仲間ではなく、3つ目のスイッチ「する側？ される側？」。くわしくは ④ 受け身×時制',
+    '❓ If I were 〜（もしもの話）は過去形でも「今」の話。4つ目のスイッチ。くわしくは ⑥ もしも（仮定法）'
   ],
   visual:tenseGrid(),
   ex:[
@@ -1044,7 +1048,7 @@ DATA[5]={type:'grammar',
 // ----- S6 確認テスト -----
 DATA[6]={type:'test',
   title:'時制と受け身 確認テスト',
-  sub:'全部まぜた20問。主語はぜんぶ I。まちがえた問題は🔥特訓に入るから安心して。',
+  sub:'全部まぜた22問。主語はぜんぶ I。まちがえた問題は🔥特訓に入るから安心して。',
   talk:[
     {who:'nishi',text:'迷ったら「合図の語」「先頭の1語」「うしろの形」。それと、空手は have、ピアノは過去形。'},
     {who:'kyon',text:'今も手に持ってたら have！ ed はエンディング！ 生中継は ing！'}
@@ -1069,7 +1073,61 @@ DATA[6]={type:'test',
     {q:'正しい文はどれ？',jp:'「私は8年間ピアノを弾いていた（12歳でやめた）」',a:'I played the piano for eight years.',choices:['I played the piano for eight years.','I have played the piano for eight years.','I have been playing the piano for eight years.'],exp:E('もうやめた → 過去形','I played the piano for eight years.','have played / have been playing は「今も続けている」意味',''),xp:4},
     {q:'I had been practicing karate.',jp:'この文の「いつ？」を決めている語は？',a:'had',choices:['had','been','practicing'],exp:E('時を決めるのは先頭の1語。had ＝ 過去','I <strong>had</strong> been practicing karate.（過去完了進行形・高校）','','高校の形でも、ルールは同じ'),xp:4},
     {q:'I ___ going to watch the M-1 final this year.',jp:'私は今年M-1の決勝を見るつもりです。',a:'am',choices:['am','will','was'],exp:E('be going to ＋ 原形。I → am','I am going to watch the M-1 final this year.','',''),xp:4},
-    {q:'I ___ the M-1 final last year.',jp:'私は去年M-1の決勝を見ました。',a:'watched',choices:['watched','have watched','watch'],exp:E('last year → 過去形（現在完了にしない）','I watched the M-1 final last year.','I have watched the M-1 final last year.',''),xp:4}
+    {q:'I ___ the M-1 final last year.',jp:'私は去年M-1の決勝を見ました。',a:'watched',choices:['watched','have watched','watch'],exp:E('last year → 過去形（現在完了にしない）','I watched the M-1 final last year.','I have watched the M-1 final last year.',''),xp:4},
+    {q:'If I ___ Kuruma, I would make everyone laugh.',jp:'もし私がくるまなら、みんなを笑わせるのに。',a:'were',choices:['were','am','be'],exp:E('現実とちがう → 1つ過去にずらす。I でも were','If I were Kuruma, I would make everyone laugh.','If I am Kuruma, 〜',''),xp:4},
+    {q:'I wish I ___ play the piano like a pro.',jp:'プロみたいにピアノが弾けたらいいのに。',a:'could',choices:['could','can','will'],exp:E('I wish ＋ could ＋ 原形','I wish I could play the piano like a pro.','I wish I can play the piano like a pro.',''),xp:4}
+  ]
+};
+
+// ----- S8 もしも（仮定法）：4つ目のスイッチ -----
+// id は 8（確認テスト6・特訓7 の記録とずれないよう新しい番号）。タブでは「芸人でまとめ」と「確認テスト」の間
+DATA[8]={type:'grammar',
+  title:'⑥ もしもの話（仮定法）：4つ目のスイッチ',
+  sub:'現実とちがう「もしも」の話では、時制を1つ過去にずらす。「先頭の1語で時が決まる」のただ1つの例外。',
+  talk:[
+    {who:'kyon',text:'「もし俺がお金持ちなら」って If I were rich… でしょ？ でも were って過去形じゃん。先頭の1語が過去なら、過去の話なんじゃないの？'},
+    {who:'nishi',text:'いいところに気づいた。そこが4つ目のスイッチ「本当の話？ もしもの話？」だ。現実とちがう「もしも」の話では、時制を1つ過去にずらす。だから過去形でも「今」の話になる。'},
+    {who:'shun',text:'きょんさん、過去形の本当の意味は「遠い」なんです。時間が遠かったら昔の話、現実から遠かったら「もしも」の話。どっちも遠いから、おんなじ過去形を使うんですわ。'},
+    {who:'kyon',text:'遠いから過去形！ じゃあ If I were rich は、今お金持ちじゃない俺の話なんだ。'},
+    {who:'nishi',text:'そう。ただし「明日雨が降ったら」みたいに本当に起こりうる話は、ずらさないふつうの if だ。「現実とちがう？」で見分けよう。'}
+  ],
+  formula:'もしも（今）：If I '+H('were')+' 〜, I '+H('would')+' ＋ 原形.<br>願い（今）：I wish I '+H('were')+' 〜. ／ I wish I '+H('could')+' ＋ 原形.',
+  ruleTitle:'作り方のルール',
+  rules:[
+    '① もしもの部分は過去形。be動詞は主語が I でも '+H('were'),
+    '② 結果の部分は '+H('would / could')+' ＋ 原形（will → would、can → could と1つ過去にずらす）',
+    '③ 願いは I wish ＋ 過去形',
+    '⚠️ 本当に起こりうる話（明日の雨）は、ずらさないふつうの if：If it rains tomorrow, I will stay home.'
+  ],
+  visual:compareCard('🔍 本当の話 と もしもの話（どちらも「今」の話）',['','英文','意味'],[
+    ['本当の話','I '+H('am')+' busy, so I '+H('can’t')+' practice karate.','忙しいから、空手を練習できない。'],
+    ['もしもの話','If I '+H('were')+' not busy, I '+H('could')+' practice karate.','もし忙しくなければ、空手を練習できるのに。（実際は忙しい）']
+  ])+'<div class="grammar-card"><div class="grammar-card-title">📐 なぜ過去形を使うのか（理屈）</div><ul class="step-list">'
+    +'<li><span class="step-no">1</span>過去形の本当の意味は「遠い」。</li>'
+    +'<li><span class="step-no">2</span>時間が遠い → 昔の話（ふつうの過去形）。</li>'
+    +'<li><span class="step-no">3</span>現実から遠い → もしもの話（仮定法）。</li>'
+    +'<li><span class="step-no">4</span>どちらも「遠い」だから同じ過去形。だから If I were 〜 は「今」の話でも過去形。</li>'
+    +'</ul></div>',
+  ex:[
+    ['If I were Kuruma, I would make everyone laugh.','もし私がくるまなら、みんなを笑わせるのに。'],
+    ['If I still played the piano, I would play Mrs. GREEN APPLE’s songs.','もし今もピアノを弾いていたら、ミセスの曲を弾くのに。（実際はやめた）'],
+    ['If I had more time, I would practice karate every day.','もっと時間があれば、毎日空手を練習するのに。'],
+    ['I wish I were as funny as Kuruma.','くるまくらいおもしろかったらいいのに。'],
+    ['I wish I could see Kyon’s live show.','きょんのライブが見られたらいいのに。']
+  ],
+  qs:[
+    {q:'If I ___ rich, I would buy a new piano.',jp:'もしお金持ちなら、新しいピアノを買うのに。',a:'were',choices:['were','am','will be'],exp:E('現実とちがう → 1つ過去にずらす。be動詞は I でも were','If I were rich, I would buy a new piano.','If I am rich, I would buy a new piano.','過去形は「現実から遠い」の印'),xp:3},
+    {q:'If I were Kuruma, I ___ make everyone laugh.',jp:'もし私がくるまなら、みんなを笑わせるのに。',a:'would',choices:['would','will','am'],exp:E('結果の部分は would ＋ 原形（will を1つ過去にずらす）','If I were Kuruma, I would make everyone laugh.','If I were Kuruma, I will make everyone laugh.',''),xp:3},
+    {q:'I wish I ___ as funny as Kuruma.',jp:'くるまくらいおもしろかったらいいのに。',a:'were',choices:['were','am','be'],exp:E('I wish ＋ 過去形。be動詞は were','I wish I were as funny as Kuruma.','I wish I am as funny as Kuruma.',''),xp:3},
+    {q:'I wish I ___ see Kyon’s live show.',jp:'きょんのライブが見られたらいいのに。',a:'could',choices:['could','can','will'],exp:E('I wish ＋ could ＋ 原形（can を1つ過去にずらす）','I wish I could see Kyon’s live show.','I wish I can see Kyon’s live show.',''),xp:3},
+    {q:'If I had more time, I would ___ karate every day.',jp:'もっと時間があれば、毎日空手を練習するのに。',a:'practice',choices:['practice','practiced','practicing'],exp:E('would のうしろは原形','If I had more time, I would practice karate every day.','I would practiced 〜',''),xp:3},
+    {q:'If it ___ tomorrow, I will stay home.',jp:'もし明日雨が降ったら、家にいます。',a:'rains',choices:['rains','rained','would rain'],exp:E('本当に起こりうる話 → ずらさないふつうの if（現在形）','If it rains tomorrow, I will stay home.','If it rained tomorrow, I would stay home.（雨が「ありえない」意味になる）','見分け方：現実とちがう？ → ずらす ／ 起こりうる？ → ずらさない'),xp:4},
+    {q:'If I were not busy, I could practice karate.',jp:'この文はいつの話？',a:'今（でも現実は忙しい）',choices:['今（でも現実は忙しい）','過去（昔は忙しくなかった）','未来（これから忙しくなくなる）'],exp:E('仮定法の過去形は「今」の話','今、もし忙しくなければ練習できるのに（実際は忙しい）','過去の話だと思う（were を見て「昔」と思わない）','「先頭の1語で時が決まる」のただ1つの例外'),xp:4},
+    {q:'If I ___ the piano now, I would play Mrs. GREEN APPLE’s songs.',jp:'もし今もピアノを弾いていたら、ミセスの曲を弾くのに。',a:'played',choices:['played','play','have played'],exp:E('今のことでも、現実とちがう（もうやめた）→ 過去形にずらす','If I played the piano now, I would play Mrs. GREEN APPLE’s songs.','If I play the piano now, I would 〜',''),xp:4}
+  ],
+  qb:[
+    {jp:'くるまくらいおもしろかったらいいのに。',a:'I wish I were as funny as Kuruma.',exp:E('I wish ＋ were','I wish I were as funny as Kuruma.','I wish I am as funny as Kuruma.',''),xp:6},
+    {jp:'もし私がくるまなら、みんなを笑わせるのに。',a:'If I were Kuruma, I would make everyone laugh.',exp:E('If I were 〜, I would ＋ 原形','If I were Kuruma, I would make everyone laugh.','',''),xp:7}
   ]
 };
 
@@ -1078,6 +1136,6 @@ updateXP();renderWeakBar();
 (function(){
   var params=new URLSearchParams(location.search);
   var reqSec=parseInt(params.get('sec'),10);
-  currentSection=(reqSec>=0&&reqSec<=TOKKU_SID)?reqSec:0;
+  currentSection=(DATA[reqSec]||reqSec===TOKKU_SID)?reqSec:0;
   renderSectionTabs();renderSection(currentSection);
 })();

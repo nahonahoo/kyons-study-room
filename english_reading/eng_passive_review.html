@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>英語｜受け身 総復習（何回でもやり直せる）</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/english.css">
+<style>
+/* このページだけで使う図・強調 */
+.hl { color: var(--gold); font-weight: bold; }
+.hl2 { color: #58a6ff; font-weight: bold; }
+.hl3 { color: #ff7eb6; font-weight: bold; }
+.strike { text-decoration: line-through; text-decoration-color: #e94560; color: #8b949e; }
+.blank { color: var(--gold); letter-spacing: 0.1em; }
+.change-row { background: rgba(255,255,255,0.03); border: 1px solid var(--border, #30363d); border-radius: 10px; padding: 12px 14px; margin: 10px 0; line-height: 2; letter-spacing: 0.04em; }
+.change-from { font-family: Georgia, 'Times New Roman', serif; font-size: 16px; color: #c9d1d9; }
+.change-arrow { color: var(--gold); font-size: 14px; }
+.change-to { font-family: Georgia, 'Times New Roman', serif; font-size: 18px; color: #fff; }
+.change-note { font-size: 14px; color: #8b949e; }
+.cmp-wrap { overflow-x: auto; }
+.cmp { border-collapse: collapse; width: 100%; font-size: 15px; line-height: 1.9; letter-spacing: 0.04em; }
+.cmp th { background: rgba(245,197,24,0.12); color: var(--gold); padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--border, #30363d); white-space: nowrap; }
+.cmp td { padding: 8px 10px; border-bottom: 1px solid var(--border, #30363d); color: #e6edf3; vertical-align: top; }
+.cmp td.en { font-family: Georgia, 'Times New Roman', serif; font-size: 17px; }
+.word-bank { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 14px; }
+.word-chip { background: var(--bg3, #1c2230); border: 1px solid var(--border, #30363d); border-radius: 8px; padding: 6px 14px; font-family: Georgia, serif; font-size: 16px; color: var(--gold, #f5c518); }
+/* 共通CSSの例文訳は折り返さない設定（nowrap）でスマホだと横にはみ出すため、このページでは「英文の下に訳」を並べる */
+.example-item { flex-wrap: wrap; align-items: flex-start; }
+.example-item .en { flex: 1 1 0; min-width: 0; }
+.example-item .jp { white-space: normal; flex-basis: 100%; padding-left: 48px; font-size: 15px; line-height: 1.9; }
+.formula-box small { font-size: 16px; line-height: 2; }
+/* 解説カード：📐ルール／✅正例／❌誤例／💡 を1行ずつ縦に並べる */
+.exp-rule, .exp-ok, .exp-ng, .exp-tip { display: block; letter-spacing: 0.04em; }
+.exp-rule { font-size: 15px; line-height: 1.9; }
+.exp-rule .label { font-size: 13px; }
+.exp-ok, .exp-ng { font-family: Georgia, 'Times New Roman', serif; font-size: 16px; line-height: 1.9; margin: 4px 2px; }
+.exp-tip { font-size: 14px; line-height: 1.9; }
+/* 主役交代の3ステップ札 */
+.step-list { list-style: none; padding: 0; margin: 8px 0 0; }
+.step-list li { background: rgba(255,255,255,0.03); border: 1px solid var(--border, #30363d); border-radius: 10px; padding: 10px 14px; margin: 8px 0; font-size: 16px; line-height: 2; letter-spacing: 0.04em; }
+.step-no { display: inline-block; background: var(--gold); color: #000; font-weight: bold; border-radius: 6px; padding: 0 8px; margin-right: 8px; }
+/* やり直しボタン */
+.redo-box { background: rgba(88,166,255,0.08); border: 1px solid #58a6ff; border-radius: 12px; padding: 14px 16px; margin: 16px 0; font-size: 15px; line-height: 2; letter-spacing: 0.04em; }
+.redo-btn { margin-top: 8px; background: #1f6feb; color: #fff; border: none; padding: 12px 22px; border-radius: 10px; font-size: 15px; font-family: inherit; font-weight: bold; cursor: pointer; }
+.page-label { font-size: 15px; color: var(--gold); font-weight: bold; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="../index.html" title="ホームへ" style="font-size:1.3rem;text-decoration:none;flex-shrink:0;line-height:1;">🏠</a>
+  <div class="nav-title">🇬🇧 NH3</div>
+  <div class="unit-tabs" id="unitTabs"><span class="page-label">🔁 受け身 総復習</span></div>
+  <div class="section-tabs" id="sectionTabs"></div>
+  <div class="coin-total" id="coinTotal">🪙 0 XP</div>
+</nav>
+
+<div class="weak-bar" id="weakBar">
+  <div class="weak-bar-label">🔴 弱点</div>
+  <div id="weakItems" style="display:flex;flex-wrap:wrap;gap:6px;flex:1;align-items:center"><span class="weak-bar-empty">まだデータなし</span></div>
+</div>
+
+<div class="xp-bar-wrap">
+  <div class="xp-top-row">
+    <div class="xp-badge" id="xpBadge">NSC入学</div>
+    <div class="xp-rank" id="xpLevel">Lv.1 🥚</div>
+    <div class="xp-title" id="xpTitle">見習い研修生</div>
+    <div class="xp-next" id="xpNext">昇格まであと 15 XP</div>
+  </div>
+  <div class="xp-status-row" id="xpStatus">きょん「英語？なにそれ食えるの？」</div>
+  <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+</div>
+
+<div class="main" id="mainContent"></div>
+<div id="toast" class="toast"></div>
+
+<script src="../assets/js/eng_passive_review.js?v=1" defer></script>
+</body>
+</html>

@@ -445,11 +445,12 @@ function renderUnit1Section(sid){
   var uid=1,html='';
   if(sid===0){
     html+='<div class="section-title">受け身（受動態）</div><div class="section-sub">「〜される・〜された」という表現。英語では be動詞 + 過去分詞 で作ります。</div>';
+    html+='<div class="intro-box" style="line-height:2">🔁 受け身をもう一度しっかりやり直したいときは <a href="eng_passive_review.html" style="color:var(--gold);font-weight:bold">受け身 総復習（何回でもやり直せる）</a> へ。過去分詞の覚え方から順番に積み直せます。</div>';
     html+=dialog([
       {who:'kyon',text:'「この絵はピカソによって描かれた」って英語でどう言うの？'},
       {who:'nishi',text:'受け身、つまり受動態だよ。be動詞＋過去分詞で作る。「This picture was painted by Picasso.」こんな形。'},
       {who:'kyon',text:'was painted！過去分詞ってwatchedとかwentみたいなやつ？'},
-      {who:'nishi',text:'正確。規則動詞はedをつける。不規則動詞は別の形になる。paint→painted、make→made、write→written という感じ。'},
+      {who:'nishi',text:'半分正解。watched はそう。でも went は過去形で、go の過去分詞は gone。規則動詞はedをつけるだけ（paint→painted）。不規則動詞は形が変わる（make→made、write→written）。'},
       {who:'kyon',text:'by Picasso の「by」は「〜によって」ってこと？知ってる！'},
     ]);
     html+='<div class="grammar-card"><div class="grammar-card-title">📐 受け身の基本構造</div>';
@@ -467,13 +468,13 @@ function renderUnit1Section(sid){
   else if(sid===1){
     html+='<div class="section-title">受け身の基本形</div><div class="section-sub">現在の受け身：am/is/are + 過去分詞</div>';
     html+='<div class="grammar-card"><div class="grammar-card-title">📐 ポイント：重要な過去分詞</div>';
-    html+='<div class="grammar-rule"><div class="rule-title">規則動詞（-ed）</div><div class="en">use→used, love→loved, make→made, call→called, teach→taught</div></div>';
-    html+='<div class="grammar-rule"><div class="rule-title">不規則動詞（要暗記）</div><div class="en">write→written, speak→spoken, sing→sung, take→taken, see→seen, know→known, give→given, break→broken</div></div></div>';
+    html+='<div class="grammar-rule"><div class="rule-title">規則動詞（-ed）</div><div class="en">use→used, love→loved, call→called, play→played, watch→watched</div></div>';
+    html+='<div class="grammar-rule"><div class="rule-title">不規則動詞（要暗記）</div><div class="en">make→made, teach→taught, write→written, speak→spoken, sing→sung, take→taken, see→seen, know→known, give→given, break→broken</div></div></div>';
     html+='<div class="practice-section"><div class="practice-title">✏️ 練習問題 — 受け身の文を完成させよう</div>';
     var qs=[
       {q:'English ___ spoken in Australia.',jp:'英語はオーストラリアで話されています。',a:'is',choices:['am','is','are'],exp:'<span class="exp-rule"><span class="label">📐 受け身の基本形</span>主語 + <strong>is/are/am</strong> + 過去分詞</span><span class="exp-ok">✅ English is spoken in Australia.</span><span class="exp-tip">💡 English（単数）→ is。受け身 = be動詞 + 過去分詞</span>',xp:3},
       {q:'These cars ___ made in Japan.',jp:'これらの車は日本で作られています。',a:'are',choices:['am','is','are'],exp:'<span class="exp-rule"><span class="label">📐 受け身：複数主語</span>複数 → <strong>are</strong> + 過去分詞</span><span class="exp-ok">✅ These cars are made in Japan.</span><span class="exp-tip">💡 These cars（複数）→ are。make の過去分詞は made</span>',xp:3},
-      {q:'This letter ___ written by Kyon.',jp:'この手紙はきょんによって書かれました。',a:'is',choices:['am','is','are'],exp:'<span class="exp-rule"><span class="label">📐 受け身</span>This letter（単数）→ <strong>is</strong> + 過去分詞</span><span class="exp-ok">✅ This letter is written by Kyon.</span><span class="exp-tip">💡 write の過去分詞は written（不規則）</span>',xp:3},
+      {q:'This letter ___ written by Kyon.',jp:'この手紙はきょんによって書かれています。',a:'is',choices:['am','is','are'],exp:'<span class="exp-rule"><span class="label">📐 受け身</span>This letter（単数）→ <strong>is</strong> + 過去分詞</span><span class="exp-ok">✅ This letter is written by Kyon.</span><span class="exp-tip">💡 write の過去分詞は written（不規則）</span>',xp:3},
       {q:'Manzai ___ loved by many people.',jp:'漫才は多くの人に愛されています。',a:'is',choices:['am','is','are'],exp:'<span class="exp-rule"><span class="label">📐 受け身</span>Manzai（単数）→ <strong>is</strong> loved</span><span class="exp-ok">✅ Manzai is loved by many people.</span><span class="exp-tip">💡 「by + 人」= 〜によって（省略できる場合もある）</span>',xp:3},
       {q:'I ___ called "Kyon" by everyone.',jp:'私はみんなに「きょん」と呼ばれています。',a:'am',choices:['am','is','are'],exp:'<span class="exp-rule"><span class="label">📐 受け身：I の場合</span>I → <strong>am</strong> + 過去分詞</span><span class="exp-ok">✅ I am called "Kyon" by everyone.</span><span class="exp-tip">💡 I → am。受け身でも am/is/are の使い分けは変わらない</span>',xp:3},
       {q:'The rules ___ known by all players.',jp:'ルールは全選手に知られています。',a:'are',choices:['am','is','are'],exp:'<span class="exp-rule"><span class="label">📐 受け身：複数</span>The rules（複数）→ <strong>are</strong> known</span><span class="exp-ok">✅ The rules are known by all players.</span><span class="exp-tip">💡 know の過去分詞は known（不規則）</span>',xp:4},
@@ -489,7 +490,7 @@ function renderUnit1Section(sid){
       {jp:'この映画は世界中で見られています。',a:'This movie is watched all over the world.',exp:'<span class="exp-rule"><span class="label">📐 受け身の作り方</span>This movie（単数）→ is + watched</span><span class="exp-ok">✅ This movie is watched all over the world.</span><span class="exp-tip">💡 watch は規則動詞なので過去分詞は watched（ed）</span>',xp:6},
       {jp:'これらの歌は若者に好かれています。',a:'These songs are liked by young people.',exp:'<span class="exp-rule"><span class="label">📐 受け身：複数</span>These songs（複数）→ are liked</span><span class="exp-ok">✅ These songs are liked by young people.</span><span class="exp-tip">💡 like は規則動詞：liked。eで終わるのでdだけつける</span>',xp:6},
       {jp:'英語はニュージーランドで話されています。',a:'English is spoken in New Zealand.',exp:'<span class="exp-rule"><span class="label">📐 不規則動詞の過去分詞</span>speak → spoke → <strong>spoken</strong></span><span class="exp-ok">✅ English is spoken in New Zealand.</span><br><span class="exp-ng">❌ is speaked（×）</span><span class="exp-tip">💡 speak-spoke-spoken。受け身では過去分詞 spoken を使う</span>',xp:7},
-      {jp:'このケーキはきょんの母によって作られました。',a:'This cake is made by Kyon&#39;s mother.',exp:'<span class="exp-rule"><span class="label">📐 不規則動詞の過去分詞</span>make → made → <strong>made</strong>（過去形も過去分詞も同じ）</span><span class="exp-ok">✅ This cake is made by Kyon&#39;s mother.</span><span class="exp-tip">💡 make-made-made。過去形と過去分詞が同じ動詞</span>',xp:7},
+      {jp:'このケーキはきょんの母によって作られています。',a:'This cake is made by Kyon&#39;s mother.',exp:'<span class="exp-rule"><span class="label">📐 不規則動詞の過去分詞</span>make → made → <strong>made</strong>（過去形も過去分詞も同じ）</span><span class="exp-ok">✅ This cake is made by Kyon&#39;s mother.</span><span class="exp-tip">💡 make-made-made。過去形と過去分詞が同じ動詞</span>',xp:7},
     ];
     qb.forEach(function(q,i){
       var qid=uid+'_s'+sid+'_qb'+i;
@@ -512,7 +513,7 @@ function renderUnit1Section(sid){
     var qs2=[
       {q:'___ this picture painted by a student?',jp:'この絵は学生によって描かれましたか？',a:'Was',choices:['Is','Was','Were'],exp:'<span class="exp-rule"><span class="label">📐 受け身の疑問文</span><strong>Was/Were</strong> + 主語 + 過去分詞 ...?</span><span class="exp-ok">✅ Was this picture painted by a student?</span><span class="exp-tip">💡 受け身の疑問文 → be動詞を文頭に。過去なので Was</span>',xp:4},
       {q:'___ these cars made in Germany?',jp:'これらの車はドイツで作られていますか？',a:'Are',choices:['Is','Are','Were'],exp:'<span class="exp-rule"><span class="label">📐 受け身の疑問文（現在・複数）</span><strong>Are</strong> + these cars + 過去分詞 ...?</span><span class="exp-ok">✅ Are these cars made in Germany?</span><span class="exp-tip">💡 現在・複数 → Are。過去・複数 → Were</span>',xp:4},
-      {q:'This room ___ not cleaned yesterday.',jp:'この部屋は昨日掃除されませんでした。',a:'was',choices:['is','was','were'],exp:'<span class="exp-rule"><span class="label">📐 受け身の否定文</span>主語 + be動詞 + <strong>not</strong> + 過去分詞</span><span class="exp-ok">✅ This room was not cleaned yesterday.</span><br><span class="exp-ok">✅ This room wasn<span class="exp-rule"><span class="label">📐 受け身の否定文</span>主語 + be動詞 + <strong>not</strong> + 過去分詞</span><span class="exp-ok">✅ This room was not cleaned yesterday.</span><br><span class="exp-ok">✅ This room wasn&#39;t cleaned yesterday.</span><span class="exp-tip">💡 yesterday → 過去 → was not</span>',xp:4},
+      {q:'This room ___ not cleaned yesterday.',jp:'この部屋は昨日掃除されませんでした。',a:'was',choices:['is','was','were'],exp:'<span class="exp-rule"><span class="label">📐 受け身の否定文</span>主語 + be動詞 + <strong>not</strong> + 過去分詞</span><span class="exp-ok">✅ This room was not cleaned yesterday.</span><br><span class="exp-ok">✅ This room wasn&#39;t cleaned yesterday.</span><span class="exp-tip">💡 yesterday → 過去 → was not</span>',xp:4},
       {q:'French ___ not spoken in this area.',jp:'この地域ではフランス語は話されていません。',a:'is',choices:['am','is','are'],exp:'<span class="exp-rule"><span class="label">📐 受け身の否定（現在）</span>主語 + <strong>is not</strong> + 過去分詞</span><span class="exp-ok">✅ French is not spoken in this area.</span><span class="exp-tip">💡 French（言語名・単数）→ is not spoken</span>',xp:4},
       {q:'___ the concert canceled last week?',jp:'コンサートは先週中止されましたか？',a:'Was',choices:['Is','Was','Were'],exp:'<span class="exp-rule"><span class="label">📐 過去受け身疑問文</span><strong>Was</strong> + 単数主語 + 過去分詞 ...?</span><span class="exp-ok">✅ Was the concert canceled last week?</span><span class="exp-tip">💡 cancel の過去分詞は canceled（規則動詞）</span>',xp:5},
       {q:'___ these rules understood by everyone?',jp:'これらのルールは皆に理解されましたか？',a:'Were',choices:['Was','Were','Are'],exp:'<span class="exp-rule"><span class="label">📐 過去受け身疑問文（複数）</span><strong>Were</strong> + 複数主語 + 過去分詞 ...?</span><span class="exp-ok">✅ Were these rules understood by everyone?</span><span class="exp-tip">💡 understand の過去分詞は understood（不規則）</span>',xp:5},
@@ -574,9 +575,9 @@ function renderUnit1Section(sid){
     html+='<div class="section-title">受け身 確認テスト</div><div class="section-sub">受け身の総まとめ！全問正解を目指そう。</div>';
     html+='<div class="practice-section"><div class="practice-title">📝 確認テスト（全20問）</div>';
     var test=[
-      {q:'English ___ spoken in Canada.',jp:'英語はカナダで話されています。',a:'is',choices:['am','is','are'],exp:'Canada全体→単数扱い → is spoken。',xp:2},
+      {q:'English ___ spoken in Canada.',jp:'英語はカナダで話されています。',a:'is',choices:['am','is','are'],exp:'English（言語）は1つあつかい → is spoken。',xp:2},
       {q:'These books ___ read by many students.',jp:'これらの本は多くの生徒に読まれています。',a:'are',choices:['am','is','are'],exp:'These books（複数）→ are read。',xp:2},
-      {q:'I ___ called "Nishimura" at work.',jp:'私は職場で「西村」と呼ばれています。',a:'am',choices:['am','is','are'],exp:'<span class="exp-rule"><span class="label">📐 受け身：I の場合</span>I → <strong>am</strong> + 過去分詞</span><span class="exp-ok">✅ I am called "Kyon" by everyone.</span><span class="exp-tip">💡 I → am。受け身でも am/is/are の使い分けは変わらない</span>',xp:2},
+      {q:'I ___ called "Nishimura" at work.',jp:'私は職場で「西村」と呼ばれています。',a:'am',choices:['am','is','are'],exp:'<span class="exp-rule"><span class="label">📐 受け身：I の場合</span>I → <strong>am</strong> + 過去分詞</span><span class="exp-ok">✅ I am called "Nishimura" at work.</span><span class="exp-tip">💡 I → am。受け身でも am/is/are の使い分けは変わらない</span>',xp:2},
       {q:'This song ___ loved by everyone.',jp:'この歌は皆に愛されています。',a:'is',choices:['am','is','are'],exp:'This song（単数）→ is loved。',xp:2},
       {q:'___ this letter written by Kyon?',jp:'この手紙はきょんによって書かれましたか？',a:'Was',choices:['Is','Was','Were'],exp:'過去受け身疑問文（単数）→ Was。',xp:3},
       {q:'The windows ___ not broken by us.',jp:'窓は私たちによって割られたのではありません。',a:'were',choices:['is','was','were'],exp:'過去の受け身否定（複数）→ were not broken。',xp:3},
@@ -593,7 +594,7 @@ function renderUnit1Section(sid){
       {q:'This bridge was ___ 200 years ago.',jp:'この橋は200年前に建てられました。',a:'built',choices:['build','built','building'],exp:'受け身の文 → be動詞 + 過去分詞。buildの過去分詞はbuilt。',xp:4},
       {q:'The song was ___ by Shimofuriboshi.',jp:'その歌は霜降り明星によって歌われました。',a:'sung',choices:['sing','sang','sung'],exp:'受け身の文 → be動詞 + 過去分詞。singの過去分詞はsung。',xp:4},
       {q:'These letters ___ written in English.',jp:'これらの手紙は英語で書かれています。',a:'are',choices:['am','is','are'],exp:'現在の受け身（These letters=複数）→ are written。',xp:3},
-      {q:'The book ___ not ___ by students.',jp:'その本は学生によっては読まれていません（現在）。',a:'is',choices:['am','is','are'],exp:'現在の受け身否定（単数）→ is not read。',xp:4},
+      {q:'The book ___ not read by students.',jp:'その本は学生によっては読まれていません（現在）。',a:'is',choices:['am','is','are'],exp:'現在の受け身否定（単数）→ is not read。',xp:4},
     ];
     test.forEach(function(q,i){
       var qid=uid+'_s'+sid+'_q'+i;

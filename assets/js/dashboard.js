@@ -25,6 +25,7 @@ const SUBJECTS = [
       { label:'📖 英単語ネタ帳（中学3年間・呪文で覚える）', href:'english_reading/eng_vocab.html' },
       { label:'Unit0 基礎復習',              href:'english_reading/nh3_unit0.html',             weakDb:'nh3',  qidPrefix:'s' },
       { label:'Unit1（受け身）',             href:'english_reading/nh3_units123.html?unit=1',    weakDb:'nh3', qidPrefix:'1_' },
+      { label:'🔁 受け身 総復習（何回でもやり直せる）', href:'english_reading/eng_passive_review.html', weakDb:'nh3', qidPrefix:'pv_' },
       { label:'Unit2（現在完了①）',         href:'english_reading/nh3_units123.html?unit=2',    weakDb:'nh3', qidPrefix:'2_' },
       { label:'Unit2（現在完了②）',         href:'english_reading/nh3_units123.html?unit=3',    weakDb:'nh3', qidPrefix:'3_' },
       { label:'Unit3（不定詞）',             href:'english_reading/nh3_units123.html?unit=4',    weakDb:'nh3', qidPrefix:'4_' },

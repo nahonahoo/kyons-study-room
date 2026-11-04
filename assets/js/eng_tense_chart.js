@@ -7,6 +7,15 @@ if(window.self!==window.top){
     document.querySelectorAll('.links a').forEach(function(a){a.setAttribute('target','_top');});
   });
 }
+// 主語の切りかえ（I ／ You ／ He・She）：くるまの表だけ。I から変わる語はピンク
+document.addEventListener('click',function(e){
+  var b=e.target.closest?e.target.closest('[data-subj]'):null;
+  if(!b)return;
+  var m=b.getAttribute('data-subj');
+  document.body.classList.toggle('subj-you',m==='you');
+  document.body.classList.toggle('subj-he',m==='he');
+  document.querySelectorAll('[data-subj]').forEach(function(x){x.classList.toggle('on',x===b);});
+});
 var currentSay=null;
 document.addEventListener('click',function(e){
   var btn=e.target.closest?e.target.closest('[data-say]'):null;

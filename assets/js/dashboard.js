@@ -62,6 +62,7 @@ const SUBJECTS = [
       { label:'中1 一次方程式',     href:'math/math_c1_equation.html',    weakDb:'math', qidPrefix:'math_eq_' },
       { label:'中1 比例・反比例',   href:'math/math_c1_proportion.html',  weakDb:'math', qidPrefix:'math_prop_' },
       { label:'中2 連立方程式',     href:'math/math_c2_simultaneous.html',weakDb:'math', qidPrefix:'math_sim_' },
+      { label:'📈 中2 一次関数（グラフから式を作る）', href:'math/math_c2_linear.html', weakDb:'math', qidPrefix:'math_lin_' },
       { label:'中3 平方根',         href:'math/math_c3_sqrt.html',        weakDb:'math', qidPrefix:'math_sqrt_' },
       { label:'中3 多項式・乗法公式・因数分解', href:'math/math_c3_polynomial.html', weakDb:'math', qidPrefix:'math_poly_' },
       { label:'中3 二次方程式（解の公式）', href:'math/math_c3_quadratic.html', weakDb:'math', qidPrefix:'math_quad_' },

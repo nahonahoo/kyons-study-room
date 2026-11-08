@@ -61,6 +61,7 @@ const SUBJECTS = [
       { label:'中1 文字式',         href:'math/math_c1_chars.html',       weakDb:'math', qidPrefix:'math_chars_' },
       { label:'中1 一次方程式',     href:'math/math_c1_equation.html',    weakDb:'math', qidPrefix:'math_eq_' },
       { label:'中1 比例・反比例',   href:'math/math_c1_proportion.html',  weakDb:'math', qidPrefix:'math_prop_' },
+      { label:'🧮 中2 式の計算（単項式・多項式・文字で説明）', href:'math/math_c2_expr.html', weakDb:'math', qidPrefix:'math_expr_' },
       { label:'中2 連立方程式',     href:'math/math_c2_simultaneous.html',weakDb:'math', qidPrefix:'math_sim_' },
       { label:'📈 中2 一次関数（グラフから式を作る）', href:'math/math_c2_linear.html', weakDb:'math', qidPrefix:'math_lin_' },
       { label:'中3 平方根',         href:'math/math_c3_sqrt.html',        weakDb:'math', qidPrefix:'math_sqrt_' },

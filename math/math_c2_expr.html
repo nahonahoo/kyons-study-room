@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>数学｜式の計算（中2）</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/math.css">
+<style>
+/* このページだけの補い（文字を大きく・行間広く。math.css は他ページと共有なので触らない） */
+.main { overflow-wrap: anywhere; }
+.exp-card { font-size: 15px; }
+.exp-card-title { font-size: 14px; }
+.exp-rule, .exp-ok, .exp-ng, .exp-tip { display: block; margin: 6px 0; line-height: 2.0; }
+.exp-rule .label { color: var(--purple); font-weight: bold; margin-right: 6px; }
+.exp-ok { color: #3ddc84; }
+.exp-ng { color: #ff8a8a; }
+.exp-tip { color: var(--gold); }
+.rule-box .note { font-size: 15px; line-height: 2.0; }
+.rule-box .rule-title { font-size: 15px; }
+.intro-box-title { font-size: 15px; }
+.ln-tbl { width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.9; margin: 10px 0; }
+.ln-tbl th, .ln-tbl td { border: 1px solid var(--border); padding: 8px; text-align: left; vertical-align: middle; }
+.ln-tbl th { color: var(--gold); background: rgba(255,216,77,0.06); }
+.ln-tbl.center th, .ln-tbl.center td { text-align: center; }
+.nw { white-space: nowrap; }
+.ln-ok { color: #3ddc84; font-weight: bold; }
+.ln-ng { color: #ff8a8a; font-weight: bold; }
+.ln-frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; font-size: .82em; line-height: 1.25; margin: 0 2px; }
+.ln-frac > span:first-child { border-bottom: 1.5px solid currentColor; padding: 0 3px; }
+.qd-step { margin: 10px 0; border: 2px solid var(--border); border-radius: 12px; background: rgba(255,255,255,0.03); }
+.qd-step summary { cursor: pointer; padding: 12px 14px; font-size: 16px; font-weight: bold; color: var(--gold); line-height: 1.7; }
+.qd-step[open] summary { border-bottom: 1px solid var(--border); }
+.qd-body { padding: 12px 16px; font-size: 16px; line-height: 2.1; }
+.qd-big { font-size: 19px; font-weight: bold; color: #fff; background: rgba(255,216,77,0.12); border-left: 4px solid var(--gold); padding: 6px 12px; margin: 8px 0; border-radius: 6px; }
+.ln-figs { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.ln-figs > div { text-align: center; font-size: 15px; line-height: 1.7; }
+.ln-qsvg { margin: 8px 0 12px; }
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="../index.html" title="ホームへ" style="font-size:1.3rem;text-decoration:none;flex-shrink:0;line-height:1;">🏠</a>
+  <div class="nav-title">🧮 式の計算</div>
+  <div class="section-tabs" id="sectionTabs"></div>
+  <div class="coin-total" id="coinTotal">🪙 0 XP</div>
+</nav>
+
+<div class="xp-bar-wrap">
+  <div class="xp-top-row">
+    <div class="xp-badge" id="xpBadge">NSC入学</div>
+    <div class="xp-rank"  id="xpLevel">Lv.1 🥚</div>
+    <div class="xp-title" id="xpTitle">見習い研修生</div>
+    <div class="xp-next"  id="xpNext">次の昇格まで 15 XP</div>
+  </div>
+  <div class="xp-status-row" id="xpStatus">きょん「式の計算？なにそれ食えるの？」</div>
+  <div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div>
+</div>
+
+<div class="weak-bar">
+  <span class="weak-bar-label">🔥 弱点TOP</span>
+  <div id="weakItems" style="display:flex;flex-wrap:wrap;gap:6px;flex:1;align-items:center"></div>
+</div>
+
+<div class="main" id="mainContent"></div>
+<div id="toast" class="toast"></div>
+<div id="resultOverlay"></div>
+
+<script src="../assets/js/math_c2_expr.js?v=1" defer></script>
+</body>
+</html>

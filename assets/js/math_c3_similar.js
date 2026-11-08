@@ -213,6 +213,29 @@ function shadow(a, b, c) {
   return svgBox(280, 198, s);
 }
 
+// 三角形を取り出して、同じ向きに並べた図（同じ色の角が対応）
+function twoTri(nA, lA, nB, lB, k) {
+  function one(ox, oy, s, n, l) {
+    var T = [ox + 36 * s, oy - 82 * s], L = [ox, oy], Rt = [ox + 84 * s, oy];
+    var r = seg(T, L) + seg(L, Rt) + seg(Rt, T) + arc(T, L, Rt, 13, YE) + arc(L, T, Rt, 14, GR) + arc(Rt, T, L, 14, OR);
+    r += txt(T[0], T[1] - 7, n[0], YE) + txt(L[0] - 10, L[1] + 9, n[1], GR) + txt(Rt[0] + 10, Rt[1] + 9, n[2], OR);
+    var m;
+    m = mid(T, L); r += val([m[0] - 9, m[1] + 2], l[0], 'end');
+    m = mid(L, Rt); r += val([m[0], m[1] + 19], l[1]);
+    m = mid(T, Rt); r += val([m[0] + 9, m[1] + 2], l[2], 'start');
+    return r;
+  }
+  return svgBox(340, 180, one(30, 148, 1, nA, lA) + one(170, 148, k, nB, lB), 380);
+}
+// 平行四辺形と、BE の延長と CD の延長の交点 F
+function pgram() {
+  var A = [60, 84], B = [30, 184], C = [190, 184], D = [220, 84], E = [160, 84], F = [238, 24];
+  var s = seg(A, B) + seg(B, C) + seg(C, D) + seg(D, A) + seg(B, F, BL, 2.6) + seg(D, F, WH, 2, true);
+  s += arc(E, A, B, 15, YE) + arc(E, D, F, 15, YE) + arc(A, B, E, 16, GR) + arc(D, F, E, 16, GR);
+  s += txt(A[0] - 11, A[1] - 3, 'A') + txt(B[0] - 11, B[1] + 8, 'B') + txt(C[0] + 11, C[1] + 8, 'C') + txt(D[0] + 13, D[1] + 8, 'D') + txt(E[0] - 3, E[1] - 11, 'E', YE) + txt(F[0] + 12, F[1] + 4, 'F', YE);
+  return svgBox(280, 208, s);
+}
+
 // ===== 問題データ =====
 var QS = {};
 // ---- Section 1：相似とは ----
@@ -403,6 +426,77 @@ QS[5] = [
   { q:'相似の証明で「対頂角は等しい」が使えるのは、どの形？', a:'ちょうちょ型', choices:['ちょうちょ型','ピラミッド型','直角三角形の高さの図','正三角形'],
     exp:E('2直線が交わるところ', 'ちょうちょの真ん中', 'ピラミッド型は共通の角', '形で使う根拠が決まる') }
 ];
+// ---- Section 10：対応の見つけ方（2026-11-08 追加） ----
+QS[10] = [
+  { q:'図で DE // BC。△ADE ∽ △ABC のとき、辺 AD に対応する辺は？', svg:pyramid(0.45,{}), a:'AB', choices:['AB','DB','BC','AC'],
+    exp:E('取り出すと、小さい △ADE と大きい △ABC', 'A→A、D→B なので AD ↔ AB', 'DB はどちらの三角形の辺でもない', '小さい三角形の辺 ↔ 大きい三角形の辺') },
+  { q:'同じ図で、辺 DE に対応する辺は？', svg:pyramid(0.45,{}), a:'BC', choices:['BC','DB','AB','EC'],
+    exp:E('2番目と3番目の文字をつなぐ', 'DE ↔ BC', 'となりの線を選ばない', '式の順番どおり') },
+  { q:'図で AB // CD。△OAB ∽ △ODC のとき、辺 OA に対応する辺は？', svg:butterfly(0.55,{}), a:'OD', choices:['OD','OC','CD','AB'],
+    exp:E('ちょうちょ型は対角の点が対応', 'A→D なので OA ↔ OD', '近くにある OC を選ばない', '1本の直線の上に並んだ2つが対応') },
+  { q:'同じ図で、辺 OB に対応する辺は？', svg:butterfly(0.55,{}), a:'OC', choices:['OC','OD','CD','OA'],
+    exp:E('B→C', 'OB ↔ OC', '上下に並ぶ OD を選ばない', 'B から O を通ってまっすぐ進むと C') },
+  { q:'図で ∠ADE ＝ ∠ACB。△ABC ∽ △AED のとき、辺 AB に対応する辺は？', svg:proofFig(), a:'AE', choices:['AE','AD','DE','DB'],
+    exp:E('裏返しの形は、等しい角の頂点で決める', 'C→D なので B→E。AB ↔ AE', '同じ線の上の AD を選ばない', '見た目ではなく角の色で') },
+  { q:'同じ図で、辺 AC に対応する辺は？', svg:proofFig(), a:'AD', choices:['AD','AE','DE','EC'],
+    exp:E('C→D', 'AC ↔ AD', '同じ線の上の AE を選ばない', '裏返しは線が入れかわる') },
+  { q:'同じ図で AB ＝ 9、AC ＝ 12、AD ＝ 4 のとき、AE の長さは？', svg:proofFig(), a:'3', choices:['3','16/3','27','6'],
+    exp:E('対応する辺で比を作る', 'AB:AE ＝ AC:AD → 9:x ＝ 12:4 → x ＝ 3', 'AB:AD ＝ AC:AE とすると 16/3（対応がちがう）', '左の三角形：右の三角形 でそろえる') },
+  { q:'同じ図で AE ＝ 6、AD ＝ 4、AC ＝ 10 のとき、AB の長さは？', svg:proofFig(), a:'15', choices:['15','20/3','12','8'],
+    exp:E('AB:AE ＝ AC:AD', 'x:6 ＝ 10:4 → 4x ＝ 60 → x ＝ 15', 'AE と AD を入れかえない', '先に対応を書き出す') },
+  { q:'図で ∠A ＝ 90°、AH ⊥ BC。△ABC ∽ △HBA のとき、辺 AB に対応する辺は？', svg:rightAlt(), a:'HB', choices:['HB','HA','BA','AC'],
+    exp:E('A→H、B→B', 'AB ↔ HB', '同じ AB を選ばない', '順番どおりに読む') },
+  { q:'同じ図で AB ＝ 6、BC ＝ 9 のとき、BH の長さは？', svg:rightAlt(), a:'4', choices:['4','9','6','3'],
+    exp:E('AB:HB ＝ BC:BA', '6:x ＝ 9:6 → 9x ＝ 36 → x ＝ 4', 'AB が左にも右にも出てくる', '1つの辺が2回使われることもある') }
+];
+// ---- Section 11：証明ドリル（2026-11-08 追加） ----
+QS[11] = [
+  { q:'【証明A】DE // BC で △ADE ∽ △ABC を証明する。∠ADE ＝ ∠ABC（同位角）のほかに使う根拠は？', svg:pyramid(0.45,{}), a:'∠DAE ＝ ∠BAC（共通な角）', choices:['∠DAE ＝ ∠BAC（共通な角）','∠ADE ＝ ∠ACB（同位角）','∠AED ＝ ∠ADE（二等辺三角形）','AD ＝ AE（仮定）'],
+    exp:E('ピラミッド型は「同位角」と「共通な角」', '∠A は2つの三角形に共通', '問題に書いていない等しさを使わない', 'てっぺんの角は共通') },
+  { q:'【証明A】最後の1行として正しいものは？', a:'2組の角がそれぞれ等しいから、△ADE ∽ △ABC', choices:['2組の角がそれぞれ等しいから、△ADE ∽ △ABC','2組の角がそれぞれ等しいから、△ADE ∽ △ACB','1組の角が等しいから、△ADE ∽ △ABC','2組の辺の比が等しいから、△ADE ∽ △ABC'],
+    exp:E('条件のあとに、対応の順で結論', 'D→B、E→C', '△ACB は順番がちがう', '条件 → 結論') },
+  { q:'【証明B】AB // CD で △OAB ∽ △ODC を証明する。∠OAB と等しい角は？', svg:butterfly(0.55,{}), a:'∠ODC', choices:['∠ODC','∠OCD','∠AOB','∠OBA'],
+    exp:E('平行線の錯角（Z の形）', 'AD がよこぎる：∠OAB ＝ ∠ODC', '∠OCD は ∠OBA と等しい角', 'Z を指でなぞる') },
+  { q:'【証明B】∠AOB と等しい角とその根拠は？', svg:butterfly(0.55,{}), a:'∠DOC（対頂角）', choices:['∠DOC（対頂角）','∠OCD（錯角）','∠ODC（同位角）','∠BOD（対頂角）'],
+    exp:E('向かい合う角が対頂角', '∠AOB と ∠DOC', '∠BOD はとなりの角', 'O をはさんで反対側') },
+  { q:'【証明B】OA ＝ 4、OD ＝ 6、AB ＝ 5 のとき、CD の長さは？', svg:butterfly(2/3,{oa:'4',od:'6',ab:'5',cd:'x'}), a:'7.5', choices:['7.5','7','10/3','6'],
+    exp:E('OA:OD ＝ AB:DC', '4:6 ＝ 5:x → 4x ＝ 30 → x ＝ 7.5', '5 ＋ 2 ＝ 7 にしない', '比で考える') },
+  { q:'【証明C】平行四辺形 ABCD で、BE と CD の延長の交点が F。∠AEB と等しい角とその根拠は？', svg:pgram(), a:'∠DEF（対頂角）', choices:['∠DEF（対頂角）','∠DFE（錯角）','∠EDF（同位角）','∠ABE（錯角）'],
+    exp:E('AD と BF が E で交わる', '∠AEB と ∠DEF は向かい合う角', '角の場所を確かめる', '金色どうしが等しい') },
+  { q:'【証明C】∠BAE と等しい角とその根拠は？', svg:pgram(), a:'∠FDE（AB // DF の錯角）', choices:['∠FDE（AB // DF の錯角）','∠DFE（AB // DF の錯角）','∠DEF（対頂角）','∠ABE（共通な角）'],
+    exp:E('平行四辺形の向かい合う辺は平行', 'CD の延長 DF と AB が平行、AD がよこぎる', '∠DFE は ∠ABE と等しい角', '緑どうしが等しい') },
+  { q:'【証明C】結論として正しいものは？', svg:pgram(), a:'△ABE ∽ △DFE', choices:['△ABE ∽ △DFE','△ABE ∽ △DEF','△ABE ∽ △FDE','△ABE ∽ △EFD'],
+    exp:E('A→D、E→E なので B→F', '等しい角の頂点を同じ順番に', '△DEF は順番がちがう', '色の順に書く') },
+  { q:'【証明C】AE ＝ 5、ED ＝ 3、AB ＝ 10 のとき、DF の長さは？', svg:pgram(), a:'6', choices:['6','50/3','8','15'],
+    exp:E('AE:DE ＝ AB:DF', '5:3 ＝ 10:x → 5x ＝ 30 → x ＝ 6', '対応がちがうと 50/3', '△ABE ∽ △DFE の順に読む') },
+  { q:'【証明D】∠A ＝ 90°、AH ⊥ BC で △ABC ∽ △HBA を証明する。使う根拠は？', svg:rightAlt(), a:'∠BAC ＝ ∠BHA（直角）と ∠ABC ＝ ∠HBA（共通）', choices:['∠BAC ＝ ∠BHA（直角）と ∠ABC ＝ ∠HBA（共通）','∠BAC ＝ ∠BHA（直角）だけ','∠ACB ＝ ∠HBA（錯角）と AB ＝ AC','AH ＝ BH と ∠B（共通）'],
+    exp:E('直角と共通の角で2組', '∠B はどちらの三角形にも入る', '1組だけでは足りない', '直角三角形は1組は直角で決まり') },
+  { q:'証明の書き方として✕なのは？', a:'「形が同じに見えるから相似」と書く', choices:['「形が同じに見えるから相似」と書く','「△ABC と △DEF において」から書き始める','根拠のうしろに ①、② と番号をつける','最後に相似条件を書いてから結論を書く'],
+    exp:E('見た目は根拠にならない', '根拠は 仮定・共通な角・対頂角・平行線の角・円周角', '「見えるから」は点にならない', '根拠の名前を書く') }
+];
+// ---- Section 12：テスト対策（2026-11-08 追加） ----
+QS[12] = [
+  { q:'平行四辺形 ABCD で、AD 上に E を AE:ED ＝ 3:2 となるようにとる。BE と AC の交点を F とすると、AF:FC は？', a:'3:5', choices:['3:5','3:2','2:3','5:3'],
+    exp:E('ちょうちょ型 △AEF ∽ △CBF', 'BC ＝ AD ＝ 5 とすると AE ＝ 3、AF:FC ＝ AE:CB ＝ 3:5', 'ED の 2 を使わない', 'AD ＝ BC を比の 5 で置く') },
+  { q:'前の問題で、△AEF と △CBF の面積比は？', a:'9:25', choices:['9:25','3:5','27:125','6:10'],
+    exp:E('面積比は相似比の 2乗', '3²:5² ＝ 9:25', '3:5 のままにしない', '先に相似比') },
+  { q:'AD // BC の台形 ABCD で、AD ＝ 3、BC ＝ 6、対角線の交点を O とすると、AO:OC は？', a:'1:2', choices:['1:2','2:1','3:6','1:3'],
+    exp:E('ちょうちょ型 △OAD ∽ △OCB', 'AO:CO ＝ AD:CB ＝ 3:6 ＝ 1:2', '順番を逆にしない', '簡単な比にする') },
+  { q:'前の問題で、△AOD の面積が 2 のとき、△BOC の面積は？', a:'8', choices:['8','4','6','16'],
+    exp:E('相似比 1:2 → 面積比 1:4', '1:4 ＝ 2:x → x ＝ 8', '2 倍の 4 にしない', '面積は 2乗') },
+  { q:'△ABC で DE // BC、AD:DB ＝ 3:1。四角形 DBCE の面積が 14 のとき、△ADE の面積は？', svg:pyramid(0.75,{}), a:'18', choices:['18','42','32','9'],
+    exp:E('相似比 3:4 → 面積比 9:16 → 四角形は 7', '7 が 14 にあたるので 1 は 2、△ADE ＝ 9 × 2 ＝ 18', '3:1 を 2乗して 9:1 にしない', '「上：全体」→ 2乗 → 引く') },
+  { q:'△ABC で AB ＝ 10、AC ＝ 12、BC ＝ 8。M、N は AB、AC の中点。台形 MBCN の周の長さは？', a:'23', choices:['23','30','19','15'],
+    exp:E('MN は BC の半分、MB と NC も半分', 'MN ＝ 4、MB ＝ 5、NC ＝ 6、BC ＝ 8 → 23', 'BC は半分にしない', '4つの辺を全部たす') },
+  { q:'3本の平行線で AB ＝ 3、BC ＝ x、DE ＝ 4、DF ＝ 12 のとき、x の値は？', svg:lines3(1/3,{ab:'3',bc:'x',de:'4'}), a:'6', choices:['6','9','4','5'],
+    exp:E('EF ＝ DF − DE を先に出す', 'EF ＝ 8、3:x ＝ 4:8 → x ＝ 6', 'DF の 12 をそのまま使わない', 'AB:BC ＝ DE:EF') },
+  { q:'円錐を、高さを 1:2 に分けるところで底面に平行に切った。上の円錐と下の立体の体積比は？', a:'1:26', choices:['1:26','1:27','1:8','1:2'],
+    exp:E('上：全体 の相似比 1:3 → 体積比 1:27', '下は 27 − 1 ＝ 26', '1:2 を3乗して 1:8 にしない', '全体と比べる → 引く') },
+  { q:'△ABC ∽ △AED で AB ＝ 9、AE ＝ 6、BC ＝ 15 のとき、ED の長さは？', a:'10', choices:['10','22.5','12','8'],
+    exp:E('AB:AE ＝ BC:ED', '9:6 ＝ 15:x → 9x ＝ 90 → x ＝ 10', '逆にすると 22.5', '∽ の順に辺を読む') },
+  { q:'相似比 2:3 の2つの三角錐で、大きい方の体積が 54 のとき、小さい方の体積は？', a:'16', choices:['16','36','24','8'],
+    exp:E('体積比 8:27', 'x:54 ＝ 8:27 → x ＝ 16', '2乗だと 24', '体積は 3乗') }
+];
 // 問題の索引（特訓・弱点ノートはここから引く。ページを開いた直後でも使える）
 var QBANK = {};
 Object.keys(QS).forEach(function(sid) {
@@ -558,11 +652,14 @@ function showAnswer(qid) {
 var SECTIONS = [
   { id:0, label:'🔍 スタート',  title:'相似＝拡大コピー',    sub:'形が同じで、大きさがちがう図形' },
   { id:1, label:'相似とは',     title:'相似な図形',              sub:'対応する順番と、相似比' },
+  { id:10, label:'対応の見つけ方', title:'対応の見つけ方', sub:'重なった三角形を取り出して、同じ向きに並べる' },
   { id:2, label:'相似条件',     title:'三角形の相似条件',        sub:'3つの条件を見分ける' },
   { id:3, label:'証明',         title:'相似の証明',              sub:'書く順番は4行の型で決まる' },
+  { id:11, label:'証明ドリル', title:'証明ドリル', sub:'定期テストの記述に向けて、型どおりに組み立てる' },
   { id:4, label:'平行線と比',   title:'平行線と線分の比',        sub:'ピラミッド型とちょうちょ型' },
   { id:8, label:'中点連結',     title:'中点連結定理・平行線',    sub:'半分で平行・3本の平行線' },
   { id:9, label:'面積・体積',   title:'面積比・体積比と利用',    sub:'面積は2乗、体積は3乗' },
+  { id:12, label:'テスト対策', title:'テスト対策', sub:'定期テストで出やすい組み合わせ問題' },
   { id:5, label:'確認テスト',   title:'確認テスト',              sub:'全部まとめて20問。ゆっくりでOK' },
   { id:6, label:'📊弱点',       title:'弱点ノート',              sub:'間違えた問題の正答率を確認しよう' },
   { id:7, label:'🔥特訓',       title:'弱点特訓モード',          sub:'弱点問題だけを集中練習！' }
@@ -711,6 +808,8 @@ INTRO[0] = function() {
       ['大きさ','同じ','ちがってもよい'],
       ['対応する角','等しい','等しい'],
       ['対応する辺','等しい','<b>比が等しい</b>']]))
+  + card('📝 テストまで時間がないときの順番',
+    '<div class="rule-box"><div class="ex">① 対応の見つけ方</div><div class="ex">② 平行線と比</div><div class="ex">③ 証明ドリル</div><div class="ex">④ テスト対策</div></div>')
   + '<button class="start-btn" data-goto="1">🔍 相似とは から始める →</button>';
 };
 INTRO[1] = function() {
@@ -718,7 +817,12 @@ INTRO[1] = function() {
     chat('nishi', '△ABC ∽ △DEF と書いたら、<b>同じ順番の文字どうしが対応する</b>。A と D、B と E、C と F だ')
   ])
   + card('📐 比例式の解き方',
-    '<div class="rule-box"><div class="ex">a:b ＝ c:d のとき、ad ＝ bc</div><div class="ex">x:12 ＝ 3:4 → 4x ＝ 36 → x ＝ 9</div><div class="note">⚠️ 相似は「何倍か」の話。たし算で長さを出さない</div></div>');
+    '<div class="rule-box"><div class="ex">a:b ＝ c:d のとき、ad ＝ bc</div><div class="ex">x:12 ＝ 3:4 → 4x ＝ 36 → x ＝ 9</div><div class="note">⚠️ 相似は「何倍か」の話。たし算で長さを出さない</div></div>')
+  + card('🔍 最初の例題：△ABC ∽ △DEF、AB ＝ 2、DE ＝ 4、BC ＝ 3 のとき EF は？',
+    pair({ab:'2',de:'4',bc:'3',ef:'x'},1.6)
+    + step('STEP 1　対応する辺を書く（タップ）', 'AB ↔ DE、BC ↔ EF')
+    + step('STEP 2　比例式にする（タップ）', '2:4 ＝ 3:x')
+    + step('STEP 3　解く（タップ）', '2 × x ＝ 4 × 3 → 2x ＝ 12<div class="qd-big">x ＝ 6</div>確かめ：どちらも 2 倍 ✓'));
 };
 INTRO[2] = function() {
   return talk([
@@ -768,7 +872,12 @@ INTRO[4] = function() {
     + '<div class="rule-box"><div class="rule-title">なぜ✕なの？</div><div class="ex">① 相似なのは △ADE と △ABC</div><div class="ex">② DE:BC は、この2つの三角形の対応する辺の比</div><div class="ex">③ DB はどちらの三角形の辺でもないので、比に使えない</div></div>')
   + card('📐 ちょうちょ型（AB // CD）',
     butterfly(0.5,{oa:'3',od:'6',ob:'4',oc:'8',ab:'5',cd:'10'})
-    + '<div class="rule-box"><div class="ex">OA:OD ＝ OB:OC ＝ AB:DC</div><div class="note">💡 対角にある点が対応する。A と D、B と C</div></div>');
+    + '<div class="rule-box"><div class="ex">OA:OD ＝ OB:OC ＝ AB:DC</div><div class="note">💡 対角にある点が対応する。A と D、B と C</div></div>')
+  + card('🔍 最初の例題：x はどの比を使う？',
+    pyramid(0.4,{ad:'2',db:'3',de:'4',bc:'x'})
+    + step('STEP 1　x はどの線？（タップ）', 'BC は<b>横の線</b> → 「上の三角形：全体の三角形」で比べる')
+    + step('STEP 2　比を決める（タップ）', 'AD:AB ＝ 2:(2 ＋ 3) ＝ <b>2:5</b>')
+    + step('STEP 3　比例式を解く（タップ）', '2:5 ＝ 4:x → 2x ＝ 20<div class="qd-big">x ＝ 10</div>'));
 };
 INTRO[8] = function() {
   return talk([
@@ -795,6 +904,62 @@ INTRO[9] = function() {
 };
 INTRO[5] = function() {
   return talk([ chat('nishi', 'ここまでの総まとめだ。時間は気にしなくていい。入試の形は <a href="math_c3_geometry.html" style="color:var(--gold)">円周角・相似・三平方（大問3対策）</a>で練習できるよ') ]);
+};
+
+INTRO[10] = function() {
+  return talk([
+    chat('kyon', '三角形が重なってると、どの辺がどの辺かわからなくなるんだよ'),
+    chat('nishi', '重なったまま考えないことだ。<b>2つの三角形を取り出して、同じ向きに並べる</b>。見え方が全部変わる'),
+    chat('shun', 'きょんさん、舞台で2人が重なってたら、どっちがボケかわからんでしょ？まず並んでもらうんですわ')
+  ])
+  + card('📐 対応の見つけ方：3ステップ',
+    '<div class="rule-box"><div class="ex">① 等しい角に同じ色をつける</div><div class="ex">② 2つの三角形を取り出して、同じ向きに並べる</div><div class="ex">③ 同じ色の順番に頂点を読む → 比を作る</div></div>')
+  + card('🔍 ピラミッド型：DE // BC',
+    pyramid(0.4,{ad:'2',db:'3',de:'4',bc:'10'})
+    + '<div class="qd-big" style="text-align:center">↓ 取り出す</div>'
+    + twoTri(['A','D','E'],['2','4',''],['A','B','C'],['5','10',''],1.5)
+    + '<div class="rule-box"><div class="ex">△ADE ∽ △ABC</div><div class="note">💡 取り出すと、AB は 2 ＋ 3 ＝ <b>5</b> だとわかる。DB の 3 は三角形の辺ではない</div></div>')
+  + card('🔍 ほかの2つの形（タップで開く）',
+    step('ちょうちょ型：回して並べる（タップ）',
+      butterfly(0.5,{oa:'3',od:'6',ab:'5',cd:'10'})
+      + '<div class="qd-big" style="text-align:center">↓ △OAB を半回転</div>'
+      + twoTri(['O','B','A'],['','5','3'],['O','C','D'],['','10','6'],1.5)
+      + '△OAB ∽ △ODC。A と D、B と C が同じ色になる')
+    + step('裏返しの形：裏返して並べる（タップ）',
+      proofFig()
+      + '<div class="qd-big" style="text-align:center">↓ △AED を裏返す</div>'
+      + twoTri(['A','E','D'],['','',''],['A','B','C'],['','',''],1.5)
+      + '∠ADE ＝ ∠ACB なので D と C が同じ色。△ABC ∽ △AED'));
+};
+INTRO[11] = function() {
+  return talk([
+    chat('nishi', 'テストの記述は、書く順番さえ守れば点がもらえる。下の例を、1行ずつ開きながら見てみよう'),
+    chat('iwa', 'きょん、証明はお手紙だと思って。「誰と誰の話か」を最初に書かないと、読む人が困るでしょ'),
+    chat('kyon', 'イワクラちゃん、俺の手紙、だいたい宛名から間違ってるわ')
+  ])
+  + card('🔍 お手本：AB // CD のとき △OAB ∽ △ODC',
+    butterfly(0.55,{})
+    + step('1行目　誰と誰か（タップ）', '△OAB と △ODC において')
+    + step('2行目　根拠その1（タップ）', '対頂角は等しいから、∠AOB ＝ ∠DOC …①')
+    + step('3行目　根拠その2（タップ）', 'AB // CD より、錯角は等しいから、∠OAB ＝ ∠ODC …②')
+    + step('4行目　条件と結論（タップ）', '①、②より、2組の角がそれぞれ等しいから<div class="qd-big">△OAB ∽ △ODC</div>'))
+  + card('📐 書くときの3つのルール',
+    table([['ルール','例'],
+      ['根拠の名前を書く','対頂角、錯角、共通な角、仮定'],
+      ['番号をつける','…①、…②'],
+      ['結論は対応の順に書く','△OAB ∽ △ODC']]));
+};
+INTRO[12] = function() {
+  return talk([
+    chat('kuru', 'きょんさん、応用問題は「相似を見つける」「上：全体にする」「2乗か3乗する」の順っす！僕の芸歴より順番がはっきりしてるっす！'),
+    chat('kyon', 'くるま、お前の芸歴だって順番どおりだよ')
+  ])
+  + card('📐 長さ・面積を求める順番',
+    table([['手順','やること'],
+      ['①','相似な三角形を見つける'],
+      ['②','比を「上：全体」のように対応でそろえる'],
+      ['③','長さはそのまま、面積は2乗、体積は3乗'],
+      ['④','聞かれている部分が「残り」なら引く']]));
 };
 
 // ===== 確認テストの結果 =====

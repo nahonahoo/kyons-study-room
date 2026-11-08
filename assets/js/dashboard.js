@@ -71,6 +71,7 @@ const SUBJECTS = [
       { label:'🎲 確率・データの活用・標本調査（中1〜3）', href:'math/math_c2_prob_data.html', weakDb:'math', qidPrefix:'math_pd_' },
       { label:'🔍 中3 図形と相似', href:'math/math_c3_similar.html', weakDb:'math', qidPrefix:'math_soji_' },
       { label:'⭕ 中3 円の性質（円周角・接線）', href:'math/math_c3_circle.html', weakDb:'math', qidPrefix:'math_circle_' },
+      { label:'📏 中3 三平方の定理', href:'math/math_c3_pythagoras.html', weakDb:'math', qidPrefix:'math_sanp_' },
       { label:'中3 円周角・相似・三平方の定理（大問3対策）', href:'math/math_c3_geometry.html', weakDb:'math', qidPrefix:'math_geo3_' },
       { label:'🏆 入試 大問1 完全攻略（10問セット）', href:'math/math_exam_q1.html', weakDb:'math', qidPrefix:'math_q1_' },
     ]

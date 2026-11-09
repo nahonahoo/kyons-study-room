@@ -69,6 +69,7 @@ const SUBJECTS = [
       { label:'中3 二次方程式（解の公式）', href:'math/math_c3_quadratic.html', weakDb:'math', qidPrefix:'math_quad_' },
       { label:'中2〜3 関数（一次関数・y=ax²）', href:'math/math_c3_function.html', weakDb:'math', qidPrefix:'math_func_' },
       { label:'🎲 確率・データの活用・標本調査（中1〜3）', href:'math/math_c2_prob_data.html', weakDb:'math', qidPrefix:'math_pd_' },
+      { label:'🗞️ ストーリー新聞 図形と相似（まず読む・芸人が三角形に）', href:'math/math_story_similar.html' },
       { label:'🔍 中3 図形と相似', href:'math/math_c3_similar.html', weakDb:'math', qidPrefix:'math_soji_' },
       { label:'⭕ 中3 円の性質（円周角・接線）', href:'math/math_c3_circle.html', weakDb:'math', qidPrefix:'math_circle_' },
       { label:'📏 中3 三平方の定理', href:'math/math_c3_pythagoras.html', weakDb:'math', qidPrefix:'math_sanp_' },

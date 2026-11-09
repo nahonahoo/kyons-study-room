@@ -90,9 +90,9 @@ function sticky(icon, text){
 }
 function secHead(text, color){ return '<div class="sec-head ' + (color || '') + '"><span>' + text + '</span></div>'; }
 
-function seriesNav(cur){
+function seriesNav(cur, list){
   var h = '<div class="series">';
-  STORY_SERIES.forEach(function(s){
+  (list || STORY_SERIES).forEach(function(s){
     if(s.key === cur) h += '<span class="now">' + s.label + '（いまここ）</span>';
     else if(!s.href) h += '<span class="soon">' + s.label + '（準備中）</span>';
     else h += '<a href="' + s.href + '">' + s.label + '</a>';
@@ -102,18 +102,19 @@ function seriesNav(cur){
 
 function renderStory(S){
   var html = '';
+  var L = S.labels || {};   // 歴史以外（数学など）で見出しを変えるとき用。無ければ歴史の見出しのまま
 
   html += '<div class="masthead">';
   html += '<div class="burst">号外<br>!!</div>';
   html += '<div class="masthead-title"><span class="t1">' + S.era + '</span><br><span class="t2">ストーリー</span>新聞</div>';
   html += '<div class="masthead-sub">🗞️ ' + S.span + '<br>サクッと読んで「流れ」をつかもう！（クイズじゃないよ）</div>';
-  html += seriesNav(S.key);
+  html += seriesNav(S.key, S.series);
   html += '</div>';
 
   html += '<div class="catch lite">' + S.catchText + '<small>' + S.catchSmall + '</small></div>';
 
   // 登場人物
-  html += secHead('🎭 まずは登場人物（キャラ図鑑）');
+  html += secHead(L.chara || '🎭 まずは登場人物（キャラ図鑑）');
   html += '<div class="chara-grid">';
   S.charas.forEach(function(c, i){
     html += '<div class="chara k' + (i % 6) + '"><div class="chara-top"><div class="chara-emo">' + c[0] + '</div><div class="chara-name">' + c[1] + '<small>' + c[2] + '</small></div></div><div class="chara-desc">' + c[3] + '</div></div>';
@@ -121,7 +122,7 @@ function renderStory(S){
   html += '</div>';
 
   // 年表
-  html += secHead('📅 たての年表（上から古い順）', 'c');
+  html += secHead(L.timeline || '📅 たての年表（上から古い順）', 'c');
   html += '<div class="tl">';
   S.timeline.forEach(function(t){ html += '<div class="tl-item"><span class="tl-year">' + t[0] + '</span><span>' + t[1] + '</span></div>'; });
   html += '</div>';
@@ -138,6 +139,7 @@ function renderStory(S){
     if(s.talk) html += talk(s.talk);
     if(s.goro) html += goro(s.goro);
     if(s.stickyText) html += sticky(s.stickyIcon, s.stickyText);
+    if(s.link) html += '<a href="' + s.link.href + '" style="display:block;margin:14px 0 4px;padding:12px 10px;text-align:center;border:3px solid #000;border-radius:12px;background:var(--pop-y);color:#111;font-weight:900;text-decoration:none;line-height:1.6">' + s.link.text + ' →</a>';   // 問題ページへのボタン（任意）
     html += '</div>';
     if(i < S.stages.length - 1) html += '<div class="arrow-down">👇</div>';
   });
@@ -153,8 +155,8 @@ function renderStory(S){
   });
 
   // 組み合わせ表
-  html += secHead('🔗 人物とできごとの組み合わせ', 'v');
-  html += '<div class="pair-wrap"><table class="pair-table"><tr><th>人物</th><th>できごと</th></tr>';
+  html += secHead(L.pairs || '🔗 人物とできごとの組み合わせ', 'v');
+  html += '<div class="pair-wrap"><table class="pair-table"><tr><th>' + ((L.pairHead || ['人物'])[0]) + '</th><th>' + ((L.pairHead || ['','できごと'])[1]) + '</th></tr>';
   S.pairs.forEach(function(p){ html += '<tr><td style="white-space:nowrap;font-weight:900">' + p[0] + '</td><td>' + p[1] + '</td></tr>'; });
   html += '</table></div>';
 
@@ -164,7 +166,7 @@ function renderStory(S){
     html += '<div class="flip"><div><span class="flip-q">Q' + (i + 1) + '</span>' + c[0] + '</div><button class="flip-btn" data-flip="' + i + '">答えを見る</button><div class="flip-ans" id="flip_' + i + '">→ ' + c[1] + '</div></div>';
   });
 
-  html += '<div class="end-note">📰 発行：きょん＆西村新聞社<br>これは「流れ」をつかむための読み物です。<br>クイズで確かめたいときは、ホームの「歴史」ページへ！<br>' + S.nextNote + '</div>';
+  html += '<div class="end-note">' + (S.endNote || ('📰 発行：きょん＆西村新聞社<br>これは「流れ」をつかむための読み物です。<br>クイズで確かめたいときは、ホームの「歴史」ページへ！<br>' + S.nextNote)) + '</div>';
 
   document.getElementById('paperMain').innerHTML = html;
 

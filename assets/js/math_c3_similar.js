@@ -808,6 +808,7 @@ INTRO[0] = function() {
       ['大きさ','同じ','ちがってもよい'],
       ['対応する角','等しい','等しい'],
       ['対応する辺','等しい','<b>比が等しい</b>']]))
+  + '<a href="math_story_similar.html" style="display:block;margin:0 0 16px;padding:14px;text-align:center;border-radius:12px;background:#f5c518;color:#111;font-weight:bold;text-decoration:none;line-height:1.8">🗞️ まず読む：芸人のストーリー新聞で予習 →</a>'
   + card('📝 テストまで時間がないときの順番',
     '<div class="rule-box"><div class="ex">① 対応の見つけ方</div><div class="ex">② 平行線と比</div><div class="ex">③ 証明ドリル</div><div class="ex">④ テスト対策</div></div>')
   + '<button class="start-btn" data-goto="1">🔍 相似とは から始める →</button>';
@@ -1113,4 +1114,5 @@ function showTokkuComplete() {
 updateXP();
 renderWeakBar();
 renderTabs();
-goSection(0);
+// #s1 のようなリンクで、そのセクションを直接開く（ストーリー新聞のボタン用）
+(function(){ var m = /^#s(\d+)$/.exec(location.hash), id = m ? parseInt(m[1], 10) : 0; goSection(SECTIONS.some(function(s){ return s.id === id; }) ? id : 0); })();

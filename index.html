@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>きょんの勉強部屋 📚</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/style.css?v=2">
 </head>
 <body>
 
@@ -41,8 +41,15 @@
       </div>
     </div>
 
-    <!-- 称号バッジ一覧 -->
+    <!-- 称号バッジ一覧（ボタンで開閉。スマホでは最初は畳む） -->
+    <button type="button" class="fold-btn" id="badgeToggle">🏅 称号を見る ▼</button>
     <div class="badge-grid" id="badgeGrid"></div>
+  </div>
+
+  <!-- ====== つづきから（ホームから最後に開いたページ。無いときは出ない） ====== -->
+  <div class="card" id="recentCard" style="display:none">
+    <div class="card-title">▶️ つづきから</div>
+    <div class="recent-links" id="recentLinks"></div>
   </div>
 
   <!-- ====== 教科別進捗 ====== -->
@@ -102,6 +109,6 @@
 
 </div>
 
-<script src="assets/js/dashboard.js?v=20261109b" defer></script>
+<script src="assets/js/dashboard.js?v=20261109c" defer></script>
 </body>
 </html>

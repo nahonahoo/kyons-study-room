@@ -12,6 +12,7 @@ const LEVELS = [
 
 // ====== 教科定義 ======
 // weakDb: localStorage キー（{weakDb}_weakdb）, qidPrefix: 問題IDの先頭文字列
+// label はスマホで1行に収まる長さ（20文字まで）にする。group は1本にまとめた番号チップ（歴史ストーリー新聞）
 const SUBJECTS = [
   {
     key:'exam', name:'入試対策（全教科共通）', icon:'🔍', color:'#f5c518',
@@ -22,21 +23,21 @@ const SUBJECTS = [
   {
     key:'nh3', name:'英語', icon:'🇬🇧', color:'#3b82f6',
     links:[
-      { label:'📖 英単語ネタ帳（中学3年間・呪文で覚える）', href:'english_reading/eng_vocab.html' },
-      { label:'📖 時制表（迷ったらここを見る）', href:'english_reading/eng_tense_chart.html' },
-      { label:'Unit0 基礎復習',              href:'english_reading/nh3_unit0.html',             weakDb:'nh3',  qidPrefix:'s' },
-      { label:'Unit1（受け身）',             href:'english_reading/nh3_units123.html?unit=1',    weakDb:'nh3', qidPrefix:'1_' },
-      { label:'🔁 受け身 総復習（何回でもやり直せる）', href:'english_reading/eng_passive_review.html', weakDb:'nh3', qidPrefix:'pv_' },
-      { label:'⏳ 時制と受け身 まとめ（主語はぜんぶ I・空手とピアノで）', href:'english_reading/eng_tense_passive.html', weakDb:'nh3', qidPrefix:'tn_' },
-      { label:'Unit2（現在完了①）',         href:'english_reading/nh3_units123.html?unit=2',    weakDb:'nh3', qidPrefix:'2_' },
-      { label:'Unit2（現在完了②）',         href:'english_reading/nh3_units123.html?unit=3',    weakDb:'nh3', qidPrefix:'3_' },
-      { label:'Unit3（不定詞）',             href:'english_reading/nh3_units123.html?unit=4',    weakDb:'nh3', qidPrefix:'4_' },
-      { label:'Unit4（間接疑問文・分詞）',   href:'english_reading/nh3_units456.html?unit=4',    weakDb:'nh3', qidPrefix:'u4_' },
-      { label:'Unit5（関係代名詞）',         href:'english_reading/nh3_units456.html?unit=5',    weakDb:'nh3', qidPrefix:'u5_' },
-      { label:'Unit6（仮定法）',             href:'english_reading/nh3_units456.html?unit=6',    weakDb:'nh3', qidPrefix:'u6_' },
-      { label:'📗 中3 Unit4〜 単語練習（読み上げつき）', href:'english_reading/nh3_words_u4.html' },
+      { label:'📖 英単語ネタ帳（呪文で覚える）', href:'english_reading/eng_vocab.html' },
+      { label:'📖 時制表',                 href:'english_reading/eng_tense_chart.html' },
+      { label:'Unit0 基礎復習',            href:'english_reading/nh3_unit0.html',             weakDb:'nh3',  qidPrefix:'s' },
+      { label:'Unit1 受け身',              href:'english_reading/nh3_units123.html?unit=1',    weakDb:'nh3', qidPrefix:'1_' },
+      { label:'🔁 受け身 総復習',           href:'english_reading/eng_passive_review.html', weakDb:'nh3', qidPrefix:'pv_' },
+      { label:'⏳ 時制と受け身 まとめ',      href:'english_reading/eng_tense_passive.html', weakDb:'nh3', qidPrefix:'tn_' },
+      { label:'Unit2 現在完了①',           href:'english_reading/nh3_units123.html?unit=2',    weakDb:'nh3', qidPrefix:'2_' },
+      { label:'Unit2 現在完了②',           href:'english_reading/nh3_units123.html?unit=3',    weakDb:'nh3', qidPrefix:'3_' },
+      { label:'Unit3 不定詞',              href:'english_reading/nh3_units123.html?unit=4',    weakDb:'nh3', qidPrefix:'4_' },
+      { label:'Unit4 間接疑問文・分詞',     href:'english_reading/nh3_units456.html?unit=4',    weakDb:'nh3', qidPrefix:'u4_' },
+      { label:'Unit5 関係代名詞',          href:'english_reading/nh3_units456.html?unit=5',    weakDb:'nh3', qidPrefix:'u5_' },
+      { label:'Unit6 仮定法',              href:'english_reading/nh3_units456.html?unit=6',    weakDb:'nh3', qidPrefix:'u6_' },
+      { label:'📗 Unit4〜 単語練習',         href:'english_reading/nh3_words_u4.html' },
       { label:'📘 中2英語復習（Unit1〜7）',  href:'english_reading/english_review_unit1-7.html', weakDb:'nh3',  qidPrefix:'nh3_rev_' },
-      { label:'🎧 リスニング・会話文・グラフ英語（入試対策）', href:'english_reading/eng_exam_listening.html', weakDb:'nh3', qidPrefix:'eng_ex_' },
+      { label:'🎧 リスニング（入試対策）',    href:'english_reading/eng_exam_listening.html', weakDb:'nh3', qidPrefix:'eng_ex_' },
     ]
   },
   {
@@ -47,81 +48,101 @@ const SUBJECTS = [
       { label:'中2 化学変化・原子分子', href:'science/sci_c2_chem.html',     weakDb:'sci', qidPrefix:'sci_chem_' },
       { label:'中2 電流・磁界',         href:'science/sci_c2_electric.html', weakDb:'sci', qidPrefix:'sci_elec_' },
       { label:'中3 化学変化とイオン',   href:'science/sci_c3_ion.html',      weakDb:'sci', qidPrefix:'sci_ion_' },
-      { label:'中3 生物の成長と生殖・遺伝・進化（始祖鳥）', href:'science/sci_c4_life.html', weakDb:'sci', qidPrefix:'sci_life_' },
-      { label:'🔬 実験器具と実験文の読み方（入試対策）', href:'science/sci_exam_lab.html', weakDb:'sci', qidPrefix:'sci_lab_' },
-      { label:'🌏 大地の変化・地球と宇宙（3年連続出題）', href:'science/sci_earth.html', weakDb:'sci', qidPrefix:'sci_earth_' },
+      { label:'中3 生殖・遺伝・進化',   href:'science/sci_c4_life.html',     weakDb:'sci', qidPrefix:'sci_life_' },
+      { label:'🔬 実験文の読み方（入試）', href:'science/sci_exam_lab.html',   weakDb:'sci', qidPrefix:'sci_lab_' },
+      { label:'🌏 大地・地球と宇宙（入試）', href:'science/sci_earth.html',    weakDb:'sci', qidPrefix:'sci_earth_' },
     ]
   },
   {
     key:'math', name:'数学', icon:'📐', color:'#a371f7',
     links:[
-      { label:'中1 正の数・負の数', href:'math/math_c1_numbers.html',     weakDb:'math', qidPrefix:'math_nums_' },
-      { label:'中1 図形',           href:'math/math_c1_geometry.html',    weakDb:'math', qidPrefix:'math_geo_' },
-      { label:'中1 扇形・柱体・錐体（強化）', href:'math/math_c1_solids.html', weakDb:'math', qidPrefix:'math_solid_' },
-      { label:'中1 文字式',         href:'math/math_c1_chars.html',       weakDb:'math', qidPrefix:'math_chars_' },
-      { label:'中1 一次方程式',     href:'math/math_c1_equation.html',    weakDb:'math', qidPrefix:'math_eq_' },
-      { label:'中1 比例・反比例',   href:'math/math_c1_proportion.html',  weakDb:'math', qidPrefix:'math_prop_' },
-      { label:'🧮 中2 式の計算（単項式・多項式・文字で説明）', href:'math/math_c2_expr.html', weakDb:'math', qidPrefix:'math_expr_' },
-      { label:'中2 連立方程式',     href:'math/math_c2_simultaneous.html',weakDb:'math', qidPrefix:'math_sim_' },
-      { label:'📈 中2 一次関数（グラフから式を作る）', href:'math/math_c2_linear.html', weakDb:'math', qidPrefix:'math_lin_' },
-      { label:'中3 平方根',         href:'math/math_c3_sqrt.html',        weakDb:'math', qidPrefix:'math_sqrt_' },
-      { label:'中3 多項式・乗法公式・因数分解', href:'math/math_c3_polynomial.html', weakDb:'math', qidPrefix:'math_poly_' },
-      { label:'中3 二次方程式（解の公式）', href:'math/math_c3_quadratic.html', weakDb:'math', qidPrefix:'math_quad_' },
-      { label:'中2〜3 関数（一次関数・y=ax²）', href:'math/math_c3_function.html', weakDb:'math', qidPrefix:'math_func_' },
-      { label:'🎲 確率・データの活用・標本調査（中1〜3）', href:'math/math_c2_prob_data.html', weakDb:'math', qidPrefix:'math_pd_' },
-      { label:'🗞️ ストーリー新聞 図形と相似（まず読む・芸人が三角形に）', href:'math/math_story_similar.html' },
-      { label:'🔍 中3 図形と相似', href:'math/math_c3_similar.html', weakDb:'math', qidPrefix:'math_soji_' },
-      { label:'⭕ 中3 円の性質（円周角・接線）', href:'math/math_c3_circle.html', weakDb:'math', qidPrefix:'math_circle_' },
-      { label:'📏 中3 三平方の定理', href:'math/math_c3_pythagoras.html', weakDb:'math', qidPrefix:'math_sanp_' },
-      { label:'中3 円周角・相似・三平方の定理（大問3対策）', href:'math/math_c3_geometry.html', weakDb:'math', qidPrefix:'math_geo3_' },
-      { label:'🏆 入試 大問1 完全攻略（10問セット）', href:'math/math_exam_q1.html', weakDb:'math', qidPrefix:'math_q1_' },
+      { label:'中1 正の数・負の数',   href:'math/math_c1_numbers.html',     weakDb:'math', qidPrefix:'math_nums_' },
+      { label:'中1 図形',             href:'math/math_c1_geometry.html',    weakDb:'math', qidPrefix:'math_geo_' },
+      { label:'中1 扇形・柱体・錐体', href:'math/math_c1_solids.html',      weakDb:'math', qidPrefix:'math_solid_' },
+      { label:'中1 文字式',           href:'math/math_c1_chars.html',       weakDb:'math', qidPrefix:'math_chars_' },
+      { label:'中1 一次方程式',       href:'math/math_c1_equation.html',    weakDb:'math', qidPrefix:'math_eq_' },
+      { label:'中1 比例・反比例',     href:'math/math_c1_proportion.html',  weakDb:'math', qidPrefix:'math_prop_' },
+      { label:'🧮 中2 式の計算',       href:'math/math_c2_expr.html',        weakDb:'math', qidPrefix:'math_expr_' },
+      { label:'中2 連立方程式',       href:'math/math_c2_simultaneous.html',weakDb:'math', qidPrefix:'math_sim_' },
+      { label:'📈 中2 一次関数',       href:'math/math_c2_linear.html',      weakDb:'math', qidPrefix:'math_lin_' },
+      { label:'中3 平方根',           href:'math/math_c3_sqrt.html',        weakDb:'math', qidPrefix:'math_sqrt_' },
+      { label:'中3 乗法公式・因数分解', href:'math/math_c3_polynomial.html', weakDb:'math', qidPrefix:'math_poly_' },
+      { label:'中3 二次方程式',       href:'math/math_c3_quadratic.html',   weakDb:'math', qidPrefix:'math_quad_' },
+      { label:'中2〜3 関数（y=ax²）',  href:'math/math_c3_function.html',    weakDb:'math', qidPrefix:'math_func_' },
+      { label:'🎲 確率・データ・標本調査', href:'math/math_c2_prob_data.html', weakDb:'math', qidPrefix:'math_pd_' },
+      { label:'🗞️ 新聞 図形と相似（まず読む）', href:'math/math_story_similar.html' },
+      { label:'🔍 中3 図形と相似',     href:'math/math_c3_similar.html',     weakDb:'math', qidPrefix:'math_soji_' },
+      { label:'⭕ 中3 円の性質',       href:'math/math_c3_circle.html',      weakDb:'math', qidPrefix:'math_circle_' },
+      { label:'📏 中3 三平方の定理',   href:'math/math_c3_pythagoras.html',  weakDb:'math', qidPrefix:'math_sanp_' },
+      { label:'中3 図形 大問3対策',    href:'math/math_c3_geometry.html',    weakDb:'math', qidPrefix:'math_geo3_' },
+      { label:'🏆 入試 大問1 攻略',    href:'math/math_exam_q1.html',        weakDb:'math', qidPrefix:'math_q1_' },
     ]
   },
   {
     key:'soc', name:'社会', icon:'🌏', color:'#f59e0b',
     links:[
-      { label:'歴史',               href:'social/soc_history.html',   weakDb:'soc', qidPrefix:'soc_hist_' },
-      { label:'🗞️ 歴史ストーリー① 飛鳥時代（聖徳太子〜平城京）', href:'social/soc_story_asuka.html' },
-      { label:'🗞️ 歴史ストーリー② 奈良時代（平城京〜平安京）', href:'social/soc_story_nara.html' },
-      { label:'🗞️ 歴史ストーリー③ 平安時代（平安京〜壇ノ浦）', href:'social/soc_story_heian.html' },
-      { label:'🗞️ 歴史ストーリー④ 鎌倉時代（鎌倉幕府の成立〜滅亡）', href:'social/soc_story_kamakura.html' },
-      { label:'🗞️ 歴史ストーリー⑤ 室町時代（建武の新政〜室町幕府の滅亡）', href:'social/soc_story_muromachi.html' },
-      { label:'🗞️ 歴史ストーリー⑥ 安土桃山時代（鉄砲・キリスト教〜信長・秀吉の全国統一）', href:'social/soc_story_azuchi.html' },
-      { label:'🗞️ 歴史ストーリー⑦ 江戸時代・前半（関ヶ原〜幕藩体制・「鎖国」・身分制度）', href:'social/soc_story_edo1.html' },
-      { label:'🗞️ 歴史ストーリー⑧ 江戸時代・中期（産業の発達・元禄文化・享保〜寛政の改革）', href:'social/soc_story_edo2.html' },
-      { label:'🗞️ 歴史ストーリー⑨ 江戸時代・後半（国学・蘭学・化政文化・外国船・天保の改革）', href:'social/soc_story_edo3.html' },
-      { label:'🗞️ 歴史ストーリー⑩ 開国と江戸幕府の滅亡（市民革命・産業革命・黒船来航・不平等条約・大政奉還）', href:'social/soc_story_bakumatsu.html' },
-      { label:'🗞️ 歴史ストーリー⑪ 明治維新（廃藩置県・三大改革・文明開化・国境・西南戦争）', href:'social/soc_story_meiji.html' },
-      { label:'🗞️ 歴史ストーリー⑫ 自由民権運動と大日本帝国憲法（建白書・政党・秩父事件・憲法・帝国議会）', href:'social/soc_story_kenpo.html' },
-      { label:'🗞️ 歴史ストーリー⑬ 日清・日露戦争と条約改正（陸奥宗光・下関条約・三国干渉・ポーツマス条約・小村寿太郎）', href:'social/soc_story_nichiro.html' },
-      { label:'🗞️ 歴史ストーリー⑭ 産業と明治の文化（八幡製鉄所・足尾銅山・漱石・鷗外・北里・野口）', href:'social/soc_story_meijibunka.html' },
-      { label:'🗞️ 歴史ストーリー⑮ 第一次世界大戦と国際協調（サラエボ事件・二十一か条・ロシア革命・ベルサイユ条約・国際連盟）', href:'social/soc_story_taisen1.html' },
-      { label:'🗞️ 歴史ストーリー⑯ 大正デモクラシー（米騒動・原敬・普通選挙法・水平社・関東大震災・ラジオ）', href:'social/soc_story_taisho.html' },
-      { label:'🗞️ 歴史ストーリー⑰ 戦争への道（世界恐慌・満州事変・五・一五・二・二六・日中戦争・国家総動員法）', href:'social/soc_story_showa1.html' },
-      { label:'🗞️ 歴史ストーリー⑱ 第二次世界大戦と太平洋戦争（ポーランド侵攻・ホロコースト・三国同盟・真珠湾・ミッドウェー）', href:'social/soc_story_taisen2.html' },
-      { label:'🗞️ 歴史ストーリー⑲ 戦時下の暮らしと終戦（学徒出陣・疎開・空襲・沖縄戦・原爆・8月15日）', href:'social/soc_story_shusen.html' },
-      { label:'🗞️ 歴史ストーリー⑳ 戦後の改革（GHQ・農地改革・日本国憲法・冷戦・朝鮮戦争・独立）', href:'social/soc_story_sengo1.html' },
-      { label:'🗞️ 歴史ストーリー㉑ 高度成長と今（高度経済成長・公害・沖縄返還・石油危機・冷戦の終わり・バブル・震災）', href:'social/soc_story_sengo2.html' },
-      { label:'地理（世界・日本）', href:'social/soc_geography.html', weakDb:'soc', qidPrefix:'soc_geo_' },
-      { label:'⚖️ 公民（人権・政治・経済）入試頻出', href:'social/soc_civics.html', weakDb:'soc', qidPrefix:'soc_civ_' },
+      { label:'歴史（問題）',         href:'social/soc_history.html',   weakDb:'soc', qidPrefix:'soc_hist_' },
+      { label:'🗞️ 歴史ストーリー新聞 ①〜㉑', group:[
+        { n:'①', t:'飛鳥',       href:'social/soc_story_asuka.html' },
+        { n:'②', t:'奈良',       href:'social/soc_story_nara.html' },
+        { n:'③', t:'平安',       href:'social/soc_story_heian.html' },
+        { n:'④', t:'鎌倉',       href:'social/soc_story_kamakura.html' },
+        { n:'⑤', t:'室町',       href:'social/soc_story_muromachi.html' },
+        { n:'⑥', t:'安土桃山',   href:'social/soc_story_azuchi.html' },
+        { n:'⑦', t:'江戸前半',   href:'social/soc_story_edo1.html' },
+        { n:'⑧', t:'江戸中期',   href:'social/soc_story_edo2.html' },
+        { n:'⑨', t:'江戸後半',   href:'social/soc_story_edo3.html' },
+        { n:'⑩', t:'開国',       href:'social/soc_story_bakumatsu.html' },
+        { n:'⑪', t:'明治維新',   href:'social/soc_story_meiji.html' },
+        { n:'⑫', t:'憲法',       href:'social/soc_story_kenpo.html' },
+        { n:'⑬', t:'日清・日露', href:'social/soc_story_nichiro.html' },
+        { n:'⑭', t:'明治の文化', href:'social/soc_story_meijibunka.html' },
+        { n:'⑮', t:'第一次大戦', href:'social/soc_story_taisen1.html' },
+        { n:'⑯', t:'大正',       href:'social/soc_story_taisho.html' },
+        { n:'⑰', t:'戦争への道', href:'social/soc_story_showa1.html' },
+        { n:'⑱', t:'第二次大戦', href:'social/soc_story_taisen2.html' },
+        { n:'⑲', t:'暮らしと終戦', href:'social/soc_story_shusen.html' },
+        { n:'⑳', t:'戦後の改革', href:'social/soc_story_sengo1.html' },
+        { n:'㉑', t:'高度成長と今', href:'social/soc_story_sengo2.html' },
+      ] },
+      { label:'地理（世界・日本）',   href:'social/soc_geography.html', weakDb:'soc', qidPrefix:'soc_geo_' },
+      { label:'⚖️ 公民（入試頻出）',   href:'social/soc_civics.html',    weakDb:'soc', qidPrefix:'soc_civ_' },
     ]
   },
   {
     key:'jpn', name:'国語', icon:'📖', color:'#a371f7',
     links:[
       { label:'🈂️ 漢字・語句（入試最重要）', href:'japanese/jpn_kanji_goi.html', weakDb:'jpn', qidPrefix:'jpn_kanji_' },
-      { label:'🈶 紛らわしい漢字（定期テスト対策）', href:'japanese/jpn_kanji_magirawashii.html', weakDb:'jpn', qidPrefix:'jpn_magi_' },
-      { label:'文法総復習（中1〜中3）', href:'japanese/jpn_grammar_review.html', weakDb:'jpn', qidPrefix:'jpn_gram_' },
-      { label:'🔖 品詞早見表', href:'japanese/jpn_pos_reference.html' },
-      { label:'🐾 活用形まとめ（現代文）', href:'japanese/jpn_gendai_henkaku.html' },
-      { label:'🐾 活用形まとめ（古文）', href:'japanese/jpn_henkaku_katsuyo.html' },
-      { label:'🐕 表現技法まとめ', href:'japanese/jpn_hyogen_gihou.html' },
-      { label:'🏯 古文基礎', href:'japanese/jpn_kobun_basics.html', weakDb:'jpn', qidPrefix:'jpn_kobun_' },
-      { label:'📜 古文まとめ（重要事項オール1）', href:'japanese/jpn_kobun_reference.html' },
-      { label:'🎭 古文コント台本（印刷用）', href:'japanese/jpn_kobun_konto.html' },
+      { label:'🈶 紛らわしい漢字',         href:'japanese/jpn_kanji_magirawashii.html', weakDb:'jpn', qidPrefix:'jpn_magi_' },
+      { label:'文法総復習（中1〜3）',       href:'japanese/jpn_grammar_review.html', weakDb:'jpn', qidPrefix:'jpn_gram_' },
+      { label:'🔖 品詞早見表',             href:'japanese/jpn_pos_reference.html' },
+      { label:'🐾 活用形まとめ（現代文）',   href:'japanese/jpn_gendai_henkaku.html' },
+      { label:'🐾 活用形まとめ（古文）',     href:'japanese/jpn_henkaku_katsuyo.html' },
+      { label:'🐕 表現技法まとめ',          href:'japanese/jpn_hyogen_gihou.html' },
+      { label:'🏯 古文基礎',               href:'japanese/jpn_kobun_basics.html', weakDb:'jpn', qidPrefix:'jpn_kobun_' },
+      { label:'📜 古文まとめ',             href:'japanese/jpn_kobun_reference.html' },
+      { label:'🎭 古文コント台本',          href:'japanese/jpn_kobun_konto.html' },
     ]
   },
 ];
+
+// ====== ホーム画面の表示状態（この端末だけ。XP などの学習記録とは別） ======
+// home_ui：{ open:{教科key:true/false}, grp:{グループid:true}, badges:true/false }
+// home_recent：[{href,label,subject,t}]（ホームから開いたページ。新しい順・5件まで）
+const UI_KEY = 'home_ui', RECENT_KEY = 'home_recent';
+function loadJson(k, d) { try { return JSON.parse(localStorage.getItem(k)) || d; } catch(e) { return d; } }
+function saveJson(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch(e) {} }
+function isNarrow() { return window.matchMedia('(max-width: 600px)').matches; }
+function getRecent() { return loadJson(RECENT_KEY, []).filter(r => r && r.href); }
+// 教科カードを開いておくか。手で開閉した記録があればそれ、無ければ PC は全部、スマホは最後に使った教科だけ
+function isSubjectOpen(key) {
+  const ui = loadJson(UI_KEY, {});
+  if (ui.open && typeof ui.open[key] === 'boolean') return ui.open[key];
+  if (!isNarrow()) return true;
+  const rec = getRecent();
+  return rec.length > 0 && rec[0].subject === key;
+}
+function setUi(fn) { const ui = loadJson(UI_KEY, {}); fn(ui); saveJson(UI_KEY, ui); }
 
 // ====== 仲間キャラ定義 ======
 const CHARS = [
@@ -234,6 +255,22 @@ function renderKyon() {
 }
 
 // ====== 教科グリッド描画 ======
+// 1本のリンク。data-track があると、タップしたときに「つづきから」に記録される
+function linkHtml(l, s) {
+  const weak = l.weakDb ? isUnitWeak(l.weakDb, l.qidPrefix) : false;
+  const tag = weak ? ' <span class="unit-weak-tag">苦手</span>' : '';
+  return `<a class="subject-link${weak ? ' is-weak' : ''}" href="${l.href}" data-track="${l.label}" data-subject="${s.key}">▶ ${l.label}${tag}</a>`;
+}
+// 番号チップにまとめたグループ（歴史ストーリー新聞）。タップで開閉
+function groupHtml(l, s, i) {
+  const id = s.key + '_' + i;
+  const open = !!(loadJson(UI_KEY, {}).grp || {})[id];
+  return `<div class="link-group">
+    <button type="button" class="subject-link group-btn" data-grp="${id}">${l.label}<span class="grp-count">${l.group.length}本 ${open ? '▲' : '▼'}</span></button>
+    <div class="story-chips"${open ? '' : ' style="display:none"'}>` +
+    l.group.map(g => `<a class="story-chip" href="${g.href}" data-track="🗞️ 歴史 ${g.n}${g.t}" data-subject="${s.key}">${g.n}${g.t}</a>`).join('') +
+    `</div></div>`;
+}
 function renderSubjects() {
   const grid = document.getElementById('subjectGrid');
   grid.innerHTML = '';
@@ -244,19 +281,23 @@ function renderSubjects() {
     const lv = getLevel(xp, SUBJECT_LEVELS);
     const prog = getLevelProgress(xp, SUBJECT_LEVELS);
     const hasLinks = s.links.length > 0;
+    const open = isSubjectOpen(s.key);
+    const pageCount = s.links.reduce((n, l) => n + (l.group ? l.group.length : 1), 0);
 
     const div = document.createElement('div');
-    div.className = 'subject-card' + (hasLinks ? '' : ' locked-subject');
+    div.className = 'subject-card' + (hasLinks ? '' : ' locked-subject') + (open ? '' : ' is-closed');
 
     let linksHtml = '';
-    if (hasLinks) {
+    if (hasLinks && open) {
       linksHtml = '<div class="subject-links">' +
-        s.links.map(l => {
-          const weak = l.weakDb ? isUnitWeak(l.weakDb, l.qidPrefix) : false;
-          const tag = weak ? ' <span class="unit-weak-tag">苦手</span>' : '';
-          return `<a class="subject-link${weak ? ' is-weak' : ''}" href="${l.href}">▶ ${l.label}${tag}</a>`;
-        }).join('') +
-        '</div>';
+        s.links.map((l, i) => l.group ? groupHtml(l, s, i) : linkHtml(l, s)).join('') +
+        '</div>' +
+        `<button type="button" class="fold-btn" data-toggle="${s.key}" data-open="0">▲ とじる</button>`;
+    } else if (hasLinks) {
+      // 畳んでいるときも、苦手タグのついたページだけは見せる
+      const weakLinks = s.links.filter(l => l.weakDb && isUnitWeak(l.weakDb, l.qidPrefix));
+      linksHtml = (weakLinks.length ? '<div class="subject-links">' + weakLinks.map(l => linkHtml(l, s)).join('') + '</div>' : '') +
+        `<button type="button" class="fold-btn" data-toggle="${s.key}" data-open="1">▼ ひらく（${pageCount}ページ）</button>`;
     } else {
       linksHtml = '<div style="font-size:0.78rem;color:var(--muted);margin-top:8px;">🔒 準備中</div>';
     }
@@ -276,6 +317,49 @@ function renderSubjects() {
     grid.appendChild(div);
   });
 }
+
+// ====== つづきから（ホームから最後に開いた3ページ） ======
+function renderRecent() {
+  const card = document.getElementById('recentCard'), box = document.getElementById('recentLinks');
+  if (!card || !box) return;
+  const rec = getRecent().slice(0, 3);
+  card.style.display = rec.length ? '' : 'none';
+  box.innerHTML = rec.map(r => {
+    const s = SUBJECTS.find(x => x.key === r.subject) || { icon:'', name:'', color:'var(--gold)' };
+    return `<a class="recent-link" href="${r.href}" data-track="${r.label}" data-subject="${r.subject}" style="border-left-color:${s.color}">${r.label}<small>${s.icon} ${s.name}</small></a>`;
+  }).join('');
+}
+
+// ====== 称号バッジの開閉 ======
+function renderBadgeToggle() {
+  const btn = document.getElementById('badgeToggle'), grid = document.getElementById('badgeGrid');
+  if (!btn || !grid) return;
+  const ui = loadJson(UI_KEY, {});
+  const open = typeof ui.badges === 'boolean' ? ui.badges : !isNarrow();
+  grid.style.display = open ? '' : 'none';
+  btn.textContent = open ? '🏅 称号をとじる ▲' : '🏅 称号を見る ▼';
+}
+
+// ホームのタップ：ページへ行くときは「つづきから」に記録、開閉ボタンは状態を保存して描き直す
+document.addEventListener('click', function(e) {
+  const a = e.target.closest('a[data-track]');
+  if (a) {
+    const href = a.getAttribute('href');
+    const rec = getRecent().filter(r => r.href !== href);
+    rec.unshift({ href, label: a.getAttribute('data-track'), subject: a.getAttribute('data-subject'), t: Date.now() });
+    saveJson(RECENT_KEY, rec.slice(0, 5));
+    setUi(ui => { ui.open = {}; });   // 次にホームへ戻ったとき、いま使っている教科だけが開く
+    return;
+  }
+  const t = e.target.closest('[data-toggle]');
+  if (t) { setUi(ui => { ui.open = ui.open || {}; ui.open[t.getAttribute('data-toggle')] = t.getAttribute('data-open') === '1'; }); renderSubjects(); return; }
+  const g = e.target.closest('[data-grp]');
+  if (g) { setUi(ui => { ui.grp = ui.grp || {}; ui.grp[g.getAttribute('data-grp')] = !ui.grp[g.getAttribute('data-grp')]; }); renderSubjects(); return; }
+  if (e.target.closest('#badgeToggle')) {
+    setUi(ui => { ui.badges = document.getElementById('badgeGrid').style.display === 'none'; });
+    renderBadgeToggle();
+  }
+});
 
 // ====== キャラグリッド描画 ======
 function renderChars() {
@@ -375,6 +459,8 @@ function vocabSummary() {
 // ====== 初期化 ======
 function init() {
   renderKyon();
+  renderBadgeToggle();
+  renderRecent();
   renderSubjects();
   renderChars();
   renderCalendar();

@@ -649,11 +649,11 @@ function renderSection2(){
   var a1 = [
     { qid:'eng_ex_s2_q8', short:'アナウンス：集合時刻',
       jp: listenBtns('A1') + '<div class="en" style="color:var(--gold)">問1 What time should students come to the school gate?</div>',
-      answer:'At eight fifteen.', choices:['At eight.','At eight fifteen.','At eight thirty.','At four.'],
+      answer:'At eight fifteen.', choices:['At eight o’clock.','At eight fifteen.','At eight thirty.','At four fifteen.'],
       exp:'📐 バスの出発は 8:30、でも「come to the school gate by eight fifteen」<br>💡 数字が2つ出たら、どちらが何の数字かをメモ' + transcript('A1') },
     { qid:'eng_ex_s2_q9', short:'アナウンス：含まれる情報',
       jp: listenBtns('A1') + '<div class="en" style="color:var(--gold)">問2 Which information is in this announcement?</div>',
-      answer:'Students should bring something to drink.', choices:['Students should bring something to drink.','The bus will leave at four p.m.','It will rain in the afternoon.','Students will have lunch at school.'],
+      answer:'Students should bring something to drink.', choices:['Students should bring something to drink.','The bus will leave the school at four p.m.','It will be rainy and cold in the afternoon.','Students will have lunch at school together.'],
       exp:'📐 「please bring something to drink」＝飲み物を持ってきて<br>❌ 4時は学校に「戻る」時刻。天気は sunny and hot' + transcript('A1') },
   ];
   html += voicePanel(false);
@@ -681,7 +681,7 @@ function renderSection3(){
 
   var qs = [
     { qid:'eng_ex_s3_q0', short:'会話文：R7(1) 健康に良いもの', jp:'（R7 本番）夕食の買い物中' + dlg([['Santos','Well, what do we have for dinner tonight? I’m hungry.'],['Hiroko', BL + ' Vegetable soup, for example.'],['Santos','Sounds good!']]),
-      answer:'I feel like eating something good for my health.', choices:['Actually, I want to buy and eat many cookies.','I feel like eating something good for my health.','How about eating a lot of sweets?','How do you make vegetable soup?'],
+      answer:'I feel like eating something good for my health.', choices:['Actually, I want to buy and eat many cookies.','I feel like eating something good for my health.','How about eating a lot of sweets after dinner?','How do you usually make vegetable soup at home?'],
       exp:'📐 後ろの「Vegetable soup, for example（たとえば野菜スープ）」→ 野菜スープの例になる内容＝「健康に良いものが食べたい」<br>❌ クッキー・お菓子は野菜スープの例にならない。「どうやって作るの？」は自分の提案と合わない' },
     { qid:'eng_ex_s3_q1', short:'会話文：R7(2) 予定を変える', jp:'（R7 本番）' + dlg([['Hiroko','Oh, just a moment. The prices of vegetables are higher today than last week.'],['Santos','What happened?'],['Hiroko','I’m not sure, but I think the weather affected the prices. I want ' + BL + '. What about making something different, like spaghetti?']]),
       answer:'to change our dinner plan', choices:['to have dinner together','to eat spaghetti at a restaurant','to change our dinner plan','to buy more vegetables'],
@@ -690,19 +690,19 @@ function renderSection3(){
       answer:'if we buy a tomato sauce instead of vegetables', choices:['if we buy a tomato sauce instead of vegetables','if we find enough food at a nice restaurant','because the prices of vegetables are lower','because the weather is nice and vegetables are growing'],
       exp:'📐 後ろの「Let’s get a sauce over there（あそこのソースを買おう）」→ ソースの話<br>❌ 野菜は「高い」と言っていたので lower（安い）は逆。instead of＝〜の代わりに' },
     { qid:'eng_ex_s3_q3', short:'会話文：だれを待っている', jp:'放課後、ALTのスミス先生と' + dlg([['Mr. Smith','Hi, Yuki. What are you doing here?'],['Yuki','I’m waiting for my friend. ' + BL],['Mr. Smith','Oh, what will you do at the festival?']]),
-      answer:'We are going to practice for the school festival together.', choices:['We are going to practice for the school festival together.','I finished practicing an hour ago.','I don’t have any friends here.','I’m going home alone now.'],
+      answer:'We are going to practice for the school festival together.', choices:['We are going to practice for the school festival together.','We finished our math homework in the classroom an hour ago.','I don’t have any friends here, so I will go home by myself.','I’m going home alone now because my friend is not here today.'],
       exp:'📐 後ろの「what will you do at the festival?」→ 空所で festival の話が出ている必要がある<br>❌ 友だちを待っているのに「友だちがいない」「一人で帰る」は矛盾' },
     { qid:'eng_ex_s3_q4', short:'会話文：お笑いをやる', jp:dlg([['Mr. Smith','Oh, what will you do at the festival?'],['Yuki','We’ll do a comedy show. ' + BL],['Mr. Smith','That’s great! I’d love to see it.']]),
       answer:'I want to make everyone laugh.', choices:['I want to make everyone laugh.','I don’t like comedy.','I will sing a song alone.','I have never seen a comedy show.'],
       exp:'📐 コメディショーをやる → 「みんなを笑わせたい」→ 先生が「すばらしい！見たい」<br>💡 make＋人＋動詞の原形＝人に〜させる（make everyone laugh＝みんなを笑わせる）' },
     { qid:'eng_ex_s3_q5', short:'会話文：時間と場所を伝える', jp:dlg([['Mr. Smith','That’s great! I’d love to see it.'],['Yuki','Thank you. ' + BL],['Mr. Smith','OK, I’ll be there.']]),
-      answer:'The show starts at two in the gym.', choices:['The show starts at two in the gym.','Please don’t come.','It was very fun.','I watched it on TV.'],
+      answer:'The show starts at two in the gym.', choices:['The show starts at two in the gym.','Please don’t come to see our show.','It was very fun to do the show.','I watched the show on TV at home.'],
       exp:'📐 後ろの「I’ll be there（そこに行くよ）」→ 空所で「いつ・どこ」を伝えている<br>❌ It was（過去形）はまだやっていないショーと合わない' },
     { qid:'eng_ex_s3_q6', short:'会話文：プレゼントを探す', jp:'お店で' + dlg([['Clerk','May I help you?'],['Aya','Yes. I’m looking for a bag for my sister. ' + BL],['Clerk','How about this one? It’s very popular.']]),
       answer:'Her birthday is next week.', choices:['Her birthday is next week.','She bought a bag yesterday.','I don’t have a sister.','I want to buy shoes.'],
       exp:'📐 姉（妹）へのかばんを探している理由 → 誕生日<br>❌ sister のためと言ったあとに「姉妹はいない」は矛盾。探しているのは bag（shoes ではない）' },
     { qid:'eng_ex_s3_q7', short:'会話文：but のあと', jp:dlg([['Clerk','How about this one? It’s very popular.'],['Aya','It’s nice, but ' + BL],['Clerk','Then, how about this one? It’s cheaper.']]),
-      answer:'it’s a little too expensive for me.', choices:['it’s a little too expensive for me.','I’ll take it.','it’s very cheap.','I like it very much.'],
+      answer:'it’s a little too expensive for me.', choices:['it’s a little too expensive for me.','I’ll take it because it’s popular.','it’s a little too cheap for my sister.','I like it very much, so I’ll buy it.'],
       exp:'📐 「nice, but（いいけど、）」→ 逆の内容が来る。後ろで店員が「It’s cheaper（こっちの方が安い）」→ 空所は「高すぎる」<br>💡 but のあとは前と反対のこと' },
   ];
   html += '<div style="font-size:13px;color:var(--text2);margin:8px 0 16px;font-weight:bold">── 空所に入る一言を選ぼう ──</div>';
@@ -726,7 +726,7 @@ function renderSection4(){
   var g1 = tableHtml(['Popular Kinds of Books','July','December'], [['adventure','27%','24%'],['fantasy','23%','14%'],['horror','12%','12%'],['history','11%','20%'],['love story','10%','17%'],['others','17%','13%']]);
   var qs = [
     { qid:'eng_ex_s4_q0', short:'表現：second and third most popular', jp:'<span class="en">Fantasy and horror were the second and third most popular in July.</span><br>の意味は？',
-      answer:'7月は、ファンタジーとホラーが2番目と3番目に人気だった', choices:['7月は、ファンタジーとホラーが2番目と3番目に人気だった','7月は、ファンタジーとホラーが一番人気だった','7月は、ファンタジーとホラーが2回と3回借りられた','7月は、ファンタジーとホラーが人気がなかった'],
+      answer:'7月は、ファンタジーとホラーが2番目と3番目に人気だった', choices:['7月は、ファンタジーとホラーが2番目と3番目に人気だった','7月は、ファンタジーとホラーが一番と二番目に人気だった','7月は、ファンタジーとホラーが2回と3回借りられた','7月は、ファンタジーとホラーが下から2番目と3番目だった'],
       exp:'📐 the second (third) most popular＝2番目（3番目）に人気' },
     { qid:'eng_ex_s4_q1', short:'R7 2(1) グラフと発表', jp:'（R7 本番）' + g1 + '<div class="en" style="font-size:15px">Graph 2 では、来館者数（the number of visitors）は4月と9月が約210〜220人で、他の月（約90〜130人）より多い。</div>'
       + '<div class="dlg"><div class="en">However, ① were the second and third most popular in December. … The number of visitors was ② both in April and in September.</div></div>①②の組み合わせは？',
@@ -736,7 +736,7 @@ function renderSection4(){
       answer:'8月は、借りられた本の数が減った', choices:['8月は、借りられた本の数が減った','8月は、借りられた本の数が増えた','8月は、本を借りた人が一番多かった','8月は、本の番号が変わった'],
       exp:'📐 the number of 〜＝〜の数、decrease＝減る（increase＝増える）、borrowed books＝借りられた本' },
     { qid:'eng_ex_s4_q3', short:'表現：more than', jp:'<span class="en">More than 60% of us help our families at home.</span><br>の意味は？',
-      answer:'私たちの60%より多くが家で家族の手伝いをしている', choices:['私たちの60%より多くが家で家族の手伝いをしている','私たちの60%より少ない人が手伝っている','私たちのちょうど60%が手伝っている','私たちの60%が手伝いをもっとしたい'],
+      answer:'私たちの60%より多くが家で家族の手伝いをしている', choices:['私たちの60%より多くが家で家族の手伝いをしている','私たちの60%より少ない人が家で家族の手伝いをしている','私たちのちょうど60%が家で家族の手伝いをしている','私たちの60%が家で家族の手伝いをもっとしたがっている'],
       exp:'📐 more than＝〜より多く、less than＝〜より少なく（R6 2 の発表で出た表現）' },
     { qid:'eng_ex_s4_q4', short:'R7 2(2) 並べ替え', jp:'（R7 本番）The number of visitors was high both in April and in September, and the number of ③ summer vacation and winter vacation.<br>③に入るように、アからキまでの中から<strong>六つ</strong>選んで並べ替えたとき、2番目・4番目・6番目は？' + wordBox(['students','borrowed','increased','before','after','by','books']),
       answer:'2番目イ・4番目ア・6番目エ', choices:['2番目イ・4番目ア・6番目エ','2番目イ・4番目ア・6番目オ','2番目キ・4番目カ・6番目エ','2番目ア・4番目イ・6番目ウ'],
@@ -775,10 +775,10 @@ function renderSection5(){
 
   var qs = [
     { no:'聞き取り Q1', qid:'eng_ex_s5_q0', short:'テスト：夕食のあと', jp: listenBtns('T1') + qline('T1'),
-      answer:'He will use the computer.', choices:['He will use the computer.','He will do his homework.','He will cook dinner.','He will go to bed.'],
+      answer:'He will use the computer.', choices:['He will use the computer.','He will do his homework.','He will cook dinner for Mom.','He will go to bed early.'],
       exp:'📐 宿題は夕食前に終わった → パソコンを1時間使ってよい' + transcript('T1') },
     { no:'聞き取り Q2', qid:'eng_ex_s5_q1', short:'テスト：博物館まで何分', jp: listenBtns('T2') + qline('T2'),
-      answer:'About twenty minutes.', choices:['About twenty minutes.','About forty minutes.','About one hour.','About ten minutes.'],
+      answer:'About twenty minutes.', choices:['About twenty minutes.','About forty minutes.','About sixty minutes.','About ten minutes.'],
       exp:'📐 バスで20分、歩くと40分。「I’ll take the bus」→ 20分' + transcript('T2') },
     { no:'聞き取り Q3', qid:'eng_ex_s5_q2', short:'テスト：どこへ行った', jp: listenBtns('T3') + qline('T3'),
       answer:'He went to Nagoya.', choices:['He went to Nagoya.','He went to Tokyo.','He went to Osaka.','He went to Kyoto.'],
@@ -787,7 +787,7 @@ function renderSection5(){
       answer:'It’s Ken’s.', choices:['It’s Ken’s.','It’s Ms. White’s.','It’s the boy’s.','Nobody knows.'],
       exp:'📐 「mine is blue（私のは青）」「That red one is Ken’s」<br>💡 mine＝私のもの、Ken’s＝ケンのもの' + transcript('T4') },
     { no:'聞き取り Q5', qid:'eng_ex_s5_q4', short:'テスト：待ち合わせ時刻', jp: listenBtns('T5') + qline('T5'),
-      answer:'At six forty-five.', choices:['At six thirty.','At six forty-five.','At seven.','At six.'],
+      answer:'At six forty-five.', choices:['At six thirty.','At six forty-five.','At seven o’clock.','At six fifteen.'],
       exp:'📐 最初は6:30 → 部活で無理 → 6:45を提案 → OK' + transcript('T5') },
     { no:'聞き取り Q6', qid:'eng_ex_s5_q5', short:'テスト：電車が遅れる理由', jp: listenBtns('T6') + qline('T6'),
       answer:'Because of heavy rain.', choices:['Because of heavy rain.','Because of an accident.','Because of snow.','Because the train is broken.'],
@@ -809,13 +809,13 @@ function renderSection5(){
       answer:'Sunday is fine.', choices:['Sunday is fine.','I’m busy on Sunday, too.','I don’t like movies.','Saturday is better.'],
       exp:'📐 後ろ「Great! 10時に駅で会おう」→ 日曜はOK' },
     { no:'筆記 Q13', qid:'eng_ex_s5_q12', short:'テスト：会話 写真を頼まれる', jp: dlg([['Tourist','Excuse me. Could you take a picture of us?'],['Rina', BL],['Tourist','Thank you so much.']]),
-      answer:'Sure. Please give me your camera.', choices:['Sure. Please give me your camera.','No, thank you.','It’s mine.','I took it yesterday.'],
+      answer:'Sure. Please give me your camera.', choices:['Sure. Please give me your camera.','No, thank you. I don’t need a camera.','It’s mine. Please give it back to me.','I took a picture of it yesterday.'],
       exp:'📐 頼まれて、後ろで「ありがとう」→ 引き受けている<br>💡 Could you 〜?＝〜していただけますか' },
     { no:'筆記 Q14', qid:'eng_ex_s5_q13', short:'テスト：会話 鍵をなくした', jp: dlg([['Mao','I lost my key. I’ve looked for it everywhere.'],['Dan', BL],['Mao','Oh, you’re right! Here it is. Thank you.']]),
       answer:'Did you check your bag?', choices:['Did you check your bag?','I found my key.','You should buy a new house.','I don’t have a key.'],
       exp:'📐 後ろ「本当だ！ここにあった」→ 探す場所を提案している' },
     { no:'筆記 Q15', qid:'eng_ex_s5_q14', short:'テスト：表現 the most popular', jp:'<span class="en">Soccer was the most popular sport in our class.</span><br>の意味は？',
-      answer:'サッカーはクラスで一番人気のスポーツだった', choices:['サッカーはクラスで一番人気のスポーツだった','サッカーはクラスで2番目に人気だった','サッカーはクラスで人気がなかった','サッカーをする人が増えた'],
+      answer:'サッカーはクラスで一番人気のスポーツだった', choices:['サッカーはクラスで一番人気のスポーツだった','サッカーはクラスで2番目に人気だった','サッカーはクラスで一番人気のないスポーツだった','サッカーをするクラスの人数が前より増えた'],
       exp:'📐 the most popular＝一番人気' },
     { no:'筆記 Q16', qid:'eng_ex_s5_q15', short:'テスト：表現 increased', jp:'<span class="en">The number of visitors increased in July.</span><br>の意味は？',
       answer:'7月に来館者数が増えた', choices:['7月に来館者数が増えた','7月に来館者数が減った','7月の来館者数は少なかった','7月は来館者の番号が変わった'],

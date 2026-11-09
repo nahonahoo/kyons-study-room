@@ -550,7 +550,7 @@ function renderSection1() {
       q: '空気はどれに分類される？',
       sub: '空気は窒素N₂・酸素O₂・アルゴンArなどが混ざっている',
       a: '混合物',
-      choices: ['純物質', '混合物'],
+      choices: ['純物質', '混合物', '単体', '化合物'],
       jp: '空気の分類',
       exp: '<span class="exp-rule"><span class="label">📐 ルール</span>2種類以上の物質が混ざっている → 混合物</span><span class="exp-ok">✅ 空気 = 窒素・酸素・アルゴン… → 混合物</span><span class="exp-ng">❌ 純物質は1種類の物質だけ</span><span class="exp-tip">💡 混合物の例：空気・海水・食塩水・合金（ステンレスなど）</span>'
     },
@@ -574,7 +574,7 @@ function renderSection1() {
       q: '食塩水はどれに分類される？',
       sub: '食塩水は食塩（NaCl）を水（H₂O）に溶かしたもの',
       a: '混合物',
-      choices: ['純物質', '混合物'],
+      choices: ['純物質', '混合物', '単体', '化合物'],
       jp: '食塩水の分類',
       exp: '<span class="exp-rule"><span class="label">📐 ルール</span>2種類以上の物質が混ざっている → 混合物</span><span class="exp-ok">✅ 食塩水 = NaCl（食塩）+ H₂O（水）→ 混合物</span><span class="exp-tip">💡 海水・砂糖水・炭酸水も混合物！　水は純物質だが食塩水は混合物</span>'
     },
@@ -606,7 +606,7 @@ function renderSection1() {
       q: '海水はどれに分類される？',
       sub: '海水は水・食塩・マグネシウムなど様々な物質が溶けている',
       a: '混合物',
-      choices: ['純物質', '混合物'],
+      choices: ['純物質', '混合物', '単体', '化合物'],
       jp: '海水の分類',
       exp: '<span class="exp-rule"><span class="label">📐 ルール</span>2種類以上の物質が混ざっている → 混合物</span><span class="exp-ok">✅ 海水 = 水 + 食塩 + ミネラル等 → 混合物</span><span class="exp-tip">💡 「海水」と「水（H₂O）」は別物！水は純物質だが海水は混合物</span>'
     },
@@ -614,7 +614,7 @@ function renderSection1() {
       q: '純物質の中で、1種類の元素からできているものを何という？',
       sub: '',
       a: '単体',
-      choices: ['単体', '化合物'],
+      choices: ['単体', '化合物', '混合物', '元素'],
       jp: '単体の定義',
       exp: '<span class="exp-rule"><span class="label">📐 まとめ</span>純物質の分類：元素1種類 → 単体　元素2種類以上 → 化合物</span><span class="exp-ok">✅ 単体の例：O₂・H₂・Fe・Cu・N₂</span><span class="exp-ok">✅ 化合物の例：H₂O・NaCl・CO₂・NH₃</span><span class="exp-tip">💡 「単（単純）」= 1種類だけ！という語呂でOK</span>'
     },
@@ -1265,7 +1265,7 @@ function renderSection5() {
       q: '【水溶液】溶解度について正しい説明はどれ？',
       sub: '温度と水の量が関係する',
       a: '一定温度で水100gに溶ける溶質の最大質量',
-      choices: ['一定温度で水100gに溶ける溶質の最大質量', '一定温度で水1Lに溶ける溶質の最大体積', '溶液100gに溶ける溶質の質量'],
+      choices: ['一定温度で水100gに溶ける溶質の最大質量', '一定温度で水1Lに溶ける溶質の最大体積', '一定温度で溶液100gに溶ける溶質の最大質量'],
       jp: '溶解度の正しい定義',
       exp: '<span class="exp-rule"><span class="label">📐 溶解度の定義</span>一定温度で水100gに溶ける溶質の最大質量（g）</span><span class="exp-ok">✅ 基準は水100g（溶液ではなく水！）</span><span class="exp-tip">💡 溶解度表を読むときは「水100gあたり」と確認しよう</span>'
     },
@@ -1273,7 +1273,7 @@ function renderSection5() {
       q: '【水溶液】NaClとKNO₃が混ざった固体から、KNO₃だけを取り出すのに最も適した操作はどれ？',
       sub: 'KNO₃は温度で溶解度が大きく変わる。NaClはほぼ変わらない',
       a: '再結晶（冷却）',
-      choices: ['再結晶（冷却）', '蒸発乾固', 'ろ過', '蒸留'],
+      choices: ['再結晶（冷却）', '蒸発乾固（加熱）', 'ろ過（ろ紙）', '蒸留（沸点の差）'],
       jp: 'KNO₃の精製方法',
       exp: '<span class="exp-rule"><span class="label">📐 再結晶の使いどき</span>温度差で溶解度が大きく変わる物質 → 再結晶（冷却）</span><span class="exp-ok">✅ KNO₃は60℃→20℃で析出量が大きい → 再結晶で精製</span><span class="exp-ng">❌ NaClは温度変化で溶解度がほぼ変わらない → 蒸発乾固向き</span><span class="exp-tip">💡 再結晶で取り出したいのは「温度差で溶解度が大きく変わる物質」</span>'
     },
@@ -1305,7 +1305,7 @@ function renderSection5() {
       q: '【水溶液】ろ過で取り除ける物質はどれ？',
       sub: 'ろ紙は何を通して何を止めるか',
       a: '水に溶けない固体（泥・砂など）',
-      choices: ['水に溶けない固体（泥・砂など）', '溶けた食塩（溶質）', '水（溶媒）'],
+      choices: ['水に溶けない固体（泥・砂など）', '水に溶けた固体（食塩・砂糖など）', '溶質をとかしている水（溶媒）'],
       jp: 'ろ過で取り除けるもの',
       exp: '<span class="exp-rule"><span class="label">📐 ろ過のポイント</span>ろ紙の穴より大きな粒子だけ止まる。溶けているものは通過する</span><span class="exp-ok">✅ 水に溶けていない固体（砂・泥）→ろ紙に残る</span><span class="exp-ng">❌ 溶質（食塩など）は溶液中に分散している→ろ紙を通過してしまう</span><span class="exp-tip">💡 ろ過は「溶けていない固体」だけを除く操作。溶質は取り除けない！</span>'
     },

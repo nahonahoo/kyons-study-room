@@ -323,10 +323,11 @@ function checkSectionComplete(){
 // ===== UNITS =====
 var currentUnit=1, currentSection=0;
 var UNITS=[
-  {id:1,label:'受け身',title:'受け身'},
-  {id:2,label:'現在完了①',title:'現在完了①'},
-  {id:3,label:'現在完了②',title:'現在完了②'},
-  {id:4,label:'不定詞',title:'不定詞のいろいろな形（教科書 実Unit3）'},
+  // 2025年版（令和7年度版）NEW HORIZON 3 の Unit 番号。受け身は中2 Unit7 に移ったので「復習」
+  {id:1,label:'受け身（中2の復習）',title:'受け身（中2 Unit7 の復習）'},
+  {id:2,label:'Unit1 現在完了（経験）',title:'Unit1 現在完了（経験）・make/tell'},
+  {id:3,label:'Unit2 現在完了（完了・継続）',title:'Unit2 現在完了（完了・継続）・進行形'},
+  {id:4,label:'Unit3 不定詞',title:'Unit3 不定詞のいろいろな形'},
 ];
 
 var UNIT_SECTIONS={
@@ -343,6 +344,7 @@ var UNIT_SECTIONS={
     {id:1,label:'経験（have+pp）'},
     {id:2,label:'never/ever'},
     {id:3,label:'回数・疑問文'},
+    {id:6,label:'make/tell＋人'},
     {id:4,label:'確認テスト'},
     {id:5,label:'🔥特訓'},
   ],
@@ -351,6 +353,7 @@ var UNIT_SECTIONS={
     {id:1,label:'継続（for/since）'},
     {id:2,label:'完了（just/already）'},
     {id:3,label:'混合練習'},
+    {id:6,label:'have been 〜ing'},
     {id:4,label:'確認テスト'},
     {id:5,label:'🔥特訓'},
   ],
@@ -396,10 +399,11 @@ function renderSection(uid,sid){
   if(sid===5){renderTokkuMode(uid);return;}
   var secData=UNIT_SECTIONS[uid][sid];
   var secs=UNIT_SECTIONS[uid];
+  var idx=secs.findIndex(function(s){return s.id===sid;});   // タブの並び順で進む（id 6 を途中に足したため、id の大小では判断しない）
   var html='<div class="progress-dots">';
-  secs.forEach(function(s){
+  secs.forEach(function(s,i){
     var cls='dot';
-    if(s.id<sid)cls+=' done';
+    if(i<idx)cls+=' done';
     if(s.id===sid)cls+=' current';
     html+='<div class="'+cls+'"></div>';
   });
@@ -413,7 +417,8 @@ function renderSection(uid,sid){
   else if(uid===4)html+=renderUnit4Section(sid);
 
   var isLast=(sid===4);
-  html+='<button class="next-section-btn" id="nextBtn" onclick="'+(isLast?'goUnit('+(uid<4?uid+1:1)+')':'goSection('+(sid+1)+')')+'">'+(isLast?'✓ 次のUnitへ →':'次のセクションへ →')+'</button>';
+  var nextId=(idx>=0&&idx+1<secs.length)?secs[idx+1].id:4;
+  html+='<button class="next-section-btn" id="nextBtn" onclick="'+(isLast?'goUnit('+(uid<4?uid+1:1)+')':'goSection('+nextId+')')+'">'+(isLast?'✓ 次のUnitへ →':'次のセクションへ →')+'</button>';
 
   document.getElementById('mainContent').innerHTML=html;
 
@@ -736,6 +741,52 @@ function renderUnit2Section(sid){
     });
     html+='</div>';
   }
+  else if(sid===6){
+    html+='<div class="section-title">make ＋ 人 ＋ 形容詞 ／ tell ＋ 人 ＋ that 〜</div><div class="section-sub">教科書 Unit1 のもう1つの文法。「人を〜な気持ちにする」「人に〜だと伝える」</div>';
+    html+=dialog([
+      {who:'kyon',text:'「この歌は俺を幸せにする」って、英語でどう言うの？'},
+      {who:'nishi',text:'This song makes me happy. だ。make ＋ 人 ＋ 形容詞 で「人を〜にする」。happy の前に to も be も入らない。'},
+      {who:'kyon',text:'じゃあ「にっくんは俺に、ネタが長すぎると言った」は？'},
+      {who:'nishi',text:'Nishimura told me that the act was too long. tell ＋ 人 ＋ that 〜 で「人に〜だと言う」。that の後ろは「主語＋動詞」の文がそのまま入る。'},
+      {who:'kyon',text:'make の形と tell の形、どっちも「人」が真ん中なんだね。'},
+      {who:'nishi',text:'そう。真ん中の「人」のあとに、make は形容詞1語、tell は that の文。ここだけ見分ければいい。'},
+    ]);
+    html+='<div class="grammar-card"><div class="grammar-card-title">📐 2つの型</div>';
+    html+='<div class="formula-box">make / keep ＋ <span class="highlight">人・もの</span> ＋ <span class="highlight">形容詞</span>（〜を…にする／…のままにする）<br>tell / show ＋ <span class="highlight">人</span> ＋ <span class="highlight">that ＋ 主語＋動詞</span>（人に〜だと言う／示す）</div>';
+    html+='<div class="grammar-rule"><div class="rule-title">✕ になりやすい形</div><div class="en">This song makes me <s>to happy</s> / <s>happily</s> → happy（形容詞だけ）</div><div class="en">She told <s>to me</s> that … → told me that …（to は入れない）</div></div>';
+    html+=exList(uid,sid,[
+      ['This song makes me happy.','この歌は私を幸せにします。'],
+      ['The news made him sad.','その知らせは彼を悲しませました。'],
+      ['Please keep the room clean.','部屋をきれいにしておいてください。'],
+      ['She told me that she was tired.','彼女は私に、疲れていると言いました。'],
+      ['The map shows us that the station is near here.','その地図は私たちに、駅が近くにあることを示しています。'],
+    ]);
+    html+='</div><div class="practice-section"><div class="practice-title">✏️ 練習問題</div>';
+    var qs6=[
+      {q:'This song ___ me happy.',jp:'この歌は私を幸せにします。',a:'makes',choices:['makes','gives','tells'],exp:'<span class="exp-rule"><span class="label">📐 make ＋ 人 ＋ 形容詞</span>「人を〜にする」は <strong>make</strong></span><span class="exp-ok">✅ This song makes me happy.</span><span class="exp-tip">💡 主語が This song（1つ）なので makes</span>',xp:3},
+      {q:'The news made him ___ .',jp:'その知らせは彼を悲しませました。',a:'sad',choices:['sad','sadly','sadness'],exp:'<span class="exp-rule"><span class="label">📐 人のあとは形容詞</span>made him ＋ <strong>sad</strong>（形容詞）</span><span class="exp-ok">✅ The news made him sad.</span><br><span class="exp-ng">❌ made him sadly（副詞は✕）</span><span class="exp-tip">💡 「どんな状態にするか」を形容詞1語で</span>',xp:3},
+      {q:'Please keep the room ___ .',jp:'部屋をきれいにしておいてください。',a:'clean',choices:['clean','cleanly','cleaning'],exp:'<span class="exp-rule"><span class="label">📐 keep ＋ もの ＋ 形容詞</span>「〜のままにしておく」は <strong>keep</strong></span><span class="exp-ok">✅ Please keep the room clean.</span><span class="exp-tip">💡 make と同じ型。keep は「その状態を保つ」</span>',xp:3},
+      {q:'My mother told me ___ she was going out.',jp:'母は私に、出かけると言いました。',a:'that',choices:['that','what','it'],exp:'<span class="exp-rule"><span class="label">📐 tell ＋ 人 ＋ that 〜</span>told me ＋ <strong>that</strong> ＋ 文</span><span class="exp-ok">✅ My mother told me that she was going out.</span><span class="exp-tip">💡 that のあとは「主語＋動詞」がそのまま続く</span>',xp:3},
+      {q:'The map shows ___ that the station is near here.',jp:'その地図は私たちに、駅が近いことを示しています。',a:'us',choices:['us','our','we'],exp:'<span class="exp-rule"><span class="label">📐 show ＋ 人 ＋ that 〜</span>show のすぐあとの「人」は目的語の形 → <strong>us</strong></span><span class="exp-ok">✅ The map shows us that the station is near here.</span><span class="exp-tip">💡 me / you / him / her / us / them</span>',xp:4},
+      {q:'Her smile makes everyone ___ .',jp:'彼女の笑顔はみんなを幸せにします。',a:'happy',choices:['happy','happily','happiness'],exp:'<span class="exp-rule"><span class="label">📐 make ＋ 人 ＋ 形容詞</span>makes everyone ＋ <strong>happy</strong></span><span class="exp-ok">✅ Her smile makes everyone happy.</span><span class="exp-tip">💡 everyone は「人」。そのあとは形容詞</span>',xp:3},
+      {q:'The teacher told us ___ the test was easy.',jp:'先生は私たちに、テストは簡単だったと言いました。',a:'that',choices:['that','to','for'],exp:'<span class="exp-rule"><span class="label">📐 tell ＋ 人 ＋ that 〜</span>told us ＋ <strong>that</strong> ＋ 文</span><span class="exp-ok">✅ The teacher told us that the test was easy.</span><br><span class="exp-ng">❌ told us to the test（✕）</span><span class="exp-tip">💡 「〜だと言う」は that。「〜するように言う」なら tell ＋ 人 ＋ to ＋ 動詞</span>',xp:4},
+      {q:'The long trip ___ me tired.',jp:'長い旅は私を疲れさせました。',a:'made',choices:['made','was','became'],exp:'<span class="exp-rule"><span class="label">📐 make ＋ 人 ＋ 形容詞（過去）</span><strong>made</strong> me tired</span><span class="exp-ok">✅ The long trip made me tired.</span><br><span class="exp-ng">❌ The trip became me tired（✕）</span><span class="exp-tip">💡 「〜を…にする」は make。become は「〜になる」で、人を目的語にとらない</span>',xp:4},
+    ];
+    qs6.forEach(function(q,i){
+      var qid=uid+'_s'+sid+'_q'+i;
+      html+=qCard(qid,qNum(i+1)+'<div class="q-text">'+q.q.replace('___','<span class="blank">___</span>')+'</div><div class="q-jp">'+q.jp+'</div>'+makeChoices(qid,q.choices,q.a,q.xp,q.jp,q.exp)+makeFeedback(qid,q.exp));
+    });
+    var qb6=[
+      {jp:'この歌は私を幸せにします。',a:'This song makes me happy.',exp:'<span class="exp-rule"><span class="label">📐 make ＋ 人 ＋ 形容詞</span>This song makes ＋ me ＋ <strong>happy</strong></span><span class="exp-ok">✅ This song makes me happy.</span><span class="exp-tip">💡 happy の前に to や be を入れない</span>',xp:6},
+      {jp:'彼女は私に、忙しいと言いました。',a:'She told me that she was busy.',exp:'<span class="exp-rule"><span class="label">📐 tell ＋ 人 ＋ that 〜</span>She told me ＋ <strong>that</strong> ＋ she was busy</span><span class="exp-ok">✅ She told me that she was busy.</span><span class="exp-tip">💡 told が過去なので、that のあとも過去形 was</span>',xp:7},
+      {jp:'その本は私を眠くさせました。',a:'The book made me sleepy.',exp:'<span class="exp-rule"><span class="label">📐 make の過去形</span>The book <strong>made</strong> me sleepy</span><span class="exp-ok">✅ The book made me sleepy.</span><span class="exp-tip">💡 sleepy（眠い）は形容詞</span>',xp:6},
+    ];
+    qb6.forEach(function(q,i){
+      var qid=uid+'_s'+sid+'_qb'+i;
+      html+=qCard(qid,qNum(qs6.length+i+1)+'<div class="q-jp">🇯🇵 '+q.jp+'</div>'+makeCompositionInput(qid,q.a,q.xp,q.jp,q.exp)+makeFeedback(qid,q.exp));
+    });
+    html+='</div>';
+  }
   else if(sid===4){
     html+='<div class="section-title">現在完了① 確認テスト</div><div class="section-sub">現在完了（経験）の総まとめ！</div>';
     html+='<div class="practice-section"><div class="practice-title">📝 確認テスト（全20問）</div>';
@@ -893,6 +944,52 @@ function renderUnit3Section(sid){
     qb4.forEach(function(q,i){
       var qid=uid+'_s'+sid+'_qb'+i;
       html+=qCard(qid,qNum(qs3.length+i+1)+'<div class="q-jp">🇯🇵 '+q.jp+'</div>'+makeCompositionInput(qid,q.a,q.xp,q.jp,q.exp)+makeFeedback(qid,q.exp));
+    });
+    html+='</div>';
+  }
+  else if(sid===6){
+    html+='<div class="section-title">現在完了進行形：have been 〜ing</div><div class="section-sub">教科書 Unit2 のもう1つの形。「ずっと〜し続けている」（動作の継続）</div>';
+    html+=dialog([
+      {who:'kyon',text:'「俺は10年間ずっと空手を練習し続けている」って言いたい。have practiced じゃダメ？'},
+      {who:'nishi',text:'それでも通じる。でも「今もまさにやっている最中」という感じを出したいときは、have been practicing。現在完了進行形という。'},
+      {who:'kyon',text:'have ＋ been ＋ 〜ing！長い！'},
+      {who:'nishi',text:'3つの部品だ。have / has で「今まで」、been ＋ 〜ing で「し続けている」。後ろに for や since をつけるのは継続用法と同じ。'},
+      {who:'kyon',text:'どの動詞でも使えるの？'},
+      {who:'nishi',text:'動作の動詞（practice / study / run / wait / rain）に使う。know / like のような「状態」の動詞は 〜ing にしない。I have known him for ten years. のまま。'},
+    ]);
+    html+='<div class="grammar-card"><div class="grammar-card-title">📐 現在完了進行形</div>';
+    html+='<div class="formula-box">主語 ＋ <span class="highlight">have / has been</span> ＋ <span class="highlight">動詞の ing 形</span> ＋ for / since 〜<br>疑問文：<span class="highlight">How long have you been</span> ＋ 〜ing …?</div>';
+    html+='<div class="grammar-rule"><div class="rule-title">使い分け</div><div class="en">動作（practice, study, run, wait, rain, talk）→ have been 〜ing</div><div class="en">状態（know, like, live, be）→ have ＋ 過去分詞のまま（live はどちらも可）</div></div>';
+    html+=exList(uid,sid,[
+      ['I have been practicing karate for ten years.','私は10年間ずっと空手を練習し続けています。'],
+      ['She has been studying since this morning.','彼女は今朝からずっと勉強し続けています。'],
+      ['It has been raining since last night.','昨夜からずっと雨が降り続いています。'],
+      ['How long have you been waiting?','あなたはどのくらいの間待っているのですか？'],
+      ['I have known him for ten years.','私は彼を10年前から知っています。（know は 〜ing にしない）'],
+    ]);
+    html+='</div><div class="practice-section"><div class="practice-title">✏️ 練習問題</div>';
+    var qs6=[
+      {q:'I have ___ practicing karate for ten years.',jp:'私は10年間ずっと空手を練習し続けています。',a:'been',choices:['been','be','being'],exp:'<span class="exp-rule"><span class="label">📐 have been 〜ing</span>have ＋ <strong>been</strong> ＋ practicing</span><span class="exp-ok">✅ I have been practicing karate for ten years.</span><span class="exp-tip">💡 been は be の過去分詞。have のあとは必ず過去分詞</span>',xp:3},
+      {q:'She has been ___ since this morning.',jp:'彼女は今朝からずっと勉強し続けています。',a:'studying',choices:['studying','study','studied'],exp:'<span class="exp-rule"><span class="label">📐 been のあとは 〜ing</span>has been ＋ <strong>studying</strong></span><span class="exp-ok">✅ She has been studying since this morning.</span><span class="exp-tip">💡 been ＋ 〜ing で「し続けている」</span>',xp:3},
+      {q:'It ___ been raining since last night.',jp:'昨夜からずっと雨が降り続いています。',a:'has',choices:['has','have','is'],exp:'<span class="exp-rule"><span class="label">📐 主語が it → has</span><strong>has</strong> been raining</span><span class="exp-ok">✅ It has been raining since last night.</span><span class="exp-tip">💡 天気の it は三人称単数</span>',xp:3},
+      {q:'How long ___ you been waiting?',jp:'あなたはどのくらいの間待っているのですか？',a:'have',choices:['have','has','are'],exp:'<span class="exp-rule"><span class="label">📐 疑問文</span>How long <strong>have</strong> you been 〜ing?</span><span class="exp-ok">✅ How long have you been waiting?</span><span class="exp-tip">💡 答えは For 〜. / Since 〜.</span>',xp:4},
+      {q:'They have been ___ soccer for two hours.',jp:'彼らは2時間ずっとサッカーをし続けています。',a:'playing',choices:['playing','played','play'],exp:'<span class="exp-rule"><span class="label">📐 been ＋ 〜ing</span>have been ＋ <strong>playing</strong></span><span class="exp-ok">✅ They have been playing soccer for two hours.</span><span class="exp-tip">💡 「動作をし続けている」は 〜ing</span>',xp:3},
+      {q:'「（動作を）ずっと〜し続けている」を表す形は？',jp:'現在完了進行形の形',a:'have been 〜ing',choices:['have been 〜ing','have 〜ed','be 〜ing'],exp:'<span class="exp-rule"><span class="label">📐 形の整理</span>have ＋ been ＋ 〜ing ＝ 現在完了進行形</span><span class="exp-ok">✅ have been 〜ing</span><span class="exp-tip">💡 be 〜ing は「今している」（現在進行形）。have 〜ed は「したことがある／した」</span>',xp:3},
+      {q:'I have ___ him for ten years.',jp:'私は彼を10年前から知っています。',a:'known',choices:['known','been knowing','knowing'],exp:'<span class="exp-rule"><span class="label">📐 状態の動詞は 〜ing にしない</span>know → have <strong>known</strong></span><span class="exp-ok">✅ I have known him for ten years.</span><br><span class="exp-ng">❌ have been knowing（✕）</span><span class="exp-tip">💡 know / like / want は状態。進行形にしない</span>',xp:4},
+      {q:'Kyon has been ___ for an hour.',jp:'きょんは1時間ずっと話し続けています。',a:'talking',choices:['talking','talked','talks'],exp:'<span class="exp-rule"><span class="label">📐 been ＋ 〜ing</span>has been ＋ <strong>talking</strong></span><span class="exp-ok">✅ Kyon has been talking for an hour.</span><span class="exp-tip">💡 talk は動作 → 〜ing</span>',xp:3},
+    ];
+    qs6.forEach(function(q,i){
+      var qid=uid+'_s'+sid+'_q'+i;
+      html+=qCard(qid,qNum(i+1)+'<div class="q-text">'+q.q.replace('___','<span class="blank">___</span>')+'</div><div class="q-jp">'+q.jp+'</div>'+makeChoices(qid,q.choices,q.a,q.xp,q.jp,q.exp)+makeFeedback(qid,q.exp));
+    });
+    var qb6=[
+      {jp:'私は2時間ずっとテレビを見ています。',a:'I have been watching TV for two hours.',exp:'<span class="exp-rule"><span class="label">📐 現在完了進行形</span>I have been ＋ <strong>watching</strong> ＋ for two hours</span><span class="exp-ok">✅ I have been watching TV for two hours.</span><span class="exp-tip">💡 期間は for</span>',xp:7},
+      {jp:'あなたはどのくらいの間、待っているのですか？',a:'How long have you been waiting?',exp:'<span class="exp-rule"><span class="label">📐 疑問文</span>How long have you been ＋ 〜ing?</span><span class="exp-ok">✅ How long have you been waiting?</span><span class="exp-tip">💡 wait は動作 → waiting</span>',xp:7},
+      {jp:'彼は今朝からずっと走っています。',a:'He has been running since this morning.',exp:'<span class="exp-rule"><span class="label">📐 三単現は has</span>He <strong>has</strong> been running ＋ since 〜</span><span class="exp-ok">✅ He has been running since this morning.</span><span class="exp-tip">💡 run の ing 形は n を重ねて running</span>',xp:7},
+    ];
+    qb6.forEach(function(q,i){
+      var qid=uid+'_s'+sid+'_qb'+i;
+      html+=qCard(qid,qNum(qs6.length+i+1)+'<div class="q-jp">🇯🇵 '+q.jp+'</div>'+makeCompositionInput(qid,q.a,q.xp,q.jp,q.exp)+makeFeedback(qid,q.exp));
     });
     html+='</div>';
   }

@@ -17,15 +17,17 @@ var LEVELS=[
 ];
 
 // ===== セクション定義 =====
+// 2025年版の中2に合わせた順。Unit1＝未来（id 10）。不定詞と動名詞（id 1）は Unit3・4 の見分けの復習
 var SECTIONS=[
   {id:0,label:'📖 導入'},
-  {id:1,label:'Unit1 不定詞'},
+  {id:10,label:'Unit1 will・be going to'},
   {id:2,label:'Unit2 接続詞'},
-  {id:3,label:'Unit3 不定詞・関係代名詞'},
+  {id:3,label:'Unit3 不定詞②・have to'},
+  {id:1,label:'Unit3・4 不定詞と動名詞'},
   {id:4,label:'Unit4 助動詞'},
   {id:5,label:'Unit5 疑問詞+to'},
   {id:6,label:'Unit6 比較'},
-  {id:7,label:'Unit7 受動態'},
+  {id:7,label:'Unit7 受け身'},
   {id:8,label:'🏁 確認テスト'},
   {id:9,label:'🔥 弱点特訓'},
 ];
@@ -115,13 +117,17 @@ function goSection(id){currentSection=id;renderSection(id);renderTabs();renderWe
 
 // ===== NEXT/PREV ボタン =====
 function nextBtn(id){
-  if(id<8)return '<div style="text-align:center;margin-top:28px;"><button class="start-btn" onclick="goSection('+(id+1)+')">次へ ▶</button></div>';
+  var idx=SECTIONS.findIndex(function(s){return s.id===id;}), nx=SECTIONS[idx+1];   // タブの並び順で進む
+  if(nx&&id!==8&&id!==9)return '<div style="text-align:center;margin-top:28px;"><button class="start-btn" onclick="goSection('+nx.id+')">次へ ▶</button></div>';
   return '';
 }
 
 // ===== チャットバブル =====
+var GUEST_AV={kuruma:['く','#2a6fb0'],kemuri:['ケ','#59657a'],shun:['し','#b0487a'],iwakura:['イ','#7a52c7']};
 function chat(type,name,text){
-  var av=type==='kyon'
+  var g=GUEST_AV[type];
+  var av=g?'<div class="avatar" style="background:'+g[1]+';color:#fff;font-weight:bold">'+g[0]+'</div>'
+    :type==='kyon'
     ?'<div class="avatar av-kyon">き</div>'
     :'<div class="avatar av-nishi">西村</div>';
   return '<div class="chat-line">'+av+'<div class="chat-bubble"><div class="chat-name">'+name+'</div>'+text+'</div></div>';
@@ -208,7 +214,7 @@ function checkSectionComplete(){
   if(done>=qs.length){
     if(!secDone[currentSection]){
       secDone[currentSection]=true; saveSec();
-      showToast('🎉 Unit'+(currentSection)+'クリア！ セクション完了！','#1d3a6d');
+      var _s=SECTIONS.filter(function(x){return x.id===currentSection;})[0];showToast('🎉 '+(_s?_s.label:'')+' クリア！ セクション完了！','#1d3a6d');
       renderTabs();
     }
   }
@@ -249,19 +255,83 @@ function renderSection0(){
     +chat('nishi','西村真二','その意気。Unit1から順番に進めよう。間違えても弱点DBに記録されるから後で復習できるよ。')
     +'</div>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;">'
-    +['Unit1 不定詞・動名詞','Unit2 接続詞（that/because/when）','Unit3 to不定詞副詞用法・have to','Unit4 should/must・動名詞','Unit5 疑問詞+to不定詞','Unit6 比較級・最上級・as...as','Unit7 受動態（be動詞+過去分詞）','🏁 総合確認テスト'].map(function(t,i){
-      return '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;cursor:pointer;" onclick="goSection('+(i+1)+')">'+t+'</div>';
+    +[[10,'Unit1 will・be going to'],[2,'Unit2 接続詞（that/because/when）'],[3,'Unit3 to不定詞 副詞用法・have to'],[1,'Unit3・4 不定詞と動名詞の見分け'],[4,'Unit4 should/must・動名詞'],[5,'Unit5 疑問詞+to不定詞'],[6,'Unit6 比較級・最上級・as...as'],[7,'Unit7 受け身（be動詞+過去分詞）'],[8,'🏁 総合確認テスト']].map(function(t){
+      return '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;cursor:pointer;" onclick="goSection('+t[0]+')">'+t[1]+'</div>';
     }).join('')
     +'</div>'
-    +'<div style="text-align:center;margin-top:24px;"><button class="start-btn" onclick="goSection(1)">▶ Unit 1 からスタート</button></div>';
+    +'<div style="text-align:center;margin-top:24px;"><button class="start-btn" onclick="goSection(10)">▶ Unit 1 からスタート</button></div>';
   return h;
 }
 
-// ===== SECTION 1: Unit1 不定詞・動名詞 =====
-function renderSection1(){
-  var h=sectionHeader('Unit 1','不定詞・動名詞の使い分け','What can we experience on a trip?');
+// ===== SECTION 10: Unit1 未来の表現 will / be going to（2026-11-09 追加。教科書 2025年版の中2 Unit1） =====
+function renderSection10(){
+  var h=sectionHeader('Unit 1','未来の表現：will / be going to','What can we experience on a trip?');
   h+='<div class="intro-box">'
     +'<div class="intro-box-title">💬 Unit1 トーク</div>'
+    +chat('kyon','きょん','「明日ライブやる」って英語で言いたい！未来ってどう言うの？')
+    +chat('nishi','西村真二','形は2つある。will と be going to。どっちも「これからのこと」を言う。')
+    +chat('kuruma','くるま','きょんさん！漫才でいうと、be going to は台本で、will はアドリブっす！')
+    +chat('kyon','きょん','どういうこと！？')
+    +chat('nishi','西村真二','be going to は、前から決めていた予定。I am going to perform tomorrow. will は、その場で決めたこと。「じゃあ俺が行くよ」は I will go. になる。')
+    +chat('kemuri','ケムリ','台本どおりにやる回と、舞台で思いついたことを言う回で、言い方が変わるんだと思います。')
+    +chat('kuruma','くるま','僕はずっと will っす！！')
+    +chat('kemuri','ケムリ','台本は覚えてほしいと思います。')
+    +chat('kyon','きょん','形はどうちがうの？')
+    +chat('shun','なかむらしゅん','きょんさん、ここほんまに大事なとこなんですわ。will は、主語が誰でもずっと will のまま。be going to は、be動詞が主語で衣装替えするんです。I am、He is、They are。')
+    +chat('iwakura','イワクラ','私は後ろが大事だと思う。will のあとも going to のあとも、動詞はすっぴんの原形だよ。')
+    +chat('kyon','きょん','すっぴん！じゃあ He will plays はダメなんだ！')
+    +chat('nishi','西村真二','そのとおり。予定か思いつきかは、どちらでも通じる文も多い。だから、まず形を間違えないこと。')
+    +'</div>'
+    +ruleCard('📐 will と be going to の形（これ1つ）',
+      '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:15px;line-height:1.9">'
+      +'<tr style="color:var(--gold)"><th style="text-align:left;padding:6px"></th><th style="text-align:left;padding:6px">be going to（台本）</th><th style="text-align:left;padding:6px">will（アドリブ）</th></tr>'
+      +'<tr><td style="padding:6px;white-space:nowrap">ふつう</td><td style="padding:6px">I <strong>am going to</strong> play.</td><td style="padding:6px">I <strong>will</strong> play.</td></tr>'
+      +'<tr><td style="padding:6px;white-space:nowrap">主語 He</td><td style="padding:6px">He <strong>is going to</strong> play.</td><td style="padding:6px">He <strong>will</strong> play.</td></tr>'
+      +'<tr><td style="padding:6px;white-space:nowrap">否定</td><td style="padding:6px">I am <strong>not</strong> going to play.</td><td style="padding:6px">I will <strong>not</strong> play.（won\'t）</td></tr>'
+      +'<tr><td style="padding:6px;white-space:nowrap">疑問</td><td style="padding:6px"><strong>Are</strong> you going to play?</td><td style="padding:6px"><strong>Will</strong> you play?</td></tr>'
+      +'<tr><td style="padding:6px;white-space:nowrap">答え</td><td style="padding:6px">Yes, I am. / No, I\'m not.</td><td style="padding:6px">Yes, I will. / No, I won\'t.</td></tr>'
+      +'</table></div>'
+    )
+    +ruleCard('🚫 なぜ✕なの？',
+      ruleBox('✕ He will plays tennis.','① will のあとの動詞は、主語が He でも原形 → He will <strong>play</strong> tennis.')
+      +ruleBox('✕ I going to play tennis.','② be動詞がない。be going to は3語セット → I <strong>am</strong> going to play tennis.')
+      +ruleBox('✕ I am going to playing tennis.','③ to のあとは原形 → I am going to <strong>play</strong> tennis.')
+      +ruleBox('✕ I will to play tennis.','④ will に to はつかない → I will play tennis.')
+      +ruleBox('✕ It will sunny tomorrow.','⑤ sunny は形容詞で、動詞がない。原形の be を入れる → It will <strong>be</strong> sunny tomorrow.')
+    )
+    +exCard('I <strong>am going to</strong> visit Kyoto next week.','私は来週京都を訪れる予定です。')
+    +exCard('It <strong>will be</strong> rainy tomorrow.','明日は雨でしょう。')
+    +exCard('<strong>Will you</strong> help me?','手伝ってくれませんか。（Will you 〜? は頼むときにも使う）')
+    +'<div style="font-size:13px;color:var(--text2);margin:16px 0 8px">📝 練習問題（全15問）</div>'
+    +progressDots(15,0);
+
+  var qs=[
+    {qid:'nh3_rev_s10_q0',jp:'「私は明日サッカーをするつもりです。」<br>I ( 　 ) play soccer tomorrow.',ans:'will',choices:['will','am','was','did'],exp:'📐 未来は will ＋ 動詞の原形。<br>✅ I <strong>will</strong> play soccer tomorrow.<br>❌ I am play は✕（be動詞と原形は並ばない）<br>💡 tomorrow は未来の合図！'},
+    {qid:'nh3_rev_s10_q1',jp:'「彼女は来週京都を訪れる予定です。」<br>She is ( 　 ) to visit Kyoto next week.',ans:'going',choices:['going','go','went','goes'],exp:'📐 be going to は3語セット。<br>✅ She is <strong>going</strong> to visit Kyoto next week.<br>💡 be動詞のあとは going！'},
+    {qid:'nh3_rev_s10_q2',jp:'「彼は今夜勉強するつもりです。」<br>He ( 　 ) going to study tonight.',ans:'is',choices:['is','are','am','will'],exp:'📐 be動詞は主語で変わる。He → is。<br>✅ He <strong>is</strong> going to study tonight.<br>❌ He will going は✕<br>💡 be動詞の衣装替え！'},
+    {qid:'nh3_rev_s10_q3',jp:'「彼らは映画を見る予定です。」<br>They ( 　 ) going to watch a movie.',ans:'are',choices:['are','is','am','do'],exp:'📐 They → are。<br>✅ They <strong>are</strong> going to watch a movie.<br>💡 複数の主語は are！'},
+    {qid:'nh3_rev_s10_q4',jp:'「きょんは明日、新しいネタを書くでしょう。」<br>Kyon will ( 　 ) a new joke tomorrow.',ans:'write',choices:['write','writes','wrote','writing'],exp:'📐 will のあとは原形。主語が Kyon でも s はつかない。<br>✅ Kyon will <strong>write</strong> a new joke tomorrow.<br>❌ will writes は✕<br>💡 すっぴんの原形！'},
+    {qid:'nh3_rev_s10_q5',jp:'「私は夕食のあとで宿題をするつもりです。」<br>I am going to ( 　 ) my homework after dinner.',ans:'do',choices:['do','does','did','doing'],exp:'📐 to のあとは原形。<br>✅ I am going to <strong>do</strong> my homework after dinner.<br>❌ going to doing は✕<br>💡 going につられて -ing にしない！'},
+    {qid:'nh3_rev_s10_q6',jp:'「私は今夜は出かけません。」<br>I ( 　 ) go out tonight.',ans:'will not',choices:['will not','am not','not will','do will'],exp:'📐 否定は will のあとに not。<br>✅ I <strong>will not</strong> go out tonight.<br>💡 will not の短縮形は won\'t！'},
+    {qid:'nh3_rev_s10_q7',jp:'「彼女はピアノをひくつもりはありません。」<br>She is ( 　 ) going to play the piano.',ans:'not',choices:['not','no','don\'t','doesn\'t'],exp:'📐 否定は be動詞のあとに not。<br>✅ She is <strong>not</strong> going to play the piano.<br>💡 ふつうの be動詞の否定文と同じ場所！'},
+    {qid:'nh3_rev_s10_q8',jp:'「あなたはそのクラブに入る予定ですか？」<br>( 　 ) you going to join the club?',ans:'Are',choices:['Are','Do','Will','Is'],exp:'📐 疑問文は be動詞を文の先頭へ。you → Are。<br>✅ <strong>Are</strong> you going to join the club?<br>❌ Do you going は✕<br>💡 will と going は同じ文で並べない！'},
+    {qid:'nh3_rev_s10_q9',jp:'「明日は雨が降るでしょうか？」「はい、降るでしょう。」<br>Will it rain tomorrow? — Yes, ( 　 ).',ans:'it will',choices:['it will','it is','it does','it was'],exp:'📐 Will で聞かれたら will で答える。<br>✅ Yes, <strong>it will</strong>.<br>💡 いいえなら No, it won\'t.'},
+    {qid:'nh3_rev_s10_q10',jp:'「あなたは料理をする予定ですか？」「いいえ、しません。」<br>Are you going to cook? — No, ( 　 ).',ans:'I\'m not',choices:['I\'m not','I don\'t','I am','I didn\'t'],exp:'📐 Are で聞かれたら be動詞で答える。<br>✅ No, <strong>I\'m not</strong>.<br>💡 聞かれた形で答える！'},
+    {qid:'nh3_rev_s10_q11',jp:'「明日は晴れるでしょう。」— 正しい英文は？',ans:'It will be sunny tomorrow.',choices:['It will be sunny tomorrow.','It will sunny tomorrow now.','It is will sunny tomorrow.','It will is sunny tomorrow.'],exp:'📐 sunny は形容詞。will のあとに原形の be が必要。<br>✅ It will <strong>be</strong> sunny tomorrow.<br>❌ It will sunny は✕（動詞がない）<br>💡 is の原形は be！'},
+    {qid:'nh3_rev_s10_q12',jp:'「彼は来週東京へ行く予定です。」— 正しい英文は？',ans:'He is going to go to Tokyo next week.',choices:['He is going to go to Tokyo next week.','He going to go to Tokyo next week.','He is going to goes to Tokyo next week.','He will going to Tokyo next week now.'],exp:'📐 be動詞 ＋ going to ＋ 原形。<br>✅ He <strong>is going to go</strong> to Tokyo next week.<br>💡 going と go が両方あって正しい！'},
+    {qid:'nh3_rev_s10_q13',jp:'その場で「じゃあ、ぼくが行くよ」と決めたときに使うのは？（アドリブ）',ans:'will',choices:['will','be going to','did','was'],exp:'📐 その場で決めたこと → will。前から決めていた予定 → be going to。<br>✅ OK, I <strong>will</strong> go.<br>💡 台本は be going to、アドリブは will！'},
+    {qid:'nh3_rev_s10_q14',jp:'Will you help me? の意味は？',ans:'手伝ってくれませんか。',choices:['手伝ってくれませんか。','手伝ってしまいましたか。','手伝っているのですか。','手伝わなくてはいけませんか。'],exp:'📐 Will you 〜? は「〜してくれませんか」と頼むときにも使う。<br>✅ 手伝ってくれませんか。<br>💡 返事は Sure. / All right. など！'}
+  ];
+  qs.forEach(function(q,i){h+='<div style="font-size:12px;color:var(--text2);margin-bottom:6px">Q'+(i+1)+'</div>'+makeChoice(q.qid,q.jp,q.ans,q.choices,q.exp);});
+  h+=nextBtn(10);
+  return h;
+}
+
+// ===== SECTION 1: 不定詞・動名詞（Unit3・4 の見分け） =====
+function renderSection1(){
+  var h=sectionHeader('Unit 3・4','不定詞・動名詞の使い分け','to ＋ 動詞 と 動詞-ing の見分け');
+  h+='<div class="intro-box">'
+    +'<div class="intro-box-title">💬 トーク</div>'
     +chat('kyon','きょん','「to go」と「going」って何が違うの？どっちでも同じじゃないの？')
     +chat('nishi','西村真二','動詞によって後ろに来る形が決まってる。enjoyは必ず「-ing」、wantは必ず「to+動詞」。')
     +chat('kyon','きょん','え、決まってるの！？じゃあ覚えるだけじゃん！！それは得意！！')
@@ -300,7 +370,7 @@ function renderSection1(){
 function renderSection2(){
   var h=sectionHeader('Unit 2','接続詞：that / because / when','What is local food?');
   h+='<div class="intro-box">'
-    +'<div class="intro-box-title">💬 Unit2 トーク</div>'
+    +'<div class="intro-box-title">💬 トーク</div>'
     +chat('kyon','きょん','「I think that」の that って何？省略できるって聞いたけど…')
     +chat('nishi','西村真二','この that は接続詞で「〜ということ」という意味。省略してもOKだけど、試験では省略した形が出ることも多い。')
     +chat('kyon','きょん','あ、because は「なぜなら」でしょ？それは知ってる！')
@@ -338,7 +408,7 @@ function renderSection2(){
 function renderSection3(){
   var h=sectionHeader('Unit 3','to不定詞の副詞用法・have to','What kind of job are you interested in?');
   h+='<div class="intro-box">'
-    +'<div class="intro-box-title">💬 Unit3 トーク</div>'
+    +'<div class="intro-box-title">💬 トーク</div>'
     +chat('kyon','きょん','「have to」って「must」と同じ意味？どっちを使えばいい？')
     +chat('nishi','西村真二','肯定文なら意味はほぼ同じ。でも否定文は別物で、must not＝してはいけない、don\'t have to＝しなくていい。')
     +chat('kyon','きょん','あ、「I am happy to hear that.」って授業で出てきた！toは何なの？')
@@ -384,9 +454,9 @@ function renderSection3(){
 
 // ===== SECTION 4: Unit4 should/must・動名詞 =====
 function renderSection4(){
-  var h=sectionHeader('Unit 4','should / must・動名詞（目的語）','What is a problem in a homestay?');
+  var h=sectionHeader('Unit 4','should / must・動名詞（目的語）','What is important in a homestay?');
   h+='<div class="intro-box">'
-    +'<div class="intro-box-title">💬 Unit4 トーク</div>'
+    +'<div class="intro-box-title">💬 トーク</div>'
     +chat('kyon','きょん','「should」と「must」ってどっちも「〜しなきゃ」じゃないの？')
     +chat('nishi','西村真二','強さが違う。shouldは「〜すべき」でアドバイス。mustは「絶対〜しなきゃ」で強い義務・命令。')
     +chat('kyon','きょん','must notって「〜しなくていい」じゃないの？')
@@ -425,7 +495,7 @@ function renderSection4(){
 function renderSection5(){
   var h=sectionHeader('Unit 5','疑問詞 + to不定詞','What design is good for everyone?');
   h+='<div class="intro-box">'
-    +'<div class="intro-box-title">💬 Unit5 トーク</div>'
+    +'<div class="intro-box-title">💬 トーク</div>'
     +chat('kyon','きょん','「how to make」って何？どういう意味なの？')
     +chat('nishi','西村真二','「どうやって〜するか・〜の仕方」。how to make = 作り方。what to do = 何をすべきか。疑問詞とtoをセットにした便利な表現だよ。')
     +chat('kyon','きょん','あ！料理レシピでよく見る「how to cook」もそれ？！')
@@ -464,7 +534,7 @@ function renderSection5(){
 function renderSection6(){
   var h=sectionHeader('Unit 6','比較級・最上級・as...as構文','How can we make a good presentation?');
   h+='<div class="intro-box">'
-    +'<div class="intro-box-title">💬 Unit6 トーク</div>'
+    +'<div class="intro-box-title">💬 トーク</div>'
     +chat('kyon','きょん','「taller」と「more tall」どっちが正しいの？')
     +chat('nishi','西村真二','短い単語（1音節と、happy のように y で終わる2音節）は -er。famous のような他の2音節や3音節以上は more を前に置く。tallは短いから taller が正しい。')
     +chat('kyon','きょん','「as tall as」って何？「〜と同じくらい背が高い」？')
@@ -502,7 +572,7 @@ function renderSection6(){
 function renderSection7(){
   var h=sectionHeader('Unit 7','受動態（be動詞 + 過去分詞）','What are World Heritage Sites and their problems?');
   h+='<div class="intro-box">'
-    +'<div class="intro-box-title">💬 Unit7 トーク</div>'
+    +'<div class="intro-box-title">💬 トーク</div>'
     +chat('kyon','きょん','受動態って何？普通の文と何が違うの？')
     +chat('nishi','西村真二','「〜する」が能動態、「〜される」が受動態。主語が動作を受ける側になる。')
     +chat('kyon','きょん','「English is used all over the world.」ってプリントにあったけど、これ受動態？')
@@ -590,6 +660,11 @@ function renderSection8(){
     {qid:'nh3_rev_s8_q26',jp:'「私はあなたに会えてうれしいと思った。」<br>I was glad ( 　 ) you.',ans:'to meet',choices:['to meet','meeting','of meet','met'],exp:'📐 to不定詞の副詞用法（感情の原因）：be glad + to + 動詞原形<br>✅ I was glad <strong>to meet</strong> you.<br>💡 be glad/happy/sad/surprised + to + 動詞原形！'},
     // Unit7 追加
     {qid:'nh3_rev_s8_q27',jp:'「工場でおもちゃが作られている。」<br>Toys ( 　 ) in the factory.',ans:'are made',choices:['are made','is made','make','were made'],exp:'📐 受動態（現在・複数主語）：are + 過去分詞<br>✅ Toys <strong>are made</strong> in the factory.<br>💡 Toys（複数）→ are！is ではない。make → made（不規則）'},
+    // Unit1 will・be going to（2026-11-09 追加）
+    {qid:'nh3_rev_s8_q28',jp:'「彼は明日テニスをするでしょう。」<br>He will ( 　 ) tennis tomorrow.',ans:'play',choices:['play','plays','played','playing'],exp:'📐 will のあとは原形。<br>✅ He will <strong>play</strong> tennis tomorrow.<br>💡 主語が He でも s はつかない！'},
+    {qid:'nh3_rev_s8_q29',jp:'「私たちは来月沖縄へ行く予定です。」<br>We ( 　 ) going to go to Okinawa next month.',ans:'are',choices:['are','is','am','will'],exp:'📐 We → are。<br>✅ We <strong>are</strong> going to go to Okinawa next month.<br>💡 be動詞は主語で変わる！'},
+    {qid:'nh3_rev_s8_q30',jp:'「明日は寒くなるでしょう。」— 正しい英文は？',ans:'It will be cold tomorrow.',choices:['It will be cold tomorrow.','It will cold tomorrow now.','It is will cold tomorrow.','It will is cold tomorrow.'],exp:'📐 形容詞の前に原形の be が必要。<br>✅ It will <strong>be</strong> cold tomorrow.<br>💡 is の原形は be！'},
+    {qid:'nh3_rev_s8_q31',jp:'「あなたは今週末、買い物に行く予定ですか？」<br>( 　 ) you going to go shopping this weekend?',ans:'Are',choices:['Are','Do','Will','Is'],exp:'📐 疑問文は be動詞を文の先頭へ。<br>✅ <strong>Are</strong> you going to go shopping this weekend?<br>💡 you → Are！'},
   ];
 
   var qs=shuffle(allQs).slice(0,20);
@@ -681,6 +756,7 @@ function renderSection(id){
   var main=document.getElementById('mainContent');
   var h='';
   if(id===0)h=renderSection0();
+  else if(id===10)h=renderSection10();
   else if(id===1)h=renderSection1();
   else if(id===2)h=renderSection2();
   else if(id===3)h=renderSection3();

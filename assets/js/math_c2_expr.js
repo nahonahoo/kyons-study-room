@@ -328,7 +328,7 @@ function recordResult(qid, isCorrect) {
   weakDB[qid].total++;
   if (isCorrect) weakDB[qid].correct++;
   localStorage.setItem('math_weakdb', JSON.stringify(weakDB));
-  var today = new Date().toISOString().slice(0, 10);
+  var today = new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
   var daily = JSON.parse(localStorage.getItem('math_daily') || '{}');
   daily[today] = (daily[today] || 0) + 1;
   localStorage.setItem('math_daily', JSON.stringify(daily));

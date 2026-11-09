@@ -71,7 +71,8 @@ var SUBJECTS = [
   { key:'sci_xp',  label:'理科' },
   { key:'math_xp', label:'数学' },
   { key:'soc_xp',  label:'社会' },
-  { key:'jpn_xp',  label:'国語' }
+  { key:'jpn_xp',  label:'国語' },
+  { key:'exam_xp', label:'入試対策' }
 ];
 
 function isTrackedKey(key){
@@ -148,15 +149,21 @@ document.getElementById('importBtn').addEventListener('click', function(){
       statusEl.textContent = '❌ このファイルには記録データが見つかりませんでした。';
       return;
     }
-    var count = 0;
-    Object.keys(data).forEach(function(key){
-      if (isTrackedKey(key)) { localStorage.setItem(key, data[key]); count++; }
-    });
+    var keys = Object.keys(data).filter(function(key){ return isTrackedKey(key) && typeof data[key] === 'string'; });
+    var count = keys.length;
     if (count === 0) {
       statusEl.className = 'status err';
       statusEl.textContent = '❌ 対応する記録が見つかりませんでした。';
       return;
     }
+    // 古いファイルを読み込むと今の記録が巻き戻るので、上書きの前に必ず確認する
+    var when = payload && payload.exportedAt ? new Date(payload.exportedAt).toLocaleString('ja-JP') : '不明';
+    if (!window.confirm('このファイル（保存した日時：' + when + '）の内容で、このブラウザの記録を上書きします。\nよろしいですか？')) {
+      statusEl.className = 'status err';
+      statusEl.textContent = '読み込みをやめました。記録は変わっていません。';
+      return;
+    }
+    keys.forEach(function(key){ localStorage.setItem(key, data[key]); });
     statusEl.className = 'status ok';
     statusEl.textContent = '✅ ' + count + '件の記録を読み込みました！反映しています…';
     renderStats();

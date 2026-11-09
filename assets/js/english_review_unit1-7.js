@@ -1,3 +1,5 @@
+// 2026-11-09 正解を直した問題の古い弱点データを1回だけ消す（特訓は保存済みの答えで採点するため）
+(function(){try{var f='nh3_fix_20261109';if(localStorage.getItem(f))return;var k='nh3_weakdb',d=JSON.parse(localStorage.getItem(k)||'{}'),A=[],J=['きょんはもう大きなイベントで公演しましたか？'],Q=['nh3_rev_s1_q6','nh3_rev_s2_q6','nh3_rev_s7_q4','nh3_rev_s8_q01','nh3_rev_s8_q03'];Object.keys(d).forEach(function(q){var v=d[q]||{};if(A.indexOf(v.answer)>=0||J.indexOf(v.jp)>=0||Q.indexOf(q)>=0)delete d[q];});localStorage.setItem(k,JSON.stringify(d));localStorage.setItem(f,'1');}catch(e){}})();
 // ===== 中2英語 Unit1〜7 復習 =====
 // localStorage prefix: nh3_ (英語共通XP)
 // qid prefix: nh3_rev_s{n}_q{n}
@@ -248,7 +250,7 @@ function renderSection0(){
     +'</div>'
     +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;">'
     +['Unit1 不定詞・動名詞','Unit2 接続詞（that/because/when）','Unit3 to不定詞副詞用法・have to','Unit4 should/must・動名詞','Unit5 疑問詞+to不定詞','Unit6 比較級・最上級・as...as','Unit7 受動態（be動詞+過去分詞）','🏁 総合確認テスト'].map(function(t,i){
-      return '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;cursor:pointer;" onclick="goSection('+(i+1)+')">'+(i+1===8?t:'Unit'+(i+1)+' '+t)+'</div>';
+      return '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:13px;cursor:pointer;" onclick="goSection('+(i+1)+')">'+t+'</div>';
     }).join('')
     +'</div>'
     +'<div style="text-align:center;margin-top:24px;"><button class="start-btn" onclick="goSection(1)">▶ Unit 1 からスタート</button></div>';
@@ -271,8 +273,8 @@ function renderSection1(){
       +ruleBox('形容詞的用法（名詞を修飾）','a place <strong>to visit</strong> ＝ 訪れるための場所<br>something <strong>to eat</strong> ＝ 食べるもの')
       +ruleBox('覚え方','「enjoy/finish/stop は-ingだけ！」←まずここを丸暗記！')
     )
-    +exCard('I <strong>enjoyed visiting</strong> Takeshima Museum.','タケシマ水族館を訪れるのを楽しんだ。')
-    +exCard('She <strong>wants to go</strong> to Toyoda Stadium next Sunday.','彼女は次の日曜日にトヨダスタジアムに行きたいと思っている。')
+    +exCard('I <strong>enjoyed visiting</strong> Takeshima Aquarium.','竹島水族館を訪れるのを楽しんだ。')
+    +exCard('She <strong>wants to go</strong> to Nagoya Dome next Sunday.','彼女は次の日曜日にナゴヤドームに行きたいと思っている。')
     +exCard('I found it <strong>exciting</strong>.（find + O + C）','それが面白いとわかった。')
     +'<div style="font-size:13px;color:var(--text2);margin:16px 0 8px">📝 練習問題（全10問）</div>'
     +progressDots(10,0);
@@ -284,7 +286,7 @@ function renderSection1(){
     {qid:'nh3_rev_s1_q3',jp:'「彼女は走るのをやめた。」— 正しい英文は？',ans:'She stopped running.',choices:['She stopped running.','She stopped to run.','She stopped runs.','She stopp running.'],exp:'📐 stop は動名詞（-ing）のみとる動詞。<br>✅ She stopped <strong>running</strong>.<br>⚠️ "stopped to run" は「走るために立ち止まった」という別の意味になる！'},
     {qid:'nh3_rev_s1_q4',jp:'日本語に合う英文の（　）に入る語は？<br>「私は新しい本を買いたい。」<br>I ( 　 ) to buy a new book.',ans:'want',choices:['want','enjoy','finish','stop'],exp:'📐 want + to + 動詞原形。<br>✅ I <strong>want to</strong> buy a new book.<br>💡 「〜したい」はwant to。enjoy/finish/stopは-ingを取るので不可。'},
     {qid:'nh3_rev_s1_q5',jp:'「これは読むための本です。」— 正しい英文は？',ans:'This is a book to read.',choices:['This is a book to read.','This is a book reading.','This is a book for read.','This is a book reads.'],exp:'📐 to不定詞の形容詞的用法：名詞+to+動詞原形<br>✅ a book <strong>to read</strong> ＝ 読むための本<br>a place to visit / something to eat / time to study — 同じパターン！'},
-    {qid:'nh3_rev_s1_q6',jp:'「彼女は英語を勉強することが好きだ。」<br>She likes ( 　 ) English.',ans:'studying',choices:['studying','to study','study','studied'],exp:'📐 like は to+動詞・動名詞どちらもOKだが、この問題は選択肢から。<br>✅ She likes <strong>studying</strong> English. ← 動名詞<br>✅ She likes <strong>to study</strong> English. ← to不定詞も可<br>💡 like / love / hate / start → どちらでもOKな動詞！'},
+    {qid:'nh3_rev_s1_q6',jp:'「彼女は英語を勉強することが好きだ。」<br>She likes ( 　 ) English.',ans:'studying',choices:['studying','studies','study','studied'],exp:'📐 like は to+動詞・動名詞どちらもOKだが、この問題の選択肢では studying だけが入る。<br>✅ She likes <strong>studying</strong> English. ← 動名詞<br>✅ She likes <strong>to study</strong> English. ← to不定詞も可<br>💡 like / love / hate / start → どちらでもOKな動詞！'},
     {qid:'nh3_rev_s1_q7',jp:'find + O + C の文として正しいのはどれ？<br>「私はそれが面白いとわかった。」',ans:'I found it exciting.',choices:['I found it exciting.','I found it excite.','I found exciting it.','I founded it exciting.'],exp:'📐 find + O（目的語）+ C（補語・形容詞）<br>✅ I found <strong>it exciting</strong>.<br>= Oが〜だとわかった。O → C（形容詞）の語順が大事！<br>💡 find + it + 形容詞 のパターンを丸暗記！'},
     {qid:'nh3_rev_s1_q8',jp:'「私には食べるものが何もない。」<br>I have ( 　 ) to eat.',ans:'nothing',choices:['nothing','something','anything','everything'],exp:'📐 nothing to eat = 食べるもの（食べるべきもの）が何もない<br>something to eat = 何か食べるもの<br>anything to eat = 食べるもの（疑問・否定文で）<br>💡 「食べるものが何もない」→ nothing'},
     {qid:'nh3_rev_s1_q9',jp:'「練習をやめないでください。」— 正しい英文は？',ans:'Please don\'t stop practicing.',choices:['Please don\'t stop practicing.','Please don\'t stop to practice.','Please don\'t stop practice.','Please stop practicing.'],exp:'📐 stop + -ing = 〜するのをやめる<br>✅ Please don\'t stop <strong>practicing</strong>. ← やめないで！<br>⚠️ stop to practice = 練習するために立ち止まる（別の意味）<br>💡 stop + -ing と stop + to不定詞は意味が違う！'},
@@ -322,9 +324,9 @@ function renderSection2(){
     {qid:'nh3_rev_s2_q3',jp:'「私はきょんが天才だと知っている。」<br>I know ( 　 ) Kyon is a genius.',ans:'that',choices:['that','when','because','or'],exp:'📐 know + that + S + V<br>✅ I know <strong>that</strong> Kyon is a genius.<br>💡 think / know / hope / believe / be glad のあとは that + S + V！'},
     {qid:'nh3_rev_s2_q4',jp:'「なぜ日本食が好きなの？」に対する正しい答えは？',ans:'Because it is delicious.',choices:['Because it is delicious.','When it is delicious.','That it is delicious.','That is delicious.'],exp:'📐 Why〜? という質問に対して Because〜. で答える。<br>✅ <strong>Because</strong> it is delicious.<br>💡 "Why?" → "Because S+V." のパターンは絶対暗記！'},
     {qid:'nh3_rev_s2_q5',jp:'「私はあなたが来ることを願っています。」<br>I hope ( 　 ) you will come.',ans:'that',choices:['that','because','when','while'],exp:'📐 hope + that + S + V（〜ということを願う）<br>✅ I hope <strong>that</strong> you will come.<br>💡 I hope that〜 はよく使う表現。手紙やメールにもよく出る！'},
-    {qid:'nh3_rev_s2_q6',jp:'次の2文を接続詞でつないだとき、正しいものは？<br>「She was tired. She went to bed early.」',ans:'She went to bed early because she was tired.',choices:['She went to bed early because she was tired.','She went to bed early when she was tired.','She went to bed early that she was tired.','Because she was tired she went to bed early without comma.'],exp:'📐 because は理由を表す。「疲れていたので早く寝た」。<br>✅ She went to bed early <strong>because</strong> she was tired.<br>💡 because節は前後どちらでもOK！ただし前に来るときはカンマ。'},
+    {qid:'nh3_rev_s2_q6',jp:'次の2文を接続詞でつないだとき、「疲れていたので早く寝た」の意味で正しいものは？<br>「She was tired. She went to bed early.」',ans:'She went to bed early because she was tired.',choices:['She went to bed early because she was tired.','She went to bed early when she was tired.','She went to bed early that she was tired.','She went to bed early but she was tired.'],exp:'📐 because は理由を表す。「疲れていたので早く寝た」。<br>✅ She went to bed early <strong>because</strong> she was tired.<br>💡 because節は前後どちらでもOK！ただし前に来るときはカンマ。'},
     {qid:'nh3_rev_s2_q7',jp:'「私は彼が来るとき、嬉しい。」<br>I am happy ( 　 ) he comes.',ans:'when',choices:['when','because','that','after'],exp:'📐 when = 〜するとき<br>✅ I am happy <strong>when</strong> he comes.<br>💡 because は理由、when は時。混乱したら日本語の意味で判断！'},
-    {qid:'nh3_rev_s2_q8',jp:'下線部が正しいものを選ぼう：<br>「I think ( ア because / イ that / ウ when ) this food is very good.」',ans:'that',choices:['that','because','when'],exp:'📐 think + that + S + V（〜ということを思う）<br>✅ I think <strong>that</strong> this food is very good.<br>💡 think / know / hope → that を続ける！'},
+    {qid:'nh3_rev_s2_q8',jp:'（　）に入る正しい語を選ぼう：<br>「I think ( ア because / イ that / ウ when ) this food is very good.」',ans:'that',choices:['that','because','when'],exp:'📐 think + that + S + V（〜ということを思う）<br>✅ I think <strong>that</strong> this food is very good.<br>💡 think / know / hope → that を続ける！'},
     {qid:'nh3_rev_s2_q9',jp:'「外に出たとき、雨が降っていた。」— 正しい英文は？',ans:'When I went outside, it was raining.',choices:['When I went outside, it was raining.','Because I went outside, it was raining.','That I went outside, it was raining.','When I go outside, it was raining.'],exp:'📐 when + 過去形，過去進行形（〜していた）<br>✅ <strong>When</strong> I went outside, it was raining.<br>💡 外に出た「とき」→ when。過去のことだから went（過去形）！'},
   ];
   qs.forEach(function(q,i){h+='<div style="font-size:12px;color:var(--text2);margin-bottom:6px">Q'+(i+1)+'</div>'+makeChoice(q.qid,q.jp,q.ans,q.choices,q.exp);});
@@ -338,7 +340,7 @@ function renderSection3(){
   h+='<div class="intro-box">'
     +'<div class="intro-box-title">💬 Unit3 トーク</div>'
     +chat('kyon','きょん','「have to」って「must」と同じ意味？どっちを使えばいい？')
-    +chat('nishi','西村真二','意味はほぼ同じだよ。「have to」の方が日常会話でよく使われる。疑問文・否定文は have to の方が作りやすい。')
+    +chat('nishi','西村真二','肯定文なら意味はほぼ同じ。でも否定文は別物で、must not＝してはいけない、don\'t have to＝しなくていい。')
     +chat('kyon','きょん','あ、「I am happy to hear that.」って授業で出てきた！toは何なの？')
     +chat('nishi','西村真二','それはto不定詞の副詞用法。「〜して（うれしい）」という感情の原因を表してる。')
     +'</div>'
@@ -370,7 +372,7 @@ function renderSection3(){
     {qid:'nh3_rev_s3_q6',jp:'「彼女はまた会えて嬉しかった。」<br>She was glad ( 　 ) him again.',ans:'to see',choices:['to see','of see','for seeing','seeing'],exp:'📐 be glad + to + 動詞原形（感情の原因）<br>✅ She was glad <strong>to see</strong> him again.<br>💡 glad / happy / sad / surprised + to + 動詞原形！'},
     {qid:'nh3_rev_s3_q7',jp:'「私は試験に合格するために一生懸命勉強した。」<br>I studied hard ( 　 ) the exam.',ans:'to pass',choices:['to pass','of passing','for pass','passing'],exp:'📐 to + 動詞原形（目的：〜するために）<br>✅ I studied hard <strong>to pass</strong> the exam.<br>💡 「〜するために」は to + 動詞の原形。-ing や for + 名詞とは違う！'},
     {qid:'nh3_rev_s3_q8',jp:'次のうち「have to」の文として正しいのはどれ？',ans:'You have to finish your homework.',choices:['You have to finish your homework.','You have to finishing your homework.','You has to finish your homework.','You have finish your homework.'],exp:'📐 have to + 動詞の原形（原形！-ingや三単現はNG）<br>✅ You have to <strong>finish</strong> your homework.<br>❌ finishing / finishes はNG<br>💡 have to の後は必ず動詞の原形！'},
-    {qid:'nh3_rev_s3_q9',jp:'下線部の意味として正しいのはどれ？<br>"I don\'t <u>have to</u> wake up early tomorrow."',ans:'明日は早く起きなくてよい（不要）',choices:['明日は早く起きなくてよい（不要）','明日は早く起きてはいけない（禁止）','明日は早く起きるつもりだ（予定）','明日は早く起きるべきだ（アドバイス）'],exp:'📐 don\'t have to = 〜しなくていい（不要・必要がない）<br>✅ 「明日は早く起きなくてよい（不要）」<br>⚠️ must not = してはいけない（禁止）とは違う！<br>💡 この区別は入試で毎年出る！絶対覚えよう！'},
+    {qid:'nh3_rev_s3_q9',jp:'下線部の意味として正しいのはどれ？<br>"I <u>don\'t have to</u> wake up early tomorrow."',ans:'明日は早く起きなくてよい（不要）',choices:['明日は早く起きなくてよい（不要）','明日は早く起きてはいけない（禁止）','明日は早く起きるつもりだ（予定）','明日は早く起きるべきだ（アドバイス）'],exp:'📐 don\'t have to = 〜しなくていい（不要・必要がない）<br>✅ 「明日は早く起きなくてよい（不要）」<br>⚠️ must not = してはいけない（禁止）とは違う！<br>💡 この区別は入試で毎年出る！絶対覚えよう！'},
     {qid:'nh3_rev_s3_q10',jp:'「英語を教えてくれる先生のことが好きだ。」<br>I like the teacher ( 　 ) teaches us English.',ans:'who',choices:['who','which','what','where'],exp:'📐 関係代名詞 who（先行詞が人）<br>✅ I like the teacher <strong>who</strong> teaches us English.<br>💡 先行詞（=前の名詞）が「人」のとき → who！<br>who の後ろには動詞（teaches）が続く！'},
     {qid:'nh3_rev_s3_q11',jp:'「彼女が書いた手紙は長かった。」<br>The letter ( 　 ) she wrote was long.',ans:'that',choices:['that','who','which she','what'],exp:'📐 関係代名詞 that（先行詞がもの）<br>✅ The letter <strong>that</strong> she wrote was long.<br>💡 先行詞（letter）がものの場合 → that！<br>that の後ろに she wrote（主語+動詞）が続く形に注意！'},
     {qid:'nh3_rev_s3_q12',jp:'「隣に住んでいる男性は医者だ。」— 正しい英文は？',ans:'The man who lives next door is a doctor.',choices:['The man who lives next door is a doctor.','The man which lives next door is a doctor.','The man that he lives next door is a doctor.','The man who live next door is a doctor.'],exp:'📐 関係代名詞 who + 動詞（三人称単数現在は s がつく！）<br>✅ The man <strong>who lives</strong> next door is a doctor.<br>💡 the man が先行詞（3人称単数）→ who の後ろの動詞は lives（s付き）！'},
@@ -411,7 +413,7 @@ function renderSection4(){
     {qid:'nh3_rev_s4_q5',jp:'「彼女は音楽を聴くことに興味がある。」<br>She is interested in ( 　 ) music.',ans:'listening to',choices:['listening to','listen to','to listen to','listened to'],exp:'📐 be interested in + -ing（in は前置詞）<br>✅ She is interested in <strong>listening to</strong> music.<br>💡 in の後ろ → -ing（前置詞のうしろは動名詞！）'},
     {qid:'nh3_rev_s4_q6',jp:'「あなたはヘルメットをかぶらなければならない。」<br>You ( 　 ) wear a helmet.',ans:'must',choices:['must','should','don\'t have to','must not'],exp:'📐 must = 〜しなければならない（強い義務・ルール）<br>✅ You <strong>must</strong> wear a helmet.<br>💡 should はアドバイス、must は強い義務・命令！'},
     {qid:'nh3_rev_s4_q7',jp:'「挑戦し続けてください！」<br>Keep ( 　 )!',ans:'trying',choices:['trying','to try','try','tried'],exp:'📐 keep + -ing = 〜し続ける<br>✅ Keep <strong>trying</strong>!<br>💡 keep（続ける）も動名詞のみ取る動詞！keep / enjoy / finish / stop → -ing'},
-    {qid:'nh3_rev_s4_q8',jp:'下線部が正しい文はどれ？',ans:'I practice speaking English every day.',choices:['I practice speaking English every day.','I practice to speak English every day.','I practice speak English every day.','I practices speaking English every day.'],exp:'📐 practice + -ing = 〜を練習する<br>✅ I practice <strong>speaking</strong> English every day.<br>💡 practice も動名詞のみ取る動詞の一つ！'},
+    {qid:'nh3_rev_s4_q8',jp:'正しい文はどれ？',ans:'I practice speaking English every day.',choices:['I practice speaking English every day.','I practice to speak English every day.','I practice speak English every day.','I practices speaking English every day.'],exp:'📐 practice + -ing = 〜を練習する<br>✅ I practice <strong>speaking</strong> English every day.<br>💡 practice も動名詞のみ取る動詞の一つ！'},
     {qid:'nh3_rev_s4_q9',jp:'「must not」と「don\'t have to」の意味の違いとして正しいのはどれ？',ans:'must not＝してはいけない（禁止）、don\'t have to＝しなくていい（不要）',choices:['must not＝してはいけない（禁止）、don\'t have to＝しなくていい（不要）','must not＝しなくていい（不要）、don\'t have to＝してはいけない（禁止）','どちらも同じ意味','must not＝すべきでない、don\'t have to＝してはいけない'],exp:'📐 これは英語で最も間違えやすい区別の一つ！<br>✅ must not = してはいけない（禁止）← 強い禁止<br>✅ don\'t have to = しなくていい（不要・必要がない）<br>💡 入試で毎年出る！絶対覚えよう！'},
   ];
   qs.forEach(function(q,i){h+='<div style="font-size:12px;color:var(--text2);margin-bottom:6px">Q'+(i+1)+'</div>'+makeChoice(q.qid,q.jp,q.ans,q.choices,q.exp);});
@@ -464,9 +466,9 @@ function renderSection6(){
   h+='<div class="intro-box">'
     +'<div class="intro-box-title">💬 Unit6 トーク</div>'
     +chat('kyon','きょん','「taller」と「more tall」どっちが正しいの？')
-    +chat('nishi','西村真二','短い単語（1〜2音節）は -er。長い単語（3音節以上）は more を前に置く。tallは短いから taller が正しい。')
+    +chat('nishi','西村真二','短い単語（1音節と、happy のように y で終わる2音節）は -er。famous のような他の2音節や3音節以上は more を前に置く。tallは短いから taller が正しい。')
     +chat('kyon','きょん','「as tall as」って何？「〜と同じくらい背が高い」？')
-    +chat('nishi','西村真二','そう！Aとbが同じくらいのときに使う。否定にすると「AはBほど〜でない」になる。')
+    +chat('nishi','西村真二','そう！AとBが同じくらいのときに使う。否定にすると「AはBほど〜でない」になる。')
     +'</div>'
     +ruleCard('📐 比較級・最上級の作り方',
       ruleBox('規則変化','短い語：-er / -est　（tall→taller→tallest / fast→faster→fastest）<br>長い語：more / most（popular→more popular→most popular）<br>語尾がe：-r / -st（nice→nicer→nicest）<br>子音+y：y→i+er / y→i+est（happy→happier→happiest）')
@@ -474,21 +476,21 @@ function renderSection6(){
       +ruleBox('比較の文型','A is <strong>-er than</strong> B. / A is <strong>more〜 than</strong> B. →AはBより〜<br>A is <strong>the -est</strong> （of/in〜）. →Aが最も〜<br>A is <strong>as 〜 as</strong> B. →AはBと同じくらい〜<br>A is <strong>not as 〜 as</strong> B. →AはBほど〜でない')
     )
     +exCard('Yuki is <strong>taller than</strong> Mayu.','ユキはマユより背が高い。')
-    +exCard('Kiso River is <strong>the longest</strong> river in Aichi.','木曽川は愛知で最も長い川だ。')
-    +exCard('Toyohashi is <strong>as large as</strong> Nishio.','豊橋は西尾と同じくらいの広さだ。')
+    +exCard('The Kiso River is <strong>the longest</strong> river in Aichi.','木曽川は愛知で最も長い川だ。')
+    +exCard('Ken is <strong>as tall as</strong> Mayu.','ケンはマユと同じくらいの背の高さだ。')
     +'<div style="font-size:13px;color:var(--text2);margin:16px 0 8px">📝 練習問題（全10問）</div>'
     +progressDots(10,0);
 
   var qs=[
     {qid:'nh3_rev_s6_q0',jp:'「マユはユキより速く走る。」<br>Mayu runs ( 　 ) Yuki.',ans:'faster than',choices:['faster than','more fast than','fast than','the fastest'],exp:'📐 fast（短い語）の比較級 → -er<br>✅ Mayu runs <strong>faster than</strong> Yuki.<br>💡 短い語（1音節）は -er + than の形。more fast は間違い！'},
     {qid:'nh3_rev_s6_q1',jp:'「このリンゴジュースはオレンジジュースより人気がある。」<br>This apple juice is ( 　 ) orange juice.',ans:'more popular than',choices:['more popular than','popularer than','the most popular','popular than'],exp:'📐 popular（3音節・長い語）の比較級 → more popular<br>✅ This apple juice is <strong>more popular than</strong> orange juice.<br>💡 3音節以上の語 → more を前に置く！'},
-    {qid:'nh3_rev_s6_q2',jp:'「愛知で最も有名な観光地はどこですか？」<br>What is ( 　 ) place in Aichi?',ans:'the most famous',choices:['the most famous','the famousest','most famous','more famous'],exp:'📐 famous（3音節）の最上級 → the most famous<br>✅ What is <strong>the most famous</strong> place in Aichi?<br>💡 最上級には必ず the を付ける！"the most + 形容詞"'},
+    {qid:'nh3_rev_s6_q2',jp:'「愛知で最も有名な観光地はどこですか？」<br>What is ( 　 ) place in Aichi?',ans:'the most famous',choices:['the most famous','the famousest','most famous','more famous'],exp:'📐 famous は -est をつけない語 → 最上級は the most famous<br>✅ What is <strong>the most famous</strong> place in Aichi?<br>💡 最上級には必ず the を付ける！"the most + 形容詞"'},
     {qid:'nh3_rev_s6_q3',jp:'「good の比較級と最上級は？」',ans:'better / best',choices:['better / best','gooder / goodest','more good / most good','gooder / most good'],exp:'📐 good は不規則変化！<br>✅ good → <strong>better</strong> → <strong>best</strong><br>💡 good/well → better → best は必須の不規則変化！<br>bad → worse → worst も一緒に覚えよう！'},
     {qid:'nh3_rev_s6_q4',jp:'「きょんは西村と同じくらい背が高い。」<br>Kyon is ( 　 ) Nishimura.',ans:'as tall as',choices:['as tall as','taller than','the tallest in','tall as'],exp:'📐 as + 形容詞（原級）+ as = AはBと同じくらい〜<br>✅ Kyon is <strong>as tall as</strong> Nishimura.<br>💡 as ... as の中は必ず原級（比較級ではない）！'},
     {qid:'nh3_rev_s6_q5',jp:'「私は彼女ほど速く走れない。」<br>I can\'t run ( 　 ) she can.',ans:'as fast as',choices:['as fast as','faster than','the fastest','more fast'],exp:'📐 not as + 原級 + as = AはBほど〜でない<br>✅ I can\'t run <strong>as fast as</strong> she can.<br>💡 not as〜as はよく使う！「ほど〜でない」という表現！'},
-    {qid:'nh3_rev_s6_q6',jp:'「木曽川は愛知で最も長い川だ。」<br>Kiso River is ( 　 ) river in Aichi.',ans:'the longest',choices:['the longest','the most long','longer than','longest'],exp:'📐 long（短い語）の最上級 → the longest<br>✅ Kiso River is <strong>the longest</strong> river in Aichi.<br>💡 最上級には必ず the！短い語の最上級は -est！'},
+    {qid:'nh3_rev_s6_q6',jp:'「木曽川は愛知で最も長い川だ。」<br>The Kiso River is ( 　 ) river in Aichi.',ans:'the longest',choices:['the longest','the most long','longer than','longest'],exp:'📐 long（短い語）の最上級 → the longest<br>✅ The Kiso River is <strong>the longest</strong> river in Aichi.<br>💡 最上級には必ず the！短い語の最上級は -est！'},
     {qid:'nh3_rev_s6_q7',jp:'「happy の比較級は？」',ans:'happier',choices:['happier','more happy','happyer','more happier'],exp:'📐 子音+yで終わる語：y → i + er<br>✅ happy → <strong>happier</strong><br>💡 easy→easier, busy→busier, early→earlier も同じパターン！'},
-    {qid:'nh3_rev_s6_q8',jp:'「この映画は去年より面白い。」— 正しい英文は？',ans:'This movie is more interesting than last year\'s.',choices:['This movie is more interesting than last year\'s.','This movie is interestinger than last year\'s.','This movie is most interesting than last year\'s.','This movie is more interestinger than last year\'s.'],exp:'📐 interesting（4音節）の比較級 → more interesting<br>✅ This movie is <strong>more interesting than</strong> last year\'s.<br>💡 長い語は more〜 than。-er + than にはしない！'},
+    {qid:'nh3_rev_s6_q8',jp:'「この映画は去年の映画より面白い。」— 正しい英文は？',ans:'This movie is more interesting than last year\'s.',choices:['This movie is more interesting than last year\'s.','This movie is interestinger than last year\'s.','This movie is most interesting than last year\'s.','This movie is more interestinger than last year\'s.'],exp:'📐 interesting（4音節）の比較級 → more interesting<br>✅ This movie is <strong>more interesting than</strong> last year\'s.<br>💡 長い語は more〜 than。-er + than にはしない！'},
     {qid:'nh3_rev_s6_q9',jp:'「クラスで（の中で）最も上手な歌手はだれですか？」<br>Who is ( 　 ) singer ( 　 ) your class?',ans:'the best / in',choices:['the best / in','better / in','the best / of','most good / in'],exp:'📐 最上級 + in + 場所（建物・場所・グループ）<br>　最上級 + of + 複数名詞（比べる対象の集まり）<br>✅ Who is <strong>the best</strong> singer <strong>in</strong> your class?<br>💡 in クラス・学校・都市 / of all / of the five のように使い分ける！'},
   ];
   qs.forEach(function(q,i){h+='<div style="font-size:12px;color:var(--text2);margin-bottom:6px">Q'+(i+1)+'</div>'+makeChoice(q.qid,q.jp,q.ans,q.choices,q.exp);});
@@ -510,11 +512,11 @@ function renderSection7(){
       ruleBox('基本形：be動詞 + 過去分詞','現在：am/is/are + 過去分詞<br>過去：was/were + 過去分詞')
       +ruleBox('行為者：by + 人','This letter <strong>was written by</strong> him.<br>⚠️ 行為者が不明・一般の人のときはbyを省く')
       +ruleBox('否定文・疑問文','否定：be動詞 + not + 過去分詞<br>疑問：Be動詞 + 主語 + 過去分詞 〜?')
-      +ruleBox('重要な不規則過去分詞（暗記必須！）','write→written / see→seen / make→made<br>use→used / know→known / give→given<br>speak→spoken / sing→sung / take→taken')
+      +ruleBox('重要な不規則過去分詞（暗記必須！）','write→written / see→seen / make→made<br>build→built / know→known / give→given<br>speak→spoken / sing→sung / take→taken')
     )
     +exCard('<strong>English is used</strong> all over the world.','英語は世界中で使われている。')
     +exCard('<strong>This book was written by</strong> Dazai Osamu.','この本は太宰治によって書かれた。')
-    +exCard('<strong>Was Mt. Fuji seen</strong> from here?','ここから富士山は見えましたか？')
+    +exCard('<strong>Was this picture taken</strong> by Ken?','この写真はケンによって撮られましたか？')
     +'<div style="font-size:13px;color:var(--text2);margin:16px 0 8px">📝 練習問題（全10問）</div>'
     +progressDots(10,0);
 
@@ -523,7 +525,7 @@ function renderSection7(){
     {qid:'nh3_rev_s7_q1',jp:'「この本は太宰治によって書かれた。」<br>This book ( 　 ) Dazai Osamu.',ans:'was written by',choices:['was written by','written by','is written by','was write by'],exp:'📐 受動態（過去）：was/were + 過去分詞 + by 人<br>✅ This book <strong>was written by</strong> Dazai Osamu.<br>💡 write の過去分詞は written（不規則！）。by で行為者を表す。'},
     {qid:'nh3_rev_s7_q2',jp:'「この車はトヨタによって製造されている。」<br>This car ( 　 ) by Toyota.',ans:'is made',choices:['is made','was made','made','is making'],exp:'📐 受動態（現在）：is + 過去分詞<br>✅ This car <strong>is made</strong> by Toyota.<br>💡 make の過去分詞は made。is made = 作られている。'},
     {qid:'nh3_rev_s7_q3',jp:'「この歌はミカによって歌われた。」<br>This song ( 　 ) Mika.',ans:'was sung by',choices:['was sung by','is sung by','was sing by','sang by'],exp:'📐 受動態（過去）：was + 過去分詞 + by<br>✅ This song <strong>was sung by</strong> Mika.<br>💡 sing の過去分詞は sung（不規則！）。sing→sang→sung'},
-    {qid:'nh3_rev_s7_q4',jp:'「ここから富士山は見えましたか？」— 疑問文として正しいのは？',ans:'Was Mt. Fuji seen from here?',choices:['Was Mt. Fuji seen from here?','Is Mt. Fuji seen from here?','Did Mt. Fuji see from here?','Was Mt. Fuji saw from here?'],exp:'📐 受動態の疑問文：Was/Were + 主語 + 過去分詞?<br>✅ <strong>Was</strong> Mt. Fuji <strong>seen</strong> from here?<br>💡 see の過去分詞は seen。過去の疑問文なので was！'},
+    {qid:'nh3_rev_s7_q4',jp:'「この写真はケンによって撮られましたか？」— 疑問文として正しいのは？',ans:'Was this picture taken by Ken?',choices:['Was this picture taken by Ken?','Is this picture taken by Ken?','Did this picture take by Ken?','Was this picture took by Ken?'],exp:'📐 受動態の疑問文：Was/Were + 主語 + 過去分詞?<br>✅ <strong>Was</strong> this picture <strong>taken</strong> by Ken?<br>💡 take の過去分詞は taken。過去の疑問文なので was！'},
     {qid:'nh3_rev_s7_q5',jp:'「この映画はここでは上映されていない。」— 正しい否定文は？',ans:'This movie is not shown here.',choices:['This movie is not shown here.','This movie not is shown here.','This movie is not show here.','This movie was not shown here.'],exp:'📐 受動態の否定文：be動詞 + not + 過去分詞<br>✅ This movie <strong>is not shown</strong> here.<br>💡 「現在」上映されていない → is not（現在形）<br>show の過去分詞は shown！'},
     {qid:'nh3_rev_s7_q6',jp:'次の能動態を受動態に書き換えよう：<br>「They use English all over the world.」',ans:'English is used all over the world.',choices:['English is used all over the world.','English is use all over the world.','English was used all over the world.','English uses all over the world.'],exp:'📐 能動態 → 受動態：目的語が主語になる<br>They use English → <strong>English is used</strong> (by them)<br>✅ English <strong>is used</strong> all over the world.<br>💡 by them は一般的なので省略OK！'},
     {qid:'nh3_rev_s7_q7',jp:'「その公園は1993年に建てられた。」<br>The park ( 　 ) in 1993.',ans:'was built',choices:['was built','is built','built','was build'],exp:'📐 受動態（過去）：was/were + 過去分詞<br>✅ The park <strong>was built</strong> in 1993.<br>💡 build（建てる）の過去分詞は built（不規則！）<br>1993年 = 過去 → was'},
@@ -549,10 +551,10 @@ function renderSection8(){
   var allQs=[
     // Unit1
     {qid:'nh3_rev_s8_q00',jp:'「彼女は歌うことを楽しんだ。」<br>She enjoyed ( 　 ) a song.',ans:'singing',choices:['singing','to sing','sing','sings'],exp:'📐 enjoy + -ing（動名詞のみ）<br>✅ She enjoyed <strong>singing</strong> a song.<br>💡 enjoy / finish / stop → -ing！'},
-    {qid:'nh3_rev_s8_q01',jp:'「食べるための何かが欲しい。」— 正しいのは？',ans:'I want something to eat.',choices:['I want something to eat.','I want something eating.','I want something eat.','I want to eat something.'],exp:'📐 something to eat = 食べるための何か（to不定詞の形容詞用法）<br>✅ I want <strong>something to eat</strong>.<br>💡 名詞+to+動詞原形 = 〜するための名詞！'},
+    {qid:'nh3_rev_s8_q01',jp:'「食べるための何かが欲しい。」— 正しいのは？',ans:'I want something to eat.',choices:['I want something to eat.','I want something eating.','I want something eat.','I want something for eat.'],exp:'📐 something to eat = 食べるための何か（to不定詞の形容詞用法）<br>✅ I want <strong>something to eat</strong>.<br>💡 名詞+to+動詞原形 = 〜するための名詞！'},
     // Unit2
     {qid:'nh3_rev_s8_q02',jp:'「私はこれが正しいと思う。」<br>I think ( 　 ) this is right.',ans:'that',choices:['that','because','when','which'],exp:'📐 think + that + S+V<br>✅ I think <strong>that</strong> this is right.<br>💡 think/know/hope のあと → that！'},
-    {qid:'nh3_rev_s8_q03',jp:'「疲れていたので早く寝た。」— 正しい英文は？',ans:'I went to bed early because I was tired.',choices:['I went to bed early because I was tired.','I went to bed early when I was tired.','I went to bed early that I was tired.','Because I was tired, I went to bed early, too.'],exp:'📐 because = 〜なので（理由）<br>✅ I went to bed early <strong>because</strong> I was tired.<br>💡 「なぜ〜？」→「〜だから because」！'},
+    {qid:'nh3_rev_s8_q03',jp:'「疲れていたので早く寝た。」— 正しい英文は？',ans:'I went to bed early because I was tired.',choices:['I went to bed early because I was tired.','I went to bed early when I was tired.','I went to bed early that I was tired.','I went to bed early but I was tired.'],exp:'📐 because = 〜なので（理由）<br>✅ I went to bed early <strong>because</strong> I was tired.<br>💡 「なぜ〜？」→「〜だから because」！'},
     // Unit3
     {qid:'nh3_rev_s8_q04',jp:'「あなたは今日学校に行かなくていい。」<br>You ( 　 ) go to school today.',ans:'don\'t have to',choices:['don\'t have to','must not','should not','will not'],exp:'📐 don\'t have to = 〜しなくていい（不要）<br>✅ You <strong>don\'t have to</strong> go to school today.<br>⚠️ must not = してはいけない（禁止）と混乱しないこと！'},
     {qid:'nh3_rev_s8_q05',jp:'「また会えて嬉しいです。」<br>I\'m happy ( 　 ) you again.',ans:'to see',choices:['to see','see','seeing','of seeing'],exp:'📐 to不定詞の副詞用法（感情の原因）：be + 形容詞 + to + 動詞原形<br>✅ I\'m happy <strong>to see</strong> you again.<br>💡 happy/glad/sad/surprised + to + 動詞原形！'},

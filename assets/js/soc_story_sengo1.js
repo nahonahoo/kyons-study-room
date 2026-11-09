@@ -86,7 +86,7 @@ var STAGES = [
     items:[
       '<span class="hl-blue">1945年</span>、選挙法が改正され、<span class="hl-red">満20歳以上のすべての男女</span>に選挙権が与えられた。翌1946年の総選挙では、<span class="hl">39人の女性議員</span>が誕生した',
       '<span class="hl-blue">1947年</span>、<span class="hl big">教育基本法</span>が定められ、義務教育は<span class="hl-red">小学校6年・中学校3年の9年</span>になり、男女共学が広まった',
-      '民法も改正され、江戸時代から続いた「家」中心の制度（家の長である戸主が強い権限をもつ）が廃止され、<span class="hl-red">男女平等</span>が定められた'
+      '民法も改正され、明治時代の民法で定められた「家」中心の制度（家の長である戸主が強い権限をもつ）が廃止され、<span class="hl-red">男女平等</span>が定められた'
     ],
     talk:[
       ['kyon','中学校が義務教育になったの、このときなんだ！'],
@@ -110,7 +110,7 @@ var STAGES = [
       ['kyon','⑫の大日本帝国憲法と、全部反対になってる！'],
       ['yasu','きょんさん、ここは法学部の2人がいかせてもらいます。……絶対なかるてぃんが、2つの憲法のちがいを3つで言った方がいいよ'],
       ['nakaru','えっ、3つですか！？ じゃあいきます！ 主権が天皇から国民へ！ 人権が「法律の範囲内」から「永久の権利」へ！ 戦争は「兵役の義務」から「戦争の放棄」へ！ ……ヤスさん、これ、法学部の1年生で一番最初にやるやつです！'],
-      ['yasu','知ってるよ。俺も法学部だから'],
+      ['yasu','知ってるよ。僕も法学部だから'],
       ['nishi','日本国憲法＝<b>1946年11月3日公布・1947年5月3日施行</b>、<b>国民主権・基本的人権の尊重・平和主義</b>、天皇は<b>象徴</b>。上の表は、公民の憲法の単元でもそのまま出る']
     ],
     goro:'公布<b>11月3日</b>＝文化の日、施行<b>5月3日</b>＝憲法記念日　→「公布は文化、施行は記念」',
@@ -252,5 +252,5 @@ renderStory({
   onelineHead:'戦後の改革と独立を1行で',
   oneline:'<span class="hl">GHQ</span>の占領（間接統治） → 非軍事化（軍隊解散・東京裁判・人間宣言） → 民主化（<span class="hl">財閥解体</span>・<span class="hl">農地改革</span>・女性参政権・<span class="hl">教育基本法</span>） → <span class="hl">日本国憲法</span>（1946公布・1947施行） → <span class="hl">国際連合</span>と<span class="hl">冷戦</span> → <span class="hl">朝鮮戦争</span>（1950）・特需景気・自衛隊 → <span class="hl">サンフランシスコ平和条約</span>と<span class="hl">日米安保</span>（1951）→ 独立（1952） → <span class="hl">55年体制</span>（1955） → <span class="hl">日ソ共同宣言</span>・国連加盟（1956）',
   myths:MYTHS, pairs:PAIRS, checks:CHECKS,
-  nextNote:'<a href="soc_story_shusen.html" style="color:var(--pop-c)">👈 前号「暮らしと終戦」</a>　／　次号㉑「高度成長と今ストーリー新聞」をお楽しみに'
+  nextNote:'<a href="soc_story_shusen.html" style="color:var(--pop-c)">👈 前号「暮らしと終戦」</a>　／　<a href="soc_story_sengo2.html" style="color:var(--pop-c)">次号㉑「高度成長と今」へ 👉</a>'
 });

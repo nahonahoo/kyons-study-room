@@ -84,7 +84,7 @@ function recordResult(qid, isCorrect) {
   weakDB[qid].total++;
   if (isCorrect) weakDB[qid].correct++;
   localStorage.setItem('jpn_weakdb', JSON.stringify(weakDB));
-  var _today = new Date().toISOString().slice(0,10);
+  var _today = new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
   var _daily = JSON.parse(localStorage.getItem('jpn_daily') || '{}');
   _daily[_today] = (_daily[_today] || 0) + 1;
   localStorage.setItem('jpn_daily', JSON.stringify(_daily));
@@ -430,7 +430,7 @@ function renderSection1() {
     + '<div class="rule-card-title">🏯 歴史的仮名遣い→現代仮名遣いの変換ルール</div>'
     + '<div class="rule-box">'
     + '<div class="ex">語の途中・終わりの「は・ひ・ふ・へ・ほ」→「わ・い・う・え・お」（例：いふ→いう）</div>'
-    + '<div class="note">⚠️ 語の一番はじめの「は・ひ・ふ・へ・ほ」はそのまま変わらない（例：花＝はな のまま）</div>'
+    + '<div class="note">⚠️ 語の一番はじめの「は・ひ・ふ・へ・ほ」はそのまま変わらない（例：花＝はな のまま）／助詞の「は」「へ」もそのまま（花は）／二語が合わさった語も切れ目の後はそのまま（朝日＝あさひ）</div>'
     + '</div>'
     + '<div class="rule-box">'
     + '<div class="ex">「ゐ・ゑ・を」→「い・え・お」（例：ゐなか→いなか、こゑ→こえ、をとこ→おとこ）</div>'
@@ -531,7 +531,7 @@ function renderSection2() {
     { q:'「いみじ」の意味は？', sub:'程度を表す言葉', a:'程度がはなはだしい（良くも悪くも）', choices:['程度がはなはだしい（良くも悪くも）','必ず良いことだ','必ず悪いことだ','少しだけ'],
       exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「いみじ」＝とても、はなはだしい（プラスにもマイナスにも使う）</span><span class="exp-tip">💡 文脈によって「すばらしい」にも「ひどい」にもなる！</span>' },
     { q:'「ゆかし」の意味は？', sub:'心が向かう気持ち', a:'見たい、知りたい、心惹かれる', choices:['見たい、知りたい、心惹かれる','行きやすい','ゆるやかだ','ゆかいだ'],
-      exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「ゆかし」＝心が惹かれて見たい・知りたいと思う気持ち</span><span class="exp-tip">💡 「行く」とは関係ない、感情を表す形容詞！</span>' },
+      exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「ゆかし」＝心が惹かれて見たい・知りたいと思う気持ち</span><span class="exp-tip">💡 動詞「行く」から生まれた形容詞。「そこへ行きたい」→「見たい・知りたい」！</span>' },
   ];
   qs.forEach(function(q, i) { q._qid = 'jpn_kobun_s2_q' + i; });
   html += '<div class="practice-section"><div class="practice-title">✏️ 練習問題 — 古文単語・言い回し</div>';
@@ -615,7 +615,7 @@ function renderSection4() {
   html += '<div class="intro-box">'
     + '<div class="intro-box-title">🏯 きょん＆西村の会話</div>'
     + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">古文の「過去形」とか「否定形」って、現代語の「た」「ない」と違うの？</div></div></div>'
-    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">形は違うが役割は同じだ。文末や動詞の後ろについている「き・けり」は過去（〜た）、「つ・ぬ・たり・り」は完了（〜た・〜てしまった）、「ず」は打消（〜ない）。この5つの形を見た瞬間に意味が浮かぶようになれば、話の時間の流れが一気につかめるようになる。</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">形は違うが役割は同じだ。文末や動詞の後ろについている「き・けり」は過去（〜た）、「つ・ぬ・たり・り」は完了（〜た・〜てしまった）、「ず」は打消（〜ない）。この7つの形を見た瞬間に意味が浮かぶようになれば、話の時間の流れが一気につかめるようになる。</div></div></div>'
     + '</div>';
 
   html += '<div class="rule-card">'
@@ -641,7 +641,7 @@ function renderSection4() {
     { q:'「昔、男ありけり。」の「けり」の意味は？', sub:'物語の書き出しの定番表現', a:'過去（〜た）', choices:['過去（〜た）','完了（〜てしまった）','打消（〜ない）','推量（〜だろう）'],
       exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「けり」＝過去を表す（物語の地の文で頻出）</span><span class="exp-tip">💡 「今は昔、〜ありけり」は物語の定番の書き出しパターン！</span>' },
     { q:'「花咲きぬ。」の「ぬ」の意味は？', sub:'動詞の後の「ぬ」', a:'完了（〜た）', choices:['完了（〜た）','打消（〜ない）','過去（昔のこと）','推量'],
-      exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「ぬ」＝完了（〜てしまった、〜た）</span><span class="exp-ng">❌ 現代語の「ぬ＝打消」（例：知らぬ）と混同しやすいので要注意！</span><span class="exp-tip">💡 古文の「ぬ」は完了、現代語の「ぬ」は打消——意味が逆になることがある！</span>' },
+      exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「ぬ」＝完了（〜てしまった、〜た）</span><span class="exp-ng">❌ 現代語の「ぬ＝打消」（例：知らぬ）と混同しやすいので要注意！</span><span class="exp-tip">💡 連用形＋「ぬ」（咲きぬ）は完了。未然形＋「ぬ」（咲かぬ）は古文でも打消「ず」の連体形！</span>' },
     { q:'「物語を書きたり。」の「たり」の意味は？', sub:'完了・存続を表す', a:'完了・存続（〜た／〜ている）', choices:['完了・存続（〜た／〜ている）','未来の予定','疑問','禁止'],
       exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「たり」＝完了・存続（動作が終わった、または続いている）</span><span class="exp-tip">💡 文脈で「〜した」か「〜している」かを判断する！</span>' },
     { q:'「え知らず。」の「ず」の意味は？', sub:'Section 3の呼応の副詞とセット', a:'打消（〜ない）', choices:['打消（〜ない）','過去（〜た）','完了（〜てしまった）','推量（〜だろう）'],
@@ -650,13 +650,13 @@ function renderSection4() {
       exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「し」は過去の助動詞「き」が形を変えたもの</span><span class="exp-tip">💡 「き」は自分が直接体験した過去を表す！</span>' },
     { q:'次のうち「完了」の意味を持つ助動詞はどれ？', sub:'グループ分けの確認', a:'たり', choices:['たり','けり','ず','き'],
       exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「つ・ぬ・たり・り」が完了グループ、「き・けり」が過去グループ、「ず」が打消</span><span class="exp-tip">💡 3グループに分けて覚えると混同しにくい！</span>' },
-    { q:'「鳥鳴けり。」を現代語訳すると？', sub:'過去の「けり」', a:'鳥が鳴いた。', choices:['鳥が鳴いた。','鳥は鳴かない。','鳥が鳴いている。','鳥は鳴くだろう。'],
+    { q:'「鳥鳴きけり。」を現代語訳すると？', sub:'過去の「けり」', a:'鳥が鳴いた。', choices:['鳥が鳴いた。','鳥は鳴かない。','鳥が鳴いている。','鳥は鳴くだろう。'],
       exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「けり」＝過去（〜た）</span><span class="exp-tip">💡 動詞＋けり、の形をそのまま「〜た」に置き換える！</span>' },
     { q:'「風吹かず。」を現代語訳すると？', sub:'打消の「ず」', a:'風が吹かない。', choices:['風が吹かない。','風が吹いた。','風が吹くだろう。','風が吹いている。'],
       exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「ず」＝打消（〜ない）</span><span class="exp-tip">💡 動詞＋ず、の形をそのまま「〜ない」に置き換える！</span>' },
     { q:'「日暮れぬ。」を現代語訳すると？', sub:'完了の「ぬ」', a:'日が暮れた。', choices:['日が暮れた。','日が暮れない。','日が暮れるだろう。','日は暮れなかった。'],
-      exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「ぬ」＝完了（〜た）</span><span class="exp-ng">❌ 「暮れぬ」を「暮れない」と誤読するのは古文で最も多いミスの一つ！</span><span class="exp-tip">💡 動詞のすぐ後の「ぬ」は打消ではなく完了！</span>' },
-    { q:'「昔、竹取の翁といふ者ありけり。」の話が起きたのはいつ？', sub:'「けり」から時間を読み取る', a:'過去のこと（昔のこと）', choices:['過去のこと（昔のこと）','これから起こること','今まさに起きていること','未来永劫続くこと'],
+      exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「ぬ」＝完了（〜た）</span><span class="exp-ng">❌ 「暮れぬ」を「暮れない」と誤読するのは古文で最も多いミスの一つ！</span><span class="exp-tip">💡 文末で言い切る「ぬ」は完了。「暮れぬ人」のように体言が続く「ぬ」は打消！</span>' },
+    { q:'「今は昔、竹取の翁といふ者ありけり。」の話が起きたのはいつ？', sub:'「けり」から時間を読み取る', a:'過去のこと（昔のこと）', choices:['過去のこと（昔のこと）','これから起こること','今まさに起きていること','未来永劫続くこと'],
       exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>文末の「けり」から、これが過去に起きた出来事だとわかる</span><span class="exp-tip">💡 竹取物語の有名な書き出し！助動詞から時間の流れをつかむ練習！</span>' },
   ];
   qs.forEach(function(q, i) { q._qid = 'jpn_kobun_s4_q' + i; });
@@ -696,7 +696,7 @@ function renderSection5() {
 
   var qs = [
     { q:'「花ぞ咲きける。」文末の形が変化しているのはなぜ？', sub:'係り結びの基本', a:'「ぞ」があるため連体形になっている', choices:['「ぞ」があるため連体形になっている','「ぞ」があるため已然形になっている','文法的な誤りである','特に理由はない'],
-      exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「ぞ」があると文末は連体形になる</span><span class="exp-tip">💡 「ぞ」は強調（〜だなあ）の意味を添える！</span>' },
+      exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「ぞ」があると文末は連体形になる</span><span class="exp-tip">💡 「ぞ」は強調（訳には出さないことが多い）</span>' },
     { q:'「花こそ咲きけれ。」文末の形が変化しているのはなぜ？', sub:'こそ→已然形', a:'「こそ」があるため已然形になっている', choices:['「こそ」があるため已然形になっている','「こそ」があるため連体形になっている','過去の話だから','疑問文だから'],
       exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「こそ」があると文末は已然形になる</span><span class="exp-tip">💡 「ぞ・なむ」とは変化のゴールが違うので区別する！</span>' },
     { q:'「や・か」が文中にあるとき、表す意味として近いのは？', sub:'疑問・反語', a:'疑問・反語（〜か／〜だろうか、いや〜ない）', choices:['疑問・反語（〜か／〜だろうか、いや〜ない）','強い断定','過去の出来事','禁止'],
@@ -704,8 +704,8 @@ function renderSection5() {
     { q:'「ぞ・なむ・や・か・こそ」に共通する働きは？', sub:'係り結び全体の役割', a:'文末の活用形を変えながら意味を強める・疑問にする', choices:['文末の活用形を変えながら意味を強める・疑問にする','文の主語を隠す','文を過去形にする','敬語に変える'],
       exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>これらは「係助詞」と呼ばれ、文末の形を変化させながら強調や疑問の意味を添える</span><span class="exp-tip">💡 現代語にはない、古文特有のルール！</span>' },
     { q:'文末がいつもと違う形（連体形や已然形）になっているのを見つけたら、まず何をすべき？', sub:'読解のコツ', a:'少し手前に係助詞（ぞ・なむ・や・か・こそ）がないか探す', choices:['少し手前に係助詞（ぞ・なむ・や・か・こそ）がないか探す','誤字だと判断する','文末を無視する','違う訳し方を諦める'],
-      exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>文末の変化は係助詞のサイン。手前を見返せば必ず見つかる</span><span class="exp-tip">💡 これができると、なぜその形なのか自分で説明できるようになる！</span>' },
-    { q:'「ぞ・なむ・こそ」に共通する意味は？', sub:'強調のグループ', a:'強調（〜だなあ、まさに〜だ）', choices:['強調（〜だなあ、まさに〜だ）','疑問','打消','過去'],
+      exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>文末の変化は係助詞のサイン。手前を見返すと見つかることが多い</span><span class="exp-tip">💡 これができると、なぜその形なのか自分で説明できるようになる！</span>' },
+    { q:'「ぞ・なむ・こそ」に共通する意味は？', sub:'強調のグループ', a:'強調', choices:['強調','疑問','打消','過去'],
       exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「ぞ・なむ・こそ」は強調を表す係助詞のグループ</span><span class="exp-tip">💡 「や・か」の疑問グループと2つに分けて覚える！</span>' },
   ];
   qs.forEach(function(q, i) { q._qid = 'jpn_kobun_s5_q' + i; });
@@ -747,7 +747,7 @@ function renderSection6() {
   html += '<div class="rule-card">'
     + '<div class="rule-card-title">🏯 主語が省略される・変わる合図</div>'
     + '<div class="rule-box">'
-    + '<div class="ex">「〜を」「〜に」の直後で主語が変わりやすい</div>'
+    + '<div class="ex">活用語＋接続助詞「〜を」「〜に」「〜ば」「〜ど」の直後で主語が変わりやすい</div>'
     + '<div class="ex">同じ主語が続く間は繰り返し書かれず、省略され続ける</div>'
     + '<div class="ex">会話文には「」がついていないことが多く、「と言ふ」「とて」の前までが発言内容</div>'
     + '<div class="note">⚠️ 「誰の動作か」がわからなくなったら、まず直前の敬語をチェックする習慣をつける！</div>'
@@ -762,7 +762,7 @@ function renderSection6() {
     { q:'古文で主語が省略されやすいのはどんなとき？', sub:'省略のルール', a:'直前の文と同じ主語が続くとき', choices:['直前の文と同じ主語が続くとき','会話文のとき','過去の出来事のとき','疑問文のとき'],
       exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>同じ人物の動作が続く間、主語は繰り返し書かれず省略され続ける</span><span class="exp-tip">💡 主語が変わるまでは「さっきと同じ人」と考えて読み進める！</span>' },
     { q:'主語が変わりやすい合図として挙げられるのは？', sub:'変わり目のサイン', a:'「〜を」「〜に」の直後', choices:['「〜を」「〜に」の直後','「〜は」の直後','文の一番最初','句点（。）の3つ前'],
-      exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「〜を」「〜に」など動作の対象を示す言葉の直後で、主語が別の人物に切り替わることが多い</span><span class="exp-tip">💡 これを知っておくと、次の動作の主語を予測しながら読める！</span>' },
+      exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>活用語についた接続助詞「〜を」「〜に」「〜ば」「〜ど」（〜すると・〜のに・〜ので・〜けれど）の直後で、主語が別の人物に切り替わることが多い</span><span class="exp-tip">💡 これを知っておくと、次の動作の主語を予測しながら読める！</span>' },
     { q:'古文の会話文の特徴は？', sub:'カギカッコがない読解', a:'「」がついていないことが多く、「と言ふ」等の前までが発言内容', choices:['「」がついていないことが多く、「と言ふ」等の前までが発言内容','必ず「」がついている','会話文は古文には存在しない','会話文はすべて敬語で書かれる'],
       exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>古文の原文には「」がなく、「と言ふ」「とて」などの前が発言の終わりの目印になる</span><span class="exp-tip">💡 「と」を見つけたら、そこから前にさかのぼって発言の始まりを探す！</span>' },
     { q:'「誰の動作かわからなくなった」ときに、まず確認すべきことは？', sub:'読解の実践手順', a:'直前の動詞に尊敬語・謙譲語がついているか確認する', choices:['直前の動詞に尊敬語・謙譲語がついているか確認する','文章全体を読み直すのをあきらめる','漢字の意味だけで推測する','最初の1文だけを信じる'],
@@ -810,7 +810,7 @@ function renderSection7() {
     { q:'「な泣きそ」の意味は？', sub:'禁止の呼応表現', a:'泣くな', choices:['泣くな','泣いてもいい','泣きたい','泣いてしまった'], exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「な〜そ」＝禁止（〜するな）</span><span class="exp-tip">💡 動詞を挟み込む特別な形！</span>' },
     { q:'「つゆ知らず」の意味は？', sub:'呼応の副詞', a:'まったく知らない', choices:['まったく知らない','少しは知っている','知りたい','知るだろう'], exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「つゆ〜（打消）」＝まったく〜ない</span><span class="exp-tip">💡「さらに」「よに」も同じグループ！</span>' },
     { q:'「昔、男ありけり。」の「けり」の意味は？', sub:'物語の書き出しの定番', a:'過去（〜た）', choices:['過去（〜た）','完了','打消','推量'], exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「けり」は過去を表す</span><span class="exp-tip">💡 物語の地の文でよく使われる！</span>' },
-    { q:'「花咲きぬ。」の「ぬ」の意味は？', sub:'完了の「ぬ」注意', a:'完了（〜た）', choices:['完了（〜た）','打消（〜ない）','過去','推量'], exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「ぬ」は完了を表す</span><span class="exp-ng">❌ 現代語の打消の「ぬ」と混同しやすい！</span><span class="exp-tip">💡 動詞のすぐ後の「ぬ」は完了！</span>' },
+    { q:'「花咲きぬ。」の「ぬ」の意味は？', sub:'完了の「ぬ」注意', a:'完了（〜た）', choices:['完了（〜た）','打消（〜ない）','過去','推量'], exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「ぬ」は完了を表す</span><span class="exp-ng">❌ 現代語の打消の「ぬ」と混同しやすい！</span><span class="exp-tip">💡 連用形＋「ぬ」（咲きぬ）は完了。未然形＋「ぬ」（咲かぬ）は古文でも打消「ず」の連体形！</span>' },
     { q:'「風吹かず。」を現代語訳すると？', sub:'打消の「ず」', a:'風が吹かない。', choices:['風が吹かない。','風が吹いた。','風が吹くだろう。','風が吹いている。'], exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「ず」＝打消（〜ない）</span><span class="exp-tip">💡 そのまま「〜ない」に置き換える！</span>' },
     { q:'「物語を書きたり。」の「たり」の意味は？', sub:'完了・存続', a:'完了・存続（〜た／〜ている）', choices:['完了・存続（〜た／〜ている）','未来の予定','疑問','禁止'], exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「たり」は完了・存続を表す</span><span class="exp-tip">💡 文脈で「〜した」か「〜している」か判断！</span>' },
     { q:'「花ぞ咲きける。」文末が連体形になっているのはなぜ？', sub:'係り結び', a:'「ぞ」があるため', choices:['「ぞ」があるため','過去の話だから','疑問文だから','誤りである'], exp:'<span class="exp-rule"><span class="label">🏯 ルール</span>「ぞ」があると文末は連体形になる</span><span class="exp-tip">💡 係り結びの基本パターン！</span>' },

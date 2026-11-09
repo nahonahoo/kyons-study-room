@@ -36,7 +36,7 @@ var KOBUN_MIWAKE_SVG = '<svg viewBox="0 0 340 300" style="width:100%;max-width:3
   + '<path d="M 170,106 L 170,122" stroke="#8b949e" stroke-width="2" marker-end="url(#kzArrow)"/>'
   + '<rect x="10" y="124" width="320" height="50" rx="8" fill="rgba(245,197,24,0.12)" stroke="#f5c518" stroke-width="2"/>'
   + '<text x="170" y="144" fill="#f5c518" font-size="12" text-anchor="middle">③ イ段なら上一段 or 上二段</text>'
-  + '<text x="170" y="160" fill="#8b949e" font-size="9" text-anchor="middle">上一段は「ひいきにみいる」の8語だけ</text>'
+  + '<text x="170" y="160" fill="#8b949e" font-size="9" text-anchor="middle">上一段は「ひいきにみゐる」の十数語だけ</text>'
   + '<text x="170" y="172" fill="#8b949e" font-size="9" text-anchor="middle">（干る･射る･着る･似る･見る･煮る･居る･率る）。他は上二段</text>'
   + '<path d="M 170,176 L 170,192" stroke="#8b949e" stroke-width="2" marker-end="url(#kzArrow)"/>'
   + '<rect x="10" y="194" width="320" height="50" rx="8" fill="rgba(233,69,96,0.10)" stroke="#e94560" stroke-width="1.5"/>'
@@ -44,7 +44,7 @@ var KOBUN_MIWAKE_SVG = '<svg viewBox="0 0 340 300" style="width:100%;max-width:3
   + '<text x="170" y="230" fill="#8b949e" font-size="9" text-anchor="middle">下一段は「蹴る」の1語だけ。他は下二段</text>'
   + '<path d="M 170,246 L 170,262" stroke="#8b949e" stroke-width="2" marker-end="url(#kzArrow)"/>'
   + '<rect x="10" y="264" width="320" height="32" rx="8" fill="rgba(63,185,80,0.12)" stroke="#3fb950" stroke-width="1.5"/>'
-  + '<text x="170" y="284" fill="#3fb950" font-size="11" text-anchor="middle">⑤ 上記に当てはまらない9語は変格活用（丸暗記）</text>'
+  + '<text x="170" y="284" fill="#3fb950" font-size="11" text-anchor="middle">⑤ 変格の9語は①より先にチェック（丸暗記）</text>'
   + '<defs><marker id="kzArrow" markerWidth="8" markerHeight="8" refX="4" refY="6" orient="auto"><path d="M0,0 L8,0 L4,7 Z" fill="#8b949e"/></marker></defs>'
   + '</svg>';
 
@@ -127,9 +127,9 @@ var KOBUN_DOG = [
 // ----- ⑤ 実践問題（軽いチェック用・スコアなし） -----
 var KOBUN_QUIZ = [
   { q:'「歩く」に「ず」をつけると直前の音は何段？', choices:['ア段', 'イ段', 'エ段'], answer:0, exp:'歩か「ず」→ア段→四段活用。' },
-  { q:'「見る」は何活用？', choices:['上二段活用','上一段活用','下二段活用'], answer:1, exp:'「見る」は上一段活用の代表語（覚え方「ひいきにみいる」の1語）。' },
+  { q:'「見る」は何活用？', choices:['上二段活用','上一段活用','下二段活用'], answer:1, exp:'「見る」は上一段活用の代表語（覚え方「ひいきにみゐる」の1語）。' },
   { q:'「蹴る」は何活用？', choices:['下二段活用','四段活用','下一段活用'], answer:2, exp:'古文で下一段活用になるのは「蹴る」ただ1語だけ。' },
-  { q:'「起く」は何活用？', choices:['上二段活用','上一段活用','四段活用'], answer:0, exp:'「起く」は上一段の8語に含まれないので上二段活用。現代語の「起きる」（上一段）の元になった。' },
+  { q:'「起く」は何活用？', choices:['上二段活用','上一段活用','四段活用'], answer:0, exp:'「起く」は上一段の語に含まれないので上二段活用。現代語の「起きる」（上一段）の元になった。' },
   { q:'「食ぶ」は何活用？', choices:['下一段活用','下二段活用','四段活用'], answer:1, exp:'「食ぶ」は下二段活用。現代語の「食べる」（下一段）の元になった。' },
   { q:'変格活用は全部で何語（複合語をのぞく）？', choices:['6語','9語','12語'], answer:1, exp:'来（1）／す・おはす（2）／死ぬ・往ぬ（2）／あり・をり・はべり・いまそかり（4）＝9語。' },
   { q:'「（かの犬）起くる時、いとうつくし。」の「起くる」の活用形は？', choices:['終止形','連体形','已然形'], answer:1, exp:'あとに体言「時」が続く→連体形。' },

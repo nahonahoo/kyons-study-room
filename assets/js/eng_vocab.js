@@ -51,7 +51,7 @@ const PATTERNS = [
   { id: 'ou_ow', name: 'ou・ow（アウの叫び隊）', rule: '「アウ」は ou か ow。house、out、mouth／now、down、town。', tip: '呪文は ou も ow も「オウ」。クラウド→ク・ル・オウ・ド。' },
   { id: 'ai_ay', name: 'ai・ay（エイの兄弟）', rule: '「エイ」は単語の中なら ai、最後なら ay。rain、wait／day、play。', tip: '呪文では ai＝アイ、ay＝アイ と唱える。rain＝ラ・イン。' },
   { id: 'oa_ow', name: 'oa・ow（オウの二人組）', rule: '「オウ」は oa か ow。boat、road／snow、window。', tip: '呪文では oa＝オア、ow＝オウ。' },
-  { id: 'tion', name: 'tion・sion（ション一座）', rule: '単語の最後の「ション」はほぼ tion。たまに sion（vision、television）。', tip: '呪文では tion＝ティオン、sion＝シオン。station＝スタ・ティオン。' },
+  { id: 'tion', name: 'tion・sion（ション一座）', rule: '単語の最後の「ション」はほぼ tion。たまに sion（mission、discussion）。「ジョン」と濁るときは sion（vision、television）。', tip: '呪文では tion＝ティオン、sion＝シオン。station＝スタ・ティオン。' },
   { id: 'ture', name: 'ture（チャーの人）', rule: '最後の「チャー」は ture。picture、future、nature、culture。', tip: '呪文では ture＝ツレ。picture＝ピク・ツレ。' },
   { id: 'er_ir_ur', name: 'er・ir・ur（アーのあいまいトリオ）', rule: 'あいまいな「アー」は er、ir、ur のどれか。her、bird、turn。どれになるかは単語ごとに覚える。', tip: '呪文で エル・イル・ウル と言い分ける。bird＝ビ・ル・ド。' },
   { id: 'ar_or', name: 'ar・or（アーとオーの漫才コンビ）', rule: 'はっきりした「アー」は ar（car、park）、「オー」は or（short、sport）。', tip: '呪文で アル／オル と唱える。' },
@@ -105,7 +105,7 @@ function addXp(n) {
 // ダッシュボードの学習カレンダー用（他の英語ページと同じ書き方）
 function countDaily() {
   try {
-    const k = new Date().toISOString().slice(0, 10);
+    const k = new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
     const d = JSON.parse(localStorage.getItem('nh3_daily') || '{}');
     d[k] = (d[k] || 0) + 1;
     localStorage.setItem('nh3_daily', JSON.stringify(d));

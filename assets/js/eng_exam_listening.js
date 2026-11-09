@@ -62,7 +62,7 @@ function recordResult(qid, isCorrect){
   if(!weakDB[qid]) weakDB[qid] = { jp:(qMeta[qid]&&qMeta[qid].jp)||'', short:(qMeta[qid]&&qMeta[qid].short)||'', answer:(qMeta[qid]&&qMeta[qid].answer)||'', choices:(qMeta[qid]&&qMeta[qid].choices)||[], correct:0, total:0 };
   weakDB[qid].total++; if(isCorrect) weakDB[qid].correct++;
   localStorage.setItem('nh3_weakdb', JSON.stringify(weakDB));
-  var _t = new Date().toISOString().slice(0,10);
+  var _t = new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
   var _d = JSON.parse(localStorage.getItem('nh3_daily') || '{}');
   _d[_t] = (_d[_t] || 0) + 1; localStorage.setItem('nh3_daily', JSON.stringify(_d));
   renderWeakBar();
@@ -738,7 +738,7 @@ function renderSection4(){
     { qid:'eng_ex_s4_q3', short:'表現：more than', jp:'<span class="en">More than 60% of us help our families at home.</span><br>の意味は？',
       answer:'私たちの60%より多くが家で家族の手伝いをしている', choices:['私たちの60%より多くが家で家族の手伝いをしている','私たちの60%より少ない人が手伝っている','私たちのちょうど60%が手伝っている','私たちの60%が手伝いをもっとしたい'],
       exp:'📐 more than＝〜より多く、less than＝〜より少なく（R6 2 の発表で出た表現）' },
-    { qid:'eng_ex_s4_q4', short:'R7 2(2) 並べ替え', jp:'（R7 本番）The number of visitors was high both in April and in September, and the number of ③ summer vacation and winter vacation.<br>③に入るように、アからキから<strong>六つ</strong>選んで並べ替えたとき、2番目・4番目・6番目は？' + wordBox(['students','borrowed','increased','before','after','by','books']),
+    { qid:'eng_ex_s4_q4', short:'R7 2(2) 並べ替え', jp:'（R7 本番）The number of visitors was high both in April and in September, and the number of ③ summer vacation and winter vacation.<br>③に入るように、アからキまでの中から<strong>六つ</strong>選んで並べ替えたとき、2番目・4番目・6番目は？' + wordBox(['students','borrowed','increased','before','after','by','books']),
       answer:'2番目イ・4番目ア・6番目エ', choices:['2番目イ・4番目ア・6番目エ','2番目イ・4番目ア・6番目オ','2番目キ・4番目カ・6番目エ','2番目ア・4番目イ・6番目ウ'],
       exp:'📐 books borrowed by students increased before（生徒に借りられた本の数は夏休みと冬休みの前に増えた）<br>1 books 2 <b>borrowed</b>（イ） 3 by 4 <b>students</b>（ア） 5 increased 6 <b>before</b>（エ） → after（オ）が余る<br>💡 グラフは7月・12月（休みの前）に増えている → before。borrowed by students＝生徒によって借りられた（後ろから books を説明）<br>✅ R7 2(2)' },
     { qid:'eng_ex_s4_q5', short:'並べ替え：the number of students who', jp:'This graph shows ③ smartphones every day.<br>③に入るように六つ選んで並べ替えたとき、2番目・4番目・6番目は？' + wordBox(['number','students','the','who','of','use','uses']),

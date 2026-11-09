@@ -690,7 +690,7 @@ DATA[0]={type:'intro',
     '① be動詞（am / is / are / was / were）を絶対に忘れない',
     '② 動詞は「過去分詞」（過去形ではない！ wrote ではなく written）',
     '③「〜によって」は by。だれがしたか言わなくていいときは省略OK',
-    '🇯🇵 日本語の合図：「〜される」「〜された」「〜されている」「〜られる」が出たら受け身'
+    '🇯🇵 日本語の合図：「〜される」「〜された」「〜されている」「〜られる」が出たら受け身（「食べることができる」の意味の「食べられる」は受け身ではない）'
   ],
   visual:changeCard('🔄 主役交代の変身図',[
     ['Kyon writes the script.（きょんが台本を書く）',H2('The script')+' '+H('is written')+' '+H3('by Kyon')+'.','主役が「台本」に交代 → 台本はきょんによって書かれる'],
@@ -955,7 +955,7 @@ DATA[5]={type:'grammar',
     ]}
   ],
   qs:[
-    {q:'The mountain is covered ___ snow.',jp:'その山は雪でおおわれています。',a:'with',choices:['with','by','of'],exp:E('be covered with 〜 ＝ 〜でおおわれている','The mountain is covered with snow.','The mountain is covered by snow.','決めゼリフ：be covered with snow'),xp:3},
+    {q:'The mountain is covered ___ snow.',jp:'その山は雪でおおわれています。',a:'with',choices:['with','at','of'],exp:E('be covered with 〜 ＝ 〜でおおわれている','The mountain is covered with snow.','The mountain is covered at snow.','決めゼリフ：be covered with snow'),xp:3},
     {q:'This song is known ___ everyone in Japan.',jp:'この歌は日本のみんなに知られています。',a:'to',choices:['to','at','of'],exp:E('be known to 〜 ＝ 〜に知られている','This song is known to everyone in Japan.','This song is known at everyone in Japan.','「〜に知られている」の「に」は to'),xp:3},
     {q:'This desk is made ___ wood.',jp:'この机は木でできています。',a:'of',choices:['of','from','in'],exp:E('見て材料がわかる → made of','This desk is made of wood.','This desk is made from wood.','机を見たら木だとわかる → of'),xp:4},
     {q:'Butter is made ___ milk.',jp:'バターは牛乳から作られます。',a:'from',choices:['from','of','in'],exp:E('見ても材料がわからない → made from','Butter is made from milk.','Butter is made of milk.','バターを見ても牛乳には見えない → from'),xp:4},
@@ -969,7 +969,7 @@ DATA[5]={type:'grammar',
     {jp:'私は英語に興味があります。',a:'I am interested in English.',exp:E('be interested in 〜','I am interested in English.','I am interesting in English.（interesting は「おもしろい」）','人が主役のときは interested'),xp:6}
   ],
   qc:[
-    {jp:'その山は雪でおおわれていました。',words:['mountain','the','was','covered','with','snow'],a:'The mountain was covered with snow.',exp:E('主役 ＋ was covered ＋ with 雪','The mountain was covered with snow.','The mountain was covered by snow.','決めゼリフ：be covered with'),xp:6}
+    {jp:'その山は雪でおおわれていました。',words:['mountain','the','was','covered','with','snow'],a:'The mountain was covered with snow.',exp:E('主役 ＋ was covered ＋ with 雪','The mountain was covered with snow.','The mountain was covered at snow.','決めゼリフ：be covered with'),xp:6}
   ]
 };
 
@@ -990,7 +990,7 @@ DATA[6]={type:'test',
     {q:'Japanese is ___ in Japan.',jp:'日本語は日本で話されています。',a:'spoken',choices:['spoken','spoke','speak'],exp:E('speak → spoke → spoken','Japanese is spoken in Japan.','Japanese is spoke in Japan.','spoke は過去形'),xp:3},
     {q:'This temple ___ built in 1200.',jp:'この寺は1200年に建てられました。',a:'was',choices:['was','is','were'],exp:E('in 1200 は昔・1つ → was','This temple was built in 1200.','This temple is built in 1200.',''),xp:3},
     {q:'Are these bags made in Italy? — Yes, they ___.',jp:'これらのかばんはイタリアで作られていますか。— はい、そうです。',a:'are',choices:['are','do','is'],exp:E('Are で聞かれたら are で答える','Yes, they are.','Yes, they do.',''),xp:3},
-    {q:'The room was not ___ yesterday.',jp:'その部屋は昨日そうじされませんでした。',a:'cleaned',choices:['cleaned','clean','cleaning'],exp:E('was not のうしろも過去分詞','The room was not cleaned yesterday.','The room was not clean yesterday.',''),xp:3},
+    {q:'The room was not ___ yesterday.',jp:'その部屋は昨日そうじされませんでした。',a:'cleaned',choices:['cleaned','clean','cleaning'],exp:E('was not のうしろも過去分詞','The room was not cleaned yesterday.','The room was not clean yesterday.（clean は形容詞。「きれいではなかった」という別の意味になる）',''),xp:3},
     {q:'正しい受け身の文はどれ？',jp:'正しい受け身の文は？（この絵はピカソによって描かれた）',a:'This picture was painted by Picasso.',choices:['This picture was painted by Picasso.','This picture painted by Picasso.','This picture was painting by Picasso.'],exp:E('be動詞 ＋ 過去分詞 がそろっているか','This picture was painted by Picasso.','This picture painted by Picasso.（be動詞がない）','パーツ①be動詞 ②過去分詞 を指さし確認'),xp:4},
     {q:'正しい疑問文はどれ？',jp:'正しい疑問文は？（この手紙はケンによって書かれましたか）',a:'Was this letter written by Ken?',choices:['Was this letter written by Ken?','Did this letter written by Ken?','Was this letter wrote by Ken?'],exp:E('Was ＋ 主役 ＋ 過去分詞 〜?','Was this letter written by Ken?','Did this letter written by Ken? ／ Was this letter wrote by Ken?','did は使わない・wrote は過去形'),xp:4},
     {q:'Ken broke the window. → The window ___ broken by Ken.',jp:'「ケンが窓を割った」を受け身に',a:'was',choices:['was','is','were'],exp:E('broke は昔 ／ the window は1つ → was','The window was broken by Ken.','The window is broken by Ken.','「時」は元の文の動詞で決める'),xp:4},

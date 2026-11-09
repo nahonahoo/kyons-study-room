@@ -1,3 +1,5 @@
+// 2026-11-09 正解を直した問題の古い弱点データを1回だけ消す（特訓は保存済みの答えで採点するため）
+(function(){try{var f='jpn_fix_20261109';if(localStorage.getItem(f))return;var k='jpn_weakdb',d=JSON.parse(localStorage.getItem(k)||'{}'),A=['せろん','言行不一致'],J=[],Q=['jpn_gram_s7_q4','jpn_gram_s6_q1'];Object.keys(d).forEach(function(q){var v=d[q]||{};if(A.indexOf(v.answer)>=0||J.indexOf(v.jp)>=0||Q.indexOf(q)>=0)delete d[q];});localStorage.setItem(k,JSON.stringify(d));localStorage.setItem(f,'1');}catch(e){}})();
 // ===== XP LEVELS =====
 var LEVELS = [
   { lv:1, min:0,   max:15,  badge:'🥚 NSC入学',     title:'見習い研修生',   status:'きょん「文法？なにそれ食えるの？」' },
@@ -84,7 +86,7 @@ function recordResult(qid, isCorrect) {
   weakDB[qid].total++;
   if (isCorrect) weakDB[qid].correct++;
   localStorage.setItem('jpn_weakdb', JSON.stringify(weakDB));
-  var _today = new Date().toISOString().slice(0,10);
+  var _today = new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
   var _daily = JSON.parse(localStorage.getItem('jpn_daily') || '{}');
   _daily[_today] = (_daily[_today] || 0) + 1;
   localStorage.setItem('jpn_daily', JSON.stringify(_daily));
@@ -618,7 +620,7 @@ function renderSection3() {
     + '<div class="ex">五段活用：ア段になる（例：書く→書か-ない）</div>'
     + '<div class="ex">上一段活用：イ段になる（例：見る→見-ない）</div>'
     + '<div class="ex">下一段活用：エ段になる（例：食べる→食べ-ない）</div>'
-    + '<div class="ex">カ行変格活用：「来る」だけ／サ行変格活用：「する」だけ（丸暗記）</div>'
+    + '<div class="ex">カ行変格活用：「来る」だけ／サ行変格活用：「する」と「〜する」（勉強する・運動する）（丸暗記）</div>'
     + '</div>'
     + '</div>';
 
@@ -654,7 +656,7 @@ function renderSection3() {
     { q:'「食べる」は何活用？', sub:'未然形がエ段', a:'下一段活用', choices:['下一段活用','上一段活用','五段活用','サ変'],
       exp:'<span class="exp-rule"><span class="label">📖 ルール</span>食べ「ない」→エ段（べ）→下一段活用</span><span class="exp-tip">💡 「エ段＋る」の形の動詞に多い！</span>' },
     { q:'「来る」「する」の活用の種類は？', sub:'この2語だけ特別な活用', a:'カ変とサ変', choices:['カ変とサ変','サ変とカ変','五段と五段','上一段と下一段'],
-      exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「来る」はカ行変格活用、「する」はサ行変格活用</span><span class="exp-tip">💡 この2つだけの特別な活用。丸暗記するしかない！</span>' },
+      exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「来る」はカ行変格活用、「する」はサ行変格活用</span><span class="exp-tip">💡 「来る」はカ変、「する」「勉強する」はサ変。形ごと丸暗記！</span>' },
     { q:'「明日、公園へ行く『とき』は傘を持つ。」の「行く」の活用形は？', sub:'あとに体言が続く', a:'連体形', choices:['連体形','終止形','連用形','未然形'],
       exp:'<span class="exp-rule"><span class="label">📖 ルール</span>あとに体言（「とき」）が続く→連体形</span><span class="exp-tip">💡 終止形と形が同じ動詞も多いので、あとに続く言葉で判断！</span>' },
     { q:'「早く『走れ』ば間に合う。」の「走れ」の活用形は？', sub:'あとに「ば」が続く', a:'仮定形', choices:['仮定形','命令形','連用形','未然形'],
@@ -758,7 +760,7 @@ function renderSection5() {
     + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">助動詞、ここが一番出るってにっくん言ってたよね…緊張してきた。</div></div></div>'
     + '<div class="chat-line"><div class="avatar charC">車</div><div><div class="chat-name">くるま（令和ロマン）</div><div class="chat-bubble">きょんさん！大丈夫っすよ！助動詞なんて全部で10個くらいしかないんで！たった10個！！コンビニのおにぎりの種類より少ないっすよ！！</div></div></div>'
     + '<div class="chat-line"><div class="avatar av-kyon">😄</div><div><div class="chat-name">きょん</div><div class="chat-bubble">くるま、それただの数の話で励ましになってなくない！？でもちょっと元気出た！</div></div></div>'
-    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">くるまの言う通り、数自体は多くない。ポイントは「同じ助動詞でも意味が複数ある」ことと「意味は接続（直前の言葉の形）で見分けられる」ことの2つだけだ。</div></div></div>'
+    + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">くるまの「10個」は言いすぎだが、よく出るものは限られている。ポイントは「同じ助動詞でも意味が複数ある」ことと「意味は接続（直前の言葉の形）で見分けられる」ことの2つだけだ。</div></div></div>'
     + '</div>';
 
   html += '<div class="rule-card">'
@@ -769,7 +771,7 @@ function renderSection5() {
     + '<div class="ex">ない・ぬ（ん）：打消</div>'
     + '<div class="ex">う・よう：推量・意志・勧誘</div>'
     + '<div class="ex">た（だ）：過去・完了・存続・確認</div>'
-    + '<div class="ex">そうだ：様態（連用形接続）／伝聞（終止形接続）</div>'
+    + '<div class="ex">そうだ：様態（動詞は連用形接続。形容詞・形容動詞は語幹接続：高そうだ・静かそうだ）／伝聞（終止形接続）</div>'
     + '<div class="ex">ようだ：比況・推定・例示</div>'
     + '<div class="ex">らしい：推定</div>'
     + '<div class="ex">だ・です：断定／ます：丁寧</div>'
@@ -780,7 +782,7 @@ function renderSection5() {
     + '<div class="rule-card-title">📖 接続のルール（見分けの手がかり）</div>'
     + '<div class="rule-box">'
     + '<div class="ex">未然形＋れる・られる・せる・させる・ない・う・よう</div>'
-    + '<div class="ex">連用形＋た・そうだ（様態）・ます</div>'
+    + '<div class="ex">連用形（形容詞・形容動詞は語幹）＋そうだ（様態）／連用形＋た・ます</div>'
     + '<div class="ex">終止形＋そうだ（伝聞）・らしい</div>'
     + '<div class="ex">体言＋だ・です</div>'
     + '<div class="note">💡 同じ「そうだ」でも接続の形が違えば意味が変わる。これがSection 6の識別問題の土台になる！</div>'
@@ -794,7 +796,7 @@ function renderSection5() {
       exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「〜することができる」と言い換えられる＝可能</span><span class="exp-tip">💡 「起きることができる」に置き換え可能！</span>' },
     { q:'「昔のことが『思い出される』。」の「れる」の意味は？', sub:'「自然に〜してしまう」', a:'自発', choices:['自発','受身','可能','尊敬'],
       exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「自然に〜してしまう」という意味＝自発</span><span class="exp-tip">💡 「思い出す」「案じる」「感じる」など気持ちを表す動詞によく使われる！</span>' },
-    { q:'「先生が『来られる』。」の「られる」の意味は？', sub:'「お（ご）〜になる」と言い換えられる', a:'尊敬', choices:['尊敬','受身','可能','自発'],
+    { q:'「校長先生が式で話さ『れる』。」の「れる」の意味は？', sub:'「お（ご）〜になる」と言い換えられる', a:'尊敬', choices:['尊敬','受身','可能','自発'],
       exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「お（ご）〜になる」と言い換えられる＝尊敬</span><span class="exp-tip">💡 目上の人の動作に使う！</span>' },
     { q:'「無理やり手伝わ『せる』。」の「せる」の意味は？', sub:'他人に何かをやらせる', a:'使役', choices:['使役','受身','可能','尊敬'],
       exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「〜させる」＝他人に何かをやらせる意味＝使役</span><span class="exp-tip">💡 「せる・させる」はほぼ使役の意味だけと覚えてOK！</span>' },
@@ -845,11 +847,11 @@ function renderSection6() {
     + '</div>';
 
   html += '<div class="rule-card">'
-    + '<div class="rule-card-title">📖 「ない」の識別（3種類）</div>'
+    + '<div class="rule-card-title">📖 「ない」の識別（4種類）</div>'
     + '<div class="rule-box">'
     + '<div class="ex">助動詞（打消）：動詞について、「ぬ」に置き換えられる（例：食べない→食べぬ ○）</div>'
     + '<div class="ex">形容詞：「存在しない」という意味そのもの、「ぬ」に置き換えられない（例：お金がない→お金がぬ ×）</div>'
-    + '<div class="ex">補助形容詞：「〜ではない」の形、直前に「は」を入れられる（例：美しくない→美しくはない ○）</div>'
+    + '<div class="ex">補助形容詞：「〜ではない」の形、直前に「は」を入れられる（例：美しくない→美しくはない ○）</div>' + '<div class="ex">形容詞の一部：「少ない・危ない・切ない」など、「ない」を切り離すと意味が通らない語</div>'
     + '<div class="note">⚠️ コツ：まず「ぬ」に置き換えてみる。置き換えられれば助動詞。置き換えられなければ形容詞か補助形容詞（「は」を入れられれば補助形容詞）！</div>'
     + '</div>'
     + '</div>';
@@ -862,7 +864,7 @@ function renderSection6() {
   html += '<div class="rule-card">'
     + '<div class="rule-card-title">📖 「そうだ」「らしい」「ようだ」の識別</div>'
     + '<div class="rule-box">'
-    + '<div class="ex">そうだ：連用形接続→様態（見た目）／終止形接続→伝聞（人から聞いた話）</div>'
+    + '<div class="ex">そうだ：連用形接続（形容詞・形容動詞は語幹）→様態（見た目）／終止形接続→伝聞（人から聞いた話）</div>'
     + '<div class="ex">らしい：助動詞（根拠のある推定）／接尾語（「いかにも〜だ」に言い換え可、例：男らしい）</div>'
     + '<div class="ex">ようだ：比況（まるで〜のようだ）・推定（〜らしい様子）・例示（例えば〜のような）</div>'
     + '</div>'
@@ -874,22 +876,22 @@ function renderSection6() {
     + '<div class="rule-title">の（格助詞の4つの用法）</div>'
     + '<div class="ex">主語の代用（〜が）：「私の作った料理」＝「私が作った料理」</div>'
     + '<div class="ex">連体修飾（〜の）：「私の本」</div>'
-    + '<div class="ex">体言の代用（〜のもの・こと）：「これは私のだ」</div>'
+    + '<div class="ex">体言の代用（〜のもの・こと）：「これは私のだ」</div>' + '<div class="ex">並立（〜の〜の）：「行くの行かないのと騒ぐ」</div>'
     + '</div>'
     + '<div class="rule-box">'
     + '<div class="rule-title">で／から／が</div>'
-    + '<div class="ex">で：格助詞（場所・手段）／断定の助動詞「だ」の連用形／接続助詞（動詞連用形＋て が濁った形）</div>'
+    + '<div class="ex">で：格助詞（場所・手段）／断定の助動詞「だ」の連用形／接続助詞（動詞連用形＋て が濁った形）／形容動詞の活用語尾（静かで）</div>'
     + '<div class="ex">から：格助詞（体言＋起点）／接続助詞（活用語＋理由）</div>'
     + '<div class="ex">が：格助詞（体言＋主語）／接続助詞（活用語＋逆接）</div>'
-    + '<div class="note">💡 共通のコツ：直前が体言なら格助詞、直前が活用語（用言・助動詞）なら接続助詞や断定の助動詞の可能性！</div>'
+    + '<div class="note">💡 共通のコツ：直前が活用語（用言・助動詞）なら接続助詞。直前が体言なら格助詞か断定の助動詞（「で」は「だ」に変えて文が切れれば断定：学生で、→学生だ。）！</div>'
     + '</div>'
     + '</div>';
 
   var qs = [
     { q:'「宿題が全然終わら『ない』。」の「ない」の種類は？', sub:'「ぬ」に置き換えられるか', a:'助動詞（打消）', choices:['助動詞（打消）','形容詞','補助形容詞','連体詞'],
       exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「終わらぬ」と言い換えられる＝助動詞（打消）</span><span class="exp-tip">💡 動詞について「ぬ」に置き換えられたら助動詞！</span>' },
-    { q:'「教室に誰もい『ない』。」の「ない」の種類は？', sub:'「いぬ」とは言えない', a:'形容詞', choices:['形容詞','助動詞（打消）','補助形容詞','副詞'],
-      exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「存在しない」という意味そのものを表す本来の形容詞</span><span class="exp-ng">❌ 「いぬ」とは言い換えられない！</span><span class="exp-tip">💡 「ある」の反対＝「ない」という単独の形容詞！</span>' },
+    { q:'「教室に机が『ない』。」の「ない」の種類は？', sub:'「机がぬ」とは言えない', a:'形容詞', choices:['形容詞','助動詞（打消）','補助形容詞','副詞'],
+      exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「存在しない」という意味そのものを表す本来の形容詞</span><span class="exp-ng">❌ 「机がぬ」とは言い換えられない！</span><span class="exp-tip">💡 「ある」の反対＝「ない」という単独の形容詞！</span>' },
     { q:'「この料理は辛く『ない』。」の「ない」の種類は？', sub:'「は」を入れられる', a:'補助形容詞', choices:['補助形容詞','助動詞（打消）','形容詞','副詞'],
       exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「辛くはない」と「は」を入れられる＝補助形容詞</span><span class="exp-tip">💡 「〜くない」「〜ではない」の形が目印！</span>' },
     { q:'「今にも泣き出し『そうだ』。」の種類は？', sub:'連用形に接続', a:'様態', choices:['様態','伝聞','推定','比況'],
@@ -941,14 +943,14 @@ function renderSection7() {
     { q:'「静かに『座って』いる。」の「座って」と「いる」の関係は？', sub:'「〜て＋いる」の形', a:'補助の関係', choices:['補助の関係','並立の関係','主・述の関係','修飾・被修飾の関係'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「〜て＋いる」は補助の関係</span><span class="exp-tip">💡 前が意味の中心、後ろは補助！</span>' },
     { q:'「まるで、氷『のようだ』。」の「ようだ」の種類は？', sub:'「まるで」がヒント', a:'比況', choices:['比況','推定','例示','伝聞'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「まるで〜のようだ」＝比況</span><span class="exp-tip">💡 「まるで」は比況の合図！</span>' },
     { q:'「桜『の』咲く季節。」の「の」の働きは？', sub:'「桜が咲く」と言い換え可', a:'主語の代用', choices:['主語の代用','連体修飾','体言の代用','並立'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「桜が咲く季節」と言い換えられる＝主語の代用</span><span class="exp-tip">💡 「の」を「が」に置き換えて意味が通るか確認！</span>' },
-    { q:'「彼女は歌が上手『だ』。」の「だ」の品詞・意味は？', sub:'体言（形容動詞語幹）につく', a:'助動詞（断定）', choices:['助動詞（断定）','助動詞（過去）','形容動詞の一部','助詞'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>言い切りにつく「だ」で「〜である」の意味＝断定の助動詞</span><span class="exp-tip">💡 「上手だ」の「だ」は名詞的な語につく断定！</span>' },
+    { q:'「彼女は歌が上手『だ』。」の「だ」の品詞・意味は？', sub:'「上手な人」と活用できる', a:'形容動詞の一部', choices:['助動詞（断定）','助動詞（過去）','形容動詞の一部','助詞'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「上手だ」で1語の形容動詞。「だ」は活用語尾（終止形）</span><span class="exp-tip">💡 「〜な」に変えられれば形容動詞。「学生だ」は「学生な人」と言えないので断定の助動詞！</span>' },
     { q:'「叫ぶ」の活用の種類は？', sub:'「ない」をつけて直前の音を見る', a:'バ行五段活用', choices:['バ行五段活用','バ行上一段活用','マ行五段活用','バ行下一段活用'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>叫ば「ない」→ア段→五段活用。バ行の音で変化（ば・び・ぶ・ぶ・べ・べ）</span><span class="exp-tip">💡 「行」はカ行だけじゃない。バ行でもマ行でもラ行でも、未然形がア段になれば五段活用（Section 3の「行と段は別の話」を復習！）</span>' },
     { q:'「大きな『声』で笑う。」の「声」の品詞は？', sub:'活用しない自立語で主語になれる', a:'名詞', choices:['名詞','形容詞','連体詞','副詞'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>活用しない自立語で主語になれる＝名詞</span><span class="exp-tip">💡 「声が」と「が」をつけられる！</span>' },
     { q:'「あの『大きな』家。」の「大きな」の品詞は？', sub:'活用しない・体言だけを修飾', a:'連体詞', choices:['連体詞','形容詞','形容動詞','副詞'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>活用せず体言だけを修飾する＝連体詞</span><span class="exp-ng">❌ 形容詞に見えるが「大きい」のように活用しないので形容詞ではない！</span><span class="exp-tip">💡 「この・その・あの・大きな・小さな」は連体詞の仲間！</span>' },
     { q:'「本『を』貸してください。」の「を」の種類は？', sub:'体言について対象を示す', a:'格助詞', choices:['格助詞','接続助詞','副助詞','終助詞'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>体言「本」について動作の対象を示す＝格助詞</span><span class="exp-tip">💡 直前が体言なら格助詞！</span>' },
     { q:'「食べたい『けれど』我慢する。」の「けれど」の種類は？', sub:'活用語について逆接でつなぐ', a:'接続助詞', choices:['接続助詞','接続詞','副助詞','終助詞'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>活用語「食べたい」にくっついて逆接でつなぐ＝接続助詞</span><span class="exp-ng">❌ 独立した1つの文節を作る「接続詞」とは違う！</span><span class="exp-tip">💡 前の語にくっつく付属語なら助詞！</span>' },
     { q:'「先生に皆さんが褒め『られた』。」の「られ」の意味は？', sub:'「（人）に〜される」', a:'受身', choices:['受身','可能','自発','尊敬'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「（人）に〜される」と言い換えられる＝受身</span><span class="exp-tip">💡 「先生に」が動作をする相手！</span>' },
-    { q:'「暗い場所でも黒板の字が読ま『れる』。」の「れる」の意味は？', sub:'「ことができる」に言い換え可', a:'可能', choices:['可能','受身','自発','尊敬'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「読むことができる」と言い換えられる＝可能</span><span class="exp-tip">💡 「〜できる」に置き換えられたら可能！</span>' },
+    { q:'「暗い場所でも黒板の字が見『られる』。」の「られる」の意味は？', sub:'「ことができる」に言い換え可', a:'可能', choices:['可能','受身','自発','尊敬'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「見ることができる」と言い換えられる＝可能</span><span class="exp-tip">💡 「〜できる」に置き換えられたら可能！</span>' },
     { q:'「明日は晴れる『そうだ』。」（天気予報で聞いた）の種類は？', sub:'終止形に接続', a:'伝聞', choices:['伝聞','様態','推定','比況'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>終止形「晴れる」に接続＝伝聞</span><span class="exp-tip">💡 情報を人から聞いたときに使う！</span>' },
     { q:'「今にも壊れ『そうだ』。」の種類は？', sub:'連用形に接続', a:'様態', choices:['様態','伝聞','推定','比況'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>連用形「壊れ」に接続＝様態</span><span class="exp-tip">💡 見た目の様子を表す！</span>' },
     { q:'「宿題を忘れ『ない』ようにする。」の「ない」の種類は？', sub:'「忘れぬ」と言い換え可', a:'助動詞（打消）', choices:['助動詞（打消）','形容詞','補助形容詞','連体詞'], exp:'<span class="exp-rule"><span class="label">📖 ルール</span>「忘れぬ」と言い換えられる＝助動詞（打消）</span><span class="exp-tip">💡 動詞について「ぬ」に置き換えOK！</span>' },

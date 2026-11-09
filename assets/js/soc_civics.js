@@ -62,7 +62,7 @@ function recordResult(qid, isCorrect){
   if(!weakDB[qid]) weakDB[qid] = { jp:(qMeta[qid]&&qMeta[qid].jp)||'', answer:(qMeta[qid]&&qMeta[qid].answer)||'', choices:(qMeta[qid]&&qMeta[qid].choices)||[], correct:0, total:0 };
   weakDB[qid].total++; if(isCorrect) weakDB[qid].correct++;
   localStorage.setItem('soc_weakdb', JSON.stringify(weakDB));
-  var _t = new Date().toISOString().slice(0,10);
+  var _t = new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
   var _d = JSON.parse(localStorage.getItem('soc_daily') || '{}');
   _d[_t] = (_d[_t] || 0) + 1; localStorage.setItem('soc_daily', JSON.stringify(_d));
   localStorage.setItem('soc_civ_lastStudy', _t);
@@ -392,7 +392,7 @@ var svgSaiban = '<svg viewBox="0 0 320 150" style="width:100%;max-width:360px;di
   + '<rect x="262" y="24" width="50" height="28" rx="5" fill="rgba(233,69,96,0.12)" stroke="#e94560"/>'
   + '<text x="287" y="42" fill="#e6edf3" font-size="9" text-anchor="middle">被告人</text>'
   + '<rect x="200" y="70" width="80" height="26" rx="5" fill="rgba(163,113,247,0.15)" stroke="#a371f7"/>'
-  + '<text x="240" y="87" fill="#a371f7" font-size="9" text-anchor="middle">裁判所＋裁判員</text>'
+  + '<text x="240" y="87" fill="#a371f7" font-size="9" text-anchor="middle">裁判所（重大事件は裁判員も）</text>'
   + '<text x="240" y="115" fill="#8b949e" font-size="8" text-anchor="middle">犯罪を裁く（警察→検察→起訴）</text>'
   + '<text x="240" y="128" fill="#8b949e" font-size="8" text-anchor="middle">弁護人は被告人の利益を守る</text>'
   + '</svg>';
@@ -404,12 +404,12 @@ function renderSection0(){
     + chat('kyon','きょん（富士田恭兵）','公民って、政治とか経済とか…大人の話じゃん。俺、選挙も行ったことないし。')
     + chat('nishi','西村真二（慶應卒・元アナ）','愛知県の入試では、大問5と6がまるごと公民で、毎年8問前後。しかも「知っていれば取れる」問題が多い。地理・歴史より暗記で点になる教科だ。')
     + chat('kyon','きょん','8問！？それって結構でかいじゃん！')
-    + chat('nishi','西村','公民は4つの部屋に分けると整理しやすい。①人権と憲法（ルールの土台）②政治（国会・内閣・裁判所）③経済（お金の流れ）④現代社会（効率と公正、契約、消費者）。吉本で言えば、①が就業規則、②が会社の組織、③が給料とギャラ、④が日々のトラブル対応だ。')
+    + chat('nishi','西村','公民は3つの部屋に分けると整理しやすい。①現代社会・人権・憲法（ルールの土台）②政治（国会・内閣・裁判所）③経済（お金の流れ）。吉本で言えば、①が就業規則とトラブル対応、②が会社の組織、③が給料とギャラだ。')
     + chat('kyon','きょん','会社に例えるとわかる！！俺、社長になる予定だし！！')
     + '</div>'
 
     + '<div class="rule-card">'
-    + '<div class="rule-card-title">📐 公民の4つの部屋（入試の出方）</div>'
+    + '<div class="rule-card-title">📐 公民の3つの部屋と入試の出方</div>'
     + '<div class="rule-box"><div class="rule-title">① 現代社会・人権・憲法 → Section 1</div><div class="ex">効率と公正／契約・PL法・クーリングオフ／法の支配／人権の種類（平等・自由・社会・参政・請求）／新しい人権／公共の福祉／憲法改正の手続き</div><div class="note">入試：R5「効率と公正」「15歳ができる政治参加」「公共の福祉」／R6「法の支配」「憲法改正」「再婚禁止期間＝平等権」「環境アセスメント」</div></div>'
     + '<div class="rule-box"><div class="rule-title">② 民主政治 → Section 2</div><div class="ex">選挙の原則と18歳／国会（衆議院の優越・弾劾裁判所）／内閣（議院内閣制）／裁判所（三審制・裁判員・違憲審査・国民審査）／三権分立／地方自治</div><div class="note">入試：R7「裁判員」「弁護士と国選弁護人」「三審制・弾劾裁判所・憲法の番人・法テラス」</div></div>'
     + '<div class="rule-box"><div class="rule-title">③ 経済 → Section 3</div><div class="ex">需要と供給／インフレ・デフレ／景気対策（日銀の公開市場操作・政府の減税）／為替（円高円安）／税金と財政／社会保障／労働三法</div><div class="note">入試：R7「景況感と減税」「需要が供給を下回り物価が下がる」「円高と受け取るドル」／R6「石油危機と物価」「デフレの期間」／R5「公共事業とニューディール政策」</div></div>'
@@ -426,7 +426,7 @@ function renderSection1(){
     + '<div class="intro-box-title">⚖️ きょん＆西村の会話</div>'
     + chat('kyon','きょん','「効率と公正」って何？どっちも良さそうな言葉なんだけど。')
     + chat('nishi','西村真二（慶應卒・元アナ）','効率は「ムダがないか」、公正は「みんなに公平か」。高速道路を作るとき、古墳の下にトンネルを掘って文化財を守るのは「公正」、建設費を安くするのは「効率」。R5の入試でそのまま出た。')
-    + chat('kyon','きょん','ライブの出番順を決めるとき、先輩優先は効率、じゃんけんは公正…みたいな？')
+    + chat('kyon','きょん','ライブの出番順を決めるとき、話し合わずに前回と同じ順にするのは効率、じゃんけんは公正…みたいな？')
     + chat('nishi','西村','その感覚で合ってる。次に「人権」。憲法が保障する自由や権利は、平等権・自由権・社会権・参政権・請求権の5つに分かれる。自由権はさらに精神・身体・経済の3つ。この分類が入試の組み合わせ問題で毎年問われる。')
     + '</div>';
 
@@ -440,7 +440,7 @@ function renderSection1(){
     + '<div class="rule-card-title">📐 憲法と人権</div>'
     + '<div class="rule-box"><div class="rule-title">法の支配・憲法の三原則</div><div class="ex"><strong style="color:var(--gold)">法の支配</strong>＝権力を法で制限して、国民の自由と権利を守る考え方（人の支配の反対）<br>三原則＝<strong>国民主権・基本的人権の尊重・平和主義</strong>　天皇は「象徴」</div></div>'
     + '<div class="rule-box"><div class="rule-title">人権の5分類（組み合わせ問題の定番）</div>'
-    + '<div class="ex">① <strong style="color:var(--gold)">平等権</strong>：法の下の平等、男女平等（例：女性だけ再婚禁止期間→違憲）<br>'
+    + '<div class="ex">① <strong style="color:var(--gold)">平等権</strong>：法の下の平等、男女平等（例：女性だけの再婚禁止期間は6か月のうち100日を超える部分が違憲→2024年に制度ごと廃止）<br>'
     + '② <strong style="color:var(--gold)">自由権</strong>：精神の自由（思想・信教・表現）／身体の自由（不当な逮捕の禁止）／<strong>経済活動の自由</strong>（居住・移転・職業選択、財産権）<br>'
     + '③ <strong style="color:var(--gold)">社会権</strong>：生存権（健康で文化的な最低限度の生活）、教育を受ける権利、勤労の権利、労働基本権<br>'
     + '④ <strong style="color:var(--gold)">参政権</strong>：選挙権・被選挙権・国民審査・国民投票<br>'
@@ -472,7 +472,7 @@ function renderSection1(){
       exp:'📐 憲法改正の発議＝<strong>総議員</strong>の3分の2以上。国民投票＝<strong>18歳</strong>以上<br>⚠️ 法律案の再可決は「出席議員の3分の2」。憲法改正は「総議員」' },
     { qid:'soc_civ_s1_q6', jp:'「女性のみ離婚後6か月たたないと再婚できない」と定めた民法の規定を、裁判所は憲法違反と判断した。守られるべきと判断された権利は？',
       answer:'平等権', choices:['平等権','自由権','社会権','プライバシーの権利'],
-      exp:'📐 「女性のみ」＝男女で扱いが違う→<strong>法の下の平等</strong>（平等権）<br>✅ R6の入試（2015年の最高裁判決）' },
+      exp:'📐 「女性のみ」＝男女で扱いが違う→<strong>法の下の平等</strong>（平等権）<br>✅ R6の入試（2015年の最高裁判決は100日を超える部分を違憲と判断。再婚禁止期間は2024年に廃止）' },
     { qid:'soc_civ_s1_q7', jp:'小説のモデルとなった人物が「名誉を侵害された」と訴え、裁判所が出版差し止めを命じた。守られるべきと判断された権利は？',
       answer:'プライバシーの権利', choices:['プライバシーの権利','社会権','参政権','経済活動の自由'],
       exp:'📐 私生活を勝手に公開されない権利＝<strong>プライバシーの権利</strong>（新しい人権）<br>✅ R6の入試。表現の自由とぶつかるが、プライバシーが優先された例' },
@@ -520,7 +520,7 @@ function renderSection2(){
     + '<div class="rule-card-title">📐 選挙・国会・内閣</div>'
     + '<div class="rule-box"><div class="rule-title">選挙の4原則と年齢</div><div class="ex"><strong>普通</strong>選挙（18歳以上なら誰でも）・<strong>平等</strong>選挙（1人1票）・<strong>直接</strong>選挙・<strong>秘密</strong>選挙<br>選挙権18歳／被選挙権：衆議院・市町村長・地方議員25歳、参議院・都道府県知事30歳<br>衆議院＝小選挙区比例代表並立制、参議院＝選挙区＋比例代表</div></div>'
     + '<div class="rule-box"><div class="rule-title">国会（立法）</div><div class="ex">衆議院（定数465・任期4年・<strong>解散あり</strong>）と参議院（定数248・任期6年・3年ごと半数改選・解散なし）の二院制<br><strong style="color:var(--gold)">衆議院の優越</strong>：予算の先議、予算・条約・首相指名は衆議院の議決が優先、法律案は衆議院で<strong>出席議員の3分の2</strong>以上で再可決<br>国会の種類：常会（1月・150日）、臨時会、特別会（解散総選挙後・首相指名）<br>国会の仕事：法律の制定、予算の議決、条約の承認、首相の指名、弾劾裁判所、国政調査権、憲法改正の発議</div></div>'
-    + '<div class="rule-box"><div class="rule-title">内閣（行政）と議院内閣制</div><div class="ex">内閣総理大臣は<strong>国会議員の中から国会が指名</strong>→天皇が任命。国務大臣の過半数は国会議員<br><strong style="color:var(--gold)">議院内閣制</strong>＝内閣は国会の信任で成り立つ。衆議院が不信任を決議→内閣は10日以内に<strong>衆議院を解散</strong>するか<strong>総辞職</strong></div><div class="note">💡 R7の歴史でも「1928年の普通選挙で政友会が最多議席→総裁の田中義一が首相」という議院内閣制につながる問題が出た</div></div>'
+    + '<div class="rule-box"><div class="rule-title">内閣（行政）と議院内閣制</div><div class="ex">内閣総理大臣は<strong>国会議員の中から国会が指名</strong>→天皇が任命。国務大臣の過半数は国会議員<br><strong style="color:var(--gold)">議院内閣制</strong>＝内閣は国会の信任で成り立つ。衆議院が不信任を決議→内閣は10日以内に<strong>衆議院を解散</strong>するか<strong>総辞職</strong></div><div class="note">💡 R7の歴史でも「1928年の普通選挙で政友会が最多議席を得て、総裁の田中義一が首相を務めた」という議院内閣制につながる問題が出た</div></div>'
     + '</div>';
 
   html += '<div class="rule-card">'
@@ -570,7 +570,7 @@ function renderSection2(){
       exp:'📐 <strong>普通</strong>選挙＝財産や性別で制限しない（1925年は男子のみ25歳以上、1945年に女性も、2016年から18歳）<br>平等＝1人1票、直接＝自分で投票、秘密＝誰に入れたか秘密' },
     { qid:'soc_civ_s2_q12', jp:'地方自治で、条例の制定・改廃を直接請求するのに必要な署名は有権者の何分の1以上？',
       answer:'50分の1', choices:['50分の1','3分の1','2分の1','10分の1'],
-      exp:'📐 条例の制定・改廃、監査の請求＝<strong>50分の1</strong>以上（署名→首長へ）<br>首長・議員の解職（リコール）、議会の解散＝<strong>3分の1</strong>以上（署名→選挙管理委員会→住民投票）' },
+      exp:'📐 条例の制定・改廃＝<strong>50分の1</strong>以上（署名→首長へ）、監査の請求＝<strong>50分の1</strong>以上（署名→監査委員へ）<br>首長・議員の解職（リコール）、議会の解散＝<strong>3分の1</strong>以上（署名→選挙管理委員会→住民投票）' },
     { qid:'soc_civ_s2_q13', jp:'衆議院と参議院について正しいものはどれ？',
       answer:'衆議院には解散があり、参議院には解散がない', choices:['衆議院には解散があり、参議院には解散がない','参議院の任期は4年である','衆議院の任期は6年である','両院とも3年ごとに半数を改選する'],
       exp:'📐 衆議院：任期4年・解散あり。参議院：任期6年・3年ごと半数改選・解散なし<br>💡 「解散がある方が国民の意見を反映しやすい」から衆議院の優越がある' },
@@ -597,7 +597,7 @@ function renderSection3(){
     + '<div class="rule-card-title">📐 市場と物価・景気</div>'
     + '<div style="overflow-x:auto;margin-bottom:14px">' + svgDemand + '</div>'
     + '<div class="rule-box"><div class="rule-title">需要と供給</div><div class="ex"><strong style="color:var(--red)">需要</strong>＝買いたい量（価格が下がると増える）／<strong style="color:var(--teal)">供給</strong>＝売りたい量（価格が上がると増える）<br>需要＞供給→価格が<strong>上がる</strong>　需要＜供給→価格が<strong>下がる</strong>　つり合う点＝<strong>均衡価格</strong></div><div class="note">💡 R7：「不景気になると家計の所得が減り、商品の需要が供給を<strong>下回り</strong>、物価が<strong>下がります</strong>」</div></div>'
-    + '<div class="rule-box"><div class="rule-title">インフレとデフレ</div><div class="ex"><strong style="color:var(--red)">インフレーション</strong>＝物価が上がり続ける（お金の価値が下がる）。例：1974年の<strong>石油危機</strong>で物価が急上昇<br><strong style="color:var(--teal)">デフレーション</strong>＝物価が下がり続ける（不景気のとき）。例：1999〜2003年ごろ、ハンバーガーが59円</div><div class="note">💡 R6：消費者物価指数のグラフで「1974年が高いのは石油危機」「物価が下がり続けた期間はZ（2000年前後）」</div></div>'
+    + '<div class="rule-box"><div class="rule-title">インフレとデフレ</div><div class="ex"><strong style="color:var(--red)">インフレーション</strong>＝物価が上がり続ける（お金の価値が下がる）。例：1973年の<strong>石油危機</strong>で1974年に物価が急上昇<br><strong style="color:var(--teal)">デフレーション</strong>＝物価が下がり続ける（不景気のとき）。例：1999〜2003年ごろ、ハンバーガーが59円</div><div class="note">💡 R6：消費者物価指数のグラフで「1974年が高いのは石油危機」「物価が下がり続けた期間はZ（2000年前後）」</div></div>'
     + '<div class="rule-box"><div class="rule-title">景気対策（誰が・何を）</div><div class="ex"><strong style="color:var(--gold)">日本銀行（金融政策）</strong>：<strong>公開市場操作</strong>。不景気→銀行から<strong>国債を買う</strong>（お金を市場に出す）／好景気→国債を売る<br><strong style="color:var(--gold)">政府（財政政策）</strong>：不景気→<strong>減税</strong>・<strong>公共事業を増やす</strong>（企業の仕事を増やす）／好景気→増税・公共事業を減らす</div><div class="note">💡 R7：「政府は<strong>減税を行い、家計の所得を増やす</strong>」（公開市場操作は日銀の仕事なので×）。R5：「公共事業＝<strong>企業の仕事を増やす</strong>」「世界恐慌のときの<strong>ニューディール政策</strong>（アメリカ）」</div></div>'
     + '<div class="rule-box"><div class="rule-title">日本銀行の3つの役割</div><div class="ex"><strong>発券銀行</strong>（お札を発行）・<strong>政府の銀行</strong>（税金の出し入れ）・<strong>銀行の銀行</strong>（一般の銀行にお金を貸す）。個人は口座を作れない</div></div>'
     + '</div>';

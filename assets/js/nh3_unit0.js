@@ -140,7 +140,7 @@ function recordResult(qid, isCorrect) {
   weakDB[qid].total++;
   if (isCorrect) weakDB[qid].correct++;
   localStorage.setItem('nh3_weakdb', JSON.stringify(weakDB));
-  var _today = new Date().toISOString().slice(0,10);
+  var _today = new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
   var _daily = JSON.parse(localStorage.getItem('nh3_daily') || '{}');
   _daily[_today] = (_daily[_today] || 0) + 1;
   localStorage.setItem('nh3_daily', JSON.stringify(_daily));
@@ -488,9 +488,10 @@ function gradeWithAPI(qid, meta, val) {
   showGradeResult(qid, meta, val, result);
 }
 
+function expandContr(s){return s.replace(/\b(have|has|had|is|are|was|were|do|does|did|would|should|could)n't\b/g,'$1 not').replace(/\bcan't\b|\bcannot\b/g,'can not').replace(/\bwon't\b/g,'will not').replace(/\b(i|you|we|they)'ve\b/g,'$1 have').replace(/\b(he|she|it|that|there)'s\b/g,'$1 is').replace(/\b(you|we|they)'re\b/g,'$1 are').replace(/\bi'm\b/g,'i am');}
 function localSmartGrade(val, answer, jpText) {
-  var v = val.trim().toLowerCase().replace(/[.,!?]/g, '').replace(/\s+/g, ' ');
-  var a = answer.trim().toLowerCase().replace(/[.,!?]/g, '').replace(/\s+/g, ' ');
+  var v = expandContr(unifyQuote(val).trim().toLowerCase().replace(/[.,!?]/g, '').replace(/\s+/g, ' '));
+  var a = expandContr(unifyQuote(answer).trim().toLowerCase().replace(/[.,!?]/g, '').replace(/\s+/g, ' '));
 
   // 完全一致
   if (v === a) {
@@ -643,8 +644,9 @@ function showGradeResult(qid, meta, val, result) {
   }
 }
 
+function unifyQuote(s){return (s||'').replace(/&#39;/g,"'").replace(/[‘’`]/g,"'");}
 function normalize(s) {
-  return (s || '').trim().toLowerCase().replace(/[.,!?'"]/g,'').replace(/\s+/g,' ');
+  return unifyQuote(s).trim().toLowerCase().replace(/[.,!?'"]/g,'').replace(/\s+/g,' ');
 }
 // キーワードマッチ採点：答えの主要キーワードが全部含まれていれば正解
 function flexMatch(val, answer) {
@@ -842,11 +844,11 @@ function renderSection1() {
   html += '<div class="practice-section"><div class="practice-title">✏️ 練習問題 — be動詞を選ぼう</div>';
 
   var qs1 = [
-    { q: '___ you a student?', jp: 'あなたは学生ですか？', a: 'Are', choices: ['Am','Is','Are'], exp: '<span class="exp-rule"><span class="label">📐 ルール</span>You → <strong>are</strong>（複数・二人称）<br>疑問文はbe動詞を文頭に移動する</span><span class="exp-ok">✅ Are you a student?</span><br><span class="exp-ng">❌ You are a student? （疑問文ではない）</span><span class="exp-tip">💡 主語が you/we/they → are</span>', xp: 3 },
+    { q: '___ you a student?', jp: 'あなたは学生ですか？', a: 'Are', choices: ['Am','Is','Are'], exp: '<span class="exp-rule"><span class="label">📐 ルール</span>You → <strong>are</strong>（二人称。一人でも複数でも are）<br>疑問文はbe動詞を文頭に移動する</span><span class="exp-ok">✅ Are you a student?</span><br><span class="exp-ng">❌ You are a student? （疑問文ではない）</span><span class="exp-tip">💡 主語が you/we/they → are</span>', xp: 3 },
     { q: 'I ___ from Aichi.', jp: '私は愛知出身です。', a: 'am', choices: ['am','is','are'], exp: '<span class="exp-rule"><span class="label">📐 ルール</span>I → <strong>am</strong>（一人称単数・専用）</span><span class="exp-ok">✅ I am from Aichi.</span><br><span class="exp-ng">❌ I is / I are</span><span class="exp-tip">💡 I だけが am。他の主語には使えない</span>', xp: 3 },
     { q: 'She ___ very funny.', jp: '彼女はとても面白い。', a: 'is', choices: ['am','is','are'], exp: '<span class="exp-rule"><span class="label">📐 ルール</span>He / She / It → <strong>is</strong>（三人称単数）</span><span class="exp-ok">✅ She is very funny.</span><br><span class="exp-ng">❌ She are / She am</span><span class="exp-tip">💡 三人称単数（一人の人・ひとつの物）→ is</span>', xp: 3 },
-    { q: 'We ___ good friends.', jp: '私たちは良い友達です。', a: 'are', choices: ['am','is','are'], exp: '<span class="exp-rule"><span class="label">📐 ルール</span>We → <strong>are</strong>（一人称複数）</span><span class="exp-ok">✅ We are good friends.</span><br><span class="exp-ng">❌ We is / We am</span><span class="exp-tip">💡 we / they / you（複数）→ are</span>', xp: 3 },
-    { q: 'Reiwa Roman ___ a comedy duo.', jp: '令和ロマンはコンビです。', a: 'is', choices: ['am','is','are'], exp: '<span class="exp-rule"><span class="label">📐 ルール</span>コンビ名・グループ名 → 単数扱い → <strong>is</strong></span><span class="exp-ok">✅ Reiwa Roman is a comedy duo.</span><br><span class="exp-ok">✅ Cotton is funny.</span><span class="exp-tip">💡 複数の人でもグループ全体を一つとして見ると is</span>', xp: 4 },
+    { q: 'We ___ good friends.', jp: '私たちは良い友達です。', a: 'are', choices: ['am','is','are'], exp: '<span class="exp-rule"><span class="label">📐 ルール</span>We → <strong>are</strong>（一人称複数）</span><span class="exp-ok">✅ We are good friends.</span><br><span class="exp-ng">❌ We is / We am</span><span class="exp-tip">💡 we / they / you → are（you は一人でも are）</span>', xp: 3 },
+    { q: 'Reiwa Roman ___ a comedy duo.', jp: '令和ロマンはコンビです。', a: 'is', choices: ['am','is','are'], exp: '<span class="exp-rule"><span class="label">📐 ルール</span>コンビ名・グループ名（単数形の名前）→ 単数扱い → <strong>is</strong></span><span class="exp-ok">✅ Reiwa Roman is a comedy duo.</span><br><span class="exp-ok">✅ Cotton is funny.</span><span class="exp-tip">💡 複数の人でもグループ全体を一つとして見ると is</span>', xp: 4 },
     { q: 'He ___ not from Tokyo.', jp: '彼は東京出身ではありません。', a: 'is', choices: ['am','is','are'], exp: '<span class="exp-rule"><span class="label">📐 否定文のルール</span>主語 + be動詞 + <strong>not</strong> + ...</span><span class="exp-ok">✅ He is not a comedian.</span><br><span class="exp-ok">✅ He isn&#39;t a comedian.（短縮形）</span><span class="exp-tip">💡 be動詞の直後にnotを置くだけ</span>', xp: 3 },
     { q: 'They ___ comedians.', jp: '彼らは芸人です。', a: 'are', choices: ['am','is','are'], exp: '<span class="exp-rule"><span class="label">📐 ルール</span>They → <strong>are</strong>（三人称複数）</span><span class="exp-ok">✅ They are comedians.</span><span class="exp-tip">💡 複数の人・物を指す代名詞 → are</span>', xp: 3 },
     { q: '___ it interesting?', jp: 'それは面白いですか？', a: 'Is', choices: ['Am','Is','Are'], exp: '<span class="exp-rule"><span class="label">📐 ルール</span>It → <strong>is</strong>（三人称単数）<br>疑問文 → Is を文頭に</span><span class="exp-ok">✅ Is it interesting?</span><br><span class="exp-ng">❌ It is interesting?（疑問文の形ではない）</span><span class="exp-tip">💡 Is it ...? の語順を覚えよう</span>', xp: 3 },
@@ -933,12 +935,12 @@ function renderSection2() {
   html += '<div class="practice-section"><div class="practice-title">✏️ 練習問題</div>';
   var qs2 = [
     { q: 'I ___ very tired yesterday.', jp: '私は昨日とても疲れていた。', a: 'was', choices: ['am','was','were'], exp: '<span class="exp-rule"><span class="label">📐 過去形のルール</span>I → am → <strong>was</strong>（過去）<br>yesterday / last〜 / ago → 過去形のサイン！</span><span class="exp-ok">✅ I was very tired yesterday.</span><span class="exp-tip">💡 I/He/She/It → was　We/You/They → were</span>', xp: 3 },
-    { q: 'They ___ funny on stage last night.', jp: '彼らは昨夜ステージで面白かった。', a: 'were', choices: ['are','was','were'], exp: '<span class="exp-rule"><span class="label">📐 過去形のルール</span>They → are → <strong>were</strong>（過去）</span><span class="exp-ok">✅ They were funny on stage last night.</span><span class="exp-tip">💡 複数（They/We/You）の過去 → were</span>', xp: 3 },
+    { q: 'They ___ funny on stage last night.', jp: '彼らは昨夜ステージで面白かった。', a: 'were', choices: ['are','was','were'], exp: '<span class="exp-rule"><span class="label">📐 過去形のルール</span>They → are → <strong>were</strong>（過去）</span><span class="exp-ok">✅ They were funny on stage last night.</span><span class="exp-tip">💡 They/We/You の過去 → were（You は一人でも were）</span>', xp: 3 },
     { q: '___ she a student last year?', jp: '彼女は去年学生でしたか？', a: 'Was', choices: ['Is','Was','Were'], exp: '<span class="exp-rule"><span class="label">📐 過去疑問文</span>Was/Were を文頭に移動するだけ</span><span class="exp-ok">✅ Was she a student last year?</span><br><span class="exp-ok">✅ Yes, she was. / No, she wasn&#39;t.</span><span class="exp-tip">💡 She の過去疑問文 → Was she ...?</span>', xp: 4 },
     { q: 'We ___ not at home yesterday.', jp: '私たちは昨日家にいなかった。', a: 'were', choices: ['am','was','were'], exp: '<span class="exp-rule"><span class="label">📐 過去否定文</span>We → were → <strong>were not（weren&#39;t）</strong></span><span class="exp-ok">✅ We were not at home yesterday.</span><span class="exp-tip">💡 複数の過去否定 → were not</span>', xp: 4 },
     { q: 'Kamaitachi ___ very popular two years ago.', jp: 'かまいたちは2年前とても人気があった。', a: 'was', choices: ['is','was','were'], exp: '<span class="exp-rule"><span class="label">📐 ルール</span>グループ名 → 単数扱い → <strong>was</strong>（過去）<br>two years ago → 過去のサイン</span><span class="exp-ok">✅ Kamaitachi was very popular two years ago.</span><span class="exp-tip">💡 「〜前に」は ～ ago（必ず過去形）</span>', xp: 5 },
-    { q: 'He ___ at school last Monday.', jp: '彼は先週月曜日学校にいた。', a: 'was', choices: ['is','was','were'], exp: '<span class="exp-rule"><span class="label">📐 ルール</span>He → was（過去）<br>last Monday = 先週月曜日 → 過去のサイン</span><span class="exp-ok">✅ He was at school last Monday.</span><span class="exp-tip">💡 last + 曜日/週/年/月 → 必ず過去形</span>', xp: 3 },
-    { q: '___ you happy then?', jp: 'その時あなたは嬉しかったですか？', a: 'Were', choices: ['Was','Were','Are'], exp: '<span class="exp-rule"><span class="label">📐 過去疑問文</span>You → were → <strong>Were you ...?</strong></span><span class="exp-ok">✅ Were you happy then?</span><br><span class="exp-ok">✅ Yes, I was. / No, I wasn&#39;t.</span><span class="exp-tip">💡 then（その時）も過去のサイン</span>', xp: 4 },
+    { q: 'He ___ at school last Monday.', jp: '彼はこの前の月曜日学校にいた。', a: 'was', choices: ['is','was','were'], exp: '<span class="exp-rule"><span class="label">📐 ルール</span>He → was（過去）<br>last Monday = この前の月曜日 → 過去のサイン</span><span class="exp-ok">✅ He was at school last Monday.</span><span class="exp-tip">💡 last + 曜日/週/年/月 → 必ず過去形</span>', xp: 3 },
+    { q: '___ you happy then?', jp: 'その時あなたは嬉しかったですか？', a: 'Were', choices: ['Was','Were','Are'], exp: '<span class="exp-rule"><span class="label">📐 過去疑問文</span>You → were → <strong>Were you ...?</strong></span><span class="exp-ok">✅ Were you happy then?</span><br><span class="exp-ok">✅ Yes, I was. / No, I wasn&#39;t.</span><span class="exp-tip">💡 then（その時）は過去の文でよく使う</span>', xp: 4 },
     { q: 'It ___ not cold last week.', jp: '先週は寒くなかった。', a: 'was', choices: ['is','was','were'], exp: '<span class="exp-rule"><span class="label">📐 過去否定</span>It → was → <strong>was not（wasn&#39;t）</strong></span><span class="exp-ok">✅ It was not cold last week.</span><span class="exp-tip">💡 It の過去否定 → was not / wasn&#39;t</span>', xp: 4 },
     { q: 'Cotton ___ not famous five years ago.', jp: 'コットンは5年前有名ではなかった。', a: 'was', choices: ['is','was','were'], exp: '<span class="exp-rule"><span class="label">📐 過去否定</span>Cotton（単数）→ was not（過去否定）</span><span class="exp-ok">✅ Cotton was not famous five years ago.</span><span class="exp-tip">💡 グループ名も単数扱い → was not</span>', xp: 5 },
     { q: '___ they at the live show yesterday?', jp: '彼らは昨日ライブに来ていましたか？', a: 'Were', choices: ['Was','Were','Did'], exp: '<span class="exp-rule"><span class="label">📐 重要ポイント</span>be動詞の疑問文 → <strong>Was/Were</strong>（Didは使わない！）</span><span class="exp-ok">✅ Were they at the live show yesterday?</span><br><span class="exp-ng">❌ Did they be at the live show?（×）</span><span class="exp-tip">💡 be動詞とDo/Doesは混ぜない！</span>', xp: 5 },
@@ -957,7 +959,7 @@ function renderSection2() {
   var qs2b = [
     { jp: '彼は昨日学校にいませんでした。', a: 'He was not at school yesterday.', exp: '<span class="exp-rule"><span class="label">📐 過去否定文の語順</span>主語 + was/were + not + 残り + 時の表現</span><span class="exp-ok">✅ He was not at school yesterday.</span><span class="exp-tip">💡 He の過去否定 → was not</span>', xp: 5 },
     { jp: '昨日忙しかったですか？', a: 'Were you busy yesterday?', exp: '<span class="exp-rule"><span class="label">📐 過去疑問文</span>Were + you + 形容詞/場所 + 時の表現 ?</span><span class="exp-ok">✅ Were you busy yesterday?</span><span class="exp-tip">💡 答えは Yes, I was. / No, I wasn&#39;t.</span>', xp: 5 },
-    { jp: '私たちは去年同じクラスでした。', a: 'We were in the same class last year.', exp: '<span class="exp-rule"><span class="label">📐 ルール</span>We → were（過去）　in the same class = 同じクラスに（所属）</span><span class="exp-ok">✅ We were in the same class last year.</span><span class="exp-tip">💡 「in the same ＋ 人が継続的に所属するカテゴリ名詞」<br>✅ class / club / group / team<br>❌ rain / Takashimaya（所属できない）</span>', xp: 5 },
+    { jp: '私たちは去年同じクラスでした。', a: 'We were in the same class last year.', exp: '<span class="exp-rule"><span class="label">📐 ルール</span>We → were（過去）　in the same class = 同じクラスに（所属）</span><span class="exp-ok">✅ We were in the same class last year.</span><span class="exp-tip">💡 「同じクラスだった」は be in the same class と言う（club / team も同じ）</span>', xp: 5 },
     { jp: '彼女は昨日家にいましたか？', a: 'Was she at home yesterday?', exp: '<span class="exp-rule"><span class="label">📐 過去疑問文</span>Was + she + 場所/形容詞 + 時の表現 ?</span><span class="exp-ok">✅ Was she at home yesterday?</span><span class="exp-tip">💡 She の過去疑問文 → Was she ...?</span>', xp: 5 },
   ];
   qs2b.forEach(function(q, i) {
@@ -1027,7 +1029,7 @@ function renderSection3() {
     ['Does she watch comedy videos?', '彼女はお笑い動画を見ますか？'],
     ['Yes, she does. / No, she doesn\'t.', 'はい。/ いいえ。'],
     ['I don\'t understand advanced comedy.', '私は高度なお笑いが理解できない。'],
-    ['He doesn\'t speak Kansai dialect.', '彼は関西弁を話さない。'],
+    ['He doesn\'t speak the Kansai dialect.', '彼は関西弁を話さない。'],
   ];
   ex5.forEach(function(e, i) {
     var aid = 's3_exb_' + i;
@@ -1046,7 +1048,7 @@ function renderSection3() {
     { q: 'He ___ (go) to school by bike.', jp: '彼は自転車で学校に行く。', a: 'goes', choices: ['go','goes','gos'], exp: '<span class="exp-rule"><span class="label">📐 三単現：-oで終わる</span>go → <strong>goes</strong></span><span class="exp-ok">✅ He goes to school by bike.</span><br><span class="exp-ng">❌ He gos（×）</span><span class="exp-tip">💡 go→goes、do→does</span>', xp: 4 },
     { q: 'They ___ English every day.', jp: '彼らは毎日英語を勉強する。', a: 'study', choices: ['study','studies','studys'], exp: '<span class="exp-rule"><span class="label">📐 ポイント</span>They → 三単現でない → 動詞はそのまま</span><span class="exp-ok">✅ They study English every day.</span><br><span class="exp-ng">❌ They studies（×）</span><span class="exp-tip">💡 sがつくのは He/She/It だけ！</span>', xp: 4 },
     { q: 'She ___ (not, like) math.', jp: '彼女は数学が好きではない。', a: "doesn't like", choices: ["don't like","doesn't like","isn't like"], exp: 'She（三単現）の否定 → doesn\'t + 原形（like）。', xp: 5 },
-    { q: '___ your teacher speak English well?', jp: 'あなたの先生は英語を上手に話しますか？', a: 'Does', choices: ['Do','Does','Is'], exp: '<span class="exp-rule"><span class="label">📐 三単現の疑問文</span>Does + 三単現の主語 + 動詞の原形 ...?</span><span class="exp-ok">✅ Does your teacher speak English well?</span><span class="exp-tip">💡 your teacher → 一人の人 → Does</span>', xp: 4 },
+    { q: '___ your teacher speak English well?', jp: 'あなたの先生は英語を上手に話しますか？', a: 'Does', choices: ['Do','Does','Is'], exp: '<span class="exp-rule"><span class="label">📐 三単現の疑問文</span>Does + 三単現の主語 + 動詞の原形 ...?</span><span class="exp-ok">✅ Does your teacher speak English well?</span><span class="exp-tip">💡 your teacher → he/she に置きかえられる（三人称単数）→ Does</span>', xp: 4 },
     { q: 'Kyon ___ (try) very hard every day.', jp: 'きょんは毎日一生懸命頑張る。', a: 'tries', choices: ['trys','tries','try'], exp: '<span class="exp-rule"><span class="label">📐 三単現：子音+y → ies</span>try → <strong>tries</strong></span><span class="exp-ok">✅ Kyon tries very hard every day.</span><br><span class="exp-ng">❌ Kyon trys（×）</span><span class="exp-tip">💡 try/study/carry/worry → ies</span>', xp: 5 },
   ];
   qs3.forEach(function(q, i) {
@@ -1061,10 +1063,10 @@ function renderSection3() {
       + '</div>';
   });
   var qs3b = [
-    { jp: '彼は関西弁を話しますか？', a: 'Does he speak Kansai dialect?', exp: '<span class="exp-rule"><span class="label">📐 三単現の疑問文</span>Does + he + 動詞の原形 ...?</span><span class="exp-ok">✅ Does he speak Kansai dialect?</span><span class="exp-tip">💡 答え：Yes, he does. / No, he doesn&#39;t.</span>', xp: 5 },
-    { jp: '私は毎日英語を勉強しない。', a: "I don't study English every day.", exp: 'I の否定 → don\'t + 原形。', xp: 5 },
+    { jp: '彼は関西弁を話しますか？', a: 'Does he speak the Kansai dialect?', exp: '<span class="exp-rule"><span class="label">📐 三単現の疑問文</span>Does + he + 動詞の原形 ...?</span><span class="exp-ok">✅ Does he speak the Kansai dialect?</span><span class="exp-tip">💡 答え：Yes, he does. / No, he doesn&#39;t.</span>', xp: 5 },
+    { jp: '私は毎日は英語を勉強しない。', a: "I don't study English every day.", exp: 'I の否定 → don\'t + 原形。', xp: 5 },
     { jp: '彼女は毎朝早く起きます。', a: 'She gets up early every morning.', exp: '<span class="exp-rule"><span class="label">📐 三単現のs</span>get → <strong>gets</strong></span><span class="exp-ok">✅ She gets up early every morning.</span><span class="exp-tip">💡 get up（起きる）の三単現 → gets up</span>', xp: 5 },
-    { jp: 'きょんはよく動画を見ますか？', a: 'Does Kyon often watch videos?', exp: '<span class="exp-rule"><span class="label">📐 三単現の疑問文</span>Does + Kyon + 動詞の原形 ...?</span><span class="exp-ok">✅ Does Kyon often watch videos?</span><span class="exp-tip">💡 often の位置：does の後・動詞の前</span>', xp: 5 },
+    { jp: 'きょんはよく動画を見ますか？', a: 'Does Kyon often watch videos?', exp: '<span class="exp-rule"><span class="label">📐 三単現の疑問文</span>Does + Kyon + 動詞の原形 ...?</span><span class="exp-ok">✅ Does Kyon often watch videos?</span><span class="exp-tip">💡 often の位置：主語の後・動詞の原形の前</span>', xp: 5 },
   ];
   qs3b.forEach(function(q, i) {
     var qid = 's3_qb' + i;
@@ -1209,11 +1211,11 @@ function renderFinalTest() {
     + '<div class="chat-line"><div class="avatar av-nishi">慶</div><div><div class="chat-name">西村</div><div class="chat-bubble">全部の文法が混ざって出てくるよ。be動詞か一般動詞か、現在か過去か、よく考えて。</div></div></div>'
     + '</div>';
 
-  html += '<div class="practice-section"><div class="practice-title">📝 総合確認テスト（全20問）</div>';
+  html += '<div class="practice-section"><div class="practice-title">📝 総合確認テスト（全30問）</div>';
   var testQs = [
     // be動詞現在
-    { q: 'I ___ from Aichi prefecture.', jp: '私は愛知県出身です。', a: 'am', choices: ['am','is','are'], exp: 'I → am（現在）', xp: 2 },
-    { q: 'Shimofuriboshi ___ a popular comedy duo.', jp: '霜降り明星は人気のコンビです。', a: 'is', choices: ['am','is','are'], exp: '三人称単数 → is', xp: 2 },
+    { q: 'I ___ from Aichi Prefecture.', jp: '私は愛知県出身です。', a: 'am', choices: ['am','is','are'], exp: 'I → am（現在）', xp: 2 },
+    { q: 'Shimofuri Myojo ___ a popular comedy duo.', jp: '霜降り明星は人気のコンビです。', a: 'is', choices: ['am','is','are'], exp: '三人称単数 → is', xp: 2 },
     { q: '___ they good comedians?', jp: '彼らは良い芸人ですか？', a: 'Are', choices: ['Am','Is','Are'], exp: 'They の疑問文 → Are', xp: 2 },
     { q: 'She ___ not funny at all.', jp: '彼女は全然面白くない。', a: 'is', choices: ['am','is','are'], exp: 'She → is（現在否定）', xp: 2 },
     // be動詞過去
@@ -1231,7 +1233,7 @@ function renderFinalTest() {
     { q: 'I ___ (go) to see a comedy show last week.', jp: '私は先週お笑いショーを見に行った。', a: 'went', choices: ['goed','went','goes'], exp: 'go の過去形は went（不規則）', xp: 4 },
     { q: 'She ___ (study) very hard for the exam.', jp: '彼女は試験のためとても一生懸命勉強した。', a: 'studied', choices: ['studyed','studied','study'], exp: 'study → y→iに変えてed → studied', xp: 4 },
     { q: '___ you watch the show yesterday?', jp: '昨日ショーを見ましたか？', a: 'Did', choices: ['Do','Does','Did'], exp: '過去の疑問文 → Did', xp: 3 },
-    { q: 'He ___ (not, go) to school last Monday.', jp: '彼は先週の月曜日学校に行かなかった。', a: "didn't go", choices: ["didn't go","don't go","wasn't go"], exp: '過去否定 → didn\'t + 原形（go）', xp: 4 },
+    { q: 'He ___ (not, go) to school last Monday.', jp: '彼はこの前の月曜日学校に行かなかった。', a: "didn't go", choices: ["didn't go","don't go","wasn't go"], exp: '過去否定 → didn\'t + 原形（go）', xp: 4 },
     // 混合
     { q: 'Cotton ___ (make) us laugh a lot last night.', jp: 'コットンは昨夜私たちをたくさん笑わせた。', a: 'made', choices: ['maked','made','makes'], exp: 'make の過去形 → made（不規則）', xp: 4 },
     { q: 'Kyon ___ not good at studying.', jp: 'きょんは勉強が得意ではない（現在）。', a: 'is', choices: ['am','is','was'], exp: 'Kyon（三人称単数）現在 → is not', xp: 3 },
@@ -1240,7 +1242,7 @@ function renderFinalTest() {
     { q: 'He ___ (go) to school by bike every day.', jp: '彼は毎日自転車で学校に行く。', a: 'goes', choices: ['go','goes','went'], exp: 'He（三単現）→ goes。goのs→goes', xp: 3 },
     { q: 'She ___ (not, study) last night.', jp: '彼女は昨夜勉強しなかった。', a: "didn't study", choices: ["doesn't study","didn't study","wasn't study"], exp: '過去否定 → didn\'t + 原形（study）', xp: 4 },
     { q: '___ they at the concert yesterday?', jp: '彼らは昨日コンサートにいましたか？', a: 'Were', choices: ['Was','Were','Did'], exp: 'They のbe動詞過去疑問文 → Were。', xp: 4 },
-    { q: 'I ___ (see) that comedian last week.', jp: '私は先週その芸人を見た。', a: 'saw', choices: ['seed','saw','seen'], exp: '<span class="exp-rule"><span class="label">📐 不規則動詞</span>see → <strong>saw</strong></span><span class="exp-ok">✅ We saw the movie last week.</span><br><span class="exp-ng">❌ We seed（×）</span><span class="exp-tip">💡 see-saw-seen（原形-過去-過去分詞）</span>', xp: 4 },
+    { q: 'I ___ (see) that comedian last week.', jp: '私は先週その芸人を見た。', a: 'saw', choices: ['seed','saw','seen'], exp: '<span class="exp-rule"><span class="label">📐 不規則動詞</span>see → <strong>saw</strong></span><span class="exp-ok">✅ I saw that comedian last week.</span><br><span class="exp-ng">❌ I seed（×）</span><span class="exp-tip">💡 see-saw-seen（原形-過去-過去分詞）</span>', xp: 4 },
     { q: 'She ___ (try) her best yesterday.', jp: '彼女は昨日ベストを尽くした。', a: 'tried', choices: ['tryed','tried','try'], exp: 'try → y をiに変えてed → tried。', xp: 4 },
     { q: '___ Kyon practice every day?', jp: 'きょんは毎日練習しますか？', a: 'Does', choices: ['Do','Does','Did'], exp: 'Kyon（三単現）の現在疑問文 → Does。', xp: 4 },
     { q: 'We ___ (not, speak) to each other then.', jp: '私たちはその時お互いに話さなかった。', a: "didn't speak", choices: ["don't speak","didn't speak","weren't speak"], exp: '過去否定 → didn\'t + 原形（speak）', xp: 5 },
@@ -1253,7 +1255,7 @@ function renderFinalTest() {
     var qid = 's5_q' + i;
     qMeta[qid] = { type:'choice', answer: q.a, xp: q.xp };
     html += '<div class="q-card" data-card="' + qid + '">'
-      + '<div class="q-number">Q' + (i+1) + ' / 20</div>'
+      + '<div class="q-number">Q' + (i+1) + ' / 30</div>'
       + '<div class="q-text">' + q.q.replace('___', '<span class="blank">___</span>') + '</div>'
       + '<div class="q-jp">' + q.jp + '</div>'
       + makeChoices(qid, q.choices, q.a, q.xp)
@@ -1594,7 +1596,7 @@ var ALL_QUESTION_DATA = {
   's2_q2': {jp:'彼女は去年学生でしたか？',answer:'Was',choices:['Is','Was','Were']},
   's2_q3': {jp:'私たちは昨日家にいなかった。',answer:'were',choices:['am','was','were']},
   's2_q4': {jp:'かまいたちは2年前とても人気があった。',answer:'was',choices:['is','was','were']},
-  's2_q5': {jp:'彼は先週月曜日学校にいた。',answer:'was',choices:['is','was','were']},
+  's2_q5': {jp:'彼はこの前の月曜日学校にいた。',answer:'was',choices:['is','was','were']},
   's2_q6': {jp:'その時あなたは嬉しかったですか？',answer:'Were',choices:['Was','Were','Are']},
   's2_q7': {jp:'先週は寒くなかった。',answer:'was',choices:['is','was','were']},
   's2_q8': {jp:'コットンは5年前有名ではなかった。',answer:'was',choices:['is','was','were']},
@@ -1613,8 +1615,8 @@ var ALL_QUESTION_DATA = {
   's3_q7': {jp:'彼女は数学が好きではない。',answer:'doesn\'t like',choices:['don\'t like','doesn\'t like','isn\'t like']},
   's3_q8': {jp:'あなたの先生は英語を上手に話しますか？',answer:'Does',choices:['Do','Does','Is']},
   's3_q9': {jp:'きょんは毎日一生懸命頑張る。',answer:'tries',choices:['trys','tries','try']},
-  's3_qb0': {jp:'彼は関西弁を話しますか？',answer:'Does he speak Kansai dialect?',choices:[]},
-  's3_qb1': {jp:'私は毎日英語を勉強しない。',answer:'I don\'t study English every day.',choices:[]},
+  's3_qb0': {jp:'彼は関西弁を話しますか？',answer:'Does he speak the Kansai dialect?',choices:[]},
+  's3_qb1': {jp:'私は毎日は英語を勉強しない。',answer:'I don\'t study English every day.',choices:[]},
   's3_qb2': {jp:'彼女は毎朝早く起きます。',answer:'She gets up early every morning.',choices:[]},
   's3_qb3': {jp:'きょんはよく動画を見ますか？',answer:'Does Kyon often watch videos?',choices:[]},
   's4_q0': {jp:'私は先週大阪に行った。',answer:'went',choices:['goed','went','go']},

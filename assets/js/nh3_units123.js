@@ -1,3 +1,5 @@
+// 2026-11-09 正解を直した問題の古い弱点データを1回だけ消す（特訓は保存済みの答えで採点するため）
+(function(){try{var f='nh3_fix_20261109';if(localStorage.getItem(f))return;var k='nh3_weakdb',d=JSON.parse(localStorage.getItem(k)||'{}'),A=[],J=['きょんはもう大きなイベントで公演しましたか？'],Q=['nh3_rev_s1_q6','nh3_rev_s2_q6','nh3_rev_s7_q4','nh3_rev_s8_q01','nh3_rev_s8_q03'];Object.keys(d).forEach(function(q){var v=d[q]||{};if(A.indexOf(v.answer)>=0||J.indexOf(v.jp)>=0||Q.indexOf(q)>=0)delete d[q];});localStorage.setItem(k,JSON.stringify(d));localStorage.setItem(f,'1');}catch(e){}})();
 // ===== LEVELS =====
 var LEVELS = [
   { lv:1, min:0,   label:'Lv.1 🥚', badge:'NSC入学',       title:'見習い研修生',       status:'きょん「英語？なにそれ食えるの？」' },
@@ -132,16 +134,18 @@ function renderWeakBar() {
 
 // ===== QUESTION ENGINE =====
 var qMeta={};
-function normalize(s){return(s||'').trim().toLowerCase().replace(/[.,!?'"]/g,'').replace(/\s+/g,' ');}
+function unifyQuote(s){return (s||'').replace(/&#39;/g,"'").replace(/[‘’`]/g,"'");}
+function normalize(s){return unifyQuote(s).trim().toLowerCase().replace(/[.,!?'"]/g,'').replace(/\s+/g,' ');}
 function flexMatch(val,answer){
   var v=normalize(val),a=normalize(answer);
   if(v===a)return true;
   var aWords=a.split(' ').filter(function(w){return w.length>1;});
   return aWords.every(function(w){return v.indexOf(w)!==-1;});
 }
+function expandContr(s){return s.replace(/\b(have|has|had|is|are|was|were|do|does|did|would|should|could)n't\b/g,'$1 not').replace(/\bcan't\b|\bcannot\b/g,'can not').replace(/\bwon't\b/g,'will not').replace(/\b(i|you|we|they)'ve\b/g,'$1 have').replace(/\b(he|she|it|that|there)'s\b/g,'$1 is').replace(/\b(you|we|they)'re\b/g,'$1 are').replace(/\bi'm\b/g,'i am');}
 function localSmartGrade(val,answer){
-  var v=val.trim().toLowerCase().replace(/[.,!?]/g,'').replace(/\s+/g,' ');
-  var a=answer.trim().toLowerCase().replace(/[.,!?]/g,'').replace(/\s+/g,' ');
+  var v=expandContr(unifyQuote(val).trim().toLowerCase().replace(/[.,!?]/g,'').replace(/\s+/g,' '));
+  var a=expandContr(unifyQuote(answer).trim().toLowerCase().replace(/[.,!?]/g,'').replace(/\s+/g,' '));
   if(v===a)return{grade:'◎',xpRate:1.0,comment:'完璧！そのまま覚えよう！'};
   var vW=v.split(' '),aW=a.split(' ');
   var matched=aW.filter(function(w){return vW.indexOf(w)!==-1;});
@@ -561,7 +565,7 @@ function renderUnit1Section(sid){
     });
     var qb3=[
       {jp:'その映画は2年前に作られました。',a:'The movie was made two years ago.',exp:'<span class="exp-rule"><span class="label">📐 不規則動詞の過去分詞</span>make → made → <strong>made</strong></span><span class="exp-ok">✅ The movie was made two years ago.</span><span class="exp-tip">💡 make-made-made（過去形も過去分詞も made）</span>',xp:6},
-      {jp:'たくさんのメダルが選手たちに与えられました。',a:'Many medals were given to the athletes.',exp:'<span class="exp-rule"><span class="label">📐 不規則動詞の過去分詞</span>give → gave → <strong>given</strong></span><span class="exp-ok">✅ Many medals were given to the athletes.</span><span class="exp-tip">💡 give-gave-given。「〜に与えられた」→ given to 〜</span>',xp:7},
+      {jp:'たくさんのメダルが選手たちに与えられました。（many を使って）',a:'Many medals were given to the athletes.',exp:'<span class="exp-rule"><span class="label">📐 不規則動詞の過去分詞</span>give → gave → <strong>given</strong></span><span class="exp-ok">✅ Many medals were given to the athletes.</span><span class="exp-tip">💡 give-gave-given。「〜に与えられた」→ given to 〜</span>',xp:7},
       {jp:'この歌はコットンに歌われましたか？',a:'Was this song sung by Cotton?',exp:'<span class="exp-rule"><span class="label">📐 過去受け身の疑問文</span><strong>Was</strong> + this song + 過去分詞 ...?</span><span class="exp-ok">✅ Was this song sung by Cotton?</span><span class="exp-tip">💡 sing-sang-sung（過去分詞は sung）</span>',xp:7},
       {jp:'そのビルは100年前に建てられました。',a:'The building was built 100 years ago.',exp:'<span class="exp-rule"><span class="label">📐 不規則動詞の過去分詞</span>build → built → <strong>built</strong></span><span class="exp-ok">✅ The building was built 100 years ago.</span><span class="exp-tip">💡 build-built-built（過去形と過去分詞が同じ）</span>',xp:6},
     ];
@@ -592,7 +596,7 @@ function renderUnit1Section(sid){
       {q:'The letter ___ not sent yesterday.',jp:'その手紙は昨日送られませんでした。',a:'was',choices:['is','was','were'],exp:'過去の受け身否定（単数）→ was not sent。',xp:4},
       {q:'Japanese is ___ all over the world.',jp:'日本語は世界中で話されています。',a:'spoken',choices:['speak','spoke','spoken'],exp:'受け身の文 → be動詞 + 過去分詞。speakの過去分詞はspoken。',xp:4},
       {q:'This bridge was ___ 200 years ago.',jp:'この橋は200年前に建てられました。',a:'built',choices:['build','built','building'],exp:'受け身の文 → be動詞 + 過去分詞。buildの過去分詞はbuilt。',xp:4},
-      {q:'The song was ___ by Shimofuriboshi.',jp:'その歌は霜降り明星によって歌われました。',a:'sung',choices:['sing','sang','sung'],exp:'受け身の文 → be動詞 + 過去分詞。singの過去分詞はsung。',xp:4},
+      {q:'The song was ___ by Shimofuri Myojo.',jp:'その歌は霜降り明星によって歌われました。',a:'sung',choices:['sing','sang','sung'],exp:'受け身の文 → be動詞 + 過去分詞。singの過去分詞はsung。',xp:4},
       {q:'These letters ___ written in English.',jp:'これらの手紙は英語で書かれています。',a:'are',choices:['am','is','are'],exp:'現在の受け身（These letters=複数）→ are written。',xp:3},
       {q:'The book ___ not read by students.',jp:'その本は学生によっては読まれていません（現在）。',a:'is',choices:['am','is','are'],exp:'現在の受け身否定（単数）→ is not read。',xp:4},
     ];
@@ -616,7 +620,7 @@ function renderUnit2Section(sid){
       {who:'kyon',text:'「私はM-1のライブに行ったことがある」って英語で言いたいんだけど？'},
       {who:'nishi',text:'現在完了の経験用法だよ。have + 過去分詞で作る。「I have been to an M-1 live show.」こんな感じ。'},
       {who:'kyon',text:'have been！過去形のwent じゃないの？'},
-      {who:'nishi',text:'そこが大事なポイント。現在完了は「今の時点でその経験がある」というニュアンス。beenはgoの現在完了形で「行ったことがある」という経験を表す。'},
+      {who:'nishi',text:'そこが大事なポイント。現在完了は「今の時点でその経験がある」というニュアンス。been は be の過去分詞で、have been to 〜 で「〜に行ったことがある」という経験を表す（go の過去分詞は gone）。'},
       {who:'kyon',text:'haveとhas の使い分けもあるの？'},
       {who:'nishi',text:'I / you / we / they は have、he / she / it は has を使う。過去分詞は受け身のときと同じ形だよ。'},
     ]);
@@ -635,7 +639,7 @@ function renderUnit2Section(sid){
     html+='<div class="section-title">経験 have/has + 過去分詞</div><div class="section-sub">「〜したことがある」の基本パターンを練習しよう</div>';
     html+='<div class="grammar-card"><div class="grammar-card-title">📐 重要：have / has の使い分け</div>';
     html+='<div class="formula-box"><span class="highlight">have</span>: I, You, We, They<br><span class="highlight">has</span>: He, She, It（三人称単数）</div>';
-    html+='<div class="grammar-rule"><div class="rule-title">よく出る過去分詞（現在完了用）</div><div class="en">go → gone / been, see → seen, eat → eaten, visit → visited, try → tried, read → read, write → written, speak → spoken, meet → met, win → won</div></div></div>';
+    html+='<div class="grammar-rule"><div class="rule-title">よく出る過去分詞（現在完了用）</div><div class="en">go → gone（「行ったことがある」は have been to）, see → seen, eat → eaten, visit → visited, try → tried, read → read, write → written, speak → spoken, meet → met, win → won</div></div></div>';
     html+='<div class="practice-section"><div class="practice-title">✏️ 練習問題</div>';
     var qs=[
       {q:'I ___ visited Kyoto twice.',jp:'私は京都を2回訪れたことがあります。',a:'have',choices:['have','has','had'],exp:'<span class="exp-rule"><span class="label">📐 現在完了の基本</span>I → <strong>have</strong> + 過去分詞</span><span class="exp-ok">✅ I have visited Kyoto twice.</span><br><span class="exp-ng">❌ I has visited（×）</span><span class="exp-tip">💡 I/You/We/They → have　He/She/It → has</span>',xp:3},
@@ -676,8 +680,8 @@ function renderUnit2Section(sid){
     html+='</div><div class="practice-section"><div class="practice-title">✏️ 練習問題</div>';
     var qs2=[
       {q:'I have ___ been to Hokkaido.',jp:'私は北海道に一度も行ったことがありません。',a:'never',choices:['ever','never','before'],exp:'<span class="exp-rule"><span class="label">📐 neverの使い方</span>have + <strong>never</strong> + 過去分詞（否定の意味を含む）</span><span class="exp-ok">✅ I have never been to Hokkaido.</span><br><span class="exp-ng">❌ I have not never（×　notは不要）</span><span class="exp-tip">💡 never には既に否定の意味がある。not は不要！</span>',xp:4},
-      {q:'Have you ___ eaten sushi?',jp:'あなたは今までに寿司を食べたことがありますか？',a:'ever',choices:['ever','never','before'],exp:'<span class="exp-rule"><span class="label">📐 everの使い方</span>Have you <strong>ever</strong> + 過去分詞 ...?（疑問文で使う）</span><span class="exp-ok">✅ Have you ever eaten sushi?</span><span class="exp-tip">💡 ever は「今までに」という意味。疑問文専用！</span>',xp:4},
-      {q:'She has ___ seen a manzai show.',jp:'彼女は以前漫才のショーを見たことがあります。',a:'before',choices:['ever','never','before'],exp:'<span class="exp-rule"><span class="label">📐 beforeの使い方</span>have + 過去分詞 + <strong>before</strong>（文末）</span><span class="exp-ok">✅ She has seen a manzai show before.</span><span class="exp-tip">💡 before は肯定文で「以前に」。文末が定位置</span>',xp:4},
+      {q:'Have you ___ eaten sushi?',jp:'あなたは今までに寿司を食べたことがありますか？',a:'ever',choices:['ever','never','before'],exp:'<span class="exp-rule"><span class="label">📐 everの使い方</span>Have you <strong>ever</strong> + 過去分詞 ...?（疑問文で使う）</span><span class="exp-ok">✅ Have you ever eaten sushi?</span><span class="exp-tip">💡 ever は「今までに」という意味。疑問文でよく使う！</span>',xp:4},
+      {q:'She has seen a manzai show ___ .',jp:'彼女は以前漫才のショーを見たことがあります。',a:'before',choices:['ever','never','before'],exp:'<span class="exp-rule"><span class="label">📐 beforeの使い方</span>have + 過去分詞 + <strong>before</strong>（文末）</span><span class="exp-ok">✅ She has seen a manzai show before.</span><span class="exp-tip">💡 before は肯定文で「以前に」。文末が定位置</span>',xp:4},
       {q:'He has ___ tried sushi.',jp:'彼は一度も寿司を食べてみたことがありません。',a:'never',choices:['ever','never','before'],exp:'<span class="exp-rule"><span class="label">📐 never（三単現）</span>has + <strong>never</strong> + 過去分詞</span><span class="exp-ok">✅ He has never tried sushi.</span><span class="exp-tip">💡 主語が三単現（He/She/It）→ has never + 過去分詞</span>',xp:4},
       {q:'Have they ___ visited Japan?',jp:'彼らは今までに日本を訪れたことがありますか？',a:'ever',choices:['ever','never','before'],exp:'<span class="exp-rule"><span class="label">📐 everの疑問文</span>Have + 主語 + <strong>ever</strong> + 過去分詞 ...?</span><span class="exp-ok">✅ Have they ever visited Japan?</span><span class="exp-tip">💡 ever の位置：have と過去分詞の間</span>',xp:4},
       {q:'I have seen this movie ___ .',jp:'私は以前この映画を見たことがあります。',a:'before',choices:['ever','never','before'],exp:'「以前に」は before。肯定文の文末に置く。',xp:3},
@@ -740,16 +744,16 @@ function renderUnit2Section(sid){
       {q:'She ___ eaten natto before.',jp:'彼女は以前納豆を食べたことがあります。',a:'has',choices:['have','has','had'],exp:'She（三単現）→ has + 過去分詞。',xp:2},
       {q:'I have ___ seen that movie.',jp:'私はその映画を一度も見たことがありません。',a:'never',choices:['ever','never','before'],exp:'「一度も〜ない」→ never。have never + 過去分詞。',xp:2},
       {q:'Have you ___ tried Osaka food?',jp:'あなたは今までに大阪の食べ物を食べたことがありますか？',a:'ever',choices:['ever','never','before'],exp:'疑問文「今までに」→ ever。',xp:2},
-      {q:'He has visited Kyoto ___ .',jp:'彼は京都を3回訪れたことがあります。',a:'three times',choices:['once','twice','three times'],exp:'<span class="exp-rule"><span class="label">📐 回数の表現</span>3回 = <strong>three times</strong></span><span class="exp-ok">✅ She has visited Tokyo three times.</span><span class="exp-tip">💡 4回以上も同様：four times, five times...</span>',xp:3},
-      {q:'We ___ seen Reiwa Roman live.',jp:'私たちは令和ロマンのライブを見たことがあります。',a:'have',choices:['have','has','had'],exp:'<span class="exp-rule"><span class="label">📐 現在完了</span>We → <strong>have</strong> + 過去分詞</span><span class="exp-ok">✅ We have seen Kamaitachi live.</span><span class="exp-tip">💡 see の過去分詞は seen（不規則）</span>',xp:2},
+      {q:'He has visited Kyoto ___ .',jp:'彼は京都を3回訪れたことがあります。',a:'three times',choices:['once','twice','three times'],exp:'<span class="exp-rule"><span class="label">📐 回数の表現</span>3回 = <strong>three times</strong></span><span class="exp-ok">✅ He has visited Kyoto three times.</span><span class="exp-tip">💡 4回以上も同様：four times, five times...</span>',xp:3},
+      {q:'We ___ seen Reiwa Roman live.',jp:'私たちは令和ロマンのライブを見たことがあります。',a:'have',choices:['have','has','had'],exp:'<span class="exp-rule"><span class="label">📐 現在完了</span>We → <strong>have</strong> + 過去分詞</span><span class="exp-ok">✅ We have seen Reiwa Roman live.</span><span class="exp-tip">💡 see の過去分詞は seen（不規則）</span>',xp:2},
       {q:'___ many times have you been to Tokyo?',jp:'あなたは何回東京に行ったことがありますか？',a:'How',choices:['How','What','Which'],exp:'回数を尋ねる → How many times have you + 過去分詞？',xp:3},
       {q:'She has ___ spoken in public.',jp:'彼女は一度も人前でスピーチしたことがありません。',a:'never',choices:['ever','never','before'],exp:'「一度も〜ない」→ has never + 過去分詞。',xp:3},
       {q:'I have seen him ___ .',jp:'私は以前彼を見たことがあります。',a:'before',choices:['ever','never','before'],exp:'「以前に」→ before（文末）。',xp:2},
-      {q:'How many times ___ she met that comedian?',jp:'彼女はその芸人に何回会ったことがありますか？',a:'has',choices:['have','has','had'],exp:'<span class="exp-rule"><span class="label">📐 回数疑問文（三単現）</span>How many times <strong>has</strong> she + 過去分詞 ...?</span><span class="exp-ok">✅ How many times has she won the prize?</span><span class="exp-tip">💡 主語が三単現 → has を使う</span>',xp:4},
-      {q:'I have ___ read this novel.',jp:'私は以前この小説を読んだことがあります。',a:'before',choices:['ever','never','before'],exp:'「以前に」→ before。肯定文では文末。',xp:3},
-      {q:'They have visited Japan ___ .',jp:'彼らは日本を1回訪れたことがあります。',a:'once',choices:['once','twice','three times'],exp:'<span class="exp-rule"><span class="label">📐 回数の表現</span>1回 = <strong>once</strong></span><span class="exp-ok">✅ I have been there once.</span><span class="exp-tip">💡 once = one time の意味。「いつか」ではなく「1回」</span>',xp:2},
+      {q:'How many times ___ she met that comedian?',jp:'彼女はその芸人に何回会ったことがありますか？',a:'has',choices:['have','has','had'],exp:'<span class="exp-rule"><span class="label">📐 回数疑問文（三単現）</span>How many times <strong>has</strong> she + 過去分詞 ...?</span><span class="exp-ok">✅ How many times has she met that comedian?</span><span class="exp-tip">💡 主語が三単現 → has を使う</span>',xp:4},
+      {q:'I have read this novel ___ .',jp:'私は以前この小説を読んだことがあります。',a:'before',choices:['ever','never','before'],exp:'「以前に」→ before。肯定文では文末。',xp:3},
+      {q:'They have visited Japan ___ .',jp:'彼らは日本を1回訪れたことがあります。',a:'once',choices:['once','twice','three times'],exp:'<span class="exp-rule"><span class="label">📐 回数の表現</span>1回 = <strong>once</strong></span><span class="exp-ok">✅ They have visited Japan once.</span><span class="exp-tip">💡 once = one time の意味。「いつか」ではなく「1回」</span>',xp:2},
       {q:'Have you ever ___ Mt. Fuji?',jp:'あなたは今までに富士山に登ったことがありますか？',a:'climbed',choices:['climb','climbed','climbing'],exp:'have ever + 過去分詞。climbの過去分詞はclimbed。',xp:4},
-      {q:'Kyon has never ___ to Paris.',jp:'きょんはパリに行ったことがありません。',a:'been',choices:['go','went','been'],exp:'has never + 過去分詞。beの現在完了はbeen（been to = 行ったことがある）。',xp:5},
+      {q:'Kyon has never ___ to Paris.',jp:'きょんはパリに行ったことがありません。',a:'been',choices:['go','went','been'],exp:'has never + 過去分詞。beの過去分詞はbeen（been to = 行ったことがある）。',xp:5},
       {q:'I have ___ that song many times.',jp:'私はその歌を何回も聞いたことがあります。',a:'heard',choices:['hear','heard','hearing'],exp:'have + 過去分詞。hearの過去分詞はheard。',xp:4},
       {q:'She ___ tried sushi once.',jp:'彼女は寿司を1回食べたことがあります。',a:'has',choices:['have','has','had'],exp:'She（三単現）→ has tried。',xp:2},
       {q:'How many times have you ___ this game?',jp:'あなたはこのゲームを何回やったことがありますか？',a:'played',choices:['play','played','playing'],exp:'have + 過去分詞。playの過去分詞はplayed。',xp:3},
@@ -782,7 +786,7 @@ function renderUnit3Section(sid){
       {who:'nishi',text:'for は「〜の間」（期間の長さ）、since は「〜から」（起点の時点）。「for ten years」「since 2015」という感じで使い分ける。'},
     ]);
     html+='<div class="grammar-card"><div class="grammar-card-title">📐 継続用法と完了用法</div>';
-    html+='<div class="formula-box">継続: 主語 + <span class="highlight">have/has</span> + 過去分詞 + <span class="highlight">for / since</span> 〜<br>完了: 主語 + <span class="highlight">have/has</span> + <span class="highlight">just / already / yet</span> + 過去分詞</div>';
+    html+='<div class="formula-box">継続: 主語 + <span class="highlight">have/has</span> + 過去分詞 + <span class="highlight">for / since</span> 〜<br>完了: 主語 + <span class="highlight">have/has</span> + <span class="highlight">just / already</span> + 過去分詞<br>否定文・疑問文では文末に <span class="highlight">yet</span></div>';
     html+=exList(uid,sid,[
       ['I have lived here for five years.','私はここに5年間住んでいます。'],
       ['She has studied English since 2020.','彼女は2020年から英語を勉強しています。'],
@@ -802,7 +806,7 @@ function renderUnit3Section(sid){
       {q:'I have studied English ___ three years.',jp:'私は3年間英語を勉強しています。',a:'for',choices:['for','since','during'],exp:'<span class="exp-rule"><span class="label">📐 継続：forの使い方</span><strong>for</strong> + 期間の長さ（数字＋時間単位）</span><span class="exp-ok">✅ I have studied English for three years.</span><span class="exp-tip">💡 for = 「〜の間」。for two hours / for a week なども同様</span>',xp:3},
       {q:'She has lived in Osaka ___ 2018.',jp:'彼女は2018年から大阪に住んでいます。',a:'since',choices:['for','since','from'],exp:'<span class="exp-rule"><span class="label">📐 継続：sinceの使い方</span><strong>since</strong> + 過去の時点（年・月・日・曜日など）</span><span class="exp-ok">✅ She has lived in Osaka since 2018.</span><span class="exp-tip">💡 since = 「〜から（ずっと）」。起点となる時点を示す</span>',xp:3},
       {q:'They have been friends ___ many years.',jp:'彼らは何年も友達です。',a:'for',choices:['for','since','during'],exp:'<span class="exp-rule"><span class="label">📐 for + 期間</span>for + 期間の長さ</span><span class="exp-ok">✅ They have been friends for many years.</span><span class="exp-tip">💡 for many years = 何年も。for a long time = 長い間</span>',xp:3},
-      {q:'Kyon has wanted to do comedy ___ she was a child.',jp:'きょんは子どもの頃からお笑いをやりたいと思っています。',a:'since',choices:['for','since','from'],exp:'<span class="exp-rule"><span class="label">📐 since + 節</span>since + 過去の時点を表す節（since I was a child）</span><span class="exp-ok">✅ Kyon has wanted to do comedy since she was a child.</span><span class="exp-tip">💡 since の後に「主語+過去形」の節も使える</span>',xp:4},
+      {q:'Kyon has wanted to do comedy ___ he was a child.',jp:'きょんは子どもの頃からお笑いをやりたいと思っています。',a:'since',choices:['for','since','from'],exp:'<span class="exp-rule"><span class="label">📐 since + 節</span>since + 過去の時点を表す節（since I was a child）</span><span class="exp-ok">✅ Kyon has wanted to do comedy since he was a child.</span><span class="exp-tip">💡 since の後に「主語+過去形」の節も使える</span>',xp:4},
       {q:'I ___ known him for ten years.',jp:'私は彼と10年来の知り合いです。',a:'have',choices:['have','has','had'],exp:'<span class="exp-rule"><span class="label">📐 継続の現在完了</span>I have + 過去分詞 + for 〜</span><span class="exp-ok">✅ I have known him for ten years.</span><span class="exp-tip">💡 know の過去分詞は known（不規則）</span>',xp:4},
       {q:'She ___ practiced manzai since last spring.',jp:'彼女は去年の春から漫才を練習しています。',a:'has',choices:['have','has','had'],exp:'<span class="exp-rule"><span class="label">📐 継続（三単現）</span>She → has + 過去分詞 + since 〜</span><span class="exp-ok">✅ She has practiced manzai since last spring.</span><span class="exp-tip">💡 practice は規則動詞：practiced</span>',xp:4},
       {q:'How long ___ you lived here?',jp:'あなたはここに住んでいてどのくらいになりますか？',a:'have',choices:['have','has','had'],exp:'<span class="exp-rule"><span class="label">📐 継続の疑問文</span><strong>How long</strong> have you + 過去分詞 ...?</span><span class="exp-ok">✅ How long have you lived here?</span><span class="exp-tip">💡 How long = 「どのくらいの間」。for や since のある文の疑問形</span>',xp:5},
@@ -833,13 +837,13 @@ function renderUnit3Section(sid){
     html+='<div class="practice-section"><div class="practice-title">✏️ 練習問題</div>';
     var qs2=[
       {q:'I have ___ finished the report.',jp:'私はちょうどレポートを終えたところです。',a:'just',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：just</span>have + <strong>just</strong> + 過去分詞（「ちょうど〜したところ」）</span><span class="exp-ok">✅ I have just finished the report.</span><span class="exp-tip">💡 just の位置：have と過去分詞の間</span>',xp:3},
-      {q:'She has ___ done her homework.',jp:'彼女はもう宿題をやってしまいました。',a:'already',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：already</span>has + <strong>already</strong> + 過去分詞（肯定文）</span><span class="exp-ok">✅ Kyon has already learned the lines.</span><span class="exp-tip">💡 already は肯定文専用。位置は have と過去分詞の間</span>',xp:3},
+      {q:'She has ___ done her homework.',jp:'彼女はもう宿題をやってしまいました。',a:'already',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：already</span>has + <strong>already</strong> + 過去分詞（肯定文）</span><span class="exp-ok">✅ She has already done her homework.</span><span class="exp-tip">💡 already は肯定文で使うのが基本。位置は have と過去分詞の間</span>',xp:3},
       {q:'I have not read the book ___ .',jp:'私はまだその本を読んでいません。',a:'yet',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：yet（否定文）</span>have not + 過去分詞 + <strong>yet</strong>（「まだ〜ない」）</span><span class="exp-ok">✅ I have not read the book yet.</span><span class="exp-tip">💡 yet は文末。否定文では「まだ〜ない」の意味</span>',xp:3},
       {q:'Have you eaten lunch ___ ?',jp:'もう昼食を食べましたか？',a:'yet',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：yet（疑問文）</span>Have you + 過去分詞 + <strong>yet</strong>?（「もう〜しましたか」）</span><span class="exp-ok">✅ Have you eaten lunch yet?</span><span class="exp-tip">💡 yet は疑問文でも使える。「もう〜しましたか」の意味</span>',xp:3},
       {q:'He has ___ left for Osaka.',jp:'彼はちょうど大阪に向けて出発したところです。',a:'just',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：just</span>have + <strong>just</strong> + 過去分詞</span><span class="exp-ok">✅ He has just left for Osaka.</span><span class="exp-tip">💡 just は「ちょうど〜したばかり」</span>',xp:4},
-      {q:'Kyon has ___ learned the lines.',jp:'きょんはもうセリフを覚えてしまいました。',a:'already',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：already</span>has + <strong>already</strong> + 過去分詞（肯定文）</span><span class="exp-ok">✅ Kyon has already learned the lines.</span><span class="exp-tip">💡 already は肯定文専用。位置は have と過去分詞の間</span>',xp:4},
+      {q:'Kyon has ___ learned the lines.',jp:'きょんはもうセリフを覚えてしまいました。',a:'already',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：already</span>has + <strong>already</strong> + 過去分詞（肯定文）</span><span class="exp-ok">✅ Kyon has already learned the lines.</span><span class="exp-tip">💡 already は肯定文で使うのが基本。位置は have と過去分詞の間</span>',xp:4},
       {q:'Has she arrived ___?',jp:'もう彼女は到着しましたか？',a:'yet',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 yet（疑問文）</span>Has she + 過去分詞 + <strong>yet</strong>?</span><span class="exp-ok">✅ Has she arrived yet?</span><span class="exp-tip">💡 三単現の疑問文は Has。yet は文末</span>',xp:4},
-      {q:'They have ___ not decided.',jp:'彼らはまだ決めていません。',a:'yet',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 yet（否定文）</span>have not + 過去分詞 + <strong>yet</strong></span><span class="exp-ok">✅ They have not decided yet.</span><span class="exp-tip">💡 yet は文末。have not ... yet = 「まだ〜していない」</span>',xp:4},
+      {q:'They have not decided ___ .',jp:'彼らはまだ決めていません。',a:'yet',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 yet（否定文）</span>have not + 過去分詞 + <strong>yet</strong></span><span class="exp-ok">✅ They have not decided yet.</span><span class="exp-tip">💡 yet は文末。have not ... yet = 「まだ〜していない」</span>',xp:4},
     ];
     qs2.forEach(function(q,i){
       var qid=uid+'_s'+sid+'_q'+i;
@@ -870,11 +874,11 @@ function renderUnit3Section(sid){
       {q:'I have ___ finished my work.',jp:'私はちょうど仕事を終えたところです。',a:'just',choices:['just','already','never'],exp:'<span class="exp-rule"><span class="label">📐 完了：just</span>have + <strong>just</strong> + 過去分詞（完了）</span><span class="exp-ok">✅ I have just finished my work.</span><span class="exp-tip">💡 just は「ちょうど〜したばかり」</span>',xp:3},
       {q:'How ___ have you studied English?',jp:'あなたはどのくらいの間英語を勉強していますか？',a:'long',choices:['long','many','much'],exp:'<span class="exp-rule"><span class="label">📐 継続の疑問文</span><strong>How long</strong> have you + 過去分詞 ...?</span><span class="exp-ok">✅ How long have you studied English?</span><span class="exp-tip">💡 答え：For ～ years. / Since ～.</span>',xp:4},
       {q:'Have you done the dishes ___?',jp:'もうお皿を洗いましたか？',a:'yet',choices:['just','already','yet'],exp:'疑問文の「もう」（完了）→ yet。',xp:4},
-      {q:'He has ___ visited that country once.',jp:'彼はその国を1回訪れたことがあります。',a:'visited',choices:['visit','visited','visiting'],exp:'<span class="exp-rule"><span class="label">📐 経験の現在完了</span>have + <strong>visited</strong>（規則動詞）</span><span class="exp-ok">✅ He has visited that country once.</span><span class="exp-tip">💡 visit は規則動詞：visited</span>',xp:4},
-      {q:'Cotton has performed ___ more than ten years.',jp:'コットンは10年以上活動しています。',a:'for',choices:['for','since','yet'],exp:'<span class="exp-rule"><span class="label">📐 継続：for</span>has performed + <strong>for</strong> + 期間</span><span class="exp-ok">✅ Cotton has performed for more than ten years.</span><span class="exp-tip">💡 more than = 「〜以上」</span>',xp:4},
+      {q:'He has ___ that country once.',jp:'彼はその国を1回訪れたことがあります。',a:'visited',choices:['visit','visited','visiting'],exp:'<span class="exp-rule"><span class="label">📐 経験の現在完了</span>have + <strong>visited</strong>（規則動詞）</span><span class="exp-ok">✅ He has visited that country once.</span><span class="exp-tip">💡 visit は規則動詞：visited</span>',xp:4},
+      {q:'Cotton has performed ___ more than ten years.',jp:'コットンは10年以上活動しています。',a:'for',choices:['for','since','yet'],exp:'<span class="exp-rule"><span class="label">📐 継続：for</span>has performed + <strong>for</strong> + 期間</span><span class="exp-ok">✅ Cotton has performed for more than ten years.</span><span class="exp-tip">💡 more than = 「〜より多い」（日本語では「〜以上」と訳すことが多い）</span>',xp:4},
       {q:'She has ___ read the email.',jp:'彼女はもうそのメールを読んでしまいました。',a:'already',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：already</span>has + <strong>already</strong> + 過去分詞</span><span class="exp-ok">✅ She has already read the email.</span><span class="exp-tip">💡 already の位置：has と過去分詞の間</span>',xp:3},
       {q:'How many times ___ you seen Kamaitachi?',jp:'あなたはかまいたちを何回見たことがありますか？',a:'have',choices:['have','has','had'],exp:'<span class="exp-rule"><span class="label">📐 回数疑問文</span>How many times have you + 過去分詞?</span><span class="exp-ok">✅ How many times have you seen Kamaitachi?</span><span class="exp-tip">💡 答え：I have seen them ～ times.</span>',xp:4},
-      {q:'I ___ not finished my homework ___.',jp:'私はまだ宿題を終えていません。',a:'have',choices:['have','has','had'],exp:'<span class="exp-rule"><span class="label">📐 完了の否定</span>I have not + 過去分詞 + <strong>yet</strong></span><span class="exp-ok">✅ I have not finished my homework yet.</span><span class="exp-tip">💡 I → have。yet は文末</span>',xp:4},
+      {q:'I ___ not finished my homework yet.',jp:'私はまだ宿題を終えていません。',a:'have',choices:['have','has','had'],exp:'<span class="exp-rule"><span class="label">📐 完了の否定</span>I have not + 過去分詞 + <strong>yet</strong></span><span class="exp-ok">✅ I have not finished my homework yet.</span><span class="exp-tip">💡 I → have。yet は文末</span>',xp:4},
     ];
     qs3.forEach(function(q,i){
       var qid=uid+'_s'+sid+'_q'+i;
@@ -898,24 +902,24 @@ function renderUnit3Section(sid){
     var test=[
       {q:'I have lived here ___ five years.',jp:'私はここに5年間住んでいます。',a:'for',choices:['for','since','yet'],exp:'「5年間」という期間の長さ → for。',xp:2},
       {q:'She has studied English ___ 2021.',jp:'彼女は2021年から英語を勉強しています。',a:'since',choices:['for','since','during'],exp:'「2021年から」という起点 → since。',xp:2},
-      {q:'I have ___ finished my dinner.',jp:'私はちょうど夕食を終えたところです。',a:'just',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：just</span>have + <strong>just</strong> + 過去分詞</span><span class="exp-ok">✅ He has just left for Osaka.</span><span class="exp-tip">💡 just は「ちょうど〜したばかり」</span>',xp:2},
-      {q:'She has ___ done the dishes.',jp:'彼女はもう皿洗いをしてしまいました。',a:'already',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：already</span>has + <strong>already</strong> + 過去分詞（肯定文）</span><span class="exp-ok">✅ Kyon has already learned the lines.</span><span class="exp-tip">💡 already は肯定文専用。位置は have と過去分詞の間</span>',xp:2},
+      {q:'I have ___ finished my dinner.',jp:'私はちょうど夕食を終えたところです。',a:'just',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：just</span>have + <strong>just</strong> + 過去分詞</span><span class="exp-ok">✅ I have just finished my dinner.</span><span class="exp-tip">💡 just は「ちょうど〜したばかり」</span>',xp:2},
+      {q:'She has ___ done the dishes.',jp:'彼女はもう皿洗いをしてしまいました。',a:'already',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：already</span>has + <strong>already</strong> + 過去分詞（肯定文）</span><span class="exp-ok">✅ She has already done the dishes.</span><span class="exp-tip">💡 already は肯定文で使うのが基本。位置は have と過去分詞の間</span>',xp:2},
       {q:'Have you eaten lunch ___?',jp:'もう昼食を食べましたか？',a:'yet',choices:['just','already','yet'],exp:'疑問文の「もう〜しましたか」→ yet。',xp:2},
       {q:'I have not read the book ___.',jp:'私はまだその本を読んでいません。',a:'yet',choices:['just','already','yet'],exp:'否定文の「まだ〜ない」→ yet（文末）。',xp:2},
       {q:'He ___ known her for a long time.',jp:'彼は彼女と長い付き合いです。',a:'has',choices:['have','has','had'],exp:'He（三単現）→ has + 過去分詞（known）。',xp:3},
-      {q:'___ long have you practiced manzai?',jp:'あなたはどのくらい漫才を練習していますか？',a:'How',choices:['How','What','Which'],exp:'<span class="exp-rule"><span class="label">📐 継続の疑問文</span><strong>How long</strong> have you + 過去分詞 ...?</span><span class="exp-ok">✅ How long have you studied English?</span><span class="exp-tip">💡 答え：For ～ years. / Since ～.</span>',xp:3},
+      {q:'___ long have you practiced manzai?',jp:'あなたはどのくらい漫才を練習していますか？',a:'How',choices:['How','What','Which'],exp:'<span class="exp-rule"><span class="label">📐 継続の疑問文</span><strong>How long</strong> have you + 過去分詞 ...?</span><span class="exp-ok">✅ How long have you practiced manzai?</span><span class="exp-tip">💡 答え：For ～ years. / Since ～.</span>',xp:3},
       {q:'Cotton has performed together ___ over ten years.',jp:'コットンは10年以上一緒に活動しています。',a:'for',choices:['for','since','yet'],exp:'「10年以上」という期間 → for。',xp:3},
-      {q:'Kyon has practiced comedy ___ she was young.',jp:'きょんは若い頃からお笑いを練習しています。',a:'since',choices:['for','since','during'],exp:'「若い頃から」という起点（節）→ since。',xp:4},
-      {q:'I have ___ seen this movie.',jp:'私はちょうどこの映画を見たところです。',a:'just',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：just</span>have + <strong>just</strong> + 過去分詞</span><span class="exp-ok">✅ He has just left for Osaka.</span><span class="exp-tip">💡 just は「ちょうど〜したばかり」</span>',xp:3},
+      {q:'Kyon has practiced comedy ___ he was young.',jp:'きょんは若い頃からお笑いを練習しています。',a:'since',choices:['for','since','during'],exp:'「若い頃から」という起点（節）→ since。',xp:4},
+      {q:'I have ___ seen this movie.',jp:'私はちょうどこの映画を見たところです。',a:'just',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：just</span>have + <strong>just</strong> + 過去分詞</span><span class="exp-ok">✅ I have just seen this movie.</span><span class="exp-tip">💡 just は「ちょうど〜したばかり」</span>',xp:3},
       {q:'She has ___ left for school.',jp:'彼女はもう学校に出発してしまいました。',a:'already',choices:['just','already','yet'],exp:'「もう〜した」肯定文 → already。',xp:3},
       {q:'Have they arrived ___?',jp:'もう彼らは着きましたか？',a:'yet',choices:['just','already','yet'],exp:'疑問文「もう〜しましたか」→ yet。',xp:3},
       {q:'I ___ studied English for three years.',jp:'私は3年間英語を勉強しています。',a:'have',choices:['have','has','had'],exp:'I → have + 過去分詞。継続用法。',xp:2},
       {q:'She ___ lived in Tokyo since 2019.',jp:'彼女は2019年から東京に住んでいます。',a:'has',choices:['have','has','had'],exp:'She（三単現）→ has + 過去分詞。継続用法。',xp:2},
       {q:'We have not decided ___.',jp:'私たちはまだ決めていません。',a:'yet',choices:['just','already','yet'],exp:'否定文「まだ〜ない」→ yet（文末）。',xp:3},
       {q:'How long ___ she been a comedian?',jp:'彼女はどのくらいの間芸人をしていますか？',a:'has',choices:['have','has','had'],exp:'she（三単現）→ How long has she + 過去分詞？',xp:4},
-      {q:'I have ___ finished reading the book.',jp:'私はちょうど本を読み終わったところです。',a:'just',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：just</span>have + <strong>just</strong> + 過去分詞</span><span class="exp-ok">✅ He has just left for Osaka.</span><span class="exp-tip">💡 just は「ちょうど〜したばかり」</span>',xp:3},
+      {q:'I have ___ finished reading the book.',jp:'私はちょうど本を読み終わったところです。',a:'just',choices:['just','already','yet'],exp:'<span class="exp-rule"><span class="label">📐 完了：just</span>have + <strong>just</strong> + 過去分詞</span><span class="exp-ok">✅ I have just finished reading the book.</span><span class="exp-tip">💡 just は「ちょうど〜したばかり」</span>',xp:3},
       {q:'They have been friends ___ they were children.',jp:'彼らは子どもの頃からずっと友達です。',a:'since',choices:['for','since','during'],exp:'「子どもの頃から」という起点（節）→ since。',xp:4},
-      {q:'Has Kyon ___ performed at a big event?',jp:'きょんはもう大きなイベントで公演しましたか？',a:'already',choices:['just','already','yet'],exp:'肯定の意味の疑問文「もう〜しましたか」→ already（または yet も可）。',xp:4},
+      {q:'Has Kyon performed at a big event ___?',jp:'きょんはもう大きなイベントで公演しましたか？',a:'yet',choices:['just','already','yet'],exp:'疑問文の「もう〜しましたか」→ yet（文末）。',xp:4},
     ];
     test.forEach(function(q,i){
       var qid=uid+'_s'+sid+'_q'+i;
@@ -1088,7 +1092,7 @@ function renderUnit4Section(sid){
     html+='<div class="section-title">③ let/help + 人 + 動詞の原形</div><div class="section-sub">この型だけ to が付かない！「(人)に〜させる」「(人)が〜するのを手伝う」</div>';
     html+='<div class="grammar-card"><div class="grammar-card-title">📐 基本の型（要注意：toなし！）</div>';
     html+='<div class="formula-box">let / help + <span class="highlight">人</span> + <span class="highlight">動詞の原形</span>（toはつけない）....<br><small style="color:var(--text2)">例: Let us tell you about sea otters.<br>（ラッコについてお話しさせてください。）</small></div>';
-    html+='<div class="grammar-rule"><div class="rule-title">②との違いに注意！</div><div class="en">want / tell / ask → 人 の後に <strong>to</strong> がつく</div><div class="en">let / help → 人 の後は <strong>to なし</strong>、動詞の原形そのまま</div></div></div>';
+    html+='<div class="grammar-rule"><div class="rule-title">②との違いに注意！</div><div class="en">want / tell / ask → 人 の後に <strong>to</strong> がつく</div><div class="en">let / help → 人 の後は <strong>to なし</strong>、動詞の原形そのまま<br><small style="color:var(--text2)">（help は to をつけた形も実はあるけれど、教科書とテストでは to なしで書けばOK）</small></div></div></div>';
     html+=exList(uid,sid,[
       ['Let us tell you about sea otters.','ラッコについてお話しさせてください。'],
       ['People helped sea otters live safely.','人々はラッコが安全に生きる手助けをしました。'],
@@ -1100,13 +1104,13 @@ function renderUnit4Section(sid){
     html+='</div><div class="practice-section"><div class="practice-title">✏️ 練習問題</div>';
     var qs3=[
       {q:'Let me ___ you.',jp:'私にあなたを手伝わせてください。',a:'help',choices:['help','to help','helping'],exp:'<span class="exp-rule"><span class="label">📐 型</span>let + me + <strong>help</strong>（to なし・原形のまま）</span><span class="exp-ok">✅ Let me help you.</span><br><span class="exp-ng">❌ Let me to help you（×　toは不要）</span><span class="exp-tip">💡 let の後は絶対に to をつけない！</span>',xp:3},
-      {q:'People helped sea otters ___ safely.',jp:'人々はラッコが安全に生きるのを助けました。',a:'live',choices:['live','to live','living'],exp:'<span class="exp-rule"><span class="label">📐 型</span>helped + sea otters + <strong>live</strong>（原形のまま）</span><span class="exp-ok">✅ People helped sea otters live safely.</span><span class="exp-tip">💡 help も to なし！これが②との一番の違い</span>',xp:3},
-      {q:'Can you help me ___ my homework?',jp:'宿題を終えるのを手伝ってくれますか？',a:'finish',choices:['finish','to finish','finishing'],exp:'<span class="exp-rule"><span class="label">📐 型</span>help + me + <strong>finish</strong>（原形のまま）</span><span class="exp-ok">✅ Can you help me finish my homework?</span><span class="exp-tip">💡 finish（終える）を原形のまま使う</span>',xp:3},
+      {q:'People helped sea otters ___ safely.',jp:'人々はラッコが安全に生きるのを助けました。',a:'live',choices:['live','lives','living'],exp:'<span class="exp-rule"><span class="label">📐 型</span>helped + sea otters + <strong>live</strong>（原形のまま）</span><span class="exp-ok">✅ People helped sea otters live safely.</span><span class="exp-tip">💡 help も to なし！これが②との一番の違い</span>',xp:3},
+      {q:'Can you help me ___ my homework?',jp:'宿題を終えるのを手伝ってくれますか？',a:'finish',choices:['finish','finishes','finishing'],exp:'<span class="exp-rule"><span class="label">📐 型</span>help + me + <strong>finish</strong>（原形のまま）</span><span class="exp-ok">✅ Can you help me finish my homework?</span><span class="exp-tip">💡 finish（終える）を原形のまま使う</span>',xp:3},
       {q:'Let us ___ you about endangered animals.',jp:'絶滅危惧種についてお話しさせてください。',a:'tell',choices:['tell','to tell','telling'],exp:'<span class="exp-rule"><span class="label">📐 型</span>Let + us + <strong>tell</strong>（原形のまま）</span><span class="exp-ok">✅ Let us tell you about endangered animals.</span><span class="exp-tip">💡 Let us 〜＝「私たちに〜させてください」という決まり文句</span>',xp:4},
       {q:'Don\'t let him ___ video games today.',jp:'今日は彼にテレビゲームをさせないでください。',a:'play',choices:['play','to play','plays'],exp:'<span class="exp-rule"><span class="label">📐 否定形</span>Don\'t let + him + <strong>play</strong>（原形のまま）</span><span class="exp-ok">✅ Don\'t let him play video games today.</span><span class="exp-tip">💡 否定文でも let の後の動詞は原形のまま変わらない</span>',xp:4},
-      {q:'Ken helped me ___ my umbrella.',jp:'ケンは私が傘を見つけるのを手伝ってくれました。',a:'find',choices:['find','to find','found'],exp:'<span class="exp-rule"><span class="label">📐 型</span>helped + me + <strong>find</strong>（原形のまま）</span><span class="exp-ok">✅ Ken helped me find my umbrella.</span><span class="exp-tip">💡 過去の文でも、help の後の動詞は原形のまま！</span>',xp:4},
+      {q:'Ken helped me ___ my umbrella.',jp:'ケンは私が傘を見つけるのを手伝ってくれました。',a:'find',choices:['find','finds','found'],exp:'<span class="exp-rule"><span class="label">📐 型</span>helped + me + <strong>find</strong>（原形のまま）</span><span class="exp-ok">✅ Ken helped me find my umbrella.</span><span class="exp-tip">💡 過去の文でも、help の後の動詞は原形のまま！</span>',xp:4},
       {q:'Let me ___ if you have any questions.',jp:'質問があれば私に知らせてください。',a:'know',choices:['know','to know','knowing'],exp:'<span class="exp-rule"><span class="label">📐 型</span>Let + me + <strong>know</strong>（原形のまま）</span><span class="exp-ok">✅ Let me know if you have any questions.</span><span class="exp-tip">💡 Let me know ＝ よく使う決まり文句「知らせてください」</span>',xp:4},
-      {q:'My father helped me ___ my bike.',jp:'父は私が自転車を直すのを手伝ってくれました。',a:'fix',choices:['fix','to fix','fixed'],exp:'<span class="exp-rule"><span class="label">📐 型</span>helped + me + <strong>fix</strong>（原形のまま）</span><span class="exp-ok">✅ My father helped me fix my bike.</span><span class="exp-tip">💡 fix（直す）も原形のまま使う</span>',xp:4},
+      {q:'My father helped me ___ my bike.',jp:'父は私が自転車を直すのを手伝ってくれました。',a:'fix',choices:['fix','fixes','fixed'],exp:'<span class="exp-rule"><span class="label">📐 型</span>helped + me + <strong>fix</strong>（原形のまま）</span><span class="exp-ok">✅ My father helped me fix my bike.</span><span class="exp-tip">💡 fix（直す）も原形のまま使う</span>',xp:4},
     ];
     qs3.forEach(function(q,i){
       var qid=uid+'_s'+sid+'_q'+i;
@@ -1143,10 +1147,10 @@ function renderUnit4Section(sid){
       {q:'I asked my father ___ take me to the zoo.',jp:'私は父に動物園に連れて行ってくれるように頼みました。',a:'to',choices:['to','for','taking'],exp:'asked + 人 + to ～。',xp:3},
       {q:'She wants ___ to come with her.',jp:'彼女は私に一緒に来てほしいと思っています。',a:'me',choices:['me','I','my'],exp:'want の後の「人」は目的格（me）。',xp:4},
       {q:'Let us ___ you about endangered animals.',jp:'絶滅危惧種についてお話しさせてください。',a:'tell',choices:['tell','to tell','telling'],exp:'let + 人 + 動詞の原形（toなし）。',xp:3},
-      {q:'People helped sea otters ___ safely.',jp:'人々はラッコが安全に生きる手助けをしました。',a:'live',choices:['live','to live','living'],exp:'help + 人 + 動詞の原形（toなし）。',xp:3},
-      {q:'Can you help me ___ my homework?',jp:'宿題を終えるのを手伝ってくれますか？',a:'finish',choices:['finish','to finish','finishing'],exp:'help + 人 + 動詞の原形（toなし）。',xp:3},
+      {q:'People helped sea otters ___ safely.',jp:'人々はラッコが安全に生きる手助けをしました。',a:'live',choices:['live','lives','living'],exp:'help + 人 + 動詞の原形（toなし）。',xp:3},
+      {q:'Can you help me ___ my homework?',jp:'宿題を終えるのを手伝ってくれますか？',a:'finish',choices:['finish','finishes','finishing'],exp:'help + 人 + 動詞の原形（toなし）。',xp:3},
       {q:'Don\'t let him ___ video games today.',jp:'今日は彼にテレビゲームをさせないでください。',a:'play',choices:['play','to play','plays'],exp:'否定文でも let の後は原形のまま。',xp:4},
-      {q:'Ken helped me ___ my umbrella.',jp:'ケンは私が傘を見つけるのを手伝ってくれました。',a:'find',choices:['find','to find','found'],exp:'help + 人 + 動詞の原形（toなし）。',xp:4},
+      {q:'Ken helped me ___ my umbrella.',jp:'ケンは私が傘を見つけるのを手伝ってくれました。',a:'find',choices:['find','finds','found'],exp:'help + 人 + 動詞の原形（toなし）。',xp:4},
       {q:'Let me ___ if you have any questions.',jp:'質問があれば私に知らせてください。',a:'know',choices:['know','to know','knowing'],exp:'Let me know ＝決まり文句。',xp:3},
       {q:'It is important for us ___ save endangered animals.',jp:'絶滅危惧種の動物を救うことは私たちにとって大切です。',a:'to',choices:['to','for','saving'],exp:'for us の後は to + 原形。',xp:3},
       {q:'I want more people ___ protect wild animals.',jp:'私はもっと多くの人に野生動物を守ってほしいです。',a:'to',choices:['to','for','protecting'],exp:'want + 人 + to ～。',xp:3},

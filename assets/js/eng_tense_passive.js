@@ -686,10 +686,10 @@ DATA[0]={type:'intro',
     {who:'nishi',text:'中学で使うのは7つだけ。変わるのは動詞のところだけだ。下を眺めるだけでいい。'}
   ],
   formulaTitle:'📐 空手で7つ',
-  formula:'I '+H('practice')+' karate.（練習する）<br>I '+H('practiced')+' karate.（練習した）<br>I '+H('will practice')+' karate.（練習するだろう）<br>I '+H('am practicing')+' karate.（練習している）<br>I '+H('was practicing')+' karate.（練習していた）<br>I '+H('have practiced')+' karate.（ずっと続けている）<br>I '+H('have been practicing')+' karate.（ずっとやり続けている）',
+  formula:'I '+H('practice')+' karate.（練習する）<br>I '+H('practiced')+' karate.（練習した）<br>I '+H('will practice')+' karate.（練習するだろう）<br>I '+H('am practicing')+' karate.（練習している）<br>I '+H('was practicing')+' karate.（練習していた）<br>I '+H('have practiced')+' karate for ten years.（10年間ずっと続けている）<br>I '+H('have been practicing')+' karate for ten years.（10年間ずっとやり続けている）',
   ruleTitle:'見るところは1つ',
   rules:[
-    '先頭の語で「いつ？」が決まる：was・過去形 → 過去 ／ am・have・原形 → 現在 ／ will → 未来'
+    'I のすぐあとの語（動詞のかたまりの先頭）で「いつ？」が決まる：was・過去形 → 過去 ／ am・have・原形 → 現在 ／ will → 未来'
   ],
   ex:[
     ['I practice karate.','私は空手を練習します。'],
@@ -697,7 +697,7 @@ DATA[0]={type:'intro',
     ['I have practiced karate for ten years.','私は10年間空手を続けています。']
   ],
   qs:[
-    {q:'I have been practicing karate.',jp:'この文の「いつ？（現在）」を決めている語は？',a:'have',choices:['have','been','practicing'],exp:E('時を決めるのは先頭の1語','I <strong>have</strong> been practicing karate.（have ＝ 現在）','been や practicing を見ても時はわからない','先頭が had なら過去、will なら未来になる'),xp:2},
+    {q:'I have been practicing karate.',jp:'この文の「いつ？（現在）」を決めている語は？',a:'have',choices:['have','been','practicing'],exp:E('時を決めるのは I のすぐあとの1語','I <strong>have</strong> been practicing karate.（have ＝ 現在）','been や practicing を見ても時はわからない','I のすぐあとが had なら過去、will なら未来になる'),xp:2},
     {q:'I am practicing karate now.',jp:'この文の「形」は？',a:'進行形（〜している最中）',choices:['進行形（〜している最中）','完了形（ずっと・もう・したことある）','ふつうの形'],exp:E('be ＋ 〜ing ＝ 進行形','I am practicing karate now.（今、練習している最中）','',''),xp:2},
     {q:'I have practiced karate for ten years.',jp:'この文の時制の名前は？',a:'現在完了形',choices:['現在完了形','過去形','現在進行形'],exp:E('have ＋ 過去分詞 ＝ 完了形。先頭が have ＝ 現在 → 現在完了形','I have practiced karate for ten years.（10年間ずっと続けている）','',''),xp:2},
     {q:'I will practice karate tomorrow.',jp:'この文の「いつ？」は？',a:'未来',choices:['未来','過去','現在'],exp:E('will ＋ 原形 ＝ 未来','I will practice karate tomorrow.','','tomorrow も未来の合図'),xp:2},
@@ -788,7 +788,7 @@ DATA[2]={type:'grammar',
 // ----- S3 完了形（空手とピアノのちがい）-----
 DATA[3]={type:'grammar',
   title:'③ 完了形：空手は have、ピアノは過去形',
-  sub:'今も続けている → have。もうやめた → 過去形。',
+  sub:'「for ＋ 期間」の文では、今も続けている → have。もうやめた → 過去形。',
   talk:[
     {who:'shun',text:'きょんさん、have は「今も手に持ってる」の have です。空手はまだ手に持ってる。ピアノはもう手放した。'},
     {who:'kyon',text:'今も手に持ってたら have！'}
@@ -831,7 +831,7 @@ DATA[4]={type:'grammar',
     {who:'kyon',text:'にっくんに見張られる文なの！？'},
     {who:'shun',text:'きょんさん、変わるのは前の am のとこだけ。頭だけかぶりかえてる着ぐるみですわ。'}
   ],
-  formula:'I '+H('am')+' watched by Nishimura.（見張られる）<br>I '+H('was')+' watched by Nishimura.（見張られた）<br>I '+H('will be')+' watched by Nishimura.（見張られるだろう）<br>I '+H('have been')+' watched by Nishimura.（ずっと見張られている）',
+  formula:'I '+H('am')+' watched by Nishimura.（見張られる）<br>I '+H('was')+' watched by Nishimura.（見張られた）<br>I '+H('will be')+' watched by Nishimura.（見張られるだろう）<br>I '+H('have been')+' watched by Nishimura since this morning.（今朝からずっと見張られている）',
   ruleTitle:'気をつけること',
   rules:[
     'will のうしろは be、have のうしろは been'
@@ -867,7 +867,7 @@ DATA[5]={type:'grammar',
   talk:[
     {who:'kuruma',text:'きょんさん！主語は I のままで、動詞だけタイムマシンに乗せたらいいんすよ！'}
   ],
-  formula:'I '+H('watch')+' 〜（毎日）→ I '+H('watched')+' 〜（去年）→ I '+H('am watching')+' 〜（今）→ I '+H('have seen')+' 〜（何回も）',
+  formula:'I '+H('watch')+' 〜（毎日）→ I '+H('watched')+' 〜（去年）→ I '+H('am watching')+' 〜（今）→ I '+H('have watched')+' 〜（何回も）',
   ruleTitle:'迷ったら',
   rules:[
     '合図の語を見る（every day / last 〜 / now / many times）'
@@ -918,7 +918,7 @@ DATA[6]={type:'test',
     {q:'I was ___ by Kuruma’s funny answer.',jp:'私はくるまのおもしろい答えに驚きました。',a:'surprised',choices:['surprised','surprising','surprise'],exp:E('私が驚く → was surprised（受け身の形）','I was surprised by Kuruma’s funny answer.','I was surprising 〜（「私が人を驚かせていた」になる）',''),xp:4},
     {q:'正しい文はどれ？',jp:'「私は10年間空手を続けている（今も）」',a:'I have practiced karate for ten years.',choices:['I have practiced karate for ten years.','I practiced karate for ten years.','I am practice karate for ten years.'],exp:E('今も続いている → 現在完了','I have practiced karate for ten years.','I practiced karate for ten years.（もうやめた意味になる）',''),xp:4},
     {q:'正しい文はどれ？',jp:'「私は8年間ピアノを弾いていた（12歳でやめた）」',a:'I played the piano for eight years.',choices:['I played the piano for eight years.','I have played the piano for eight years.','I have been playing the piano for eight years.'],exp:E('もうやめた → 過去形','I played the piano for eight years.','have played / have been playing は「今も続けている」意味',''),xp:4},
-    {q:'I had been practicing karate.',jp:'この文の「いつ？」を決めている語は？',a:'had',choices:['had','been','practicing'],exp:E('時を決めるのは先頭の1語。had ＝ 過去','I <strong>had</strong> been practicing karate.（過去完了進行形・高校）','','高校の形でも、ルールは同じ'),xp:4},
+    {q:'I had been practicing karate.',jp:'この文の「いつ？」を決めている語は？',a:'had',choices:['had','been','practicing'],exp:E('時を決めるのは I のすぐあとの1語。had ＝ 過去','I <strong>had</strong> been practicing karate.（過去完了進行形・高校）','','高校の形でも、ルールは同じ'),xp:4},
     {q:'I ___ going to watch the M-1 final this year.',jp:'私は今年M-1の決勝を見るつもりです。',a:'am',choices:['am','will','was'],exp:E('be going to ＋ 原形。I → am','I am going to watch the M-1 final this year.','',''),xp:4},
     {q:'I ___ the M-1 final last year.',jp:'私は去年M-1の決勝を見ました。',a:'watched',choices:['watched','have watched','watch'],exp:E('last year → 過去形（現在完了にしない）','I watched the M-1 final last year.','I have watched the M-1 final last year.',''),xp:4},
     {q:'If I ___ Kuruma, I would make everyone laugh.',jp:'もし私がくるまなら、みんなを笑わせるのに。',a:'were',choices:['were','am','be'],exp:E('現実とちがう → 1つ過去にずらす。I でも were','If I were Kuruma, I would make everyone laugh.','If I am Kuruma, 〜',''),xp:4},

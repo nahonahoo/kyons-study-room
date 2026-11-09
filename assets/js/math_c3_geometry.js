@@ -62,7 +62,7 @@ function recordResult(qid, isCorrect){
   if(!weakDB[qid]) weakDB[qid] = { jp:(qMeta[qid]&&qMeta[qid].jp)||'', answer:(qMeta[qid]&&qMeta[qid].answer)||'', choices:(qMeta[qid]&&qMeta[qid].choices)||[], correct:0, total:0 };
   weakDB[qid].total++; if(isCorrect) weakDB[qid].correct++;
   localStorage.setItem('math_weakdb', JSON.stringify(weakDB));
-  var _t = new Date().toISOString().slice(0,10);
+  var _t = new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
   var _d = JSON.parse(localStorage.getItem('math_daily') || '{}');
   _d[_t] = (_d[_t] || 0) + 1; localStorage.setItem('math_daily', JSON.stringify(_d));
   renderWeakBar();

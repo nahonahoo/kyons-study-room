@@ -1,3 +1,5 @@
+// 2026-11-09 正解を直した問題の古い弱点データを1回だけ消す（特訓は保存済みの答えで採点するため）
+(function(){try{var f='soc_fix_20261109';if(localStorage.getItem(f))return;var k='soc_weakdb',d=JSON.parse(localStorage.getItem(k)||'{}'),A=['午前3時','徴兵','中大兄皇子・藤原鎌足','主権在民・基本的人権の尊重・平和主義'],J=[],Q=[];Object.keys(d).forEach(function(q){var v=d[q]||{};if(A.indexOf(v.answer)>=0||J.indexOf(v.jp)>=0||Q.indexOf(q)>=0)delete d[q];});localStorage.setItem(k,JSON.stringify(d));localStorage.setItem(f,'1');}catch(e){}})();
 // ===== XP LEVELS =====
 var LEVELS=[
   { lv:1, min:0,   max:15,  badge:'🥚 NSC入学',     title:'見習い研修生',   status:'きょん「地理？なにそれ食えるの？」' },
@@ -65,7 +67,7 @@ function recordResult(qid,isCorrect){
   if(!weakDB[qid]) weakDB[qid]={ jp:(qMeta[qid]&&qMeta[qid].jp)||'', answer:(qMeta[qid]&&qMeta[qid].answer)||'', choices:(qMeta[qid]&&qMeta[qid].choices)||[], correct:0, total:0 };
   weakDB[qid].total++; if(isCorrect) weakDB[qid].correct++;
   localStorage.setItem('soc_weakdb',JSON.stringify(weakDB));
-  var _today=new Date().toISOString().slice(0,10);
+  var _today=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
   var _daily=JSON.parse(localStorage.getItem('soc_daily')||'{}');
   _daily[_today]=(_daily[_today]||0)+1;
   localStorage.setItem('soc_daily',JSON.stringify(_daily));
@@ -283,10 +285,10 @@ function makeSvgWorldMap(){
     +'<line x1="225" y1="0" x2="225" y2="270" stroke="#86efac" stroke-width="1" stroke-dasharray="4,4" opacity="0.5"/>'
     +'<text x="226" y="11" fill="#86efac" font-size="8" opacity="0.8">0°経線</text>'
     // 北アメリカ大陸
-    +'<polygon points="28,32 140,32 150,58 138,88 112,122 78,142 42,138 24,108 22,62" fill="#f59e0b" opacity="0.85"/>'
+    +'<polygon points="28,32 140,32 150,58 138,88 112,104 78,114 42,110 24,98 22,62" fill="#f59e0b" opacity="0.85"/>'
     +'<text x="80" y="90" fill="#000" font-size="12" text-anchor="middle" font-weight="bold">北アメリカ</text>'
     // 南アメリカ大陸
-    +'<polygon points="75,152 148,152 154,182 144,218 118,248 88,250 68,228 65,196" fill="#22c55e" opacity="0.85"/>'
+    +'<polygon points="75,118 148,118 154,160 144,205 118,245 88,250 68,225 65,175" fill="#22c55e" opacity="0.85"/>'
     +'<text x="105" y="205" fill="#000" font-size="12" text-anchor="middle" font-weight="bold">南アメリカ</text>'
     // ヨーロッパ（ユーラシアの一部）
     +'<polygon points="218,28 272,28 278,56 260,80 232,82 218,64 215,44" fill="#a78bfa" opacity="0.9"/>'
@@ -311,8 +313,8 @@ function makeSvgWorldMap(){
     +'<text x="494" y="115" fill="#7dd3fc" font-size="9" text-anchor="middle" transform="rotate(-90,494,115)" opacity="0.8">太平洋</text>'
     +'<text x="38" y="175" fill="#7dd3fc" font-size="8" text-anchor="middle" opacity="0.6">太平洋</text>'
     // 日本マーカー
-    +'<circle cx="432" cy="82" r="5" fill="#ef4444"/>'
-    +'<text x="440" y="78" fill="#ef4444" font-size="9" font-weight="bold">日本</text>'
+    +'<circle cx="478" cy="82" r="5" fill="#ef4444"/>'
+    +'<text x="486" y="78" fill="#ef4444" font-size="9" font-weight="bold">日本</text>'
     // ロンドンマーカー
     +'<circle cx="228" cy="42" r="4" fill="#86efac"/>'
     +'<text x="232" y="38" fill="#86efac" font-size="8">ロンドン</text>'
@@ -358,8 +360,8 @@ function makeSvgLatLon(){
     +'<circle cx="130" cy="213" r="3" fill="#e2e8f0"/>'
     +'<text x="136" y="218" fill="#e2e8f0" font-size="9">南極</text>'
     // 日本の位置（北緯35°、東経135°）
-    +'<circle cx="170" cy="80" r="5" fill="#ef4444"/>'
-    +'<text x="178" y="78" fill="#ef4444" font-size="9" font-weight="bold">日本 (北緯35°)</text>'
+    +'<circle cx="170" cy="65" r="5" fill="#ef4444"/>'
+    +'<text x="178" y="63" fill="#ef4444" font-size="9" font-weight="bold">日本 (北緯35°)</text>'
     // タイトル
     +'<text x="220" y="20" fill="#e2e8f0" font-size="12" font-weight="bold" text-anchor="middle">緯度と経度のしくみ</text>'
     +'</svg>';
@@ -407,9 +409,9 @@ function renderSection0(){
     +'<div class="intro-box-title">🎤 きょんと西村の地理入門トーク</div>'
     +chat('kyon','きょん（富士田恭兵）','地理って…地図に国の名前とか書いてあって、「これを全部覚えろ！」ってやつでしょ？無理じゃない？？')
     +chat('nishi','西村真二','違う違う。「なんでここにこの産業があるのか」「なぜこの気候になるのか」を理解する科目だよ。暗記科目じゃなくて、理由を追う科目。')
-    +chat('kyon','きょん','理由があるの！？じゃあ豊田市がトヨタだらけなのにも理由があるの？')
+    +chat('kyon','きょん','理由があるの！？じゃあ愛知県がトヨタだらけなのにも理由があるの？')
     +chat('nishi','西村真二','ある。中京工業地帯の話は Section 3 でやる。今日一番「そういうことか！」ってなるやつだから楽しみにしてて。')
-    +chat('kyon','きょん','知ってる街の名前が授業に出てくると、急に他人事じゃなくなるね！！やる気出た！！')
+    +chat('kyon','きょん','知ってる名前が授業に出てくると、急に他人事じゃなくなるね！！やる気出た！！')
     +'</div>'
     // 地理の3大テーマ
     +'<div class="rule-card">'
@@ -422,14 +424,14 @@ function renderSection0(){
     +'<div class="rule-card">'
     +'<div class="rule-card-title">🎵 六大陸の語呂合わせ</div>'
     +'<div style="text-align:center;padding:12px;">'
-    +'<div style="font-family:Bebas Neue,sans-serif;font-size:26px;color:var(--amber);letter-spacing:4px;margin-bottom:8px">ユーア　北南　オ南</div>'
+    +'<div style="font-family:Bebas Neue,sans-serif;font-size:26px;color:var(--amber);letter-spacing:4px;margin-bottom:8px">ユーア　北南　南オ</div>'
     +'<div style="font-size:14px;color:var(--text);line-height:2.4;">'
     +'<span style="color:var(--amber);font-weight:bold">ユー</span>ラシア　'
     +'<span style="color:var(--amber);font-weight:bold">ア</span>フリカ　'
     +'<span style="color:var(--amber);font-weight:bold">北</span>アメリカ　'
     +'<span style="color:var(--amber);font-weight:bold">南</span>アメリカ　'
-    +'<span style="color:var(--amber);font-weight:bold">オ</span>ーストラリア　'
-    +'<span style="color:var(--amber);font-weight:bold">南</span>極</div>'
+    +'<span style="color:var(--amber);font-weight:bold">南</span>極　'
+    +'<span style="color:var(--amber);font-weight:bold">オ</span>ーストラリア</div>'
     +'</div>'
     +'<div style="text-align:center;padding:10px;margin-top:8px;border-top:1px solid var(--border)">'
     +'<div style="font-size:13px;color:var(--text2)">三大洋の語呂合わせ：<span style="color:var(--gold);font-size:16px;font-family:Bebas Neue,sans-serif;letter-spacing:3px;">タイ・タイ・イン</span></div>'
@@ -452,7 +454,7 @@ function renderSection1(){
   html+='<div class="intro-box" style="margin-bottom:20px">'
     +'<div class="intro-box-title">💬 緯度・経度トーク</div>'
     +chat('kyon','きょん','緯度と経度ってどっちが横でどっちが縦かわかんなくなる…！！')
-    +chat('nishi','西村真二','「緯度＝い（横）ど」で覚えよう。"い"の字は横棒が並ぶイメージ。緯度は赤道から上下に測る。')
+    +chat('nishi','西村真二','「緯」は織物のよこ糸、「経」はたて糸という意味。だから緯度の線は横、経度の線は縦。緯度は赤道から上下に測る。')
     +chat('kyon','きょん','あ！「緯」の字に横線が並んでるじゃん！！これ確かに！！')
     +chat('nishi','西村真二','時差は「東に行くほど時刻が早い」。日本（東経135°）は15°ずつ進む→135÷15＝9時間分、ロンドンより早い。')
     +chat('kyon','きょん','じゃあ日本で朝9時のとき、ロンドンは真夜中の0時？！地球って不思議だな！！')
@@ -486,15 +488,15 @@ function renderSection1(){
     { qid:'soc_geo_s1_q4',  jp:'経度差が15度ひらくと、時差は何時間になる？',
       ans:'1時間', choices:['1時間','2時間','30分','3時間'],
       exp:'地球は24時間で360度回転するので、360÷24＝15度で1時間の時差。日本（東経135度）とロンドン（0度）の時差は 135÷15＝9時間！' },
-    { qid:'soc_geo_s1_q5',  jp:'緯度0度の線（赤道）が通らない大陸はどれ？',
-      ans:'オーストラリア大陸', choices:['オーストラリア大陸','アフリカ大陸','南アメリカ大陸','アジア（東南アジア）'],
+    { qid:'soc_geo_s1_q5',  jp:'緯度0度の線（赤道）が通らないのはどれ？',
+      ans:'オーストラリア大陸', choices:['オーストラリア大陸','アフリカ大陸','南アメリカ大陸','アジア（東南アジアの島々）'],
       exp:'赤道はアフリカ大陸中央・南アメリカ（ブラジル）・東南アジア（インドネシアなど）を通る。オーストラリアは赤道より南（南半球）に位置するため通らない。' },
     { qid:'soc_geo_s1_q6',  jp:'六大陸の中で最も小さい大陸はどれ？',
       ans:'オーストラリア大陸', choices:['オーストラリア大陸','南極大陸','ヨーロッパ（半島）','南アメリカ大陸'],
       exp:'六大陸の面積順（大→小）：ユーラシア＞アフリカ＞北アメリカ＞南アメリカ＞南極＞オーストラリア。オーストラリア大陸が最小。' },
     { qid:'soc_geo_s1_q7',  jp:'アマゾン川が流れているのはどの州？',
       ans:'南アメリカ州', choices:['南アメリカ州','アフリカ州','アジア州','オセアニア州'],
-      exp:'アマゾン川はブラジルを中心とした南アメリカ大陸を流れる、流域面積世界最大の川。流域には熱帯雨林が広がり、地球の酸素の約20%を生産している。' },
+      exp:'アマゾン川はブラジルを中心とした南アメリカ大陸を流れる、流域面積世界最大の川。流域には世界最大の熱帯雨林が広がっている。' },
     { qid:'soc_geo_s1_q8',  jp:'世界最大の砂漠「サハラ砂漠」がある大陸はどれ？',
       ans:'アフリカ大陸', choices:['アフリカ大陸','アジア大陸','北アメリカ大陸','オーストラリア大陸'],
       exp:'サハラ砂漠はアフリカ大陸北部に広がる世界最大の砂漠。面積は約900万km²で日本の約24倍。赤道付近の高温多湿とは異なり、北アフリカは亜熱帯高圧帯で雨が降らない。' },
@@ -544,7 +546,7 @@ function renderSection2(){
 
   // ── アジア州 概略図 SVG ──
   html+='<div style="background:#0d2a3a;border-radius:10px;padding:12px;margin-bottom:16px">'
-    +'<div style="font-size:13px;font-weight:bold;color:var(--gold);margin-bottom:8px;text-align:center">🗺 アジア州 4つのエリア</div>'
+    +'<div style="font-size:13px;font-weight:bold;color:var(--gold);margin-bottom:8px;text-align:center">🗺 アジア州のエリア（主な4つ＋中央アジア）</div>'
     +'<svg viewBox="0 0 360 240" style="width:100%;max-width:400px;display:block;margin:0 auto" xmlns="http://www.w3.org/2000/svg">'
     // 背景（海）
     +'<rect x="0" y="0" width="360" height="240" rx="10" fill="#0d2a52"/>'
@@ -595,7 +597,7 @@ function renderSection2(){
     +'</div>'
     +'<div class="rule-box">'
     +'<div class="rule-title">中国の特徴</div>'
-    +'<div class="note">人口約14億（2023年はインドに次ぎ世界2位）・世界最大の農業生産国<br>経済特区（深セン・上海など）で急速に工業化 → 「世界の工場」<br>一人っ子政策（1980〜2015年）→ 現在は少子高齢化問題</div>'
+    +'<div class="note">人口約14億（2023年はインドに次ぎ世界2位）・世界最大の農業生産国<br>経済特区（深セン・アモイなど）で急速に工業化 → 「世界の工場」<br>一人っ子政策（1979〜2015年）→ 現在は少子高齢化問題</div>'
     +'</div>'
     +'<div class="rule-box">'
     +'<div class="rule-title">韓国・日本</div>'
@@ -605,14 +607,14 @@ function renderSection2(){
 
   // ── 東南アジア ルールカード ──
   html+='<div class="rule-card" style="border-color:#a78bfa">'
-    +'<div class="rule-card-title" style="color:#a78bfa">🌿 東南アジア（ASEAN10か国）</div>'
+    +'<div class="rule-card-title" style="color:#a78bfa">🌿 東南アジア（ASEAN11か国）</div>'
     +'<div class="rule-box">'
     +'<div class="rule-title">気候・農業</div>'
     +'<div class="note">赤道付近 → 熱帯（年中高温多湿）<br>主要農産物：米・天然ゴム・パーム油・コーヒー・カカオ<br>プランテーション：植民地時代にヨーロッパ人が始めた輸出向け大規模農園</div>'
     +'</div>'
     +'<div class="rule-box">'
     +'<div class="rule-title">ASEAN（東南アジア諸国連合）</div>'
-    +'<div class="note">1967年設立・10か国加盟（タイ・インドネシア・フィリピン・ベトナム・シンガポールなど）<br>加盟国間の関税削減・経済協力が目的<br>日本企業が多数進出（工場設立・投資）</div>'
+    +'<div class="note">1967年設立・11か国加盟（タイ・インドネシア・フィリピン・ベトナム・シンガポールなど。2025年に東ティモールが加わった）<br>加盟国間の関税削減・経済協力が目的<br>日本企業が多数進出（工場設立・投資）</div>'
     +'</div>'
     +'<div class="rule-box">'
     +'<div class="rule-title">覚え方のコツ</div>'
@@ -625,11 +627,11 @@ function renderSection2(){
     +'<div class="rule-card-title" style="color:#f87171">🕌 南アジア（インド・パキスタン・バングラデシュ・スリランカ）</div>'
     +'<div class="rule-box">'
     +'<div class="rule-title">インドの特徴</div>'
-    +'<div class="note">2023年に中国を抜き世界最大の人口（約14.4億）<br>IT産業で世界的に有名（バンガロールが「インドのシリコンバレー」）<br>ヒンドゥー教が主流・カースト制度の影響が残る<br>綿花・茶・コーヒーも主要輸出品</div>'
+    +'<div class="note">2023年に中国を抜き世界最大の人口（約14億人超）<br>IT産業で世界的に有名（バンガロールが「インドのシリコンバレー」）<br>ヒンドゥー教が主流・カースト制度の影響が残る<br>綿花・茶・コーヒーも主要輸出品</div>'
     +'</div>'
     +'<div class="rule-box">'
     +'<div class="rule-title">モンスーンと農業</div>'
-    +'<div class="note">夏：南西モンスーン（インド洋から湿った風）→ 雨季に大雨<br>冬：乾燥（乾季）<br>雨季の水田農業：米・綿花・豆類</div>'
+    +'<div class="note">夏：南西モンスーン（インド洋から湿った風）→ 雨季に大雨<br>冬：乾燥（乾季）<br>雨の多い地域（ガンジス川下流など）は稲作、デカン高原は綿花、アッサム地方は茶</div>'
     +'</div>'
     +'</div>';
 
@@ -665,28 +667,28 @@ function renderSection2(){
     // 東アジア
     { qid:'soc_geo_s2_q1', jp:'東アジアで「モンスーン（季節風）」の影響が強い地域で特に発達した農業は？',
       ans:'稲作（水田農業）', choices:['稲作（水田農業）','小麦農業','放牧農業','プランテーション'],
-      exp:'モンスーン（季節風）が夏に大量の雨をもたらすため、東アジアでは稲作が発達。中国・日本・韓国の主食は米。気候が農業を決めるパターンを覚えよう！' },
+      exp:'モンスーン（季節風）が夏に大量の雨をもたらすため、東アジアでは稲作が発達。日本・韓国と中国南部では米が主食（中国北部は小麦が中心）。気候が農業を決めるパターンを覚えよう！' },
     { qid:'soc_geo_s2_q2', jp:'中国が急速な工業化を進めるために沿岸部に設置した地域を何という？',
       ans:'経済特区', choices:['経済特区','自由貿易港','工業地帯','開発特別区'],
       exp:'1970〜80年代に鄧小平が導入。深セン・珠海・汕頭・廈門などが最初の経済特区。外国企業を優遇・関税免除で「世界の工場」へと急成長した。' },
     // 東南アジア
     { qid:'soc_geo_s2_q3', jp:'東南アジアの国々が加盟する地域経済協力機構はどれ？',
       ans:'ASEAN（東南アジア諸国連合）', choices:['ASEAN（東南アジア諸国連合）','EU（欧州連合）','OPEC（石油輸出国機構）','AU（アフリカ連合）'],
-      exp:'ASEAN（アセアン）は1967年設立・10か国加盟。タイ・インドネシア・フィリピン・ベトナム・シンガポールなど。日本企業の工場進出が多く、日本の重要な貿易相手地域。' },
+      exp:'ASEAN（アセアン）は1967年設立・11か国加盟。タイ・インドネシア・フィリピン・ベトナム・シンガポールなど。日本企業の工場進出が多く、日本の重要な貿易相手地域。' },
     { qid:'soc_geo_s2_q4', jp:'植民地時代にヨーロッパ人が東南アジアなどで始めた、輸出用作物を栽培する大規模農園農業を何という？',
       ans:'プランテーション', choices:['プランテーション','棚田農業','大規模機械農業','自給農業'],
       exp:'プランテーション＝輸出用・外国資本・単一作物が特徴。天然ゴム（マレーシア・インドネシア）、コーヒー・カカオ（アフリカ・東南アジア）など。現在も続く植民地の遺産。' },
     // 南アジア
     { qid:'soc_geo_s2_q5', jp:'2023年に中国を抜いて世界一の人口大国となった国はどれ？',
       ans:'インド', choices:['インド','パキスタン','バングラデシュ','スリランカ'],
-      exp:'インドは2023年に人口約14.4億人となり中国を抜いた。若者人口が多く経済成長が続く。IT産業（バンガロール）でも世界的に有名。ヒンドゥー教が主流の宗教。' },
+      exp:'インドは2023年に人口が約14億人を超えて中国を抜いた。若者人口が多く経済成長が続く。IT産業（バンガロール）でも世界的に有名。ヒンドゥー教が主流の宗教。' },
     { qid:'soc_geo_s2_q6', jp:'インドのIT産業の中心地として有名な都市はどれ？',
       ans:'バンガロール', choices:['バンガロール','ムンバイ','デリー','コルカタ'],
-      exp:'バンガロールは「インドのシリコンバレー」と呼ばれるIT産業の集積地。英語教育の普及・理系人材の豊富さ・賃金の安さが強み。海外IT企業も多数進出している。' },
+      exp:'バンガロール（現在の正式名はベンガルール）は「インドのシリコンバレー」と呼ばれるIT産業の集積地。英語教育の普及・理系人材の豊富さ・賃金の安さが強み。海外IT企業も多数進出している。' },
     // 西アジア
     { qid:'soc_geo_s2_q7', jp:'西アジアの国々が中心になって結成した石油輸出国の組織はどれ？',
       ans:'OPEC（石油輸出国機構）', choices:['OPEC（石油輸出国機構）','ASEAN','NATO','WHO'],
-      exp:'OPEC（オペック）は石油の生産量・価格を調整する国際組織。サウジアラビア・UAE・イラク・イランなどが中心。日本の輸入石油の約90%が中東産なので、試験で超頻出！' },
+      exp:'OPEC（オペック）は石油の生産量・価格を調整する国際組織。サウジアラビア・イラク・イラン・クウェートなどが中心（UAEは2026年5月に脱退）。日本の輸入石油の約90%が中東産なので、試験で超頻出！' },
     { qid:'soc_geo_s2_q8', jp:'イスラム教の礼拝でムスリム（信者）が向かう聖地として正しいのは？',
       ans:'メッカ（サウジアラビア）', choices:['メッカ（サウジアラビア）','エルサレム（イスラエル）','バグダード（イラク）','テヘラン（イラン）'],
       exp:'メッカはサウジアラビア西部にあるイスラム教最大の聖地。ムスリムは1日5回メッカの方向に向かって礼拝する。一生に一度メッカへの巡礼（ハッジ）を行うのが義務とされる。' },
@@ -737,9 +739,9 @@ function makeSvgJapanMap(){
     // 中部
     +'<polygon points="155,195 230,195 235,210 228,235 208,248 178,248 155,235 148,215" fill="#fb923c" opacity="0.85"/>'
     +'<text x="192" y="226" fill="#000" font-size="10" text-anchor="middle" font-weight="bold">中部</text>'
-    // ★豊田マーカー
+    // ★名古屋マーカー
     +'<circle cx="188" cy="232" r="5" fill="#ef4444" stroke="#fff" stroke-width="1.5"/>'
-    +'<text x="196" y="230" fill="#ef4444" font-size="8" font-weight="bold">豊田</text>'
+    +'<text x="196" y="230" fill="#ef4444" font-size="8" font-weight="bold">名古屋</text>'
     // 近畿
     +'<polygon points="140,252 190,252 195,265 188,282 165,288 140,278 133,265" fill="#e879f9" opacity="0.85"/>'
     +'<text x="163" y="274" fill="#000" font-size="10" text-anchor="middle" font-weight="bold">近畿</text>'
@@ -757,8 +759,8 @@ function makeSvgJapanMap(){
     // 太平洋ラベル
     +'<text x="255" y="260" fill="#7dd3fc" font-size="10" text-anchor="middle" opacity="0.7" transform="rotate(90,255,260)">太平洋</text>'
     // 標準時子午線
-    +'<line x1="180" y1="10" x2="180" y2="410" stroke="#f59e0b" stroke-width="0.8" stroke-dasharray="4,5" opacity="0.4"/>'
-    +'<text x="182" y="12" fill="#f59e0b" font-size="7" opacity="0.7">東経135°（標準時）</text>'
+    
+    
     +'</svg>';
 }
 
@@ -768,19 +770,19 @@ function renderSection3(){
 
   // ── 日本地図（既存SVG関数） ──
   html+=makeSvgJapanMap();
-  html+='<div style="text-align:center;font-size:11px;color:var(--text2);margin-bottom:12px;">▲ 日本の7地方区分。赤点は豊田市（中部地方・中京工業地帯）</div>';
+  html+='<div style="text-align:center;font-size:11px;color:var(--text2);margin-bottom:12px;">▲ 日本の7地方区分。赤点は名古屋市（中部地方・中京工業地帯）</div>';
 
   // ── イントロ会話 ──
   html+='<div class="intro-box" style="margin-bottom:16px">'
     +'<div class="intro-box-title">💬 日本の姿トーク</div>'
     +chat('kyon','きょん','日本って「島国」って言うけど、実際に何個の島があるの？')
     +chat('nishi','西村真二','確認されている島だけで約14,125島。有人島は約430島くらい。南北に約3,000km伸びてるから、北海道と沖縄で気候が全然違う。')
-    +chat('kyon','きょん','え、3000kmって東京からタイくらいの距離じゃん！そりゃ気候違うわ…')
+    +chat('kyon','きょん','え、3000kmって東京からフィリピンのマニラくらいの距離じゃん！そりゃ気候違うわ…')
     +chat('nishi','西村真二','北海道は亜寒帯、東北・本州は温帯、沖縄は亜熱帯。しかも日本列島には高い山脈があるから、日本海側と太平洋側でも気候が逆になる。')
-    +chat('kyon','きょん','豊田市って中部地方でしょ？自動車産業で日本一ってすごくない？')
+    +chat('kyon','きょん','愛知県って中部地方でしょ？自動車産業で日本一ってすごくない？')
     +chat('nishi','西村真二','すごい。中京工業地帯（愛知・岐阜・三重）の工業出荷額は日本1位。豊田市はその中心地だよ。')
     +chat('kyon','きょん','でも地震とか台風とか怖いよね…日本って災害多すぎない？')
-    +chat('nishi','西村真二','その通り。日本は「環太平洋火山帯」に位置してるから地震・火山が多い。台風も毎年来る。でもだからこそ防災意識が大事になってくる。')
+    +chat('nishi','西村真二','その通り。日本は「環太平洋造山帯」に位置してるから地震・火山が多い。台風も毎年来る。でもだからこそ防災意識が大事になってくる。')
     +'</div>';
 
   // ── 日本の位置・領域カード ──
@@ -791,7 +793,7 @@ function renderSection3(){
     +'<div class="note">'
     +'<table style="width:100%;border-collapse:collapse;font-size:13px">'
     +'<tr style="background:rgba(255,255,255,0.06)"><th style="padding:5px 8px;text-align:left;color:var(--gold)">方向</th><th style="padding:5px 8px;text-align:left;color:var(--gold)">島名</th><th style="padding:5px 8px;text-align:left;color:var(--gold)">都道府県</th></tr>'
-    +'<tr><td style="padding:4px 8px">北端 🧊</td><td style="padding:4px 8px">択捉島</td><td style="padding:4px 8px">北海道（ロシアと係争中）</td></tr>'
+    +'<tr><td style="padding:4px 8px">北端 🧊</td><td style="padding:4px 8px">択捉島</td><td style="padding:4px 8px">北海道（北方領土・ロシアが不法に占拠）</td></tr>'
     +'<tr style="background:rgba(255,255,255,0.04)"><td style="padding:4px 8px">南端 ☀️</td><td style="padding:4px 8px">沖ノ鳥島</td><td style="padding:4px 8px">東京都（サンゴ礁の小島）</td></tr>'
     +'<tr><td style="padding:4px 8px">東端 🌅</td><td style="padding:4px 8px">南鳥島</td><td style="padding:4px 8px">東京都（太平洋上）</td></tr>'
     +'<tr style="background:rgba(255,255,255,0.04)"><td style="padding:4px 8px">西端 🌇</td><td style="padding:4px 8px">与那国島</td><td style="padding:4px 8px">沖縄県（台湾の北東）</td></tr>'
@@ -800,7 +802,7 @@ function renderSection3(){
     +'</div>'
     +'<div class="rule-box">'
     +'<div class="rule-title">標準時・時差</div>'
-    +'<div class="note">標準時子午線＝東経135度（兵庫県明石市を通る）<br>ロンドン（0度）との時差：135÷15＝<strong>9時間</strong>（日本が進んでいる）<br>EEZ（排他的経済水域）：海岸から200海里以内 → 日本はEEZが世界第6位の広さ！</div>'
+    +'<div class="note">標準時子午線＝東経135度（兵庫県明石市を通る）<br>ロンドン（0度）との時差：135÷15＝<strong>9時間</strong>（日本が進んでいる）<br>EEZ（排他的経済水域）：海岸から200海里以内（領海を除く）→ 日本はEEZが世界第6位の広さ！</div>'
     +'</div>'
     +'<div class="rule-box">'
     +'<div class="rule-title">重要な川・湖</div>'
@@ -828,7 +830,7 @@ function renderSection3(){
     // 北海道（亜寒帯）
     +'<rect x="8" y="8" width="80" height="46" rx="6" fill="#60a5fa" opacity="0.82"/>'
     +'<text x="48" y="28" fill="#fff" font-size="11" text-anchor="middle" font-weight="bold">北海道気候</text>'
-    +'<text x="48" y="42" fill="#e0f2fe" font-size="9" text-anchor="middle">亜寒帯・冬に大雪</text>'
+    +'<text x="48" y="42" fill="#e0f2fe" font-size="9" text-anchor="middle">亜寒帯・冬が寒い</text>'
     +'<text x="48" y="50" fill="#bae6fd" font-size="8" text-anchor="middle">梅雨がない</text>'
     // 日本海側（冬に大雪）
     +'<rect x="8" y="62" width="80" height="46" rx="6" fill="#818cf8" opacity="0.82"/>'
@@ -856,13 +858,13 @@ function renderSection3(){
     +'<text x="48" y="193" fill="#fce7f3" font-size="9" text-anchor="middle">亜熱帯・年中温暖</text>'
     +'<text x="48" y="204" fill="#fbcfe8" font-size="8" text-anchor="middle">台風の通り道</text>'
     // 矢印ラベル（季節風）
-    +'<text x="196" y="20" fill="#93c5fd" font-size="10" text-anchor="middle" font-weight="bold">← 北西季節風（冬）→大雪</text>'
-    +'<text x="196" y="170" fill="#6ee7b7" font-size="10" text-anchor="middle" font-weight="bold">← 南東季節風（夏）→雨</text>'
-    // 真ん中に「日本の本州」ラベル
-    +'<rect x="272" y="112" width="80" height="46" rx="6" fill="#475569" opacity="0.6"/>'
-    +'<text x="312" y="132" fill="#cbd5e1" font-size="9" text-anchor="middle">東日本</text>'
-    +'<text x="312" y="145" fill="#94a3b8" font-size="8" text-anchor="middle">太平洋側は</text>'
-    +'<text x="312" y="156" fill="#94a3b8" font-size="8" text-anchor="middle">夏に台風来る</text>'
+    +'<text x="196" y="20" fill="#93c5fd" font-size="10" text-anchor="middle" font-weight="bold">北西季節風（冬）→日本海側に大雪</text>'
+    +'<text x="196" y="170" fill="#6ee7b7" font-size="10" text-anchor="middle" font-weight="bold">南東季節風（夏）→太平洋側に雨</text>'
+    
+    
+    
+    
+    
     +'</svg>'
     +'<div style="font-size:11px;color:var(--text2);margin-top:6px;text-align:center">冬の季節風（北西）→ 日本海側に大雪 ／ 夏の季節風（南東）→ 太平洋側に雨</div>'
     +'</div>';
@@ -900,7 +902,7 @@ function renderSection3(){
     +'<rect x="270" y="75" width="68" height="38" rx="6" fill="#3b82f6" opacity="0.85"/>'
     +'<text x="304" y="91" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold">京浜</text>'
     +'<text x="304" y="104" fill="#bfdbfe" font-size="8" text-anchor="middle">東京・川崎</text>'
-    // 中京（豊田！）
+    // 中京
     +'<rect x="178" y="75" width="72" height="38" rx="6" fill="#ef4444" opacity="0.9"/>'
     +'<text x="214" y="89" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold">中京 ★</text>'
     +'<text x="214" y="101" fill="#fca5a5" font-size="8" text-anchor="middle">豊田・名古屋</text>'
@@ -916,7 +918,7 @@ function renderSection3(){
     // 北九州
     +'<rect x="32" y="98" width="42" height="28" rx="6" fill="#f97316" opacity="0.8"/>'
     +'<text x="53" y="110" fill="#fff" font-size="9" text-anchor="middle" font-weight="bold">北九州</text>'
-    +'<text x="53" y="120" fill="#fed7aa" font-size="7" text-anchor="middle">鉄鋼→半導体</text>'
+    +'<text x="53" y="120" fill="#fed7aa" font-size="7" text-anchor="middle">鉄鋼→自動車</text>'
     // 北海道（太平洋ベルト外）
     +'<rect x="270" y="12" width="68" height="30" rx="6" fill="#475569" opacity="0.8"/>'
     +'<text x="304" y="26" fill="#e2e8f0" font-size="9" text-anchor="middle">北海道（農業）</text>'
@@ -925,7 +927,7 @@ function renderSection3(){
     +'<rect x="270" y="46" width="68" height="24" rx="6" fill="#475569" opacity="0.7"/>'
     +'<text x="304" y="58" fill="#e2e8f0" font-size="9" text-anchor="middle">東北（稲作・IC）</text>'
     // 凡例
-    +'<text x="15" y="188" fill="#ef4444" font-size="9">★ 豊田市はここ！</text>'
+    +'<text x="15" y="188" fill="#ef4444" font-size="9">★ 工業出荷額 日本1位</text>'
     +'</svg>'
     +'</div>';
 
@@ -939,8 +941,8 @@ function renderSection3(){
     +'<tr style="background:rgba(255,255,255,0.06)"><th style="padding:4px 6px;text-align:left;color:var(--gold)">地域</th><th style="padding:4px 6px;text-align:left;color:var(--gold)">主な農業</th></tr>'
     +'<tr><td style="padding:3px 6px">北海道</td><td style="padding:3px 6px">大規模畑作（小麦・じゃがいも・てんさい）・酪農（根釧台地）</td></tr>'
     +'<tr style="background:rgba(255,255,255,0.04)"><td style="padding:3px 6px">東北</td><td style="padding:3px 6px">稲作中心（秋田・宮城・山形）・りんご（青森）</td></tr>'
-    +'<tr><td style="padding:3px 6px">関東近郊</td><td style="padding:3px 6px">近郊農業（都市向け野菜）・茶（静岡）</td></tr>'
-    +'<tr style="background:rgba(255,255,255,0.04)"><td style="padding:3px 6px">中部高原</td><td style="padding:3px 6px">抑制栽培（長野の高原野菜・夏レタスなど）</td></tr>'
+    +'<tr><td style="padding:3px 6px">関東近郊</td><td style="padding:3px 6px">近郊農業（都市向け野菜）</td></tr>'
+    +'<tr style="background:rgba(255,255,255,0.04)"><td style="padding:3px 6px">中部</td><td style="padding:3px 6px">抑制栽培（長野の高原野菜・夏レタスなど）・茶（静岡）</td></tr>'
     +'<tr><td style="padding:3px 6px">九州・四国</td><td style="padding:3px 6px">促成栽培（宮崎・高知のピーマン・きゅうり）</td></tr>'
     +'</table>'
     +'</div>'
@@ -955,7 +957,7 @@ function renderSection3(){
     +'🏆 中京（愛知）：<strong>出荷額日本1位</strong>・自動車（トヨタ）中心<br>'
     +'京浜（東京・神奈川）：かつて1位・印刷・食品・機械<br>'
     +'阪神（大阪・神戸）：金属・化学・繊維<br>'
-    +'北九州：鉄鋼→現在は半導体（シリコンアイランド）'
+    +'北九州：鉄鋼で発展→現在は自動車・機械も（半導体工場は九州各地に広がり「シリコンアイランド」）'
     +'</div>'
     +'</div>'
     +'</div>';
@@ -968,7 +970,7 @@ function renderSection3(){
     // 地震・津波ゾーン（環太平洋）
     +'<rect x="8" y="8" width="80" height="66" rx="6" fill="#ef4444" opacity="0.8"/>'
     +'<text x="48" y="26" fill="#fff" font-size="11" text-anchor="middle" font-weight="bold">🌊 地震・津波</text>'
-    +'<text x="48" y="40" fill="#fca5a5" font-size="8.5" text-anchor="middle">環太平洋火山帯</text>'
+    +'<text x="48" y="40" fill="#fca5a5" font-size="8.5" text-anchor="middle">環太平洋造山帯</text>'
     +'<text x="48" y="53" fill="#fca5a5" font-size="8.5" text-anchor="middle">プレート境界で発生</text>'
     +'<text x="48" y="66" fill="#fee2e2" font-size="7.5" text-anchor="middle">津波に注意→高台へ</text>'
     // 台風
@@ -1004,7 +1006,7 @@ function renderSection3(){
     +'<div class="rule-box"><div class="rule-title" style="color:#60a5fa">北海道地方</div><div class="note">大規模農業（十勝平野）・酪農（根釧台地）・観光・漁業。冬は亜寒帯で厳しい寒さ。梅雨がない。</div></div>'
     +'<div class="rule-box"><div class="rule-title" style="color:#34d399">東北地方</div><div class="note">稲作（米どころ：秋田・宮城）・りんご（青森）・さくらんぼ（山形）。やませによる冷害に注意。IC工場も増加。</div></div>'
     +'<div class="rule-box"><div class="rule-title" style="color:#a78bfa">関東地方</div><div class="note">東京一極集中・日本最大の平野（関東平野）・近郊農業。京浜工業地帯。人口の約35%以上が集中。</div></div>'
-    +'<div class="rule-box"><div class="rule-title" style="color:#ef4444">中部地方 ★豊田市</div><div class="note">中京工業地帯（出荷額日本1位・自動車）・北陸の稲作・長野の高原野菜（抑制栽培）・富士山。</div></div>'
+    +'<div class="rule-box"><div class="rule-title" style="color:#ef4444">中部地方 ★中京工業地帯</div><div class="note">中京工業地帯（出荷額日本1位・自動車）・北陸の稲作・長野の高原野菜（抑制栽培）・富士山。</div></div>'
     +'<div class="rule-box"><div class="rule-title" style="color:#e879f9">近畿地方</div><div class="note">阪神工業地帯・琵琶湖（近畿の水がめ）・京都（伝統工芸）・神戸港（貿易港）。</div></div>'
     +'<div class="rule-box"><div class="rule-title" style="color:#fb923c">中国・四国地方</div><div class="note">瀬戸内工業地域（化学・鉄鋼）・促成栽培（高知）・みかん（愛媛）。瀬戸内海式気候（少雨）。</div></div>'
     +'<div class="rule-box"><div class="rule-title" style="color:#fbbf24">九州・沖縄地方</div><div class="note">促成栽培（宮崎）・シリコンアイランド（半導体）・桜島（活火山）・沖縄は亜熱帯・台風の通り道。</div></div>'
@@ -1053,7 +1055,7 @@ function renderSection3(){
       exp:'北海道は広大な土地を活かした大規模農業が特徴。十勝平野ではじゃがいも・小麦・大豆・てんさい。根釧台地では酪農（乳牛）。日本の食料供給を支える食料庫！' },
     { qid:'soc_geo_s3_q13', jp:'日本で地震・火山が多い理由として正しいのはどれ？',
       ans:'太平洋プレートなど複数のプレートの境界に位置するから', choices:['太平洋プレートなど複数のプレートの境界に位置するから','砂漠が多いから','海に囲まれているから','人口が多いから'],
-      exp:'日本はユーラシアプレート・北アメリカプレート・太平洋プレート・フィリピン海プレートの境界に位置する。プレートがぶつかる・沈み込む場所で地震・火山が発生する。「環太平洋火山帯」の一部。' },
+      exp:'日本はユーラシアプレート・北アメリカプレート・太平洋プレート・フィリピン海プレートの境界に位置する。プレートがぶつかる・沈み込む場所で地震・火山が発生する。「環太平洋造山帯」の一部。' },
     { qid:'soc_geo_s3_q14', jp:'川が海・湖に流れ込む河口付近に土砂が堆積した三角形の地形を何という？',
       ans:'三角州（デルタ）', choices:['三角州（デルタ）','扇状地','リアス海岸','カルスト地形'],
       exp:'三角州（デルタ）は川が河口で運んできた土砂が積もった三角形の地形。水田・都市が発達しやすい。広島デルタ（太田川）・濃尾平野などが有名。扇状地と区別が超重要！' },
@@ -1120,9 +1122,9 @@ function renderSection4(){
   var allQs=[
     // ━━━ 世界の姿（9問）━━━
     { qid:'soc_geo_s4_q00',
-      jp:'赤道（緯度0度）が通らない大陸はどれ？',
-      ans:'オーストラリア大陸', choices:['オーストラリア大陸','アフリカ大陸','南アメリカ大陸','アジア（東南アジア）'],
-      exp:'赤道はアフリカ大陸・南アメリカ大陸・東南アジアを通る。オーストラリアは赤道より南（南緯）に位置するため通らない。「南半球の大陸＝赤道を通らない」と覚えよう。' },
+      jp:'赤道（緯度0度）が通らないのはどれ？',
+      ans:'オーストラリア大陸', choices:['オーストラリア大陸','アフリカ大陸','南アメリカ大陸','アジア（東南アジアの島々）'],
+      exp:'赤道はアフリカ大陸・南アメリカ大陸・東南アジアを通る。オーストラリアは赤道より南（南緯）に位置するため通らない。大陸全体が南半球にあるのはオーストラリアと南極。アフリカと南アメリカは赤道をまたぐ。' },
     { qid:'soc_geo_s4_q01',
       jp:'六大陸を大きい順に並べたとき3番目はどれ？',
       ans:'北アメリカ大陸', choices:['北アメリカ大陸','南アメリカ大陸','アフリカ大陸','南極大陸'],
@@ -1133,8 +1135,8 @@ function renderSection4(){
       exp:'経度15度ごとに1時間の時差。135÷15＝9時間。日本（東）がロンドン（西）より9時間進んでいる。15時－9＝午前6時。「東ほど時刻が早い」がルール！' },
     { qid:'soc_geo_s4_q03',
       jp:'東経135度（日本）が正午12時のとき、西経45度の地点は何時？（時差の計算）',
-      ans:'午前3時', choices:['午前3時','午後9時','午後3時','午前9時'],
-      exp:'東経135度と西経45度の角度差は135+45＝180度。180÷15＝12時間差。日本が進んでいるので12時－12＝午前0時…ではなく「西経は東経より遅れる」。12時ー12＝午前0時。あれ？→135+45=180、÷15=12。日本12時→西経45度は12-12=0時=午前0時だが、選択肢を見直すと午前3時。※日本9時→西経45度でも計算確認を。教科書通りの問題を復習しよう。' },
+      ans:'午前0時', choices:['午前0時','午後9時','午後3時','午前9時'],
+      exp:'東経135度と西経45度の経度差は135+45＝180度。180÷15＝12時間。東にある日本の方が12時間進んでいるので、12時－12時間＝同じ日の午前0時。東経と西経をまたぐときは経度を「足す」！' },
     { qid:'soc_geo_s4_q04',
       jp:'三大洋の中で最も面積が大きいのはどれ？',
       ans:'太平洋', choices:['太平洋','大西洋','インド洋','北極海'],
@@ -1152,7 +1154,7 @@ function renderSection4(){
       ans:'赤道を基準（0度）に南北を0〜90度で表す', choices:['赤道を基準（0度）に南北を0〜90度で表す','本初子午線を基準に東西を0〜180度で表す','北極点が0度・南極点が180度','経度と同じものを別の名前で呼ぶ'],
       exp:'緯度＝赤道が0度、北極・南極が90度。南北で0〜90度。経度＝本初子午線が0度、東西で0〜180度。「緯度＝横の線（=水平）」「経度＝縦の線」と覚えると間違えない！' },
     { qid:'soc_geo_s4_q08',
-      jp:'日本が属するユーラシア大陸は、実際には2つの大州（州）をまとめた名称だが、その2つはどれ？',
+      jp:'ユーラシア大陸は、2つの州にまたがっている。その2つはどれ？',
       ans:'アジア州とヨーロッパ州', choices:['アジア州とヨーロッパ州','アジア州とアフリカ州','ヨーロッパ州とオセアニア州','北アメリカ州とアジア州'],
       exp:'ユーラシア大陸は地理的には1つの大陸だが、州の区分ではアジア州とヨーロッパ州に分けられる。ウラル山脈・カスピ海・黒海などが境界の目安。六大州：アジア・ヨーロッパ・アフリカ・北アメリカ・南アメリカ・オセアニア。' },
 
@@ -1166,9 +1168,9 @@ function renderSection4(){
       ans:'加盟国間で関税なし・多くの国が共通通貨ユーロを使用', choices:['加盟国間で関税なし・多くの国が共通通貨ユーロを使用','全加盟国が軍事同盟を結んでいる','アジアの国も複数加盟している','全加盟国が同じ言語を使う'],
       exp:'EUは経済統合が主な目的。加盟国間で関税撤廃・ユーロ共通通貨（多くの国）・人の移動自由。イギリスは2020年にEU離脱（ブレグジット）。経済面の連携組織。' },
     { qid:'soc_geo_s4_q11',
-      jp:'東南アジアの10か国が加盟する地域協力機構はどれ？',
+      jp:'東南アジアの11か国が加盟する地域協力機構はどれ？',
       ans:'ASEAN（東南アジア諸国連合）', choices:['ASEAN（東南アジア諸国連合）','EU（欧州連合）','OPEC（石油輸出国機構）','APECアジア太平洋経済協力'],
-      exp:'ASEAN（アセアン）は1967年設立。タイ・インドネシア・フィリピン・ベトナム・マレーシア・シンガポールなど10か国。関税削減・経済協力が目的。日本企業の工場も多数進出。' },
+      exp:'ASEAN（アセアン）は1967年設立。タイ・インドネシア・フィリピン・ベトナム・マレーシア・シンガポールなど11か国。関税削減・経済協力が目的。日本企業の工場も多数進出。' },
     { qid:'soc_geo_s4_q12',
       jp:'植民地時代にヨーロッパ人が東南アジア・アフリカで始めた、輸出用作物を大規模に栽培する農園を何という？',
       ans:'プランテーション', choices:['プランテーション','棚田農業','近郊農業','自給農業'],
@@ -1176,11 +1178,11 @@ function renderSection4(){
     { qid:'soc_geo_s4_q13',
       jp:'西アジアの産油国が中心になって結成した、石油の生産量・価格を調整する国際組織はどれ？',
       ans:'OPEC（石油輸出国機構）', choices:['OPEC（石油輸出国機構）','ASEAN','NATO（北大西洋条約機構）','WTO（世界貿易機関）'],
-      exp:'OPEC（オペック）はサウジアラビア・UAE・イラク・イランなど産油国が中心。石油の生産量・価格を調整する。日本の輸入石油の約90%が中東産なので、エネルギー安全保障の観点でも超重要！' },
+      exp:'OPEC（オペック）はサウジアラビア・イラク・イラン・クウェートなど産油国が中心（UAEは2026年5月に脱退）。石油の生産量・価格を調整する。日本の輸入石油の約90%が中東産なので、エネルギー安全保障の観点でも超重要！' },
     { qid:'soc_geo_s4_q14',
       jp:'2023年に世界最大の人口大国となった国はどれ？',
       ans:'インド', choices:['インド','中国','アメリカ','インドネシア'],
-      exp:'インドは2023年に約14.4億人となり、中国（約14.0億人）を抜いて世界1位の人口大国に。若者人口が多く経済成長が続く。IT産業（バンガロール）でも有名。' },
+      exp:'インドは2023年に中国を抜いて世界1位の人口大国に。若者人口が多く経済成長が続く。IT産業（バンガロール）でも有名。' },
     { qid:'soc_geo_s4_q15',
       jp:'アフリカ北部に広がる世界最大の砂漠はどれ？',
       ans:'サハラ砂漠', choices:['サハラ砂漠','ゴビ砂漠','アラビア砂漠','ナミブ砂漠'],
@@ -1192,11 +1194,11 @@ function renderSection4(){
     { qid:'soc_geo_s4_q17',
       jp:'アマゾン川流域の熱帯雨林が「地球の肺」と呼ばれる理由はどれ？',
       ans:'大量のCO₂を吸収し酸素を供給するから', choices:['大量のCO₂を吸収し酸素を供給するから','火山の噴気を浄化するから','海水を淡水に変えるから','地震波を吸収するから'],
-      exp:'アマゾンの熱帯雨林は世界最大の森林で、膨大な量のCO₂を吸収し酸素を放出する。しかし農地・牧場への開発で急速に減少中。熱帯雨林の破壊は地球温暖化を加速させる深刻な問題。' },
+      exp:'アマゾンの熱帯雨林は世界最大の熱帯雨林で、膨大な量のCO₂を吸収し酸素を放出する。しかし農地・牧場への開発で急速に減少中。熱帯雨林の破壊は地球温暖化を加速させる深刻な問題。' },
     { qid:'soc_geo_s4_q18',
       jp:'アメリカのカリフォルニア州サンフランシスコ近郊の「シリコンバレー」が有名な産業はどれ？',
       ans:'IT（情報技術）産業', choices:['IT（情報技術）産業','石油精製','自動車製造','大規模小麦農業'],
-      exp:'シリコンバレーにはApple・Google・Meta（旧Facebook）・Amazon・NVIDIAなどの世界的IT企業が集積。「シリコン」は半導体の材料から命名。インドのバンガロールも同様に「インドのシリコンバレー」と呼ばれる。' },
+      exp:'シリコンバレーにはApple・Google・Meta（旧Facebook）・NVIDIAなどの世界的IT企業が集積。「シリコン」は半導体の材料から命名。インドのバンガロールも同様に「インドのシリコンバレー」と呼ばれる。' },
     { qid:'soc_geo_s4_q19',
       jp:'オーストラリア・ニュージーランドが属する州はどれ？',
       ans:'オセアニア州', choices:['オセアニア州','アジア州','南アメリカ州','アフリカ州'],
@@ -1233,16 +1235,16 @@ function renderSection4(){
       exp:'養殖＝生け簀で最後まで育てて出荷（ぶり・真鯛・カキ）。栽培＝稚魚・稚貝を育て自然の海に放流し、成長後に漁獲。どちらも「育てる漁業」。リアス海岸（三陸・若狭湾）は養殖に適した地形。' },
     { qid:'soc_geo_s4_q27',
       jp:'東北地方の太平洋側で夏に冷害をもたらす、北東から吹く冷たい風を何という？',
-      ans:'やませ', choices:['やませ','フェーン現象','偏西風','北東の季節風'],
+      ans:'やませ', choices:['やませ','フェーン現象','偏西風','からっ風'],
       exp:'やませは夏に北東から吹く冷湿な風。日照不足・低温をもたらし稲作に冷害被害が出る（米が不作になる）。同じ時期、日本海側はフェーン現象で高温になるという対比も重要。' },
     { qid:'soc_geo_s4_q28',
       jp:'日本で地震・火山噴火が多い地質的な理由はどれ？',
       ans:'複数のプレートの境界（沈み込み帯）に位置しているから', choices:['複数のプレートの境界（沈み込み帯）に位置しているから','砂漠地帯に囲まれているから','海に囲まれた島国だから','人口が多いから'],
-      exp:'日本はユーラシア・北アメリカ・太平洋・フィリピン海の4枚のプレートの境界に位置。プレートが沈み込む場所で地震・火山が多発する。世界の活火山の約10%が日本に集中。「環太平洋火山帯」の一部。' },
+      exp:'日本はユーラシア・北アメリカ・太平洋・フィリピン海の4枚のプレートの境界に位置。プレートが沈み込む場所で地震・火山が多発する。世界の活火山（約1500）のうち111が日本にある（約7%）。「環太平洋造山帯」の一部。' },
     { qid:'soc_geo_s4_q29',
       jp:'日本の南端の島「沖ノ鳥島」が護岸工事で維持されている理由はどれ？',
       ans:'日本のEEZ（排他的経済水域）を守るため', choices:['日本のEEZ（排他的経済水域）を守るため','観光地として開発するため','軍事基地を置くため','漁業基地として活用するため'],
-      exp:'沖ノ鳥島は海面ぎりぎりのサンゴ礁の小島。消えてしまうと周囲約40万km²のEEZ（漁業・資源採掘の独占権）を失う。だから護岸工事で維持されている。EEZは海岸から200海里（約370km）。' },
+      exp:'沖ノ鳥島は海面ぎりぎりのサンゴ礁の小島。消えてしまうと周囲約40万km²のEEZ（漁業・資源採掘の独占権）を失う。だから護岸工事で維持されている。EEZは領海の外側で、海岸から200海里（約370km）までの範囲。' },
   ];
 
   // 問題をシャッフルして全30問表示
@@ -1251,7 +1253,7 @@ function renderSection4(){
     +'<div class="intro-box-title">🏁 地理 確認テスト（全30問）</div>'
     +chat('kyon','きょん','おー！本番テストじゃん！世界の姿・世界の地域・日本の姿、全部出るの？')
     +chat('nishi','西村真二','そう。地図問題・時差計算・用語問題が混ざってる。焦らず一問ずつ確認しながら解こう。')
-    +chat('kyon','きょん','豊田市の問題も出るの？！中京工業地帯でしょ！完璧！！')
+    +chat('kyon','きょん','愛知の問題も出るの？！中京工業地帯でしょ！完璧！！')
     +chat('nishi','西村真二','その調子。間違えた問題は弱点DBに記録されるから、後で特訓で復習できるよ。')
     +'</div>'
     +'<div class="progress-dots">'

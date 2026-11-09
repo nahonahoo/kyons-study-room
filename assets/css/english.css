@@ -885,6 +885,12 @@ body { background: var(--bg); color: var(--text); font-family: 'Noto Serif JP', 
 .example-item:last-child { border-bottom: none; }
 .example-item .en { font-family: 'Times New Roman', serif; font-size: 17px; flex: 1; letter-spacing: 0.05em; line-height: 1.8; }
 .example-item .jp { font-size: 14px; color: var(--text2); white-space: nowrap; }
+@media (max-width: 600px) {
+  /* 訳が長いと横にはみ出すので、スマホでは英文の下に折り返して出す */
+  .example-item { flex-wrap: wrap; }
+  .example-item .en { flex: 1 1 calc(100% - 42px); min-width: 0; }
+  .example-item .jp { white-space: normal; flex: 1 1 100%; }
+}
 .audio-btn {
   background: none; border: 1px solid var(--border); color: var(--text2);
   width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 13px;

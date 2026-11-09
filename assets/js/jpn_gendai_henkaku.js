@@ -14,7 +14,7 @@ var GENDAI_FORMS = [
 
 // ----- ② 活用の種類ひとめ表 -----
 var GENDAI_TABLE = [
-  { type:'五段活用', word:'歩く', mizen:'歩か', renyou:'歩き', shushi:'歩く', rentai:'歩く', katei:'歩け', meirei:'歩け' },
+  { type:'五段活用', word:'歩く', mizen:'歩か・歩こ', renyou:'歩き・歩い', shushi:'歩く', rentai:'歩く', katei:'歩け', meirei:'歩け' },
   { type:'上一段活用', word:'起きる', mizen:'起き', renyou:'起き', shushi:'起きる', rentai:'起きる', katei:'起きれ', meirei:'起きろ（起きよ）' },
   { type:'下一段活用', word:'食べる', mizen:'食べ', renyou:'食べ', shushi:'食べる', rentai:'食べる', katei:'食べれ', meirei:'食べろ（食べよ）' },
   { type:'カ変', word:'来る', mizen:'こ', renyou:'き', shushi:'くる', rentai:'くる', katei:'くれ', meirei:'こい' },
@@ -36,7 +36,7 @@ var GENDAI_MIWAKE_SVG = '<svg viewBox="0 0 340 260" style="width:100%;max-width:
   + '<text x="170" y="174" fill="#8b949e" font-size="9" text-anchor="middle">例：起き（ない）→ イ段／食べ（ない）→ エ段</text>'
   + '<path d="M 170,184 L 170,200" stroke="#8b949e" stroke-width="2" marker-end="url(#gArrow)"/>'
   + '<rect x="10" y="202" width="320" height="46" rx="8" fill="rgba(63,185,80,0.12)" stroke="#3fb950" stroke-width="2"/>'
-  + '<text x="170" y="222" fill="#3fb950" font-size="12" text-anchor="middle">④ 「来る」「する」だけは例外</text>'
+  + '<text x="170" y="222" fill="#3fb950" font-size="12" text-anchor="middle">④ 「来る」「する」（〜する）は例外</text>'
   + '<text x="170" y="238" fill="#8b949e" font-size="9" text-anchor="middle">この2語はカ変・サ変と丸暗記する</text>'
   + '<defs><marker id="gArrow" markerWidth="8" markerHeight="8" refX="4" refY="6" orient="auto"><path d="M0,0 L8,0 L4,7 Z" fill="#8b949e"/></marker></defs>'
   + '</svg>';
@@ -91,7 +91,7 @@ var GENDAI_QUIZ = [
   { q:'「歩く」は何活用？', choices:['上一段活用','五段活用','下一段活用'], answer:1, exp:'未然形がア段（歩か-ない）＝五段活用。' },
   { q:'「起きる」に「ない」をつけると？', choices:['起きない','起きるない','起こない'], answer:0, exp:'「起き」はイ段なので上一段活用。' },
   { q:'「食べる」は何活用？', choices:['五段活用','上一段活用','下一段活用'], answer:2, exp:'食べ「ない」→エ段（べ）→下一段活用。' },
-  { q:'「来る」「する」の活用の種類は？', choices:['カ変とサ変','サ変とカ変（同じ）','五段と五段'], answer:0, exp:'この2語だけの特別な活用。丸暗記するしかない。' },
+  { q:'「来る」「する」の活用の種類は？', choices:['カ変とサ変','サ変とカ変（同じ）','五段と五段'], answer:0, exp:'「来る」はカ変、「する」「勉強する」はサ変。形ごと丸暗記！' },
   { q:'サ変の未然形「させる」に使われている形はどれ？', choices:['し','せ','さ'], answer:2, exp:'サ変の未然形は「し（＋ない）」「せ（＋ぬ）」「さ（＋せる）」の3つがある。' },
   { q:'「犬が公園で走るとき、とても楽しそうだ。」の「走る」の活用形は？', choices:['終止形','連体形','連用形'], answer:1, exp:'あとに体言「とき」が続く→連体形。終止形と形が同じなので、あとに続く言葉で判断する。' },
   { q:'「もし犬が走れば、すぐに疲れるだろう。」の「走れ」の活用形は？', choices:['已然形','仮定形','命令形'], answer:1, exp:'あとに「ば」が続き、「もし〜なら」の仮定を表す→仮定形。「已然形」は古文だけで使う言葉。' },

@@ -123,7 +123,7 @@ function renderWeakBar() {
 // ===== QUESTION ENGINE =====
 var qMeta={};
 // スマホのキーボードが打つ ’ ‘ をふつうの ' にそろえてから比べる
-function unifyQuote(s){return (s||'').replace(/[‘’`]/g,"'");}
+function unifyQuote(s){return (s||'').replace(/&#39;/g,"'").replace(/[‘’`]/g,"'");}
 function normalize(s){return unifyQuote(s).trim().toLowerCase().replace(/[.,!?'"]/g,'').replace(/\s+/g,' ');}
 function flexMatch(val,answer){
   var v=normalize(val),a=normalize(answer);
@@ -131,9 +131,10 @@ function flexMatch(val,answer){
   var aWords=a.split(' ').filter(function(w){return w.length>1;});
   return aWords.every(function(w){return v.indexOf(w)!==-1;});
 }
+function expandContr(s){return s.replace(/\b(have|has|had|is|are|was|were|do|does|did|would|should|could)n't\b/g,'$1 not').replace(/\bcan't\b|\bcannot\b/g,'can not').replace(/\bwon't\b/g,'will not').replace(/\b(i|you|we|they)'ve\b/g,'$1 have').replace(/\b(he|she|it|that|there)'s\b/g,'$1 is').replace(/\b(you|we|they)'re\b/g,'$1 are').replace(/\bi'm\b/g,'i am');}
 function localSmartGrade(val,answer){
-  var v=unifyQuote(val).trim().toLowerCase().replace(/[.,!?]/g,'').replace(/\s+/g,' ');
-  var a=unifyQuote(answer).trim().toLowerCase().replace(/[.,!?]/g,'').replace(/\s+/g,' ');
+  var v=expandContr(unifyQuote(val).trim().toLowerCase().replace(/[.,!?]/g,'').replace(/\s+/g,' '));
+  var a=expandContr(unifyQuote(answer).trim().toLowerCase().replace(/[.,!?]/g,'').replace(/\s+/g,' '));
   if(v===a)return{grade:'◎',xpRate:1.0,comment:'完璧！そのまま覚えよう！'};
   var vW=v.split(' '),aW=a.split(' ');
   var matched=aW.filter(function(w){return vW.indexOf(w)!==-1;});
@@ -631,12 +632,12 @@ function showTokkuComplete(uid){
 var U4={};
 U4[0]={type:'vocab',
   title:'Unit4 防災：単語準備',
-  sub:'テーマは「災害のとき、どう助け合う？」。文法は3つ。先に単語を耳から慣らしておこう。',
+  sub:'テーマは「災害のとき、どう助け合う？」。文法は4つ。先に単語を耳から慣らしておこう。',
   talk:[
     {who:'kyon',text:'にっくん、Unit4って防災の話なんでしょ？地震とか台風とか、英語で言える気がしないんだけど…'},
-    {who:'nishi',text:'単語は先に音から慣らそう。今回の文法は3つだけ。①「彼女がどこに住んでいるか知ってる」みたいに、疑問文を文の中に入れる形。②「サッカーをしている男の子」。③「ケンが撮った写真」。'},
-    {who:'kyon',text:'3つもあるの…？'},
-    {who:'shun',text:'きょんさん、大丈夫です！3つとも、ほんまにルールひとつずつで片づくんですわ。僕、途中でヒント出しますんで。'},
+    {who:'nishi',text:'単語は先に音から慣らそう。今回の文法は4つ。①「彼女がどこに住んでいるか知ってる」みたいに、疑問文を文の中に入れる形。②①のかたまりを tell のうしろに置く「何が必要か教えて」。③「サッカーをしている男の子」。④「ケンが撮った写真」。'},
+    {who:'kyon',text:'4つもあるの…？'},
+    {who:'shun',text:'きょんさん、大丈夫です！4つとも、ほんまにルールひとつずつで片づくんですわ。僕、途中でヒント出しますんで。'},
     {who:'kyon',text:'しゅん！来てくれたの！？心強い！'},
     {who:'nishi',text:'まずは単語。🔊を押して、音と意味をセットで聞いておけばいい。'}
   ],
@@ -811,7 +812,7 @@ U4[3]={type:'grammar',
     {q:'I know the woman ___ with Ms. Brown.',jp:'ブラウン先生と話している女の人を私は知っています。',a:'talking',choices:['talking','talked','talks'],exp:E('the woman ＋ talking with Ms. Brown','I know the woman talking with Ms. Brown.','','with 以下までが説明のかたまり'),xp:3},
     {q:'Look at that ___ cat.',jp:'あの眠っているネコを見て。',a:'sleeping',choices:['sleeping','sleep','slept'],exp:E('説明が1語だけなら名詞の前','Look at that sleeping cat.','Look at that sleep cat.','1語（sleeping）→ 前、2語以上（sleeping on the sofa）→ うしろ'),xp:3},
     {q:'The girl ___ the piano is Emi.',jp:'ピアノをひいている女の子はエミです。',a:'playing',choices:['playing','is playing','plays'],exp:E('かたまりの中に is は入れない','The girl playing the piano is Emi.','The girl is playing the piano is Emi.（is が2つになって文がこわれる）','文の本当の動詞は最後の is だけ'),xp:4},
-    {q:'「ベッドで眠っている赤ちゃん」はどれ？',jp:'「ベッドで眠っている赤ちゃん」を英語で',a:'a baby sleeping in the bed',choices:['a baby sleeping in the bed','a sleeping in the bed baby','a baby sleep in the bed'],exp:E('2語以上の説明は名詞のうしろ','a baby sleeping in the bed','a sleeping in the bed baby','sleeping in the bed は3語 → うしろに置く'),xp:4},
+    {q:'「ベッドで眠っている赤ちゃん」はどれ？',jp:'「ベッドで眠っている赤ちゃん」を英語で',a:'a baby sleeping in the bed',choices:['a baby sleeping in the bed','a sleeping in the bed baby','a baby sleep in the bed'],exp:E('2語以上の説明は名詞のうしろ','a baby sleeping in the bed','a sleeping in the bed baby','sleeping in the bed は4語 → うしろに置く'),xp:4},
     {q:'People ___ in the shelter helped each other.',jp:'避難所に泊まっている人々はお互いに助け合いました。',a:'staying',choices:['staying','stayed','stays'],exp:E('people ＋ staying in the shelter','People staying in the shelter helped each other.','','文の本当の動詞は helped。staying 〜 は people の説明'),xp:4}
   ],
   qb:[
@@ -865,7 +866,7 @@ U4[4]={type:'grammar',
     {q:'There is a ___ window.',jp:'割れた窓があります。',a:'broken',choices:['broken','breaking','broke'],exp:E('説明が1語だけなら名詞の前','There is a broken window.','','break - broke - broken。窓は「割られる」側'),xp:4},
     {q:'Ao to Natsu is a song ___ by many people.',jp:'「青と夏」は多くの人に愛されている歌です。',a:'loved',choices:['loved','loving','loves'],exp:E('歌は「愛される」側 → 過去分詞','Ao to Natsu is a song loved by many people.','','by many people（多くの人によって）がヒント'),xp:4},
     {q:'The food ___ at the shelter was rice balls.',jp:'避難所で配られた食べ物はおにぎりでした。',a:'given',choices:['given','giving','gave'],exp:E('食べ物は「配られる（与えられる）」側 → 過去分詞','The food given at the shelter was rice balls.','','give - gave - given。文の本当の動詞は was'),xp:4},
-    {q:'Do you know the boy ___ to Emi?',jp:'エミと話している男の子を知っていますか。',a:'talking',choices:['talking','talked','talks'],exp:E('男の子は「自分で話している」→ 〜ing','Do you know the boy talking to Emi?','','人が主役のときは、たいてい 〜ing'),xp:4}
+    {q:'Do you know the boy ___ to Emi?',jp:'エミと話している男の子を知っていますか。',a:'talking',choices:['talking','talked','talks'],exp:E('男の子は「自分で話している」→ 〜ing','Do you know the boy talking to Emi?','','男の子は「する側」→ 〜ing。人でも「される側」なら過去分詞（a singer loved by many people）'),xp:4}
   ],
   qb:[
     {jp:'これはケンによって撮られた写真です。',a:'This is a picture taken by Ken.',exp:E('a picture ＋ taken by Ken','This is a picture taken by Ken.','This is a picture taking by Ken.','例文の1番目そのまま'),xp:6},
@@ -928,18 +929,18 @@ U5[0]={type:'vocab',
     +'<div class="en">・1869年、インドで生まれる</div>'
     +'<div class="en">・イギリスのロンドンで法律を学び、弁護士（lawyer）になる</div>'
     +'<div class="en">・南アフリカで、インド系の人々への差別と戦う</div>'
-    +'<div class="en">・インドに戻り、暴力を使わない方法（nonviolence）でイギリスの支配に反対</div>'
+    +'<div class="en">・インドに戻り、暴力を使わない方法（non-violence）でイギリスの支配に反対</div>'
     +'<div class="en">・1930年「塩の行進（Salt March）」：塩に税をかける法律に反対し、海まで歩いた</div>'
     +'<div class="en">・1947年、インドは独立（independence）</div>'
     +'</div></div>',
   words:[
     ['leader','リーダー・指導者'],['lawyer','弁護士'],['freedom','自由'],['rights','権利'],['independence','独立'],
-    ['violence','暴力'],['nonviolence','非暴力（暴力を使わないこと）'],['protest','抗議（する）'],['salt','塩'],['march','行進'],
+    ['violence','暴力'],['non-violence','非暴力（暴力を使わないこと）'],['protest','抗議（する）'],['salt','塩'],['march','行進'],
     ['unfair','不公平な'],['law','法律'],['respect','尊敬する'],['follow','ついていく・従う'],['peaceful','平和的な']
   ],
   qs:[
     {q:'leader',jp:'leader の意味は？',a:'リーダー・指導者',choices:['リーダー・指導者','弁護士','法律'],exp:E('leader ＝ リーダー・指導者','a good leader（よいリーダー）','','Unit5のタイトル What makes a good leader? に入っている'),xp:2},
-    {q:'「暴力」を英語で言うと？',jp:'「暴力」は英語で？',a:'violence',choices:['violence','violin','freedom'],exp:E('暴力 ＝ violence','nonviolence ＝ 非暴力（non ＝ 〜でない）','','violin（バイオリン）とつづりが似ているので注意'),xp:2},
+    {q:'「暴力」を英語で言うと？',jp:'「暴力」は英語で？',a:'violence',choices:['violence','violin','freedom'],exp:E('暴力 ＝ violence','non-violence ＝ 非暴力（non ＝ 〜でない）','','violin（バイオリン）とつづりが似ているので注意'),xp:2},
     {q:'independence',jp:'independence の意味は？',a:'独立',choices:['独立','行進','抗議'],exp:E('independence ＝ 独立','India’s independence（インドの独立）','','in（〜でない）＋ dependence（たよること）＝ だれにもたよらない ＝ 独立'),xp:2},
     {q:'respect',jp:'respect の意味は？',a:'尊敬する',choices:['尊敬する','ついていく','反対する'],exp:E('respect ＝ 尊敬する','Many people respect Gandhi.（多くの人がガンディーを尊敬している）','','このあとの文法の例文でたくさん出てくる'),xp:2},
     {q:'「弁護士」を英語で言うと？',jp:'「弁護士」は英語で？',a:'lawyer',choices:['lawyer','leader','law'],exp:E('弁護士 ＝ lawyer','law（法律）＋ yer（人）＝ 法律の人','','law（法律）とセットで覚えよう'),xp:2}
@@ -1142,7 +1143,7 @@ U5[4]={type:'grammar',
     {q:'The food which my mother ___ is delicious.',jp:'母が作る料理はとてもおいしい。',a:'makes',choices:['makes','make','making'],exp:E('which ＋ 主語（my mother）＋ 動詞（makes）','The food which my mother makes is delicious.','','my mother（1人）なので makes'),xp:4},
     {q:'Is this the bag ___ you lost?',jp:'これはあなたがなくしたかばんですか。',a:'that',choices:['that','who','what'],exp:E('もの（the bag）＋ that ＋ 主語 ＋ 動詞','Is this the bag that you lost?','Is this the bag who you lost?','lose - lost - lost'),xp:4},
     {q:'「私が昨日会った男の人」はどれ？',jp:'「私が昨日会った男の人」を英語で',a:'the man I met yesterday',choices:['the man I met yesterday','the man which I met yesterday','the man I met him yesterday'],exp:E('人の説明 → 何もはさまない（または that）','the man I met yesterday','the man which I met yesterday（which は人に使わない）','him はいらない（①のルール）'),xp:4},
-    {q:'The pictures which Ken took ___ beautiful.',jp:'ケンが撮った写真はきれいです。',a:'are',choices:['are','is','am'],exp:E('主語の中心は the pictures（複数）→ are','The pictures which Ken took are beautiful.','The pictures which Ken took is beautiful.','Ken に引っぱられない。カッコの前の名詞を見る'),xp:4}
+    {q:'The pictures which Ken took ___ beautiful.',jp:'ケンが撮った写真はきれいです。',a:'are',choices:['are','is','am'],exp:E('主語の中心は the pictures（複数）→ are','The pictures which Ken took are beautiful.','The pictures which Ken took is beautiful.','Ken に引っぱられない。which の前の名詞（the pictures）を見る'),xp:4}
   ],
   qb:[
     {jp:'これは私が昨日買った本です。（which を使って）',a:'This is the book which I bought yesterday.',exp:E('the book ＋ which I bought yesterday','This is the book which I bought yesterday.','This is the book which I bought it yesterday.','it はいらない'),xp:6},
@@ -1384,9 +1385,9 @@ U6[4]={type:'grammar',
   formula:'［'+H('名詞')+' ＋ who / which / that ～］＋ '+H2('動詞')+' …<br><small style="color:var(--text2)">例：［The '+H('girl')+' who is talking with Ken］'+H2('is')+' my sister.（ケンと話している女の子は私の姉です。）</small>',
   ruleTitle:'読み方・書き方3ステップ',
   rules:[
-    '① who / which / that のかたまりをカッコでくくる（マフラー）',
+    '① 名詞 ＋ who / which / that ～ 全体をカッコでくくる（who から後ろがマフラー）',
     '② カッコのあとの動詞が「文の本当の動詞」',
-    '③ 本当の動詞の形は、カッコの前の名詞に合わせる：［The boys who live here］are … （boys → are）'
+    '③ 本当の動詞の形は、カッコの中の先頭の名詞に合わせる：［The boys who live here］are … （boys → are）'
   ],
   visual:compareCard('🧣 マフラーを外すと…',['長い主語の文','マフラーを外すと'],[
     ['［The girl '+X('who is talking with Ken')+'］'+H2('is')+' my sister.','The girl '+H2('is')+' my sister.'],
@@ -1405,7 +1406,7 @@ U6[4]={type:'grammar',
   qs:[
     {q:'The girl who is talking with Ken ___ my sister.',jp:'ケンと話している女の子は私の姉です。',a:'is',choices:['is','are','am'],exp:E('［The girl who is talking with Ken］＋ is','The girl who is talking with Ken is my sister.','','主語の中心は the girl（1人）→ is'),xp:3},
     {q:'The man who lives next door ___ a doctor.',jp:'となりに住んでいる男の人は医者です。',a:'is',choices:['is','lives','are'],exp:E('カッコのあとに本当の動詞','The man who lives next door is a doctor.','The man who lives next door lives a doctor.','lives はカッコの中。カッコの外に is が必要'),xp:3},
-    {q:'The boys who are playing soccer ___ my friends.',jp:'サッカーをしている男の子たちは私の友達です。',a:'are',choices:['are','is','am'],exp:E('the boys（複数）→ are','The boys who are playing soccer are my friends.','The boys who are playing soccer is my friends.','カッコの前の名詞に合わせる'),xp:3},
+    {q:'The boys who are playing soccer ___ my friends.',jp:'サッカーをしている男の子たちは私の友達です。',a:'are',choices:['are','is','am'],exp:E('the boys（複数）→ are','The boys who are playing soccer are my friends.','The boys who are playing soccer is my friends.','カッコの中の先頭の名詞に合わせる'),xp:3},
     {q:'Children who ___ school supplies live all over the world.',jp:'学用品を必要としている子供たちは世界中にいます。',a:'need',choices:['need','needs','needing'],exp:E('children（複数）→ need','Children who need school supplies live all over the world.','Children who needs school supplies live all over the world.','children は child の複数形'),xp:4},
     {q:'The book that I read yesterday ___ interesting.',jp:'私が昨日読んだ本はおもしろかった。',a:'was',choices:['was','were','did'],exp:E('［The book that I read yesterday］＋ was','The book that I read yesterday was interesting.','','the book（1冊）・昨日 → was'),xp:4},
     {q:'The comedian who made us laugh is Kyon.',jp:'この文の「本当の動詞」はどれ？',a:'is',choices:['is','made','laugh'],exp:E('who のかたまりをカッコでくくる','［The comedian who made us laugh］is Kyon.','made はカッコの中の動詞','本当の動詞はカッコの外'),xp:4},

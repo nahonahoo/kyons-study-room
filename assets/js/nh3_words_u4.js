@@ -59,7 +59,7 @@ function bubble(l) { var s = SPK[l[0]]; return '<div class="bub ' + s.cls + '"><
 function getXp() { try { return parseInt(localStorage.getItem('nh3_xp') || '0', 10) || 0; } catch (e) { return 0; } }
 function addXp(n) {
   try { localStorage.setItem('nh3_xp', String(getXp() + n)); } catch (e) {}
-  try { var k = new Date().toISOString().slice(0, 10); var d = JSON.parse(localStorage.getItem('nh3_daily') || '{}'); d[k] = (d[k] || 0) + 1; localStorage.setItem('nh3_daily', JSON.stringify(d)); } catch (e) {}
+  try { var k = new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10); var d = JSON.parse(localStorage.getItem('nh3_daily') || '{}'); d[k] = (d[k] || 0) + 1; localStorage.setItem('nh3_daily', JSON.stringify(d)); } catch (e) {}
   var p = document.createElement('div'); p.className = 'xp-pop'; p.textContent = '+' + n + ' XP'; document.body.appendChild(p);
   setTimeout(function () { if (p.parentNode) p.parentNode.removeChild(p); }, 1000);
   renderNav();

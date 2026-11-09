@@ -296,6 +296,11 @@ function renderChars() {
 }
 
 // ====== 学習カレンダー ======
+// 日付は端末の時刻で数える（toISOString のままだと世界標準時になり、日本の朝9時まで「昨日」になる）
+function localDateStr(d) {
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+}
+
 function getDailyData() {
   const data = {};
   ['nh3', 'sci', 'math', 'soc', 'jpn', 'exam'].forEach(key => {
@@ -320,7 +325,7 @@ function renderCalendar() {
   for (let i = days - 1; i >= 0; i--) {
     const d = new Date(today);
     d.setDate(d.getDate() - i);
-    const dateStr = d.toISOString().slice(0, 10);
+    const dateStr = localDateStr(d);
     const count = data[dateStr] || 0;
     let color = '#21262d';
     if (count >= 20) color = '#39d353';
@@ -338,7 +343,7 @@ function renderCalendar() {
   const oldEl = document.getElementById('calOldDate');
   if (oldEl && cells.length > 0) oldEl.textContent = cells[0].dateStr;
 
-  const todayTotal = data[today.toISOString().slice(0,10)] || 0;
+  const todayTotal = data[localDateStr(today)] || 0;
   const todayEl = document.getElementById('calTodayLabel');
   if (todayEl) {
     if (todayTotal > 0) {

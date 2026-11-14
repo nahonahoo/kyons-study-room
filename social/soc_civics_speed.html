@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公民 1問1答タイムアタック</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1117; --card:#161b22; --card2:#1c2330; --line:#30363d;
+  --text:#e6edf3; --sub:#9da7b3; --gold:#f2c94c; --green:#3fb950; --red:#f47067;
+  --blue:#58a6ff; --orange:#f0883e; --purple:#bc8cff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Noto Serif JP',serif;font-size:16px;line-height:2.0;letter-spacing:.04em;-webkit-text-size-adjust:100%}
+button{font-family:inherit;letter-spacing:inherit}
+.top-nav{display:flex;align-items:center;gap:12px;padding:8px 16px;border-bottom:1px solid var(--line);background:#0b0f15;position:sticky;top:0;z-index:20}
+.top-nav a{font-size:1.3rem;text-decoration:none;line-height:1}
+.nav-title{font-weight:700;font-size:15px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-xp{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold);letter-spacing:.06em;white-space:nowrap}
+.wrap{max-width:720px;margin:0 auto;padding:16px 16px 60px}
+.hide{display:none!important}
+
+/* ---- start ---- */
+.hero{text-align:center;padding:12px 0 4px}
+.hero h1{font-family:'Bebas Neue','Noto Serif JP',sans-serif;font-size:40px;line-height:1.2;margin:0;color:var(--gold);letter-spacing:.06em}
+.hero .jp{font-size:22px;font-weight:700;margin-top:4px}
+.hero .range{font-size:14px;color:var(--sub);margin-top:6px;line-height:1.8}
+.lvbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:14px 0}
+.lvrow{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;font-size:15px}
+.lvrow b{color:var(--gold)}
+.lvbar{height:8px;background:#21262d;border-radius:4px;overflow:hidden;margin-top:6px}
+.lvfill{height:100%;background:linear-gradient(90deg,#f2c94c,#f0883e);width:0}
+.chat{display:flex;gap:10px;align-items:flex-start;margin:10px 0}
+.chat .ic{font-size:26px;line-height:1.4;flex-shrink:0}
+.chat .bub{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:8px 14px;font-size:15px}
+.chat .nm{font-weight:700;color:var(--blue);margin-right:4px}
+.chat.kyon .nm{color:var(--orange)}
+.chat.kuruma .nm{color:var(--purple)}
+.set{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin:12px 0}
+.set h3{margin:0 0 8px;font-size:16px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{background:#21262d;color:var(--text);border:2px solid var(--line);border-radius:999px;padding:6px 16px;font-size:15px;cursor:pointer;line-height:1.6}
+.chip.on{border-color:var(--gold);background:#3a2f0b;color:var(--gold);font-weight:700}
+.chip:disabled{opacity:.4;cursor:not-allowed}
+.note{font-size:14px;color:var(--sub);margin-top:6px;line-height:1.8}
+.big-btn{display:block;width:100%;padding:14px;margin:18px 0 8px;font-size:22px;font-weight:700;border:none;border-radius:14px;cursor:pointer;background:linear-gradient(135deg,#f2c94c,#f0883e);color:#1a1200;letter-spacing:.08em}
+.big-btn:active{transform:scale(.98)}
+.sub-btn{display:inline-block;padding:10px 18px;margin:6px 6px 0 0;font-size:15px;border-radius:10px;border:1px solid var(--line);background:#21262d;color:var(--text);cursor:pointer}
+.weak{background:var(--card);border:1px solid #5a2a27;border-radius:12px;padding:12px 16px;margin:12px 0}
+.weak h3{margin:0 0 6px;font-size:15px;color:var(--red)}
+.weak-item{display:flex;justify-content:space-between;gap:10px;font-size:14px;border-bottom:1px dashed var(--line);padding:4px 0;line-height:1.8}
+.weak-item:last-child{border-bottom:none}
+.weak-item .pct{color:var(--red);font-family:'Bebas Neue',sans-serif;font-size:18px;flex-shrink:0}
+.best{font-size:14px;color:var(--sub);text-align:center}
+
+/* ---- game ---- */
+.hud{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:15px}
+.hud .no{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:.06em}
+.hud .score{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--gold);letter-spacing:.06em}
+.hud .combo{font-size:14px;color:var(--purple);font-weight:700;min-width:5em;text-align:center}
+.timer{display:flex;align-items:center;gap:10px;margin:8px 0 4px}
+.tbar{flex:1;height:14px;background:#21262d;border-radius:7px;overflow:hidden}
+.tfill{height:100%;width:100%;background:var(--green);border-radius:7px;transition:background .3s}
+.tfill.mid{background:var(--gold)}
+.tfill.low{background:var(--orange)}
+.tnum{font-family:'Bebas Neue',sans-serif;font-size:30px;width:2.2em;text-align:right;line-height:1}
+.tnum.low{color:var(--orange)}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin:10px 0 12px;position:relative}
+.qtag{display:inline-block;font-size:13px;padding:0 10px;border-radius:999px;background:#21262d;color:var(--sub);margin-bottom:6px}
+.qtext{font-size:19px;font-weight:700;line-height:2.0}
+.choices{display:grid;grid-template-columns:1fr;gap:10px}
+@media(min-width:600px){.choices{grid-template-columns:1fr 1fr}}
+.ch{display:flex;align-items:center;gap:10px;text-align:left;background:#1c2330;color:var(--text);border:2px solid var(--line);border-radius:12px;padding:12px 14px;font-size:17px;cursor:pointer;line-height:1.7;min-height:58px}
+.ch .k{font-family:'Bebas Neue',sans-serif;font-size:20px;width:30px;height:30px;line-height:30px;text-align:center;border-radius:50%;background:#30363d;color:var(--sub);flex-shrink:0}
+.ch:hover:not(:disabled){border-color:var(--blue)}
+.ch:disabled{cursor:default}
+.ch.right{border-color:var(--gold);background:#3a2f0b}
+.ch.right .k{background:var(--gold);color:#1a1200}
+.ch.wrong{border-color:var(--red);background:#3b1717}
+.ch.wrong .k{background:var(--red);color:#fff}
+.ch.dim{opacity:.45}
+.paused-cover{position:absolute;inset:0;background:var(--card);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:var(--sub)}
+.ctrl{display:flex;justify-content:space-between;margin-top:12px}
+.ctrl button{background:none;border:1px solid var(--line);color:var(--sub);border-radius:10px;padding:6px 14px;font-size:14px;cursor:pointer}
+
+/* ---- feedback ---- */
+.fb{margin-top:14px;animation:pop .25s ease}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.banner{font-size:24px;font-weight:700;text-align:center;padding:8px;border-radius:12px}
+.banner.ok{background:#12301b;color:var(--green)}
+.banner.ng{background:#3b1717;color:var(--red)}
+.banner.to{background:#3a2a10;color:var(--orange)}
+.banner .pts{display:block;font-size:15px;font-weight:400;color:var(--gold)}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.cmp div{border-radius:10px;padding:8px 12px;font-size:15px;line-height:1.8}
+.cmp .yours{border:2px solid var(--red);color:#ffb3ad}
+.cmp .ans{border:2px solid var(--gold);color:var(--gold)}
+.cmp small{display:block;font-size:12px;color:var(--sub)}
+.exp{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:12px;padding:14px 16px;font-size:15px;line-height:2.0}
+.exp .h{font-weight:700;color:var(--gold);margin-bottom:2px}
+.exp p{margin:4px 0}
+.exp .lbl{font-weight:700}
+.next-btn{display:block;width:100%;margin-top:14px;padding:12px;font-size:20px;font-weight:700;border:none;border-radius:12px;background:var(--blue);color:#06101f;cursor:pointer;letter-spacing:.06em}
+.next-btn small{font-size:12px;font-weight:400;opacity:.8;margin-left:6px}
+
+/* ---- result ---- */
+.res-hero{text-align:center;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 16px;margin-top:8px}
+.res-score{font-family:'Bebas Neue',sans-serif;font-size:64px;line-height:1;color:var(--gold);letter-spacing:.04em}
+.res-rank{font-size:22px;font-weight:700;margin-top:8px}
+.res-new{display:inline-block;background:var(--gold);color:#1a1200;font-weight:700;border-radius:999px;padding:0 12px;font-size:14px;margin-top:6px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.stat{background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:8px;text-align:center;font-size:13px;color:var(--sub);line-height:1.6}
+.stat b{display:block;font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--text);letter-spacing:.04em}
+.miss{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:12px 0}
+.miss h3{margin:0 0 6px;font-size:16px}
+.miss-item{border-bottom:1px dashed var(--line);padding:8px 0;font-size:15px;line-height:1.9}
+.miss-item:last-child{border-bottom:none}
+.miss-item .a{color:var(--gold);font-weight:700}
+.miss-item .y{color:var(--red);font-size:13px}
+
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(120px);background:#21262d;border:1px solid var(--line);color:var(--text);padding:10px 18px;border-radius:12px;font-size:15px;z-index:50;transition:transform .3s;max-width:calc(100% - 32px);text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.levelup{background:#3a2f0b;border-color:var(--gold);color:var(--gold);font-weight:700}
+.toast.demote{background:#3b1717;border-color:var(--red);color:#ffb3ad}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <a href="../index.html" title="ホームへ">🏠</a>
+  <div class="nav-title">⚡ 公民 1問1答タイムアタック</div>
+  <div class="nav-xp" id="navXp">🪙 0 XP</div>
+</nav>
+
+<div class="wrap">
+  <!-- スタート画面 -->
+  <section id="scrStart">
+    <div class="hero">
+      <h1>KOMIN TIME ATTACK</h1>
+      <div class="jp">公民 1問1答タイムアタック</div>
+      <div class="range">テスト範囲：2章 個人の尊重と日本国憲法 ／ 3章 現代の民主政治と社会 ／ 4章 私たちの暮らしと経済（〜消費生活を支える流通）</div>
+    </div>
+
+    <div class="lvbox">
+      <div class="lvrow"><b id="lvBadge">🥚 NSC入学</b><span id="lvTitle">見習い研修生</span><span id="lvNext" style="color:var(--sub);font-size:14px"></span></div>
+      <div class="lvbar"><div class="lvfill" id="lvFill"></div></div>
+    </div>
+
+    <div class="chat kyon"><div class="ic">🙋‍♂️</div><div class="bub"><span class="nm">きょん</span>公民の早押し！？時計が動いてるとドキドキするんだけど！</div></div>
+    <div class="chat"><div class="ic">🎙️</div><div class="bub"><span class="nm">西村</span>答えたら時計は止まるよ。解説はゆっくり読んでから「次へ」で大丈夫。</div></div>
+
+    <div class="set">
+      <h3>📚 範囲</h3>
+      <div class="chips" id="chipRange"></div>
+      <div class="note" id="rangeNote"></div>
+    </div>
+    <div class="set">
+      <h3>🔢 問題数</h3>
+      <div class="chips" id="chipCount"></div>
+    </div>
+    <div class="set">
+      <h3>⏱️ 1問の制限時間</h3>
+      <div class="chips" id="chipTime"></div>
+      <div class="note">早く答えるほどボーナス点が増える。時間切れは「まちがい」より減点が少ないよ。</div>
+    </div>
+
+    <button class="big-btn" id="btnStart">▶ スタート</button>
+    <div class="best" id="bestLine"></div>
+
+    <div class="weak" id="weakBox">
+      <h3>🔥 弱点TOP（正答率80%未満）</h3>
+      <div id="weakList"></div>
+    </div>
+  </section>
+
+  <!-- ゲーム画面 -->
+  <section id="scrGame" class="hide">
+    <div class="hud">
+      <div class="no" id="hudNo">Q 1 / 20</div>
+      <div class="combo" id="hudCombo"></div>
+      <div class="score" id="hudScore">0 PT</div>
+    </div>
+    <div class="timer">
+      <div class="tbar"><div class="tfill" id="tFill"></div></div>
+      <div class="tnum" id="tNum">20</div>
+    </div>
+    <div class="qcard" id="qCard">
+      <div class="qtag" id="qTag">2章</div>
+      <div class="qtext" id="qText"></div>
+      <div class="paused-cover hide" id="pausedCover">⏸ 一時停止中</div>
+    </div>
+    <div class="choices" id="choices"></div>
+    <div id="fbArea"></div>
+    <div class="ctrl">
+      <button id="btnQuit">✕ やめる</button>
+      <button id="btnPause">⏸ 一時停止</button>
+    </div>
+  </section>
+
+  <!-- 結果画面 -->
+  <section id="scrResult" class="hide"></section>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="../assets/js/soc_civics_speed.js?v=1" defer></script>
+</body>
+</html>

@@ -107,6 +107,7 @@ const SUBJECTS = [
       ] },
       { label:'地理（世界・日本）',   href:'social/soc_geography.html', weakDb:'soc', qidPrefix:'soc_geo_' },
       { label:'⚖️ 公民（入試頻出）',   href:'social/soc_civics.html',    weakDb:'soc', qidPrefix:'soc_civ_' },
+      { label:'⚡ 公民 1問1答タイムアタック', href:'social/soc_civics_speed.html', weakDb:'soc', qidPrefix:'soc_civs_' },
     ]
   },
   {

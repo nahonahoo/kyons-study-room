@@ -82,6 +82,7 @@ const SUBJECTS = [
     key:'soc', name:'社会', icon:'🌏', color:'#f59e0b',
     links:[
       { label:'歴史（問題）',         href:'social/soc_history.html',   weakDb:'soc', qidPrefix:'soc_hist_' },
+      { label:'⏱️ 歴史 1問1答（記述）', href:'social/soc_history_speed.html', weakDb:'soc', qidPrefix:'soc_hq_' },
       { label:'🗞️ 歴史ストーリー新聞 ①〜㉑', group:[
         { n:'①', t:'飛鳥',       href:'social/soc_story_asuka.html' },
         { n:'②', t:'奈良',       href:'social/soc_story_nara.html' },

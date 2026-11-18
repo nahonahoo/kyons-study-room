@@ -767,6 +767,7 @@ INTRO[0] = function() {
   + card('🧮 計算はこの3本', '<div class="mo-big">速さ ＝ 距離 ÷ 時間</div><div class="mo-big">仕事（J）＝ 力（N）× 距離（m）</div><div class="mo-big">仕事率（W）＝ 仕事（J）÷ 時間（秒）</div>'
     + note('どれも「÷」か「×」が1回だけ。単位（cm → m、g → N、分 → 秒）をそろえるのがコツ。'))
   + '<div class="mo-exam">📝 <b>時間がないときの順番</b>：入試に出た「水圧・浮力」→「エネルギー」→「物体の運動（記録タイマー）」→「入試に挑戦」</div>'
+  + '<a href="sci_story_motion.html" style="display:block;margin:10px 0 0;padding:14px 10px;text-align:center;border:2px solid var(--gold);border-radius:12px;background:rgba(245,197,24,0.1);color:var(--gold);font-weight:bold;text-decoration:none;font-size:16px;line-height:1.7">🗞️ まずはストーリー新聞で読む（芸人の掛け合い）→</a>'
   + '<button class="start-btn" data-goto="1">🎢 物体の運動 から始める →</button>';
 };
 INTRO[1] = function() {
@@ -1092,4 +1093,9 @@ function showTokkuComplete() {
 updateXP();
 renderWeakBar();
 renderTabs();
-goSection(0);
+// #s番号 で開くと、そのタブから始める（ストーリー新聞のボタン用）
+(function() {
+  var m = /^#s(\d+)$/.exec(location.hash), id = m ? parseInt(m[1]) : 0;
+  if (!SECTIONS.some(function(s) { return s.id === id; })) id = 0;
+  goSection(id);
+})();

@@ -765,7 +765,15 @@ INTRO[0] = function() {
       ['第3章 エネルギーと仕事','仕事 ＝ 力 × 距離、仕事率、<b>力学的エネルギーの保存</b>']
     ]))
   + card('🧮 計算はこの3本', '<div class="mo-big">速さ ＝ 距離 ÷ 時間</div><div class="mo-big">仕事（J）＝ 力（N）× 距離（m）</div><div class="mo-big">仕事率（W）＝ 仕事（J）÷ 時間（秒）</div>'
-    + note('どれも「÷」か「×」が1回だけ。単位（cm → m、g → N、分 → 秒）をそろえるのがコツ。'))
+    + '<div style="margin-top:14px;font-size:16px;font-weight:bold;color:var(--teal)">🔑 式を忘れたら「答えの単位」を読む</div>'
+    + table([
+      ['答えの単位','読み方','式'],
+      ['<span class="nw">cm/s</span>','<span class="nw">cm <b>÷</b> s</span>','<span class="nw">距離 ÷ 時間</span>'],
+      ['<span class="nw">J ＝ N・m</span>','<span class="nw">N <b>×</b> m</span>','<span class="nw">力 × 距離</span>'],
+      ['<span class="nw">W ＝ J/s</span>','<span class="nw">J <b>÷</b> s</span>','<span class="nw">仕事 ÷ 時間</span>']
+    ], 'center')
+    + '<div class="mo-big" style="text-align:center">／ は「わる」、並んでいたら「かける」</div>'
+    + note('解く前に、答えのらんに「□ J」と単位だけ先に書く。かける前に単位をそろえる（g → N は ÷100、cm → m は ÷100、分 → 秒は ×60）。'))
   + '<div class="mo-exam">📝 <b>時間がないときの順番</b>：入試に出た「水圧・浮力」→「エネルギー」→「物体の運動（記録タイマー）」→「入試に挑戦」</div>'
   + '<a href="sci_story_motion.html" style="display:block;margin:10px 0 0;padding:14px 10px;text-align:center;border:2px solid var(--gold);border-radius:12px;background:rgba(245,197,24,0.1);color:var(--gold);font-weight:bold;text-decoration:none;font-size:16px;line-height:1.7">🗞️ まずはストーリー新聞で読む（芸人の掛け合い）→</a>'
   + '<button class="start-btn" data-goto="1">🎢 物体の運動 から始める →</button>';

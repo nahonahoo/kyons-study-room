@@ -48,6 +48,7 @@ const SUBJECTS = [
       { label:'中2 化学変化・原子分子', href:'science/sci_c2_chem.html',     weakDb:'sci', qidPrefix:'sci_chem_' },
       { label:'中2 電流・磁界',         href:'science/sci_c2_electric.html', weakDb:'sci', qidPrefix:'sci_elec_' },
       { label:'中3 化学変化とイオン',   href:'science/sci_c3_ion.html',      weakDb:'sci', qidPrefix:'sci_ion_' },
+      { label:'中3 運動とエネルギー',   href:'science/sci_c3_motion.html',   weakDb:'sci', qidPrefix:'sci_mot_' },
       { label:'中3 生殖・遺伝・進化',   href:'science/sci_c4_life.html',     weakDb:'sci', qidPrefix:'sci_life_' },
       { label:'🔬 実験文の読み方（入試）', href:'science/sci_exam_lab.html',   weakDb:'sci', qidPrefix:'sci_lab_' },
       { label:'🌏 大地・地球と宇宙（入試）', href:'science/sci_earth.html',    weakDb:'sci', qidPrefix:'sci_earth_' },
